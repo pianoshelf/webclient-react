@@ -1,0 +1,29 @@
+{
+  "name": "react-shelf",
+  "version": "1.0.0",
+  "description": "Front-end for pianoshelf.com made using ReactJS",
+  "main": "app/main.jsx",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pianoshelf/react-shelf"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pianoshelf/react-shelf/issues"
+  },
+  "homepage": "https://github.com/pianoshelf/react-shelf",
+  "devDependencies": {
+    "del": "^1.2.0",
+    "gulp": "^3.8.9",
+    "gulp-concat": "^2.5.2",
+    "gulp-sourcemaps": "^1.5.2"
+  },
+  "dependencies": {
+    "flux-react": "^2.6.0",
+    "react": "^0.12.0"
+  }
+}
