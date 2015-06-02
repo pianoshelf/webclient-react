@@ -3,13 +3,13 @@
 
 // Import modules
 let assign = require('lodash/object/assign');
-let cloneDeep = require('lodash/object/cloneDeep');
+let cloneDeep = require('lodash/lang/cloneDeep');
 let webpack = require('webpack');
 
 // Import production webpack configuration
 let prodConfig = require('./webpack.client.js');
 
-// Make sure we don't change our other configuration.
+// Make sure we don't clobber our other configuration.
 let config = cloneDeep(prodConfig);
 
 // Modify existing properties
@@ -25,9 +25,9 @@ assign(config, {
 
   plugins: [
     new webpack.DefinePlugin({ 'process.env': { NODE_ENV: '"production"' } }),
-	new webpack.DefinePlugin({ __CLIENT__: true, __SERVER__: false }),
-	new webpack.HotModuleReplacementPlugin(),
-	new webpack.NoErrorsPlugin(),
+    new webpack.DefinePlugin({ __CLIENT__: true, __SERVER__: false }),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoErrorsPlugin(),
   ],
 
   devServer: {
@@ -45,7 +45,7 @@ assign(config, {
 
 config.entry.unshift(
   'webpack-dev-server/client?http://localhost:8000/js/',
-  'webpack/hot/only-dev-server',
+  'webpack/hot/only-dev-server'
 );
 
 config.module.loaders[2] = {

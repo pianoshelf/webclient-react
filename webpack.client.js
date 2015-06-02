@@ -1,6 +1,7 @@
 
 'use strict'; // eslint-disable-line strict
 
+// Import modules
 let webpack = require('webpack');
 let path = require('path');
 
@@ -24,7 +25,7 @@ module.exports = {
     new webpack.DefinePlugin({ __CLIENT__: true, __SERVER__: false }),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.optimize.UglifyJsPlugin(),
+    new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } }),
   ],
 
   module: {
