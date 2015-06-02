@@ -11,7 +11,7 @@ module.exports = {
   cache: true,
   debug: false,
   devtool: 'none',
-  entry: ['./app/main.jsx'],
+  entry: ['./app/client.jsx'],
 
   output: {
     path: path.resolve('./build/static/js'),
