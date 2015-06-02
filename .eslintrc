@@ -115,7 +115,7 @@
     }],
     "comma-style": [2, "last"],
     "eol-last": 2,
-    "func-names": 1,
+    "func-names": 0,
     "key-spacing": [2, {
         "beforeColon": false,
         "afterColon": true
@@ -133,7 +133,7 @@
     "no-wrap-func": 2,
     "no-underscore-dangle": 0,
     "one-var": [2, "never"],
-    "padded-blocks": [2, "never"],
+    "padded-blocks": 0,
     "semi": [2, "always"],
     "semi-spacing": [2, {
       "before": false,
