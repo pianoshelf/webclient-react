@@ -5,7 +5,8 @@
   ],
   "env": {
     "browser": true,
-    "node": true
+    "node": true,
+    "jasmine": true
   },
   "ecmaFeatures": {
     "arrowFunctions": true,
@@ -24,6 +25,9 @@
     "superInFunctions": true,
     "templateStrings": true,
     "jsx": true
+  },
+  "globals": {
+    "jest": true
   },
   "rules": {
     "strict": [2, "never"],
