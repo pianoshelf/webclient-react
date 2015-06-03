@@ -30,10 +30,7 @@
     "no-var": 2,
     "no-shadow": 2,
     "no-shadow-restricted-names": 2,
-    "no-unused-vars": [2, {
-      "vars": "local",
-      "args": "after-used"
-    }],
+    "no-unused-vars": 1,
     "no-use-before-define": 2,
     "comma-dangle": [2, "always-multiline"],
     "no-cond-assign": [2, "always"],

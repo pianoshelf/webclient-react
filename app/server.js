@@ -44,7 +44,6 @@ app.use((req, res, next) => {
 
     console.log('Setting up router!');
 
-
     // TODO(ankit): Encode this!
     let inlineData = flux.serialize();
 
@@ -63,7 +62,7 @@ app.use((req, res, next) => {
         </body>
       </html>`;
 
-      console.log(output);
+    console.log(output);
 
     res.send(output);
     next();
