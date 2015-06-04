@@ -1,14 +1,13 @@
 language: node_js
-
 node_js:
-  - iojs-v2.2.1
-
+- iojs-v2.2.1
 sudo: false
-
 script:
-  - npm run lint
-  - npm run test
-
+- npm run lint
+- npm run test
 cache:
   directories:
-    - node_modules
+  - node_modules
+notifications:
+  slack:
+    secure: sttHCSs/p3YnvsvbxRmZy48+50ebtEXaQY/Bypa0Mpka+wOsSXiiCYuV4FY2yZOgqtrDGSO3IVnVO27SZLIBKrpdDIg3OpE+lR3DjHQgjbIEH++jjo4BIKwlNNIYC05c7tMmjCinxrwVSOxaZs05nRCwS2HIUNP4cGvcFR7Yy8VEvtN/4BTLU81AdX4B1RAE0ziuuFgP0xjIGzcSplu+JeM1XaOpz5oHDtKkMXlUPAaMSGes0nzx30PhNVtcq7A6v5ZzgyE6FICrEMcGTvvtMweHBvFzugG4WOcTEQV+G4QOTWmKPrpcYAL9TYkFwwm6ut6aux7VPeRzjOtcb5koiReVtwuexeVgsvQ0KODreqJ90QfTFuNRzN6fQ+pr+nOWzIGp6CwcS8QVKthJRHnBDKFPW+fEtyZTV4h9XJ4sgP+UOnK2tN5huJYUjUpzYuhzglrL2c7uChSMS0nNYav/zIiK/AygDddOdXBgZOUKuORbritiI5zES3F+LJqI+wyf82mU+mliXsN+aKXPpeMR7LKTRgpqN46ujLB8wL4P6OKt/W8eXWE+6XPl/OuFCV8sorfq2Dgipak4GDztI5aQJStnOLkZ+km2C1oK2C8R7JKuYoNPZ2Pxwh22xnH4L+vI5ZduAEPyGU950BtgHHy13Gxtonm2C56LHhItqKwspPI=
