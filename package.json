@@ -9,7 +9,7 @@
     "start": "NODE_PATH=\"./app\" node babel.server",
     "watch-client": "./node_modules/.bin/webpack --quiet --display-error-details --config webpack.dev.client.js && ./node_modules/.bin/webpack-dev-server --config webpack.dev.client.js",
     "watch": "./node_modules/.bin/concurrent --kill-others \"npm run watch-client\" \"npm run start\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/jest"
   },
   "repository": {
     "type": "git",
@@ -22,9 +22,13 @@
   },
   "homepage": "https://github.com/pianoshelf/react-shelf",
   "devDependencies": {
+    "babel-eslint": "^3.1.10",
+    "babel-jest": "^5.2.0",
     "babel-loader": "^5.1.3",
     "concurrently": "^0.1.1",
     "eslint": "^0.22.1",
+    "eslint-plugin-react": "^2.4.0",
+    "jest-cli": "^0.4.5",
     "react-hot-loader": "^1.2.7",
     "webpack": "^1.9.10",
     "webpack-dev-server": "^1.9.0"
@@ -41,8 +45,19 @@
     "piping": "^0.1.8",
     "react": "^0.13.3",
     "react-a11y": "^0.1.1",
+    "react-addons": "^0.9.1-deprecated",
     "react-router": "^0.13.3",
+    "react-tools": "^0.13.3",
     "react-transmit": "^2.6.3",
     "superagent": "^1.2.0"
+  },
+  "jest": {
+    "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
+    "unmockedModulePathPatterns": [
+      "<rootDir>/node_modules/react",
+      "<rootDir>/node_modules/react-tools"
+    ],
+    "moduleFileExtensions": ["js", "json", "es6", "jsx"],
+    "testFileExtensions": ["js", "es6", "jsx"]
   }
 }
