@@ -35,14 +35,10 @@ if (process.env.NODE_ENV !== 'production') {
 app.use((req, res, next) => {
   let flux = new Flux(req);
 
-  console.log('Created app!');
-
   Router.run(routes, req.path, (Handler, state) => {
     let renderedString = React.renderToString(
       <Handler flux={flux} params={state.params} />
     );
-
-    console.log('Setting up router!');
 
     // TODO(ankit): Encode this!
     let inlineData = flux.serialize();
@@ -62,8 +58,6 @@ app.use((req, res, next) => {
         </body>
       </html>`;
 
-    console.log(output);
-
     res.send(output);
     next();
   });
@@ -78,7 +72,7 @@ if (!!process.env.TESTING) {
 
   // Launch application
   httpServer.listen(8000, () => {
-    console.log('PianoShelf listening on port 8000');
+    console.log('PianoShelf listening on port 8000'); // eslint-disable-line no-console
   });
 
 }
