@@ -9,6 +9,7 @@ import React from 'react';
 import Router from 'react-router';
 
 // Import internal modules
+import config from '../config';
 import Flux from './Flux';
 import routes from './Routes';
 
@@ -28,7 +29,7 @@ let jsPath = '/js/bundle.js';
 // If we're in development, we want to point to webpack-dev-server
 if (process.env.NODE_ENV !== 'production') {
   app.use('/', express.static('build/static'));
-  jsPath = 'http://localhost:8080/js/bundle.js';
+  jsPath = `http://${config.server.webpack.host}:${config.server.webpack.port}/js/bundle.js`;
 }
 
 // Capture all requests
@@ -71,8 +72,8 @@ if (!!process.env.TESTING) {
 } else {
 
   // Launch application
-  httpServer.listen(8000, () => {
-    console.log('PianoShelf listening on port 8000'); // eslint-disable-line no-console
+  httpServer.listen(config.server.dev.port, () => {
+    console.log(`PianoShelf listening on port ${config.server.dev.port}`); // eslint-disable-line no-console
   });
 
 }
