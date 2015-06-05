@@ -18,7 +18,7 @@ let reactRoot = document.getElementById('react-root');
 
 // Import inline flux data
 // TODO(ankit): Decode data once encoding is implemented
-let inlineData = document.querySelector('#react-data').textContent;
+let inlineData = document.getElementById('react-data').textContent;
 flux.deserialize(inlineData);
 
 // Fire up the router
