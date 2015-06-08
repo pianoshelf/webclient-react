@@ -2,6 +2,8 @@
 // Import modules
 import { Flummox } from 'flummox';
 
+import LoginActions from './actions/LoginActions';
+import LoginStore from './stores/LoginStore';
 
 export default class Flux extends Flummox {
 
@@ -13,6 +15,9 @@ export default class Flux extends Flummox {
 
     // Set this instance's request object to the request provided.
     this.request_ = request;
+
+    this.createActions('login', LoginActions);
+    this.createStore('login', LoginStore, this);
 
   }
 

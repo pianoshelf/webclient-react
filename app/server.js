@@ -29,7 +29,7 @@ let jsPath = '/js/bundle.js';
 // If we're in development, we want to point to webpack-dev-server
 if (process.env.NODE_ENV !== 'production') {
   app.use('/', express.static('build/static'));
-  jsPath = `http://${config.server.webpack.host}:${config.server.webpack.port}/js/bundle.js`;
+  jsPath = `http://localhost:${config.server.webpack.port}/js/bundle.js`;
 }
 
 // Capture all requests
@@ -51,11 +51,11 @@ app.use((req, res, next) => {
           <meta charset="utf-8" />
           <meta name="viewport" content="width=device-width,initial-scale=1" />
           <title>PianoShelf</title>
-          <script src="${jsPath}"></script>
         </head>
         <body>
           <div id="react-root">${renderedString}</div>
           <script type="text/inline-data" id="react-data">${inlineData}</script>
+          <script src="${jsPath}"></script>
         </body>
       </html>`;
 
