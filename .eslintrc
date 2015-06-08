@@ -39,7 +39,7 @@
     "comma-dangle": [2, "always-multiline"],
     "no-cond-assign": [2, "always"],
     "no-console": 1,
-    "no-debugger": 1,
+    "no-debugger": 2,
     "no-alert": 1,
     "no-constant-condition": 1,
     "no-dupe-keys": 2,
@@ -163,7 +163,7 @@
     "react/react-in-jsx-scope": 2,
     "react/self-closing-comp": 2,
     "react/wrap-multilines": 2,
-    "react/sort-comp": [2, {
+    "react/sort-comp": [1, {
       "order": [
         "displayName",
         "mixins",

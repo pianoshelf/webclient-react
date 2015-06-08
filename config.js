@@ -1,26 +1,24 @@
 
 module.exports = {
 
-  servers: {
+  server: {
     dev: {
       port: 8000,
-      host: 'localhost',
     },
     webpack: {
       port: 8080,
-      host: 'localhost',
     },
   },
 
 
   api: {
     prefix: 'https://www.pianoshelf.com/api',
-
+    authPrefix: 'https://www.pianoshelf.com/api-auth',
   },
 
 
   cookie: {
-    authToken: 'pianoshelf-authtoken',
+    authtoken: 'pianoshelf-authtoken',
   },
 
 };

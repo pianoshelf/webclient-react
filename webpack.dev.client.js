@@ -16,6 +16,7 @@ let webpackConfig = _.cloneDeep(webpackProdConfig);
 
 // Modify existing properties
 _.assign(webpackConfig, {
+  cache: true,
   debug: true,
   devtool: 'eval-source-map',
 
@@ -27,11 +28,11 @@ _.assign(webpackConfig, {
   ],
 
   devServer: {
-    publicPath: `http://${config.server.dev.host}:${config.server.dev.port}/js/`,
-    contentBase: './build/static/',
+    publicPath: `http://localhost:${config.server.dev.port}/js/`,
+    contentBase: './build/static',
     hot: true,
     inline: true,
-    quiet: true,
+    silent: true,
     noInfo: true,
     headers: { 'Access-Control-Allow-Origin': '*' },
     stats: { colors: true },
@@ -39,13 +40,13 @@ _.assign(webpackConfig, {
 });
 
 // Update output information
-webpackConfig.output.publicPath = `http://${config.server.dev.host}:${config.server.dev.port}/js/`;
+webpackConfig.output.publicPath = `http://localhost:${config.server.dev.port}/js/`;
 webpackConfig.output.hotUpdateMainFilename = 'update/[hash]/update.json';
 webpackConfig.output.hotUpdateChunkFilename = 'update/[hash]/[id].update.js';
 
 // Add entry points
 webpackConfig.entry.unshift(
-  `webpack-dev-server/client?http://${config.server.dev.host}:${config.server.dev.port}/js/`,
+  `webpack-dev-server/client?http://localhost:${config.server.webpack.port}`,
   'webpack/hot/only-dev-server'
 );
 
