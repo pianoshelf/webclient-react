@@ -1,12 +1,9 @@
 /**
- * This file interacts with cookies to store and retrieve auth tokens.
+ * This file interacts with cookies.
  */
 
 // Import external modules
 import Cookie from 'cookie-dough';
-
-// Import internal modules
-import config from '../../config';
 
 /**
  * This function gets a cookie.
