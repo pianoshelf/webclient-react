@@ -31,17 +31,18 @@ export function getCookie(name, flux) {
  * @param {string} name The name of the cookie.
  * @param {string} value The value of the cookie.
  * @param {Flux=} flux The Flux object.
+ * @param {Object} options Options to pass into cookie-dough
  */
-export function setCookie(name, value, flux) {
+export function setCookie(name, value, flux, options) {
 
   // Set cookie if we're on the client.
   if (__CLIENT__) {
-    return Cookie().set(name, value);
+    return Cookie().set(name, value, options);
   }
 
   // Set cookie using request if we're on the server.
   if (__SERVER__) {
-    return (new Cookie(flux.request)).set(name, value);
+    return (new Cookie(flux.request)).set(name, value, options);
   }
 
 }
