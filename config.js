@@ -19,6 +19,7 @@ module.exports = {
 
   cookie: {
     authtoken: 'pianoshelf-authtoken',
+    csrf: 'csrftoken',
   },
 
 };
