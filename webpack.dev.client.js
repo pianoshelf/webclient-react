@@ -53,7 +53,7 @@ webpackConfig.entry.unshift(
 // Modify JS loader so that react-hot works
 webpackConfig.module.loaders[2] = {
   include: /\.jsx?$/,
-  loaders: [ 'react-hot', 'babel-loader' ],
+  loaders: ['react-hot', 'babel-loader?stage=0'],
   exclude: /node_modules/,
 };
 
