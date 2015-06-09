@@ -50,7 +50,8 @@
     "react-router": "^0.13.3",
     "react-tools": "^0.13.3",
     "react-transmit": "^2.6.3",
-    "superagent": "^1.2.0"
+    "superagent": "^1.2.0",
+    "thenify": "^3.1.0"
   },
   "jest": {
     "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
