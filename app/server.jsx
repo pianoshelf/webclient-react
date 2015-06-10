@@ -34,6 +34,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 // Capture all requests
 app.use((req, res, next) => {
+  // Create Flux object
   let flux = new Flux(req);
 
   Router.run(routes, req.path, (Handler, state) => {
