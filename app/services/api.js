@@ -5,7 +5,6 @@
 
 // Import external modules
 import request from 'superagent';
-import thenify from 'thenify';
 
 // Import internal modules
 import config from '../../config';
@@ -20,6 +19,9 @@ function getHeaders_(flux) {
     'Accept': 'application/json',
   };
 
+  // Mirror cookies if we're on the server.
+  if (__SERVER__) headers['Cookie'] = flux.request.get('Cookie');
+
   // Set authorization token header if it exists.
   let auth = getCookie(config.cookie.authtoken, flux);
   if (auth) headers['Authorization'] = auth;
@@ -31,23 +33,21 @@ function getHeaders_(flux) {
   return headers;
 }
 
-
 /**
  * Sends a GET request and returns a promise.
  *
  * @param {string} endpoint The API endpoint.
  * @param {Object} params The query parameters to send in the URL.
- * @param {Object} options Options for the post request.
- *   @param {Flux=} options.flux The Flux object.
+ * @param {Flux=} flux The Flux object.
  *
  * @return {Promise} A promise that resolves when the request is complete.
  */
-export function get(endpoint, params, options) {
-  return thenify((callback) => {
+export function get(endpoint, params, flux) {
+  return new Promise((resolve, reject) => {
     request.get(`${config.api.prefix}${endpoint}`)
       .query(params)
-      .set(getHeaders_(options.flux))
-      .end((error) => callback(error ? new Error(error) : null));
+      .set(getHeaders_(flux))
+      .end((error) => error ? reject(error) : resolve());
   });
 }
 
@@ -56,18 +56,17 @@ export function get(endpoint, params, options) {
  *
  * @param {string} endpoint The API endpoint.
  * @param {Object} params The query parameters to send in the request.
- * @param {Object} options Options for the post request.
- *   @param {boolean=} options.auth Whether we should send it to the auth endpoints.
- *   @param {Flux=} options.flux The Flux object.
+ * @param {Flux=} flux The Flux object.
+ * @param {boolean=} authUrl Whether we should send it to the auth endpoints.
  *
  * @return {Promise} A promise that resolves when the request is complete.
  */
-export function post(endpoint, params, options) {
-  return thenify((callback) => {
-    request.post(`${options.auth ? config.api.authPrefix : config.api.prefix}${endpoint}`)
+export function post(endpoint, params, flux, authUrl) {
+  return new Promise((resolve, reject) => {
+    request.post(`${authUrl ? config.api.authPrefix : config.api.prefix}${endpoint}`)
       .send(params)
-      .set(getHeaders_(options.flux))
-      .end((error) => callback(error ? new Error(error) : null));
+      .set(getHeaders_(flux))
+      .end((error) => error ? reject(error) : resolve());
   });
 }
 
@@ -76,18 +75,17 @@ export function post(endpoint, params, options) {
  *
  * @param {string} endpoint The API endpoint.
  * @param {Object} params The query parameters to send in the request.
- * @param {Object} options Options for the patch request.
- *   @param {boolean=} options.auth Whether we should send it to the auth endpoints.
- *   @param {Flux=} options.flux The Flux object.
+ * @param {Flux=} flux The Flux object.
+ * @param {boolean=} authUrl Whether we should send it to the auth endpoints.
  *
  * @return {Promise} A promise that resolves when the request is complete.
  */
-export function patch(endpoint, params) {
-  return thenify((callback) => {
-    request('PATCH', `${options.auth ? config.api.authPrefix : config.api.prefix}${endpoint}`)
+export function patch(endpoint, params, flux, authUrl) {
+  return new Promise((resolve, reject) => {
+    request('PATCH', `${authUrl ? config.api.authPrefix : config.api.prefix}${endpoint}`)
       .send(params)
-      .set(getHeaders_(options.flux))
-      .end((error) => callback(error ? new Error(error) : null));
+      .set(getHeaders_(flux))
+      .end((error) => error ? reject(error) : resolve());
   });
 }
 
@@ -96,16 +94,15 @@ export function patch(endpoint, params) {
  *
  * @param {string} endpoint The API endpoint.
  * @param {Object} params The query parameters to send in the request.
- * @param {Object} options Options for the delete request.
- *   @param {Flux=} options.flux The Flux object.
+ * @param {Flux=} flux The Flux object.
  *
  * @return {Promise} A promise that resolves when the request is complete.
  */
-export function del(endpoint, params) {
-  return thenify((callback) => {
+export function del(endpoint, params, flux) {
+  return new Promise((resolve, reject) => {
     request.del(`${config.api.prefix}${endpoint}`)
       .send(params)
-      .set(getHeaders_(options.flux))
-      .end((error) => callback(error ? new Error(error) : null));
+      .set(getHeaders_(flux))
+      .end((error) => error ? reject(error) : resolve());
   });
 }
