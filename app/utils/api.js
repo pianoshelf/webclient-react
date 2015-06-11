@@ -53,7 +53,7 @@ function getHeaders_(flux) {
 function finishRequest_(flux, resolve, reject) {
 
   // Return anonymous function
-  return (err, res) => {
+  return function(err, res) {
 
     // If we're on the server and the 'Set-Cookie' header is in the response, propogate
     // that to the client by appending it to the response header.
@@ -65,8 +65,8 @@ function finishRequest_(flux, resolve, reject) {
     }
 
     // Reject if there's an error, otherwise resolve.
-    if (err) reject(err, res);
-    else resolve(err, res);
+    if (err) reject(err);
+    else resolve(res);
   };
 }
 
@@ -75,7 +75,7 @@ function finishRequest_(flux, resolve, reject) {
  *
  * @param {string} endpoint The API endpoint.
  * @param {Object} params The query parameters to send in the URL.
- * @param {Flux=} flux The Flux object.
+ * @param {Flux} flux The Flux object.
  *
  * @return {Promise} A promise that resolves when the request is complete.
  */
@@ -93,7 +93,7 @@ export function get(endpoint, params, flux) {
  *
  * @param {string} endpoint The API endpoint.
  * @param {Object} params The query parameters to send in the request.
- * @param {Flux=} flux The Flux object.
+ * @param {Flux} flux The Flux object.
  * @param {boolean=} authUrl Whether we should send it to the auth endpoints.
  *
  * @return {Promise} A promise that resolves when the request is complete.
@@ -112,7 +112,7 @@ export function post(endpoint, params, flux, authUrl) {
  *
  * @param {string} endpoint The API endpoint.
  * @param {Object} params The query parameters to send in the request.
- * @param {Flux=} flux The Flux object.
+ * @param {Flux} flux The Flux object.
  * @param {boolean=} authUrl Whether we should send it to the auth endpoints.
  *
  * @return {Promise} A promise that resolves when the request is complete.
@@ -131,7 +131,7 @@ export function patch(endpoint, params, flux, authUrl) {
  *
  * @param {string} endpoint The API endpoint.
  * @param {Object} params The query parameters to send in the request.
- * @param {Flux=} flux The Flux object.
+ * @param {Flux} flux The Flux object.
  *
  * @return {Promise} A promise that resolves when the request is complete.
  */
@@ -142,4 +142,23 @@ export function del(endpoint, params, flux) {
       .set(getHeaders_(flux))
       .end(finishRequest_(flux, resolve, reject));
   });
+}
+
+/**
+ * Sets the auth token cookie.
+ *
+ * @param {string} authToken The auth token.
+ * @param {Flux} flux The flux object.
+ */
+export function setAuthToken(authToken, flux) {
+
+  // Return cookie if we're on the client.
+  if (__CLIENT__) {
+    Cookie().set(config.cookie.authtoken, name);
+  }
+
+  // Set cookie from request if we're on the server.
+  if (__SERVER__) {
+    (new Cookie(flux.request)).set(config.cookie.authtoken, name);
+  }
 }
