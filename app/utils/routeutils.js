@@ -22,7 +22,7 @@
  *     assumption that all our stores are fully updated with the correct information,
  *     and call functions like React.renderToString.
  */
-export default function prefetchRouteData(routes, params) {
+export function prefetchRouteData(routes, params) {
   return Promise.all(
     routes
       .map(route => route.handler.routeWillRun)
