@@ -3,6 +3,10 @@
 import { Flummox } from 'flummox';
 
 import LoginActions from './actions/LoginActions';
+import SheetMusicActions from './actions/SheetMusicActions';
+import ShelfActions from './actions/ShelfActions';
+import ProfileActions from './actions/ProfileActions';
+
 import LoginStore from './stores/LoginStore';
 
 export default class Flux extends Flummox {
@@ -19,6 +23,9 @@ export default class Flux extends Flummox {
     this.createActions('login', LoginActions);
     this.createStore('login', LoginStore, this);
 
+    this.createActions('sheetmusic', SheetMusicActions);
+    this.createActions('shelf', ShelfActions);
+    this.createActions('profile', ProfileActions);
   }
 
   /**
