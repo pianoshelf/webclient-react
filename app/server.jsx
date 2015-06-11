@@ -1,5 +1,6 @@
 
 // Import external modules
+import base64 from 'base-64';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import express from 'express';
@@ -12,6 +13,7 @@ import Router from 'react-router';
 import config from '../config';
 import Flux from './Flux';
 import routes from './Routes';
+import { prefetchRouteData } from './utils/routeutils';
 
 // Launch application
 let app = express();
@@ -38,33 +40,47 @@ app.use((req, res, next) => {
   let flux = new Flux(req);
 
   Router.run(routes, req.path, (Handler, state) => {
-    let renderedString = React.renderToString(
-      <Handler flux={flux} params={state.params} />
-    );
 
-    // TODO(ankit): Encode this!
-    let inlineData = flux.serialize();
+    // Function that renders the route.
+    let renderRoute = () => {
+      try {
 
-    let output =
-      `<!DOCTYPE html>
-      <html>
-        <head>
-          <meta charset="utf-8" />
-          <meta name="viewport" content="width=device-width,initial-scale=1" />
-          <title>PianoShelf</title>
-        </head>
-        <body>
-          <div id="react-root">${renderedString}</div>
-          <script type="text/inline-data" id="react-data">${inlineData}</script>
-          <script src="${jsPath}"></script>
-        </body>
-      </html>`;
+        // Render our entire app to a string.
+        let renderedString = React.renderToString(
+          <Handler flux={flux} params={state.params} />
+        );
 
-    res.send(output);
-    next();
+        // Base64 encode all the data in our stores.
+        let inlineData = base64.encode(flux.serialize());
+
+        // Generate boilerplate output.
+        let output =
+          `<!DOCTYPE html>
+          <html>
+            <head>
+              <meta charset="utf-8" />
+              <meta name="viewport" content="width=device-width,initial-scale=1" />
+              <title>PianoShelf</title>
+            </head>
+            <body>
+              <div id="react-root">${renderedString}</div>
+              <script type="text/inline-data" id="react-data">${inlineData}</script>
+              <script src="${jsPath}"></script>
+            </body>
+          </html>`;
+
+        // Send output to ExpressJS.
+        res.send(output);
+      } catch (err) {
+
+        // Forward to next request if there's an error.
+        next(err);
+      }
+    }
+
+    // Make sure we render our route even if the promise fails.
+    prefetchRouteData(state.routes, { flux, state }).then(renderRoute, renderRoute);
   });
-
-
 });
 
 // Export the app in the testing environment
