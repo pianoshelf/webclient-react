@@ -10,6 +10,67 @@ import request from 'superagent';
 import config from '../../config';
 
 /**
+ * Gets the value of a cookie in an isomorphic way.
+ */
+function getCookie_(flux, name) {
+
+  // Return cookie if we're on the client.
+  if (__CLIENT__) {
+    return Cookie().get(name);
+  }
+
+  // Get cookie from request if we're on the server.
+  if (__SERVER__) {
+    return (new Cookie(flux.request)).get(name);
+  }
+}
+
+/**
+ * Retrieves a list of headers to send with the request given the Flux object
+ */
+function getHeaders_(flux) {
+
+  // Initial set of headers.
+  let headers = {};
+
+  // Mirror cookies if we're on the server.
+  if (__SERVER__) headers.Cookie = flux.request.get('Cookie');
+
+  // Set authorization token header if it exists.
+  let auth = getCookie_(flux, config.cookie.authtoken);
+  if (auth) headers.Authorization = auth;
+
+  // Set CSRF header if it exists.
+  let csrf = getCookie_(flux, config.cookie.csrf);
+  if (csrf) headers['X-CSRFToken'] = csrf;
+
+  return headers;
+}
+
+/**
+ * Create a callback that does post-processing on the response.
+ */
+function finishRequest_(flux, resolve, reject) {
+
+  // Return anonymous function
+  return (err, res) => {
+
+    // If we're on the server and the 'Set-Cookie' header is in the response, propogate
+    // that to the client by appending it to the response header.
+    if (__SERVER__) {
+      res.headers['set-cookie'].forEach((header) => {
+        console.log('Set-Cookie: ' + header);
+        flux.request.res.append('Set-Cookie', header);
+      });
+    }
+
+    // Reject if there's an error, otherwise resolve.
+    if (err) reject(err, res);
+    else resolve(err, res);
+  };
+}
+
+/**
  * Sends a GET request and returns a promise.
  *
  * @param {string} endpoint The API endpoint.
@@ -81,68 +142,4 @@ export function del(endpoint, params, flux) {
       .set(getHeaders_(flux))
       .end(finishRequest_(flux, resolve, reject));
   });
-}
-
-/**
- * Retrieves a list of headers to send with the request given the Flux object
- */
-function getHeaders_(flux) {
-
-  // Initial set of headers.
-  let headers = {
-    'Accept': 'application/json',
-  };
-
-  // Mirror cookies if we're on the server.
-  if (__SERVER__) headers.Cookie = flux.request.get('Cookie');
-
-  // Set authorization token header if it exists.
-  let auth = getCookie_(flux, config.cookie.authtoken);
-  if (auth) headers.Authorization = auth;
-
-  // Set CSRF header if it exists.
-  let csrf = getCookie_(flux, config.cookie.csrf);
-  if (csrf) headers['X-CSRFToken'] = csrf;
-
-  return headers;
-}
-
-/**
- * Create a callback that does post-processing on the response.
- */
-function finishRequest_(flux, resolve, reject) {
-
-  // Return anonymous function
-  return (err, res) => {
-
-    // If we're on the server and the 'Set-Cookie' header is in the response, propogate
-    // that to the client by appending it to the response header.
-    if (__SERVER__) {
-      res.headers['set-cookie'].forEach((header) => {
-        flux.request.res.append('Set-Cookie', header);
-      });
-    }
-
-    // Reject if there's an error, otherwise resolve.
-    if (err) reject(err);
-    else resolve(res);
-  };
-
-}
-
-/**
- * Gets the value of a cookie in an isomorphic way.
- */
-function getCookie_(flux, name) {
-
-  // Return cookie if we're on the client.
-  if (__CLIENT__) {
-    return Cookie().get(name);
-  }
-
-  // Get cookie from request if we're on the server.
-  if (__SERVER__) {
-    return (new Cookie(flux.request)).get(name);
-  }
-
 }
