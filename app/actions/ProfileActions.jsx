@@ -11,7 +11,7 @@ import { get, post } from '../services/api';
  */
 export default class ProfileActions extends Actions {
 
-  getProfile(username) {
+  getProfile(username, flux) {
     return get(
       '/profile/',
       { username },
@@ -19,7 +19,7 @@ export default class ProfileActions extends Actions {
     );
   }
 
-  updateProfileDescription(description) {
+  updateProfileDescription(description, flux) {
     return post(
       '/profile/',
       { description },
@@ -27,7 +27,7 @@ export default class ProfileActions extends Actions {
     );
   }
 
-  getCommentsForUser(username) {
+  getCommentsForUser(username, flux) {
     return get(
       '/comment/',
       { username },
@@ -35,7 +35,7 @@ export default class ProfileActions extends Actions {
     );
   }
 
-  getUploadsForUser(username, page) {
+  getUploadsForUser(username, page, flux) {
     return get(
       '/sheetmusic/uploads/',
       { username, page },
@@ -43,7 +43,7 @@ export default class ProfileActions extends Actions {
     );
   }
 
-  getVideosForUser(username) {
+  getVideosForUser(username, flux) {
     return get(
       '/video/',
       { username },
