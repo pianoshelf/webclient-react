@@ -36,6 +36,7 @@
   "dependencies": {
     "babel": "^5.4.7",
     "babel-plugin-typecheck": "0.0.3",
+    "base-64": "^0.1.0",
     "bluebird": "^2.9.27",
     "body-parser": "^1.12.4",
     "cookie-dough": "0.0.6",
