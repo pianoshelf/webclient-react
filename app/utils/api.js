@@ -69,7 +69,6 @@ function finishRequest_(flux, resolve, reject) {
     // that to the client by appending it to the response header.
     if (__SERVER__) {
       res.headers['set-cookie'].forEach((header) => {
-        console.log('Set-Cookie: ' + header);
         flux.request.res.append('Set-Cookie', header);
       });
     }

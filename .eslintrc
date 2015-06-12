@@ -123,9 +123,7 @@
         "beforeColon": false,
         "afterColon": true
     }],
-    "new-cap": [2, {
-      "newIsCap": true
-    }],
+    "new-cap": 0,
     "no-multiple-empty-lines": [2, {
       "max": 2
     }],
@@ -135,7 +133,7 @@
     "no-trailing-spaces": 2,
     "no-wrap-func": 2,
     "no-underscore-dangle": 0,
-    "one-var": [2, "never"],
+    "one-var": 0,
     "padded-blocks": 0,
     "semi": [2, "always"],
     "semi-spacing": [2, {
