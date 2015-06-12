@@ -1,6 +1,6 @@
 # React-Shelf
 
-[![Build Status](https://travis-ci.org/Pianoshelf/react-shelf.svg?branch=master)](https://travis-ci.org/Pianoshelf/react-shelf)
+[![Circle CI](https://circleci.com/gh/Pianoshelf/react-shelf/tree/master.svg?style=svg)](https://circleci.com/gh/Pianoshelf/react-shelf/tree/master)
 
 This repository is the front-end codebase of PianoShelf written with ReactJS.
 
