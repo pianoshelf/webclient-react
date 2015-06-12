@@ -8,7 +8,7 @@
     "lint": "./node_modules/.bin/eslint app",
     "start": "NODE_PATH=\"./app\" node babel.server",
     "watch-client": "./node_modules/.bin/webpack --quiet --display-error-details --config webpack.dev.client.js && ./node_modules/.bin/webpack-dev-server --config webpack.dev.client.js",
-    "watch": "./node_modules/.bin/concurrent --kill-others \"npm run watch-client\" \"npm run start\"",
+    "watch": "./node_modules/.bin/concurrent --kill-others \"npm run -q watch-client\" \"npm run -q start\"",
     "test": "./node_modules/.bin/jest"
   },
   "repository": {
@@ -36,7 +36,10 @@
   "dependencies": {
     "babel": "^5.4.7",
     "babel-plugin-typecheck": "0.0.3",
+    "base-64": "^0.1.0",
+    "bluebird": "^2.9.27",
     "body-parser": "^1.12.4",
+    "cookie-dough": "0.0.6",
     "cookie-parser": "^1.3.5",
     "express": "^4.12.4",
     "express-promise": "^0.4.0",
@@ -49,7 +52,8 @@
     "react-router": "^0.13.3",
     "react-tools": "^0.13.3",
     "react-transmit": "^2.6.3",
-    "superagent": "^1.2.0"
+    "superagent": "^1.2.0",
+    "thenify": "^3.1.0"
   },
   "jest": {
     "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
@@ -57,7 +61,16 @@
       "<rootDir>/node_modules/react",
       "<rootDir>/node_modules/react-tools"
     ],
-    "moduleFileExtensions": ["js", "json", "es6", "jsx"],
-    "testFileExtensions": ["js", "es6", "jsx"]
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "es6",
+      "jsx"
+    ],
+    "testFileExtensions": [
+      "js",
+      "es6",
+      "jsx"
+    ]
   }
 }

@@ -27,7 +27,9 @@
     "jsx": true
   },
   "globals": {
-    "jest": true
+    "jest": true,
+    "__SERVER__": true,
+    "__CLIENT__": true
   },
   "rules": {
     "strict": [2, "never"],
@@ -39,7 +41,7 @@
     "comma-dangle": [2, "always-multiline"],
     "no-cond-assign": [2, "always"],
     "no-console": 1,
-    "no-debugger": 1,
+    "no-debugger": 2,
     "no-alert": 1,
     "no-constant-condition": 1,
     "no-dupe-keys": 2,
@@ -121,9 +123,7 @@
         "beforeColon": false,
         "afterColon": true
     }],
-    "new-cap": [2, {
-      "newIsCap": true
-    }],
+    "new-cap": 0,
     "no-multiple-empty-lines": [2, {
       "max": 2
     }],
@@ -133,7 +133,7 @@
     "no-trailing-spaces": 2,
     "no-wrap-func": 2,
     "no-underscore-dangle": 0,
-    "one-var": [2, "never"],
+    "one-var": 0,
     "padded-blocks": 0,
     "semi": [2, "always"],
     "semi-spacing": [2, {
@@ -163,7 +163,7 @@
     "react/react-in-jsx-scope": 2,
     "react/self-closing-comp": 2,
     "react/wrap-multilines": 2,
-    "react/sort-comp": [2, {
+    "react/sort-comp": [1, {
       "order": [
         "displayName",
         "mixins",

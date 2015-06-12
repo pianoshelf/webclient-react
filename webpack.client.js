@@ -14,7 +14,7 @@ module.exports = {
   entry: ['./app/client.jsx'],
 
   output: {
-    path: path.resolve('./build/static/js'),
+    path: path.join(__dirname, 'build/static/js'),
     filename: 'bundle.js',
     chunkFilename: '[name].[id].js',
     publicPath: 'js/',
@@ -41,7 +41,7 @@ module.exports = {
       {
         include: /\.jsx?$/,
         exclude: /node_modules/,
-        loaders: ['babel'],
+        loaders: ['babel-loader?stage=0'],
       },
     ],
   },

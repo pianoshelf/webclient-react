@@ -17,8 +17,8 @@ const { Route, DefaultRoute, NotFoundRoute } = Router;
  * @module Routes
  */
 export default (
-  <Route handler={App}>
-    <Route name="main" handler={Main} path="/" />
+  <Route handler={App} path="/">
+    <DefaultRoute handler={Main} />
   </Route>
 );
 

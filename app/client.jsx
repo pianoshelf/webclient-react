@@ -3,6 +3,7 @@
 import 'babel/polyfill';
 
 // Import external modules
+import base64 from 'base-64';
 import React from 'react';
 import Router from 'react-router';
 
@@ -17,9 +18,8 @@ let flux = new Flux();
 let reactRoot = document.getElementById('react-root');
 
 // Import inline flux data
-// TODO(ankit): Decode data once encoding is implemented
-let inlineData = document.querySelector('#react-data').textContent;
-flux.deserialize(inlineData);
+let inlineData = document.getElementById('react-data').textContent;
+flux.deserialize(base64.decode(inlineData));
 
 // Fire up the router
 Router.run(routes, Router.HistoryLocation, (Handler, state) => {

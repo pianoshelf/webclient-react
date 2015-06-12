@@ -7,7 +7,7 @@ const App = React.createClass({
   mixins: [fluxMixin()],
 
   render() {
-    return <RouteHandler {...this.props} />;
+    return <RouteHandler />;
   },
 });
 
