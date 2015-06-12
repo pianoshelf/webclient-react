@@ -21,7 +21,7 @@ _.assign(webpackConfig, {
   devtool: 'eval-source-map',
 
   plugins: [
-    new webpack.DefinePlugin({ 'process.env': { NODE_ENV: '"production"' } }),
+    new webpack.DefinePlugin({ 'process.env': { NODE_ENV: '"development"' } }),
     new webpack.DefinePlugin({ __CLIENT__: true, __SERVER__: false }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),

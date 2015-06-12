@@ -9,6 +9,16 @@ import request from 'superagent';
 // Import internal modules
 import config from '../../config';
 
+// Select the correct URL prefix based on environment variables.
+let apiUrl, authUrl;
+if (process.env.NODE_ENV === 'production') {
+  apiUrl = config.api.prod.prefix;
+  authUrl = config.api.prod.authPrefix;
+} else {
+  apiUrl = config.api.dev.prefix;
+  authUrl = config.api.dev.authPrefix;
+}
+
 /**
  * Gets the value of a cookie in an isomorphic way.
  */
@@ -81,7 +91,7 @@ function finishRequest_(flux, resolve, reject) {
  */
 export function get(endpoint, params, flux) {
   return new Promise((resolve, reject) => {
-    request.get(`${config.api.prefix}${endpoint}`)
+    request.get(`${apiUrl}${endpoint}`)
       .query(params)
       .set(getHeaders_(flux))
       .end(finishRequest_(flux, resolve, reject));
@@ -94,13 +104,13 @@ export function get(endpoint, params, flux) {
  * @param {string} endpoint The API endpoint.
  * @param {Object} params The query parameters to send in the request.
  * @param {Flux} flux The Flux object.
- * @param {boolean=} authUrl Whether we should send it to the auth endpoints.
+ * @param {boolean=} auth Whether we should send it to the auth endpoints.
  *
  * @return {Promise} A promise that resolves when the request is complete.
  */
-export function post(endpoint, params, flux, authUrl) {
+export function post(endpoint, params, flux, auth) {
   return new Promise((resolve, reject) => {
-    request.post(`${authUrl ? config.api.authPrefix : config.api.prefix}${endpoint}`)
+    request.post(`${auth ? authUrl : apiUrl}${endpoint}`)
       .send(params)
       .set(getHeaders_(flux))
       .end(finishRequest_(flux, resolve, reject));
@@ -113,13 +123,13 @@ export function post(endpoint, params, flux, authUrl) {
  * @param {string} endpoint The API endpoint.
  * @param {Object} params The query parameters to send in the request.
  * @param {Flux} flux The Flux object.
- * @param {boolean=} authUrl Whether we should send it to the auth endpoints.
+ * @param {boolean=} auth Whether we should send it to the auth endpoints.
  *
  * @return {Promise} A promise that resolves when the request is complete.
  */
-export function patch(endpoint, params, flux, authUrl) {
+export function patch(endpoint, params, flux, auth) {
   return new Promise((resolve, reject) => {
-    request('PATCH', `${authUrl ? config.api.authPrefix : config.api.prefix}${endpoint}`)
+    request('PATCH', `${auth ? authUrl : apiUrl}${endpoint}`)
       .send(params)
       .set(getHeaders_(flux))
       .end(finishRequest_(flux, resolve, reject));
@@ -137,7 +147,7 @@ export function patch(endpoint, params, flux, authUrl) {
  */
 export function del(endpoint, params, flux) {
   return new Promise((resolve, reject) => {
-    request.del(`${config.api.prefix}${endpoint}`)
+    request.del(`${apiUrl}${endpoint}`)
       .send(params)
       .set(getHeaders_(flux))
       .end(finishRequest_(flux, resolve, reject));

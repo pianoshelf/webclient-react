@@ -12,8 +12,14 @@ module.exports = {
 
 
   api: {
-    prefix: 'https://www.pianoshelf.com/api',
-    authPrefix: 'https://www.pianoshelf.com/api-auth',
+    prod: {
+      prefix: 'https://www.pianoshelf.com/api',
+      authPrefix: 'https://www.pianoshelf.com/api-auth',
+    },
+    dev: {
+      prefix: 'http://localhost:5000/api',
+      authPrefix: 'http://localhost:5000/api-auth',
+    },
   },
 
 
