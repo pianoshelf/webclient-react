@@ -9,7 +9,7 @@
     "start": "NODE_PATH=\"./app\" node babel.server",
     "watch-client": "./node_modules/.bin/webpack --quiet --display-error-details --config webpack.dev.client.js && ./node_modules/.bin/webpack-dev-server --config webpack.dev.client.js",
     "watch": "./node_modules/.bin/concurrent --kill-others \"npm run -q watch-client\" \"npm run -q start\"",
-    "test": "./node_modules/.bin/mocha"
+    "test": "./node_modules/.bin/mocha --compilers js:babel/register"
   },
   "repository": {
     "type": "git",
