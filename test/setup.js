@@ -1,3 +1,4 @@
+'use strict'; // eslint-disable-line strict
 
 // Import JSDOM
 let jsdom = require('jsdom');
