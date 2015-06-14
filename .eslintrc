@@ -27,7 +27,6 @@
     "jsx": true
   },
   "globals": {
-    "jest": true,
     "__SERVER__": true,
     "__CLIENT__": true
   },
