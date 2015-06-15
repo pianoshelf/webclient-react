@@ -14,3 +14,6 @@ global.document = jsdom('<!doctype html><html><body></body></html>');
 // Set up global.window variable
 global.window = document.parentWindow;
 
+// Set up global server/client variables
+global.__SERVER__ = false;
+global.__CLIENT__ = false;

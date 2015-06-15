@@ -6,10 +6,10 @@
   "scripts": {
     "compile": "./node_modules/.bin/webpack --verbose --colors --display-error-details --config webpack.client.js",
     "lint": "./node_modules/.bin/eslint app",
-    "start": "NODE_PATH=\"./app\" node babel.server",
+    "start": "NODE_PATH=\".\" node babel.server",
     "watch-client": "./node_modules/.bin/webpack --quiet --display-error-details --config webpack.dev.client.js && ./node_modules/.bin/webpack-dev-server --config webpack.dev.client.js",
     "watch": "./node_modules/.bin/concurrent --kill-others \"npm run -q watch-client\" \"npm run -q start\"",
-    "test": "./node_modules/.bin/mocha --compilers js:babel/register"
+    "test": "NODE_PATH=\".\" ./node_modules/.bin/mocha --compilers js:babel/register --recursive"
   },
   "repository": {
     "type": "git",
@@ -31,6 +31,7 @@
     "eslint-plugin-react": "^2.4.0",
     "jsdom": "^5.4.3",
     "mocha": "^2.2.5",
+    "nock": "^2.5.0",
     "react-hot-loader": "^1.2.7",
     "webpack": "^1.9.10",
     "webpack-dev-server": "^1.9.0"
