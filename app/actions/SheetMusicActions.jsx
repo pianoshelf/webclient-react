@@ -43,10 +43,10 @@ export default class SheetMusicActions extends Actions {
     );
   }
 
-  getTrendingSheetMusic(days, flux) {
+  getTrendingSheetMusic(days, results, flux) {
     return get(
       '/sheetmusic/trending',
-      { days, results: 10 },
+      { days, results },
       flux
     );
   }
@@ -93,13 +93,13 @@ export default class SheetMusicActions extends Actions {
 
   postVideo(link, title, grade, sheetId, flux) {
     if (sheetId === null) {
-      post(
+      return post(
         '/video/',
         { link, title, grade },
         flux
       );
     } else {
-      post(
+      return post(
         '/video/',
         { link, title, grade, sheetmusicId: sheetId },
         flux
@@ -150,7 +150,7 @@ export default class SheetMusicActions extends Actions {
   editComment(commentId, commentText, flux) {
     return patch(
       `/comment/${commentId}/`,
-      {},
+      { commentText },
       flux
     );
   }
