@@ -28,8 +28,8 @@ _.assign(webpackConfig, {
   ],
 
   devServer: {
-    publicPath: `http://localhost:${config.server.dev.port}/js/`,
-    contentBase: './build/static',
+    publicPath: `http://localhost:${config.ports.webpack}/`,
+    contentBase: './build',
     hot: true,
     inline: true,
     silent: true,
@@ -40,18 +40,18 @@ _.assign(webpackConfig, {
 });
 
 // Update output information
-webpackConfig.output.publicPath = `http://localhost:${config.server.dev.port}/js/`;
+webpackConfig.output.publicPath = `http://localhost:${config.ports.webpack}/`;
 webpackConfig.output.hotUpdateMainFilename = 'update/[hash]/update.json';
 webpackConfig.output.hotUpdateChunkFilename = 'update/[hash]/[id].update.js';
 
 // Add entry points
 webpackConfig.entry.unshift(
-  `webpack-dev-server/client?http://localhost:${config.server.webpack.port}`,
+  `webpack-dev-server/client?http://localhost:${config.ports.webpack}`,
   'webpack/hot/only-dev-server'
 );
 
 // Modify JS loader so that react-hot works
-webpackConfig.module.loaders[2] = {
+webpackConfig.module.loaders[1] = {
   include: /\.jsx?$/,
   loaders: ['react-hot', 'babel-loader?stage=0'],
   exclude: /node_modules/,

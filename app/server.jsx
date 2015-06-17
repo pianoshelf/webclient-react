@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import express from 'express';
 import expressPromise from 'express-promise';
 import http from 'http';
+import path from 'path';
 import React from 'react';
 import Router from 'react-router';
 
@@ -25,13 +26,19 @@ let httpServer = http.createServer(app);
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-// The path to the compiled JS file in production
-let jsPath = '/js/bundle.js';
+// Paths to javascript file and CSS file
+let jsPath, cssPath;
 
-// If we're in development, we want to point to webpack-dev-server
-if (process.env.NODE_ENV !== 'production') {
-  app.use('/', express.static('build/static'));
-  jsPath = `http://localhost:${config.server.webpack.port}/js/bundle.js`;
+// If we're in production, we want to make the build directory a static directory in /assets
+if (process.env.NODE_ENV === 'production') {
+  app.use('/assets/', express.static(path.join(__dirname, '..', 'build')));
+  jsPath = `/assets/${config.files.js.out}`;
+  cssPath = `/assets/${config.files.css.out}`;
+
+// If we're in development, we want to point to webpack-dev-server.
+} else {
+  jsPath = `http://localhost:${config.ports.webpack}/${config.files.js.out}`;
+  cssPath = `http://localhost:${config.ports.webpack}/${config.files.css.out}`;
 }
 
 // Capture all requests
@@ -61,6 +68,7 @@ app.use((req, res, next) => {
               <meta charset="utf-8" />
               <meta name="viewport" content="width=device-width,initial-scale=1" />
               <title>PianoShelf</title>
+              <link rel="stylesheet" href="${cssPath}" />
             </head>
             <body>
               <div id="react-root">${renderedString}</div>
@@ -76,7 +84,7 @@ app.use((req, res, next) => {
         // Forward to next request if there's an error.
         next(err);
       }
-    }
+    };
 
     // Make sure we render our route even if the promise fails.
     prefetchRouteData(state.routes, { flux, state }).then(renderRoute, renderRoute);
@@ -89,8 +97,8 @@ if (!!process.env.TESTING) {
 } else {
 
   // Launch application
-  httpServer.listen(config.server.dev.port, () => {
-    console.log(`PianoShelf listening on port ${config.server.dev.port}`); // eslint-disable-line no-console
+  httpServer.listen(config.ports.express, () => {
+    console.log(`PianoShelf listening on port ${config.ports.express}`); // eslint-disable-line no-console
   });
 
 }
