@@ -4,8 +4,8 @@ import React from 'react';
 import Router from 'react-router';
 
 // Import internal modules
-import App from './components/App';
-import Main from './components/Main';
+import App from 'app/components/App';
+import Main from 'app/components/Main';
 
 // Extract router components from Router
 const { Route, DefaultRoute, NotFoundRoute } = Router;

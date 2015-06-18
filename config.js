@@ -1,15 +1,24 @@
 
 module.exports = {
 
-  server: {
-    dev: {
-      port: 8000,
-    },
-    webpack: {
-      port: 8080,
-    },
+  ports: {
+    webpack: 8080,
+    express: 5092,
   },
 
+  files: {
+    js: {
+      entry: './app/client.jsx',
+      src: ['./app/**/*.js', './app/**/*.jsx'],
+      out: 'bundle.js',
+    },
+    css: {
+      entry: './assets/main.sass',
+      src: './assets/**/*.sass',
+      out: 'main.css',
+    },
+    out: './build/',
+  },
 
   api: {
     prod: {

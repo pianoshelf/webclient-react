@@ -5,19 +5,21 @@
 let webpack = require('webpack');
 let path = require('path');
 
+let config = require('./config');
+
 module.exports = {
 
   target: 'web',
   cache: true,
   debug: false,
   devtool: 'none',
-  entry: ['./app/client.jsx'],
+  entry: [ config.files.js.entry ],
 
   output: {
-    path: path.join(__dirname, 'build/static/js'),
-    filename: 'bundle.js',
+    path: path.join(__dirname, 'build'),
+    filename: config.files.js.out,
     chunkFilename: '[name].[id].js',
-    publicPath: 'js/',
+    publicPath: '/assets/',
   },
 
   plugins: [
@@ -30,10 +32,6 @@ module.exports = {
 
   module: {
     loaders: [
-      {
-        include: /\.css$/,
-        loaders: ['style', 'css'],
-      },
       {
         include: /\.json$/,
         loaders: ['json'],
@@ -52,6 +50,7 @@ module.exports = {
 
   resolve: {
     extensions: ['', '.jsx', '.js'],
+    root: path.resolve('.'),
   },
 
 };

@@ -7,7 +7,7 @@ import Cookie from 'cookie-dough';
 import request from 'superagent';
 
 // Import internal modules
-import config from '../../config';
+import config from 'config';
 
 // Select the correct URL prefix based on environment variables.
 let apiUrl, authUrl;

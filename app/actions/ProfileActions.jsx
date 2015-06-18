@@ -3,7 +3,7 @@
 import { Actions } from 'flummox';
 
 // Import internal modules
-import { get, post } from '../utils/api';
+import { get, post } from 'app/utils/api';
 
 /**
  * Actions for anything that has to do with sheet music.
