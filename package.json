@@ -4,9 +4,9 @@
   "description": "Front-end for pianoshelf.com made using ReactJS",
   "main": "babel.server.js",
   "scripts": {
-    "compile": "./node_modules/.bin/gulp compile",
+    "compile": "NODE_PATH=\".\" ./node_modules/.bin/gulp compile",
     "lint": "./node_modules/.bin/eslint app",
-    "watch": "./node_modules/.bin/gulp watch",
+    "watch": "NODE_PATH=\".\" ./node_modules/.bin/gulp watch",
     "test": "NODE_PATH=\".\" ./node_modules/.bin/mocha --compilers js:babel/register --recursive"
   },
   "repository": {

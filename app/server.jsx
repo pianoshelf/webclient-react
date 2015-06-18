@@ -11,10 +11,10 @@ import React from 'react';
 import Router from 'react-router';
 
 // Import internal modules
-import config from '../config';
-import Flux from './Flux';
-import routes from './Routes';
-import { prefetchRouteData } from './utils/routeutils';
+import config from 'config';
+import Flux from 'app/Flux';
+import routes from 'app/Routes';
+import { prefetchRouteData } from 'app/utils/routeutils';
 
 // Launch application
 let app = express();

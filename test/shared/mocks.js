@@ -1,6 +1,6 @@
 
 // Import config file
-import config from 'config.js';
+import config from 'config';
 
 export function mockApiCall(httpPrefix, path, params) {
   let nock = require('nock');

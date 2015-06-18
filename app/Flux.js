@@ -2,13 +2,16 @@
 // Import modules
 import { Flummox } from 'flummox';
 
-import LoginActions from './actions/LoginActions';
-import SheetMusicActions from './actions/SheetMusicActions';
-import ShelfActions from './actions/ShelfActions';
-import ProfileActions from './actions/ProfileActions';
+// Import actions
+import LoginActions from 'app/actions/LoginActions';
+import SheetMusicActions from 'app/actions/SheetMusicActions';
+import ShelfActions from 'app/actions/ShelfActions';
+import ProfileActions from 'app/actions/ProfileActions';
 
-import LoginStore from './stores/LoginStore';
+// Import stores
+import LoginStore from 'app/stores/LoginStore';
 
+// Export Flux class
 export default class Flux extends Flummox {
 
   /**

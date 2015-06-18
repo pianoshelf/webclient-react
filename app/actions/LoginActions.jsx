@@ -3,7 +3,7 @@
 import { Actions } from 'flummox';
 
 // Import internal modules
-import { post } from '../utils/api';
+import { post } from 'app/utils/api';
 
 /**
  * Actions for anything that has to do with authentication.

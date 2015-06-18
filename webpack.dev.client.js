@@ -6,7 +6,7 @@ let _ = require('lodash');
 let webpack = require('webpack');
 
 // Import production webpack configuration
-let webpackProdConfig = require('./webpack.client.js');
+let webpackProdConfig = require('./webpack.client');
 
 // Import config
 let config = require('./config');
