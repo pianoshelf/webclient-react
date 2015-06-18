@@ -3,7 +3,7 @@ module.exports = {
 
   ports: {
     webpack: 8080,
-    express: 5000,
+    express: 5092,
   },
 
   files: {
