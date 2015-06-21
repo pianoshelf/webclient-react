@@ -1,13 +1,7 @@
 
 @import 'variables/colors'
 @import 'variables/fonts'
-@import 'variables/responsive'
-
-// Height of the navbar
-$navbar-height: 64px
-
-// Width of the border at the bottom of navbar
-$navbar-border-width: 2px
+@import 'variables/globals'
 
 // Height of the Pianoshelf logo
 $navbar-logo-height: 90px
@@ -29,19 +23,11 @@ $navbar-beta-offset: 12px
   position: fixed
   top: 0
   left: 0
-  height: $navbar-height + $navbar-border-width
-  border-bottom: $navbar-border-width solid $pianoshelf-blue-light
-  background-color: lighten($pianoshelf-blue-light, 20%)
-  width: 100%
+  height: $navbar-height + 2px
+  background-color: #fff
 
-// This is for the navbar container.
-.navbar__container
-  position: relative
-  margin: auto
-  height: $navbar-height
-  width: 100%
-  max-width: $site-width
-  padding-left: $navbar-logo-height + $navbar-title-offset
+.navbar--homepage
+  background-color: transparent
 
 // This is for the logo on the navbar.
 .navbar__logo
@@ -71,7 +57,7 @@ $navbar-beta-offset: 12px
   margin: 0 $navbar-beta-offset
   font-size: $font-small
 
-// This is for buttons in the nav bar
+// This is for buttons in the navbar
 .navbar__button
   display: inline-block
   float: right
@@ -83,6 +69,7 @@ $navbar-beta-offset: 12px
   &:hover
     background-color: lighten($pianoshelf-blue-light, 10%)
 
+// This is for buttons that should be highlighted in the navbar
 .navbar__button--important
   background-color: lighten($green, 10%)
 
