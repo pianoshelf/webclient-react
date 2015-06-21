@@ -1,20 +1,67 @@
 
-/**
- * This is for the navbar at the top.
- */
+@import 'variables/colors'
+@import 'variables/fonts'
+@import 'variables/responsive'
+
+// Height of the navbar
+$navbar-height: 64px
+
+// Width of the border at the bottom of navbar
+$navbar-border-width: 2px
+
+// Height of the Pianoshelf logo
+$navbar-logo-height: 90px
+
+// Offset between title and logo
+$navbar-title-offset: 10px
+
+// Offset between title and top (because our font is not perfectly center)
+$navbar-title-vertical-offset: 10px
+
+// Font size of our title
+$navbar-font-size: 35px
+
+// Distance between beta sticker and title
+$navbar-beta-offset: 12px
+
+// This is for the navbar at the top.
 .navbar
   position: fixed
   top: 0
   left: 0
+  height: $navbar-height
+  border-bottom: $navbar-border-width solid $pianoshelf-blue-light
   width: 100%
-  height: 64px
-  border-bottom: 5px solid #000
 
+// This is for the navbar container.
+.navbar__container
+  position: relative
+  margin: auto
+  height: $navbar-height
+  width: 100%
+  max-width: $site-width
+  padding-left: $navbar-logo-height + $navbar-title-offset
 
+// This is for the logo on the navbar.
 .navbar__logo
-  
+  width: $navbar-logo-height
+  height: $navbar-logo-height
+  position: absolute
+  left: 0
+  background-image: url('logo.svg')
 
+// This is for the title on the navbar
+.navbar__title
+  display: inline-block
+  line-height: $navbar-height - $navbar-title-vertical-offset
+  font-size: $navbar-font-size
+  font-family: $title-font
+  color: $pianoshelf-blue-dark-2
+  padding-top: $navbar-title-vertical-offset
+  font-weight: 300
 
-
+.navbar__title--beta
+  display: inline-block
+  padding: 0 $navbar-beta-offset
 
 

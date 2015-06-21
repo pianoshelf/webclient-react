@@ -1,0 +1,21 @@
+/**
+ * This file contains responsive measurements for the whole site.
+ */
+
+// Width of the main container of the site
+$site-width: 760px
+
+// Responsive variables
+$desktop-min: 1140px
+$tablet-min: 580px
+
+// Styles to apply when we're larger than $tablet-min
+=when-tablet
+  @media (min-width: $tablet-min)
+    @content
+
+// Styles to apply when we're larger than $desktop-min
+=when-desktop
+  @media (min-width: $desktop-min)
+    @content
+

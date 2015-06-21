@@ -2,7 +2,10 @@
 import fluxMixin from 'flummox/mixin';
 import React from 'react';
 
-let Main = React.createClass({
+// Import components
+import NavBar from 'app/components/NavBar';
+
+export default React.createClass({
   mixins: [fluxMixin(['login'])],
 
   getInitialState() {
@@ -11,17 +14,15 @@ let Main = React.createClass({
     };
   },
 
-  onClick() {
-    this.flux.getActions('login').loginUser('dude');
-  },
-
   render() {
     return (
-      <div>{this.state.ayyLmao} hh<button onClick={this.onClick}>hi</button></div>
+      <div>
+        <NavBar homepage={true} />
+
+
+      </div>
     );
   },
 
 });
-
-export default Main;
 
