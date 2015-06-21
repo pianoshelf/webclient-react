@@ -4,8 +4,9 @@
 let browserSync = require('browser-sync');
 let gulp = require('gulp');
 let gutil = require('gulp-util');
-let prefix = require('gulp-autoprefixer');
+let imagemin = require('gulp-imagemin');
 let nodemon = require('nodemon');
+let prefix = require('gulp-autoprefixer');
 let reload = browserSync.reload;
 let sass = require('gulp-sass');
 let webpack = require('webpack');
@@ -16,6 +17,16 @@ let config = require('./config');
 
 // Boolean for whether we're running webpack-dev-server
 let isRunningDevServer = false;
+
+/**
+ * Compile our images
+ */
+gulp.task('build:images', function() {
+  return gulp.src(config.files.images.src)
+    .pipe(imagemin())
+    .pipe(gulp.dest(config.files.out))
+    .pipe(reload({ stream: true }));
+});
 
 /**
  * Compile our CSS files
@@ -71,9 +82,10 @@ gulp.task('build:js:prod', function(callback) {
 /**
  * Watch the necessary directories and launch BrowserSync.
  */
-gulp.task('watch', ['build:js', 'build:css'], function() {
+gulp.task('watch', ['build:js', 'build:css', 'build:images'], function() {
   gulp.watch(config.files.js.src, ['build:js']);
   gulp.watch(config.files.css.src, ['build:css']);
+  gulp.watch(config.files.images.src, ['build:images']);
 
   // Launch Nodemon
   nodemon({

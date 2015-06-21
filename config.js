@@ -13,9 +13,12 @@ module.exports = {
       out: 'bundle.js',
     },
     css: {
-      entry: './assets/main.sass',
-      src: './assets/**/*.sass',
+      entry: './assets/css/main.sass',
+      src: './assets/css/**/*.sass',
       out: 'main.css',
+    },
+    images: {
+      src: './assets/images/*',
     },
     out: './build/',
   },
