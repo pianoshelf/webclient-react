@@ -14,7 +14,7 @@ module.exports = {
     },
     css: {
       entry: './assets/css/main.sass',
-      src: './assets/css/**/*.sass',
+      src: './assets/css/**/**/*.sass',
       out: 'main.css',
     },
     images: {
