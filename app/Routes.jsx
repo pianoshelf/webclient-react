@@ -18,7 +18,9 @@ const { Route, DefaultRoute, NotFoundRoute } = Router;
  */
 export default (
   <Route handler={App} path="/">
-    <DefaultRoute handler={Main} />
+    <Route name="register" />
+    <Route name="login" />
+    <DefaultRoute name="home" handler={Main} />
   </Route>
 );
 
