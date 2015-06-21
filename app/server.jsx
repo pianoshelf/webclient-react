@@ -20,6 +20,9 @@ import { prefetchRouteData } from 'app/utils/routeutils';
 let app = express();
 let httpServer = http.createServer(app);
 
+// Serve public folder
+app.use(express.static(path.join(__dirname, '..', 'public')));
+
 // Allow returning promises to response object
 // app.use(expressPromise);
 
@@ -29,14 +32,15 @@ app.use(cookieParser());
 // Paths to javascript file and CSS file
 let jsPath, cssPath;
 
-// If we're in production, we want to make the build directory a static directory in /assets
+// Use build directory as assets
+app.use('/assets/', express.static(path.join(__dirname, '..', 'build')));
+
 if (process.env.NODE_ENV === 'production') {
-  app.use('/assets/', express.static(path.join(__dirname, '..', 'build')));
+  // If we're in production, we want to make the build directory a static directory in /assets
   jsPath = `/assets/${config.files.js.out}`;
   cssPath = `/assets/${config.files.css.out}`;
-
-// If we're in development, we want to point to webpack-dev-server.
 } else {
+  // If we're in development, we want to point to webpack-dev-server.
   jsPath = `http://localhost:${config.ports.webpack}/${config.files.js.out}`;
   cssPath = `http://localhost:${config.ports.webpack}/${config.files.css.out}`;
 }
