@@ -33,10 +33,13 @@ gulp.task('build:images', function() {
  */
 gulp.task('build:css', function() {
   return gulp.src(config.files.css.entry)
-    .pipe(sass({ style: 'compact' }).on('error', function(err) {
+    .pipe(sass({
+      style: 'compact',
+      includePaths: ['./assets/css', './node_modules'],
+    }).on('error', function(err) {
       throw new gutil.PluginError('build:css', err);
     }))
-    .pipe(prefix('last 2 versions'))
+    .pipe(prefix('ie >= 9'))
     .pipe(gulp.dest(config.files.out))
     .pipe(reload({ stream: true }));
 });
