@@ -1,20 +1,65 @@
 
 @import 'variables/colors'
 @import 'variables/globals'
+@import 'variables/responsive'
 
 .homepage__panel--main
   padding-top: $navbar-height
-  height: 600px + $navbar-height
-  background-color: #fff
-  border-bottom: 2px solid $pianoshelf-blue-light
+  height: 400px + $navbar-height
+  background-image: url('bg.jpg')
+  background-position: center
+  background-size: cover
+  background-repeat: no-repeat
+  color: #fff
+  +when-tablet
+    height: 500px + $navbar-height
+  +when-desktop
+    height: 600px + $navbar-height
 
 .homepage__panel--information
   height: 1300px
 
 .homepage__main-message
   text-align: center
-  padding: 100px 100px 0 100px
-  font-size: 70px
-  font-weight: 100
-  color: $pianoshelf-blue-dark
+  padding: 60px 10% 40px 10%
+  margin: 0
+  font-size: 30px
+  font-weight: 200
+  line-height: 1.5
+  +when-tablet
+    font-size: 43px
+    padding: 90px 10% 60px 10%
+  +when-desktop
+    font-size: 50px
+    padding: 120px 10% 80px 10%
+
+.homepage__main-search
+  text-align: center
+  padding-bottom: 30px
+  +when-tablet
+    padding-bottom: 35px
+  +when-desktop
+    padding-bottom: 40px
+
+.homepage__main-search-input
+  font-size: 20px
+  padding: 15px
+  border: 0
+  border-radius: 5px
+  width: 50%
+  color: #000
+
+.homepage__main-register
+  font-size: 20px
+  text-align: center
+  font-weight: 200
+  +when-tablet
+    font-size: 23px
+  +when-desktop
+    font-size: 25px
+
+.homepage__main-register-link
+  text-decoration: none
+  color: inherit
+  font-weight: 600
 

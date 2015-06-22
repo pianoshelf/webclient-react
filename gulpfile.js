@@ -37,7 +37,8 @@ gulp.task('build:css', function() {
       style: 'compact',
       includePaths: ['./assets/css', './node_modules'],
     }).on('error', function(err) {
-      throw new gutil.PluginError('build:css', err);
+      console.log(err.stack);
+      return false;
     }))
     .pipe(prefix('ie >= 9'))
     .pipe(gulp.dest(config.files.out))
