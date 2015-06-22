@@ -29,12 +29,13 @@ export default React.createClass({
 
   getInitialState() {
     return {
-      homepageMode: this.props.homepage, // Make sure we initialize the state to the props.
+      homepageMode: this.props.homepage,
     };
   },
 
   componentDidMount() {
     if (this.props.homepage) {
+      this.handleStickyEvent();
       window.addEventListener('load', this.handleStickyEvent);
       window.addEventListener('scroll', this.handleStickyEvent);
       window.addEventListener('resize', this.handleStickyEvent);
@@ -85,11 +86,9 @@ export default React.createClass({
   },
 
   handleStickyEvent() {
-    window.requestAnimationFrame(() => {
-      let windowOffset = window.pageYOffset;
-      let homepageMode = this.props.homepage && windowOffset < this.props.yOffsetLimit;
-      this.setState({ homepageMode });
-    });
+    let homepageMode = this.props.homepage &&
+      window.pageYOffset < this.props.yOffsetLimit;
+    this.setState({ homepageMode });
   },
 
 });

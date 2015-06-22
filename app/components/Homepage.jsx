@@ -60,16 +60,32 @@ export default React.createClass({
     return (
       <ResponsiveContainer className="homepage__panel-information">
         <div className="homepage__info-box homepage__info-box--top-left">
-
-        </div>
-        <div className="homepage__info-box homepage__info-box--bottom-left">
-
+          <FontAwesome className="homepage__info-box-icon homepage__info-box-icon--top-left" name="tablet" />
+          <h4 className="homepage__info-box-heading">Browse Anywhere</h4>
+          <p className="homepage__info-box-description">
+            Browse and view over a thousand piano scores on any device! Alternatively, download and print the PDF file.
+          </p>
         </div>
         <div className="homepage__info-box homepage__info-box--top-right">
-
+          <FontAwesome className="homepage__info-box-icon homepage__info-box-icon--top-right" name="upload" />
+          <h4 className="homepage__info-box-heading">Upload Sheet Music</h4>
+          <p className="homepage__info-box-description">
+            PianoShelf makes it quick and easy to publish and share your sheet music. Sign up to upload sheet music within minutes.
+          </p>
+        </div>
+        <div className="homepage__info-box homepage__info-box--bottom-left">
+          <FontAwesome className="homepage__info-box-icon homepage__info-box-icon--bottom-left" name="globe" />
+          <h4 className="homepage__info-box-heading">Save Your Collection</h4>
+          <p className="homepage__info-box-description">
+            Have a repertoire or favourite sheetmusic? Add a score to your &rdquo;shelf&ldquo; to save it for later.
+          </p>
         </div>
         <div className="homepage__info-box homepage__info-box--bottom-right">
-
+          <FontAwesome className="homepage__info-box-icon homepage__info-box-icon--bottom-right" name="users" />
+          <h4 className="homepage__info-box-heading">Create A Profile</h4>
+          <p className="homepage__info-box-description">
+            On PianoShelf, you can create a public personal profile, rate sheetmusic for difficulty and add video intepretations to a composition.
+          </p>
         </div>
       </ResponsiveContainer>
     );
