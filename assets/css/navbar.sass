@@ -64,6 +64,7 @@ $navbar-logo-height-mobile: 67.5px
     line-height: $navbar-height
     font-size: 35px
 
+// This is for the title that shows on the homepage version of the navbar
 .navbar__title--homepage
   color: #fff
 
@@ -78,8 +79,9 @@ $navbar-logo-height-mobile: 67.5px
   +when-tablet
     line-height: $navbar-height - 18px
     font-size: 14px
-    margin: 18px 12px 0 12px
+    margin: 20px 12px 0 12px
 
+// This is for the beta symbol that shows on the homepage version of the navbar
 .navbar__title-beta--homepage
   color: #fff
 
@@ -87,10 +89,11 @@ $navbar-logo-height-mobile: 67.5px
 .navbar__button
   display: inline-block
   float: right
+  font-size: 16px
   text-decoration: none
   color: #000
   padding: 10px
-  margin: 10px
+  margin: 10px 10px 10px 0
   line-height: $navbar-height-mobile - 40px
   border-radius: 2px
   transition: color 0.2s, background-color 0.2s
@@ -99,6 +102,7 @@ $navbar-logo-height-mobile: 67.5px
     color: #000
   +when-tablet
     line-height: $navbar-height - 40px
+    font-size: 20px
 
 // This is for buttons that should be highlighted in the navbar
 .navbar__button--important
@@ -111,7 +115,4 @@ $navbar-logo-height-mobile: 67.5px
 .navbar__button--homepage
   background-color: transparent
   color: #fff
-
-
-
 

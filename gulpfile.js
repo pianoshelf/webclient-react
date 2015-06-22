@@ -36,10 +36,8 @@ gulp.task('build:css', function() {
     .pipe(sass({
       style: 'compact',
       includePaths: ['./assets/css', './node_modules'],
-    }).on('error', function(err) {
-      console.log(err.stack);
-      return false;
     }))
+    .on('error', gutil.log)
     .pipe(prefix('ie >= 9'))
     .pipe(gulp.dest(config.files.out))
     .pipe(reload({ stream: true }));

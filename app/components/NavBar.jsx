@@ -51,15 +51,15 @@ export default React.createClass({
 
   renderTitle_() {
     if (this.state.homepageMode) {
-      return [
-        <div className="navbar__title navbar__title--homepage">PianoShelf</div>,
-        <div className="navbar__title-beta navbar__title-beta--homepage">BETA</div>,
-      ];
+      return <div>
+        <div className="navbar__title navbar__title--homepage">PianoShelf</div>
+        <div className="navbar__title-beta navbar__title-beta--homepage">BETA</div>
+      </div>;
     } else {
-      return [
-        <div className="navbar__title">PianoShelf</div>,
-        <div className="navbar__title-beta">BETA</div>,
-      ];
+      return <div>
+        <div className="navbar__title">PianoShelf</div>
+        <div className="navbar__title-beta">BETA</div>
+      </div>;
     }
   },
 

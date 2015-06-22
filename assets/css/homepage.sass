@@ -1,9 +1,10 @@
 
 @import 'variables/colors'
+@import 'variables/fonts'
 @import 'variables/globals'
 @import 'variables/responsive'
 
-.homepage__panel--main
+.homepage__panel-main
   padding-top: $navbar-height
   height: 400px + $navbar-height
   background-image: url('bg.jpg')
@@ -11,12 +12,13 @@
   background-size: cover
   background-repeat: no-repeat
   color: #fff
+  font-family: $title-font
   +when-tablet
     height: 500px + $navbar-height
   +when-desktop
     height: 600px + $navbar-height
 
-.homepage__panel--information
+.homepage__panel-information
   height: 1300px
 
 .homepage__main-message
@@ -27,7 +29,7 @@
   font-weight: 200
   line-height: 1.5
   +when-tablet
-    font-size: 43px
+    font-size: 45px
     padding: 90px 10% 60px 10%
   +when-desktop
     font-size: 50px
@@ -42,12 +44,29 @@
     padding-bottom: 40px
 
 .homepage__main-search-input
+  display: inline-block
+  position: relative
+  background-color: #fff
   font-size: 20px
-  padding: 15px
+  width: 50%
+  margin: auto
+  padding: 0
   border: 0
   border-radius: 5px
-  width: 50%
   color: #000
+
+.homepage__main-search-input-icon
+  position: absolute
+  left: 15px
+  top: 0
+  line-height: 57px
+
+.homepage__main-search-input-field
+  width: 100%
+  border: 0
+  margin: 0
+  padding: 15px 15px 15px 45px
+  background-color: transparent
 
 .homepage__main-register
   font-size: 20px
