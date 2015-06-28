@@ -5,14 +5,21 @@ import React from 'react';
 
 // Export responsive container
 export default React.createClass({
+
+  propTypes: {
+    // Class name for this element
+    className: React.PropTypes.string,
+  },
+
   render() {
     return (
-      <div className={classNames('responsivecontainer', this.props.className)}>
-        <div className="responsivecontainer__inner">
+      <div className={classNames('responsive-container', this.props.className)}>
+        <div className="responsive-container__inner">
           {this.props.children}
         </div>
       </div>
     );
   }
+
 });
 

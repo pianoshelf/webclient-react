@@ -4,7 +4,10 @@
 @import 'variables/globals'
 @import 'variables/responsive'
 
-.homepage__panel-main
+@import 'responsivecontainer'
+@import 'sheetmusicthumbnail'
+
+.homepage__main-panel
   padding-top: $navbar-height
   height: 400px + $navbar-height
   background-image: url('bg.jpg')
@@ -12,7 +15,6 @@
   background-size: cover
   background-repeat: no-repeat
   color: #fff
-  font-family: $title-font
   +when-tablet
     height: 500px + $navbar-height
   +when-desktop
@@ -20,17 +22,20 @@
 
 .homepage__main-message
   text-align: center
-  padding: 60px 10% 40px 10%
-  margin: 0
+  margin: 60px auto 40px auto
   font-size: 30px
-  font-weight: 200
+  font-weight: $weight-light
   line-height: 1.5
+  font-family: $title-font
+  max-width: 370px
   +when-tablet
     font-size: 45px
-    padding: 90px 10% 60px 10%
+    margin: 90px auto 55px auto
+    max-width: 550px
   +when-desktop
     font-size: 50px
-    padding: 120px 10% 80px 10%
+    margin: 120px auto 70px auto
+    max-width: 610px
 
 .homepage__main-search
   text-align: center
@@ -43,32 +48,40 @@
 .homepage__main-search-input
   display: inline-block
   position: relative
-  background-color: #fff
-  font-size: 20px
-  width: 50%
+  text-decoration: none
+  border-radius: $button-border-radius
   margin: auto
-  padding: 0
-  border: 0
-  border-radius: 5px
+  padding: 13px
   color: #000
+  font-family: $title-font
+  font-size: 22px
+  width: 55%
+  border: $button-border-width solid
+  +clickable-orange
+  +when-tablet
+    width: 45%
+  +when-desktop
+    width: 35%
 
-.homepage__main-search-input-icon
-  position: absolute
-  left: 15px
-  top: 0
-  line-height: 57px
 
-.homepage__main-search-input-field
-  width: 100%
-  border: 0
-  margin: 0
-  padding: 15px 15px 15px 45px
-  background-color: transparent
+// .homepage__main-search-input-icon
+  // position: absolute
+  // left: 15px
+  // top: 0
+  // line-height: 57px
+
+// .homepage__main-search-input-field
+  // width: 100%
+  // border: 0
+  // margin: 0
+  // padding: 15px 15px 15px 45px
+  // background-color: transparent
 
 .homepage__main-register
   font-size: 20px
   text-align: center
-  font-weight: 200
+  font-weight: $weight-light
+  font-family: $title-font
   +when-tablet
     font-size: 23px
   +when-desktop
@@ -77,14 +90,14 @@
 .homepage__main-register-link
   text-decoration: none
   color: inherit
-  font-weight: 600
+  font-weight: $weight-bold
 
 .homepage__info-box
   display: inline-block
   float: left
   min-height: 200px
   border-style: solid;
-  border-color: $pianoshelf-blue
+  border-color: $blue
   width: 90%
   border-width: 0 0 2px 0
   margin: 0 5%
@@ -129,7 +142,7 @@
   text-align: center
   font-size: 45px
   &--top-left
-    color: darken($pianoshelf-blue, 30%)
+    color: darken($blue, 30%)
   &--top-right
     color: darken($green, 40%)
   &--bottom-left
@@ -146,7 +159,7 @@
 
 .homepage__info-box-heading
   font-size: 20px
-  font-weight: 400
+  font-weight: $weight-bold
   font-family: $title-font
   padding: 0
   margin: 30px 0 10px 0
@@ -158,6 +171,7 @@
 
 .homepage__info-box-description
   font-size: 15px
+  font-weight: $weight-normal
   line-height: 1.5
   padding-bottom: 10px
   +when-tablet
@@ -166,8 +180,45 @@
     font-size: 18px
     padding: 0 30px
 
+.homepage__info-box-clear
+  clear: both
 
+.homepage__popular-panel
+  background-color: $grey-light
+  overflow: hidden
 
+.homepage__popular-title
+  margin: 0
+  padding: 30px 20px
+  font-size: 20px
+  font-weight: $weight-normal
+  font-family: $title-font
+  +when-tablet
+    font-size: 24px
+
+.homepage__popular-sheetmusic-container
+  position: relative
+
+.homepage__popular-sheetmusic
+  height: 200px
+  max-width: 280px
+  margin: auto
+  +when-tablet
+    max-width: 560px
+  +when-desktop
+    max-width: 800px
+    height: 260px
+
+  &.slick-slider
+    &:not(.slick-initialized)
+      display: none
+    .slick-prev, .slick-next
+      position: absolute
+      top: 10px
+    .slick-prev
+      left: 10px
+    .slick-next
+      right: 10px
 
 
 

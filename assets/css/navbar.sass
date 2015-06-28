@@ -18,7 +18,7 @@ $navbar-logo-height-mobile: 67.5px
   z-index: 1
   height: $navbar-height-mobile + 2px
   background-color: #fff
-  border-bottom: 2px solid $pianoshelf-blue-light
+  border-bottom: 2px solid $blue-light
   transition: background-color 0.3s, border-color 0.3s
   +when-tablet
     height: $navbar-height + 2px
@@ -55,8 +55,8 @@ $navbar-logo-height-mobile: 67.5px
   line-height: $navbar-height-mobile
   font-size: 25px
   font-family: $title-font
-  color: darken($pianoshelf-blue, 30%)
-  font-weight: 300
+  color: darken($blue, 30%)
+  font-weight: $weight-light
   transition: color 0.2s, top 0.2s
   position: relative
   top: 0
@@ -80,7 +80,7 @@ $navbar-logo-height-mobile: 67.5px
   position: relative
   top: 0
   +when-tablet
-    line-height: $navbar-height - 18px
+    line-height: $navbar-height - 20px
     font-size: 14px
     margin: 20px 12px 0 12px
   &--homepage
@@ -102,7 +102,7 @@ $navbar-logo-height-mobile: 67.5px
   border-radius: 2px
   transition: color 0.2s, background-color 0.2s
   &:hover
-    background-color: lighten($pianoshelf-blue, 20%)
+    background-color: lighten($blue, 20%)
     color: #000
   +when-tablet
     line-height: $navbar-height - 40px

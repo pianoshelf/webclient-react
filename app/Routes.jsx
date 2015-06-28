@@ -20,6 +20,8 @@ export default (
   <Route handler={App} path="/">
     <Route name="register" />
     <Route name="login" />
+    <Route name="search" />
+    <Route name="sheetmusic" />
     <DefaultRoute name="home" handler={Homepage} />
   </Route>
 );

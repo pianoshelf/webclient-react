@@ -2,16 +2,43 @@
  * This file contains all our color variables.
  */
 
-$pianoshelf-blue-light: #6AA4FF
-$pianoshelf-blue: #4E78BB
-$pianoshelf-blue-dark: #2B4166
-$pianoshelf-blue-dark-2: #20314D
+$blue-light: #6AA4FF
 
+$blue: #4E78BB
 $green: #81E452
 $orange: #FFC45B
 $red: #F15674
 
 $black: #000
 $white: #fff
+
+$grey-light: #eee
+$grey-normal: #ddd
+
+=clickable-blue
+  border-color: darken($blue, 10%)
+  background: linear-gradient(lighten($blue, 16%), lighten($blue, 12%))
+  &:hover
+    background: linear-gradient(lighten($blue, 20%), lighten($blue, 16%))
+
+=clickable-green
+  border-color: darken($green, 10%)
+  background: linear-gradient(lighten($green, 16%), lighten($green, 12%))
+  &:hover
+    background: linear-gradient(lighten($green, 20%), lighten($green, 16%))
+
+=clickable-orange
+  border-color: darken($orange, 10%)
+  background: linear-gradient(lighten($orange, 16%), lighten($orange, 12%))
+  &:hover
+    background: linear-gradient(lighten($orange, 20%), lighten($orange, 16%))
+
+=clickable-red
+  border-color: darken($red, 10%)
+  background: linear-gradient(lighten($red, 16%), lighten($red, 12%))
+  &:hover
+    background: linear-gradient(lighten($red, 20%), lighten($red, 16%))
+
+
 
 

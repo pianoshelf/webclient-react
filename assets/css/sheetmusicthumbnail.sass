@@ -1,0 +1,52 @@
+
+.sheet-music-thumbnail
+  width: 120px
+  height: 180px
+  display: inline-block
+  float: left
+  padding: 10px
+  margin: 0 10px
+  background-color: #fff
+  border: $button-border-width solid $grey-normal
+  border-radius: $button-border-radius
+  color: black
+  +when-desktop
+    width: 180px
+    height: 235px
+
+.sheet-music-thumbnail__link
+  display: inline-block
+
+.sheet-music-thumbnail__thumbnail
+  width: 96px
+  height: 95px
+  background-size: cover
+  background-position: top
+  +when-desktop
+    width: 156px
+    height: 150px
+
+.sheet-music-thumbnail__title
+  padding-top: 15px
+  white-space: nowrap
+  overflow: hidden
+  text-overflow: ellipsis
+  font-family: $title-font
+  font-size: 16px
+  +when-desktop
+    font-size: 18px
+
+.sheet-music-thumbnail__description
+  padding-top: 5px
+  white-space: nowrap
+  overflow: hidden
+  text-overflow: ellipsis
+  font-size: 12px
+  font-weight: $weight-normal
+  +when-desktop
+    font-size: 14px
+  &--bold
+    font-weight: $weight-bold
+
+
+

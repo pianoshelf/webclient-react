@@ -10,6 +10,7 @@ import ProfileActions from 'app/actions/ProfileActions';
 
 // Import stores
 import LoginStore from 'app/stores/LoginStore';
+import SheetMusicStore from 'app/stores/SheetMusicStore';
 
 // Export Flux class
 export default class Flux extends Flummox {
@@ -27,6 +28,8 @@ export default class Flux extends Flummox {
     this.createStore('login', LoginStore, this);
 
     this.createActions('sheetmusic', SheetMusicActions);
+    this.createStore('sheetmusic', SheetMusicStore, this);
+
     this.createActions('shelf', ShelfActions);
     this.createActions('profile', ProfileActions);
   }
