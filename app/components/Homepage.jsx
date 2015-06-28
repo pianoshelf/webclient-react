@@ -1,6 +1,5 @@
 
 // Import external modules
-import Autosuggest from 'react-autosuggest';
 import fluxMixin from 'flummox/mixin';
 import FontAwesome from 'react-fontawesome';
 import React from 'react';
@@ -45,6 +44,7 @@ export default React.createClass({
         {this.renderMainPanel_()}
         {this.renderPopularPanel_()}
         {this.renderInfoPanel_()}
+        {this.renderFooter_()}
       </div>
     );
   },
@@ -61,11 +61,6 @@ export default React.createClass({
       className: 'homepage__main-search-input-field',
       placeholder: 'Search sheet music...',
     };
-
-            // <div className="homepage__main-search-input">
-              // <FontAwesome className="homepage__main-search-input-icon" name="music" />
-              // <Autosuggest suggestions={this.getSuggestions} inputAttributes={inputAttributes} />
-            // </div>
 
     return (
       <ResponsiveContainer className="homepage__main-panel">
@@ -167,6 +162,17 @@ export default React.createClass({
             })}
           </Slider>
         </div>
+      </div>
+    );
+  },
+
+  renderFooter_() {
+
+    return (
+      <div className="homepage__footer-panel">
+        <ResponsiveContainer className="homepage__footer-text">
+          &copy; PianoShelf 2015
+        </ResponsiveContainer>
       </div>
     );
   },

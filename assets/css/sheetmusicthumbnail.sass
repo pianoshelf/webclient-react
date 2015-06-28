@@ -7,9 +7,12 @@
   padding: 10px
   margin: 0 10px
   background-color: #fff
-  border: $button-border-width solid $grey-normal
-  border-radius: $button-border-radius
   color: black
+  transition: border-color 0.2s
+  +button
+  border-color: $grey-light
+  &:hover
+    border-color: $grey-normal
   +when-desktop
     width: 180px
     height: 235px

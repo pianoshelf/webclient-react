@@ -1,4 +1,5 @@
 
+@import 'variables/buttons'
 @import 'variables/colors'
 @import 'variables/fonts'
 @import 'variables/globals'
@@ -96,23 +97,20 @@ $navbar-logo-height-mobile: 67.5px
   font-size: 16px
   text-decoration: none
   color: #000
-  padding: 10px
+  padding: 8px
   margin: 10px 10px 10px 0
   line-height: $navbar-height-mobile - 40px
-  border-radius: 2px
-  transition: color 0.2s, background-color 0.2s
-  &:hover
-    background-color: lighten($blue, 20%)
-    color: #000
+  transition-duration: 0.2s
+  transition-property: color, background-color, border-color
+  +button
+  +clickable-blue
   +when-tablet
     line-height: $navbar-height - 40px
     font-size: 20px
   &--important
-    background-color: lighten($green, 10%)
-    &:hover
-      background-color: $green
-      color: #000
+    +clickable-green
   &--homepage
-    background-color: transparent
+    background: transparent
+    border-color: transparent
     color: #fff
 
