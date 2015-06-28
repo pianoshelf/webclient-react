@@ -1,0 +1,116 @@
+
+@import 'variables/buttons'
+@import 'variables/colors'
+@import 'variables/fonts'
+@import 'variables/globals'
+@import 'variables/responsive'
+
+// Height of the Pianoshelf logo
+$navbar-logo-height: 90px
+
+// Height of the Pianoshelf logo on mobile
+$navbar-logo-height-mobile: 67.5px
+
+// This is for the navbar at the top.
+.navbar
+  position: fixed
+  top: 0
+  left: 0
+  z-index: 1
+  height: $navbar-height-mobile + 2px
+  background-color: #fff
+  border-bottom: 2px solid $blue-light
+  transition: background-color 0.3s, border-color 0.3s
+  +when-tablet
+    height: $navbar-height + 2px
+  &--homepage
+    background-color: transparent
+    border-color: transparent
+
+// This is for the logo on the navbar.
+.navbar__logo
+  display: block
+  width: $navbar-logo-height-mobile
+  height: $navbar-logo-height-mobile
+  position: absolute
+  left: 0
+  background-image: url('logo.svg')
+  +when-tablet
+    width: $navbar-logo-height
+    height: $navbar-logo-height
+
+// The staticly placed element behind the logo
+.navbar__logo-buffer
+  display: inline-block
+  float: left
+  width: $navbar-logo-height-mobile + 10px
+  height: $navbar-height-mobile
+  +when-tablet
+    width: $navbar-logo-height + 10px
+    height: $navbar-height
+
+// This is for the title on the navbar
+.navbar__title
+  display: inline-block
+  float: left
+  line-height: $navbar-height-mobile
+  font-size: 25px
+  font-family: $title-font
+  color: darken($blue, 30%)
+  font-weight: $weight-light
+  transition: color 0.2s, top 0.2s
+  position: relative
+  top: 0
+  +when-tablet
+    line-height: $navbar-height
+    font-size: 35px
+  &--homepage
+    color: #fff
+    top: 8px
+    +when-tablet
+      top: 10px
+
+// This is for the beta symbol
+.navbar__title-beta
+  display: inline-block
+  float: left
+  line-height: $navbar-height-mobile - 18px
+  margin: 16px 10px 0 10px
+  font-size: 12px
+  transition: color 0.2s, top 0.2s
+  position: relative
+  top: 0
+  +when-tablet
+    line-height: $navbar-height - 20px
+    font-size: 14px
+    margin: 20px 12px 0 12px
+  &--homepage
+    color: #fff
+    top: 8px
+    +when-tablet
+      top: 10px
+
+// This is for buttons in the navbar
+.navbar__button
+  display: inline-block
+  float: right
+  font-size: 16px
+  text-decoration: none
+  color: #000
+  padding: 8px
+  margin: 10px 10px 10px 0
+  line-height: $navbar-height-mobile - 40px
+  transition-duration: 0.2s
+  transition-property: color, background-color, border-color
+  +button
+  +clickable-blue
+  +when-tablet
+    line-height: $navbar-height - 40px
+    font-size: 20px
+  &--important
+    +clickable-green
+  &--homepage
+    background: transparent
+    border-color: transparent
+    color: #fff
+

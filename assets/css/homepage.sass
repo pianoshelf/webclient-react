@@ -1,0 +1,231 @@
+
+@import 'variables/buttons'
+@import 'variables/colors'
+@import 'variables/fonts'
+@import 'variables/globals'
+@import 'variables/responsive'
+
+@import 'responsivecontainer'
+@import 'sheetmusicthumbnail'
+
+.homepage__main-panel
+  padding-top: $navbar-height
+  height: 400px + $navbar-height
+  background-image: url('bg.jpg')
+  background-position: center
+  background-size: cover
+  background-repeat: no-repeat
+  color: #fff
+  +when-tablet
+    height: 500px + $navbar-height
+  +when-desktop
+    height: 600px + $navbar-height
+
+.homepage__main-message
+  text-align: center
+  margin: 60px auto 40px auto
+  font-size: 30px
+  font-weight: $weight-light
+  line-height: 1.5
+  font-family: $title-font
+  max-width: 370px
+  +when-tablet
+    font-size: 45px
+    margin: 90px auto 55px auto
+    max-width: 550px
+  +when-desktop
+    font-size: 50px
+    margin: 120px auto 70px auto
+    max-width: 610px
+
+.homepage__main-search
+  text-align: center
+  padding-bottom: 30px
+  +when-tablet
+    padding-bottom: 35px
+  +when-desktop
+    padding-bottom: 40px
+
+.homepage__main-search-input
+  display: inline-block
+  position: relative
+  text-decoration: none
+  margin: auto
+  padding: 13px
+  color: #000
+  font-family: $title-font
+  font-size: 22px
+  width: 55%
+  +button
+  +clickable-orange-gradient
+  +when-tablet
+    width: 45%
+  +when-desktop
+    width: 35%
+
+
+// .homepage__main-search-input-icon
+  // position: absolute
+  // left: 15px
+  // top: 0
+  // line-height: 57px
+
+// .homepage__main-search-input-field
+  // width: 100%
+  // border: 0
+  // margin: 0
+  // padding: 15px 15px 15px 45px
+  // background-color: transparent
+
+.homepage__main-register
+  font-size: 20px
+  text-align: center
+  font-weight: $weight-light
+  font-family: $title-font
+  +when-tablet
+    font-size: 23px
+  +when-desktop
+    font-size: 25px
+
+.homepage__main-register-link
+  text-decoration: none
+  color: inherit
+  font-weight: $weight-bold
+
+.homepage__info-box
+  display: inline-block
+  float: left
+  min-height: 200px
+  border-style: solid;
+  border-color: $blue
+  width: 90%
+  border-width: 0 0 2px 0
+  margin: 0 5%
+  &:last-child
+    border-bottom-width: 0
+  +when-tablet
+    min-height: 200px
+    width: 80%
+    margin: 0 10%
+  +when-desktop
+    min-height: 350px
+    width: calc(40% - 1px)
+    margin: 0
+    border-width: 0
+    &--top-left
+      margin-top: 50px
+      border-right-width: 1px
+      border-bottom-width: 1px
+      margin-left: 10%
+    &--top-right
+      margin-top: 50px
+      margin-right: 10%
+      border-bottom-width: 1px
+      border-left-width: 1px
+    &--bottom-left
+      border-top-width: 1px
+      border-right-width: 1px
+      margin-bottom: 50px
+      margin-left: 10%
+    &--bottom-right
+      border-top-width: 1px
+      margin-right: 10%
+      margin-bottom: 50px
+      border-left-width: 1px
+
+.homepage__info-box-icon
+  display: inline-block
+  float: left
+  width: 90px
+  height: 200px
+  line-height: 200px
+  text-align: center
+  font-size: 45px
+  &--top-left
+    color: darken($blue, 30%)
+  &--top-right
+    color: darken($green, 40%)
+  &--bottom-left
+    color: darken($orange, 40%)
+  &--bottom-right
+    color: darken($red, 40%)
+  +when-tablet
+    width: 150px
+    font-size: 60px
+  +when-desktop
+    width: 100%
+    height: 140px
+    line-height: 140px
+
+.homepage__info-box-heading
+  font-size: 20px
+  font-weight: $weight-bold
+  font-family: $title-font
+  padding: 0
+  margin: 30px 0 10px 0
+  +when-tablet
+    font-size: 24px
+  +when-desktop
+    text-align: center
+    margin-bottom: 30px
+
+.homepage__info-box-description
+  font-size: 15px
+  font-weight: $weight-normal
+  line-height: 1.5
+  padding-bottom: 10px
+  +when-tablet
+    font-size: 17px
+  +when-desktop
+    font-size: 18px
+    padding: 0 30px
+
+.homepage__info-box-clear
+  clear: both
+
+.homepage__popular-panel
+  background-color: $grey-light
+  overflow: hidden
+
+.homepage__popular-title
+  margin: 0
+  padding: 30px 20px
+  font-size: 20px
+  font-weight: $weight-normal
+  font-family: $title-font
+  +when-tablet
+    font-size: 24px
+
+.homepage__popular-sheetmusic-container
+  position: relative
+
+.homepage__popular-sheetmusic
+  height: 200px
+  max-width: 280px
+  margin: auto
+  +when-tablet
+    max-width: 560px
+  +when-desktop
+    max-width: 800px
+    height: 260px
+
+  &.slick-slider
+    &:not(.slick-initialized)
+      display: none
+    .slick-prev, .slick-next
+      position: absolute
+      top: 10px
+    .slick-prev
+      left: 10px
+    .slick-next
+      right: 10px
+
+.homepage__footer-panel
+  background-color: $grey-light
+  text-align: center
+
+.homepage__footer-text
+  padding: 20px 0
+  font-weight: $weight-light
+  font-family: $title-font
+

@@ -67,7 +67,7 @@ function finishRequest_(flux, resolve, reject) {
 
     // If we're on the server and the 'Set-Cookie' header is in the response, propogate
     // that to the client by appending it to the response header.
-    if (__SERVER__) {
+    if (!err && __SERVER__ && res.headers['set-cookie']) {
       res.headers['set-cookie'].forEach((header) => {
         flux.request.res.append('Set-Cookie', header);
       });

@@ -3,13 +3,11 @@ import fluxMixin from 'flummox/mixin';
 import React from 'react';
 import { RouteHandler } from 'react-router';
 
-const App = React.createClass({
+export default React.createClass({
   mixins: [fluxMixin()],
 
   render() {
     return <RouteHandler />;
   },
 });
-
-export default App;
 

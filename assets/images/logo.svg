@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 450 450" style="enable-background:new 0 0 450 450;" xml:space="preserve">
+<style type="text/css">
+	.st0{display:none;}
+	.st1{display:inline;}
+	.st2{fill:#FFFFFF;}
+	.st3{clip-path:url(#XMLID_4_);fill:url(#XMLID_5_);stroke:#416CB3;stroke-miterlimit:10;}
+</style>
+<g id="grid" class="st0">
+	<g id="XMLID_10_" class="st1">
+	</g>
+</g>
+<g id="whiteness">
+	<polygon id="XMLID_2_" class="st2" points="225.1,425 51.8,325.1 51.8,125.1 224.9,25 398.2,124.9 398.2,324.9 	"/>
+</g>
+<g id="logo">
+	<g id="XMLID_1_">
+		<defs>
+			<path id="XMLID_15169_" d="M225,18.1L45.8,121.5v206.9L225,431.9l179.2-103.5V121.5L225,18.1z M57.8,321.5V135.4l32.5,18.8v104.1
+				l13.2,7.6v82L57.8,321.5z M115.5,354.9v-82l13.3,7.7l0-104.2l19.2,11.1v104.2l13.2,7.6v82L115.5,354.9z M219,414.6l-45.7-26.4
+				v-82l13.3,7.7l0-104.2l32.5,18.7V414.6z M63.8,125L225,31.9L386.2,125L225,218.1L63.8,125z M392.2,221.5L231,314.1v-85.6l86.6-50
+				L392.2,221.5z M231,414.6v-86.7l86.4-49.6l74.8,43.2v0L231,414.6z"/>
+		</defs>
+		<clipPath id="XMLID_4_">
+			<use xlink:href="#XMLID_15169_"  style="overflow:visible;"/>
+		</clipPath>
+		<linearGradient id="XMLID_5_" gradientUnits="userSpaceOnUse" x1="225" y1="475" x2="225" y2="-25">
+			<stop  offset="0" style="stop-color:#416CB3"/>
+			<stop  offset="1" style="stop-color:#6D93CC"/>
+		</linearGradient>
+		<rect id="XMLID_15154_" x="-25" y="-25" class="st3" width="500" height="500"/>
+	</g>
+</g>
+</svg>

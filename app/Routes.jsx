@@ -5,7 +5,7 @@ import Router from 'react-router';
 
 // Import internal modules
 import App from 'app/components/App';
-import Main from 'app/components/Main';
+import Homepage from 'app/components/Homepage';
 
 // Extract router components from Router
 const { Route, DefaultRoute, NotFoundRoute } = Router;
@@ -18,7 +18,11 @@ const { Route, DefaultRoute, NotFoundRoute } = Router;
  */
 export default (
   <Route handler={App} path="/">
-    <DefaultRoute handler={Main} />
+    <Route name="register" />
+    <Route name="login" />
+    <Route name="search" />
+    <Route name="sheetmusic" />
+    <DefaultRoute name="home" handler={Homepage} />
   </Route>
 );
 
