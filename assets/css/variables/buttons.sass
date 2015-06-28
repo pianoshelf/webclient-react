@@ -15,82 +15,28 @@ $button-border-radius: 5px
  * Clickable mixins
  */
 
-=clickable-blue
-  border-color: $blue
-  background-color: lighten($blue, 20%)
-  color: $black
+=clickable($color, $textColor: $black)
+  border-color: $color
+  background-color: lighten($color, 20%)
+  color: $textColor
   &:hover
-    border-color: $blue
-    background-color: lighten($blue, 24%)
-    color: $black
+    border-color: $color
+    background-color: lighten($color, 24%)
+    color: $textColor
 
-=clickable-blue-gradient
-  border-color: darken($blue, 10%)
-  background: linear-gradient(lighten($blue, 16%), lighten($blue, 10%))
-  color: $black
+=clickable-gradient($color, $textColor: $black)
+  border-color: darken($color, 10%)
+  background: linear-gradient(lighten($color, 16%), lighten($color, 10%))
+  color: $textColor
   &:hover
-    border-color: darken($blue, 10%)
-    background: linear-gradient(lighten($blue, 20%), lighten($blue, 14%))
-    color: $black
-
-=clickable-green
-  border-color: $green
-  background-color: lighten($green, 20%)
-  color: $black
-  &:hover
-    border-color: $green
-    background-color: lighten($green, 24%)
-    color: $black
-
-=clickable-green-gradient
-  border-color: darken($green, 10%)
-  background: linear-gradient(lighten($green, 16%), lighten($green, 10%))
-  color: $black
-  &:hover
-    border-color: darken($green, 10%)
-    background: linear-gradient(lighten($green, 20%), lighten($green, 14%))
-    color: $black
-
-=clickable-orange
-  border-color: $orange
-  background-color: lighten($orange, 20%)
-  color: $black
-  &:hover
-    border-color: $orange
-    background-color: lighten($orange, 24%)
-    color: $black
-
-=clickable-orange-gradient
-  border-color: darken($orange, 10%)
-  background: linear-gradient(lighten($orange, 16%), lighten($orange, 10%))
-  color: $black
-  &:hover
-    border-color: darken($orange, 10%)
-    background: linear-gradient(lighten($orange, 20%), lighten($orange, 14%))
-    color: $black
-
-=clickable-red
-  border-color: $red
-  background-color: lighten($red, 20%)
-  color: $black
-  &:hover
-    border-color: $red
-    background-color: lighten($red, 24%)
-    color: $black
-
-=clickable-red-gradient
-  border-color: darken($red, 10%)
-  background: linear-gradient(lighten($red, 16%), lighten($red, 10%))
-  color: $black
-  &:hover
-    border-color: darken($red, 10%)
-    background: linear-gradient(lighten($red, 20%), lighten($red, 14%))
-    color: $black
+    border-color: darken($color, 10%)
+    background: linear-gradient(lighten($color, 20%), lighten($color, 14%))
+    color: $textColor
 
 /**
  * Button mixins
  */
 
-=button
+=standard-borders
   border: $button-border-width solid
   border-radius: $button-border-radius

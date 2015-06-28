@@ -37,6 +37,16 @@ export default React.createClass({
     },
   },
 
+  componentDidMount() {
+    const sheetMusicActions = this.flux.getActions('sheetmusic');
+
+    sheetMusicActions.getSheetMusicList({
+      order_by: 'popular',
+      page: 1,
+      page_size: 12,
+    }, this.flux)
+  },
+
   render() {
     return (
       <div className="homepage">
@@ -145,25 +155,29 @@ export default React.createClass({
       nextArrow: 'a',
     };
 
-    return (
-      <div className="homepage__popular-panel">
-        <ResponsiveContainer absolute={false}>
-          <h2 className="homepage__popular-title">Our most popular sheet music:</h2>
-        </ResponsiveContainer>
-        <div className="homepage__popular-sheetmusic-container">
-          <Slider {...settings} className="homepage__popular-sheetmusic">
-            {this.state.sheetMusicList.results.map((sheetmusic, index) => {
-              return <SheetMusicThumbnail
-                id={sheetmusic.id}
-                name={sheetmusic.title}
-                thumbnail={sheetmusic.thumbnail_url}
-                musicStyle={sheetmusic.style}
-                composer={sheetmusic.composer_name} />;
-            })}
-          </Slider>
+    if (this.state.sheetMusicList) {
+      return (
+        <div className="homepage__popular-panel">
+          <ResponsiveContainer absolute={false}>
+            <h2 className="homepage__popular-title">Our most popular sheet music:</h2>
+          </ResponsiveContainer>
+          <div className="homepage__popular-sheetmusic-container">
+            <Slider {...settings} className="homepage__popular-sheetmusic">
+              {this.state.sheetMusicList.results.map((sheetmusic, index) => {
+                return <SheetMusicThumbnail
+                  id={sheetmusic.id}
+                  name={sheetmusic.title}
+                  thumbnail={sheetmusic.thumbnail_url}
+                  musicStyle={sheetmusic.style}
+                  composer={sheetmusic.composer_name} />;
+              })}
+            </Slider>
+          </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return null;
+    }
   },
 
   renderFooter_() {

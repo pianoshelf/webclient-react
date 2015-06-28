@@ -11,6 +11,7 @@ export default class MessageStore extends Store {
     const loginActions = flux.getActions('login');
 
 
+
   }
 
 }

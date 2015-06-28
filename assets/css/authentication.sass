@@ -1,0 +1,67 @@
+
+@import 'variables/buttons'
+@import 'variables/fonts'
+@import 'variables/globals'
+@import 'variables/responsive'
+
+.authentication__box
+  display: table
+  height: 100vh
+  width: 100%
+  background-color: $grey-light
+
+.authentication__box-inner
+  display: table-cell
+  vertical-align: middle
+
+.authentication__box-container
+  width: 100%
+  max-width: 300px
+  margin: auto
+  padding: 15px
+  +standard-borders
+  border-color: $grey-normal
+  background-color: $white
+
+.authentication__title
+  font-family: $title-font
+  font-size: 22px
+  text-align: center
+  margin-bottom: 15px
+
+.authentication__input
+  border: 0
+  padding: 5px 10px
+  margin: 5px 0
+  width: 100%
+
+.authentication__button
+  border: 0
+  padding: 5px 10px
+  width: 100%
+  margin: 5px 0
+  +standard-borders
+  &--login
+    +clickable($orange)
+  &--register
+    +clickable($blue-light)
+  &--facebook
+    +clickable(lighten($facebook, 25%))
+
+.authentication__button-icon
+  margin-right: 5px
+
+.authentication__link
+  margin-top: 5px
+  font-size: 14px
+  display: block
+  text-decoration: none
+  text-align: center
+  color: $grey-text-normal
+
+.authentication__hr
+  border: 0
+  border-bottom: 2px solid $grey-light
+  margin: 10px
+
+

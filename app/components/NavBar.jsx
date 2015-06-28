@@ -76,7 +76,7 @@ export default React.createClass({
 
     return (
       <ResponsiveContainer className={navbarClass}>
-        <Link className="navbar__logo" to="home" />
+        <Link to="home" className="navbar__logo" />
         <div className="navbar__logo-buffer" />
         {this.renderTitle_()}
         <Link to="register" className={buttonClass(true /* important */)}>Sign Up</Link>
