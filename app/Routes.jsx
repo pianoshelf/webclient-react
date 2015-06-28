@@ -25,7 +25,7 @@ export default (
     <Route name="authentication" handler={Authentication}>
       <Route name="register" path="/register" handler={Register} />
       <Route name="login" path="/login" handler={Login} />
-      <Route name="forgot-password" path="/forgot-password" handler={ForgotPassword} />
+      <Route name="forgot-password" path="/login/forgot" handler={ForgotPassword} />
     </Route>
     <Route name="search" />
     <Route name="sheetmusic" />
