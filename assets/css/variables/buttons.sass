@@ -12,22 +12,28 @@ $button-border-width: 2px
 $button-border-radius: 5px
 
 /**
- * Clickable mixins
+ * Useful color-based mixins
  */
 
-=clickable($color, $textColor: $black)
+=color-area($color, $textColor: $black)
   border-color: $color
   background-color: lighten($color, 20%)
   color: $textColor
+
+=clickable($color, $textColor: $black)
+  +color-area($color, $textColor)
   &:hover
     border-color: $color
     background-color: lighten($color, 24%)
     color: $textColor
 
-=clickable-gradient($color, $textColor: $black)
+=color-area-gradient($color, $textColor: $black)
   border-color: darken($color, 10%)
   background: linear-gradient(lighten($color, 16%), lighten($color, 10%))
   color: $textColor
+
+=clickable-gradient($color, $textColor: $black)
+  +color-area-gradient($color, $textColor)
   &:hover
     border-color: darken($color, 10%)
     background: linear-gradient(lighten($color, 20%), lighten($color, 14%))

@@ -1,6 +1,11 @@
 
+import fluxMixin from 'flummox/mixin';
+import FontAwesome from 'react-fontawesome';
 import React from 'react';
+import { addons } from 'react/addons';
 import { RouteHandler } from 'react-router';
+
+let { PureRenderMixin } = addons;
 
 // Import other components
 import NavBar from 'app/components/NavBar';

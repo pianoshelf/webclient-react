@@ -1,15 +1,41 @@
 
 import FontAwesome from 'react-fontawesome';
 import React from 'react';
+import { addons } from 'react/addons';
 import { Link } from 'react-router';
 
+// Pure render mixin
+let { PureRenderMixin } = addons;
+
 export default React.createClass({
+
+  mixins: [PureRenderMixin],
+
+  getInitialState() {
+    return {
+      registerInProgress: false,
+      facebookInProgress: false,
+    };
+  },
 
   componentDidMount() {
     this.refs.username.getDOMNode().focus();
   },
 
   render() {
+    let errorMessage = null;
+
+    if (this.state.errorCode &&
+        !this.state.loginInProgress &&
+        !this.state.facebookInProgress) {
+      errorMessage = (
+        <div className="authentication__error">
+          <FontAwesome className="authentication__error-icon" name="exclamation-circle" size="lg" />
+          {this.getErrorMessage_()}
+        </div>
+      );
+    }
+
     return (
       <div>
         <div className="authentication__title">Sign up for PianoShelf</div>
@@ -36,27 +62,89 @@ export default React.createClass({
               name="password2"
               placeholder="Confirm Password" />
           </div>
-          <button className="authentication__button authentication__button--register" type="submit">
-            <FontAwesome className="authentication__button-icon" name="star" />
-            Sign up
-          </button>
+          {this.renderRegisterButton_()}
         </form>
         <Link className="authentication__link" to="login">I have an account</Link>
         <hr className="authentication__hr" />
-        <button className="authentication__button authentication__button--facebook" onClick={this.handleFacebook_}>
-          <FontAwesome className="authentication__button-icon" name="facebook-square" />
-          Sign up using Facebook
-        </button>
+        {this.renderFacebookButton_()}
       </div>
     );
   },
 
+
+  renderRegisterButton_() {
+    let registerButton = this.state.registerInProgress ? (
+      <span>
+        <FontAwesome name="cog" spin={true} />
+      </span>
+    ) : (
+      <span>
+        <FontAwesome className="authentication__button-icon" name="star" />
+        Sign up
+      </span>
+    );
+
+    return (
+      <button className="authentication__button authentication__button--register"
+        type="submit"
+        disabled={this.state.registerInProgress || this.state.facebookInProgress}>
+        {registerButton}
+      </button>
+    );
+  },
+
+  renderFacebookButton_() {
+    let facebookButton = this.state.facebookInProgress ? (
+      <span>
+        <FontAwesome name="cog" spin={true} />
+      </span>
+    ) : (
+      <span>
+        <FontAwesome className="authentication__button-icon" name="facebook-square" />
+        Sign up using Facebook
+      </span>
+    );
+
+    return (
+      <button className="authentication__button authentication__button--facebook"
+        onClick={this.handleFacebook_}
+        disabled={this.state.registerInProgress || this.state.facebookInProgress}>
+        {facebookButton}
+      </button>
+    );
+  },
+
+  getErrorMessage_() {
+    switch (this.state.errorCode) {
+      case errors.register.NO_USERNAME:
+        return 'You did not enter a username!';
+      case errors.register.NO_EMAIL:
+        return 'Please enter an email!';
+      case errors.register.INVALID_EMAIL:
+        return 'The email you provided is invalid.';
+      case errors.register.NO_PASSWORD:
+        return 'You did not enter a password!';
+      case errors.register.NOT_SAME_PASSWORD:
+        return 'The two password fields do not match.';
+      case errors.register.USERNAME_TAKEN:
+        return 'Sorry, that username is taken.';
+      case errors.register.UNABLE_TO_REGISTER:
+        return 'Unable to register for a new account.';
+    }
+  },
+
   handleSubmit_(event) {
-    return true;
+    event.preventDefault();
+
+    // Set state to in progress.
+    this.setState({ registerInProgress: true });
   },
 
   handleFacebook_(event) {
-    return true;
+    event.preventDefault();
+
+    // Set state to in progress.
+    this.setState({ facebookInProgress: true });
   },
 
 });

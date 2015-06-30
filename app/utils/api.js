@@ -74,7 +74,7 @@ function finishRequest_(flux, resolve, reject) {
     }
 
     // Reject if there's an error, otherwise resolve.
-    if (err) reject(err);
+    if (err) reject(res);
     else resolve(res);
   };
 }
@@ -170,4 +170,21 @@ export function setAuthToken(authToken, flux) {
   if (__SERVER__) {
     (new Cookie(flux.request)).set(config.cookie.authtoken, name);
   }
+}
+
+/**
+ * Returns a failed promise with the correct error format. This is
+ * useful when we want to failed promise without making an API call,
+ * due to a clearly invalid value or something.
+ *
+ * @param {Object} dataToReturn The data we want to send to the store.
+ *
+ * @return {Promise} A failed promise with the correct error format.
+ */
+export function failedResponse(dataToReturn) {
+  let stringifiedData = JSON.stringify(dataToReturn);
+  return Promise.reject({
+    failedResponse: true,
+    text: stringifiedData,
+  });
 }

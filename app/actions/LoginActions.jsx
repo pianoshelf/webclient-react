@@ -3,7 +3,8 @@
 import { Actions } from 'flummox';
 
 // Import internal modules
-import { post } from 'app/utils/api';
+import { post, failedResponse } from 'app/utils/api';
+import { errors } from 'app/utils/constants';
 
 /**
  * Actions for anything that has to do with authentication.
@@ -19,6 +20,17 @@ export default class LoginActions extends Actions {
    * @param {Flux} flux The Flux object.
    */
   login(username, password, flux) {
+
+    // Validate input
+    if (username === '') return failedResponse({
+      actionError: errors.login.NO_USERNAME,
+    });
+
+    if (password === '') return failedResponse({
+      actionError: errors.login.NO_PASSWORD,
+    });
+
+    // Perform the AJAX request
     return post(
       '/login/',
       { username, password },
@@ -48,6 +60,21 @@ export default class LoginActions extends Actions {
   }
 
   register(user, flux) {
+
+    // Validate input
+    if (user.username === '') return failedResponse({
+      actionError: errors.register.NO_USERNAME,
+    });
+
+    if (user.email === '') return failedResponse({
+      actionError: errors.register.NO_EMAIL,
+    });
+
+    let emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+/;
+    if (!emailRegex.test(user.email)) return failedResponse({
+      actionError: errors.register.INVALID_EMAIL,
+    });
+
     return post(
       '/register/',
       {
