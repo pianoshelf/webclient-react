@@ -37,7 +37,7 @@
     "no-shadow-restricted-names": 2,
     "no-unused-vars": 1,
     "no-use-before-define": 2,
-    "comma-dangle": [2, "always-multiline"],
+    "comma-dangle": [1, "always-multiline"],
     "no-cond-assign": [2, "always"],
     "no-console": 1,
     "no-debugger": 2,

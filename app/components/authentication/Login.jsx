@@ -1,29 +1,28 @@
 
+import classNames from 'classnames';
 import fluxMixin from 'flummox/mixin';
 import FontAwesome from 'react-fontawesome';
 import React from 'react';
 import { addons } from 'react/addons';
 import { Link } from 'react-router';
 
-import { errors } from 'app/utils/constants'
+import { errors } from 'app/utils/constants';
 
 export default React.createClass({
 
   mixins: [fluxMixin({
-    login: (store, props) => ({
+    login: store => ({
       errorCode: store.state.errorCode,
       isLoggedIn: store.state.isLoggedIn,
-      loginInProgress: store.state.loginInProgress,
-      facebookInProgress: store.state.facebookInProgress,
+      inProgress: store.state.inProgress,
     }),
   })],
 
   getInitialState() {
     return {
-      loginInProgress: false,
-      facebookInProgress: false,
       errorCode: 0,
       isLoggedIn: false,
+      inProgress: null,
     };
   },
 
@@ -33,10 +32,11 @@ export default React.createClass({
 
   render() {
     let errorMessage = null;
+    let error = this.state.errorCode;
 
-    if (this.state.errorCode &&
-        !this.state.loginInProgress &&
-        !this.state.facebookInProgress) {
+    if (error &&
+        !this.inProgress_('login') &&
+        !this.inProgress_('facebookLogin')) {
       errorMessage = (
         <div className="authentication__error">
           <FontAwesome className="authentication__error-icon" name="exclamation-circle" size="lg" />
@@ -45,18 +45,28 @@ export default React.createClass({
       );
     }
 
+    // Assign the correct class names based on whether there's an error or not
+    let classes = {
+      username: classNames('authentication__input', {
+        'authentication__input--error': error === errors.NO_USERNAME,
+      }),
+      password: classNames('authentication__input', {
+        'authentication__input--error': error === errors.NO_PASSWORD,
+      }),
+    };
+
     return (
       <div>
         <div className="authentication__title">Log in to PianoShelf</div>
         {errorMessage}
         <form className="authentication__form" onSubmit={this.handleSubmit_}>
           <div className="authentication__inputs">
-            <input className="authentication__input"
+            <input className={classes.username}
               type="text"
               ref="username"
               name="username"
               placeholder="Username" />
-            <input className="authentication__input"
+            <input className={classes.password}
               type="password"
               ref="password"
               name="password"
@@ -71,8 +81,21 @@ export default React.createClass({
     );
   },
 
+  getErrorMessage_() {
+    switch (this.state.errorCode) {
+      case errors.UNABLE_TO_LOG_IN:
+        return 'Unable to log in with the provided username and password.';
+      case errors.NO_USERNAME:
+        return 'Username field is empty!';
+      case errors.NO_PASSWORD:
+        return 'Password field is empty!';
+      default:
+        return 'An unknown error occurred!';
+    }
+  },
+
   renderLoginButton_() {
-    let loginButton = this.state.loginInProgress ? (
+    let loginButton = this.inProgress_('login') ? (
       <span>
         <FontAwesome name="cog" spin={true} />
       </span>
@@ -86,14 +109,14 @@ export default React.createClass({
     return (
       <button className="authentication__button authentication__button--login"
         type="submit"
-        disabled={this.state.loginInProgress || this.state.facebookInProgress}>
+        disabled={this.inProgress_('login') || this.inProgress_('facebookLogin')}>
         {loginButton}
       </button>
     );
   },
 
   renderFacebookButton_() {
-    let facebookButton = this.state.facebookInProgress ? (
+    let facebookButton = this.inProgress_('facebookLogin') ? (
       <span>
         <FontAwesome name="cog" spin={true} />
       </span>
@@ -107,21 +130,14 @@ export default React.createClass({
     return (
       <button className="authentication__button authentication__button--facebook"
         onClick={this.handleFacebook_}
-        disabled={this.state.loginInProgress || this.state.facebookInProgress}>
+        disabled={this.inProgress_('login') || this.inProgress_('facebookLogin')}>
         {facebookButton}
       </button>
     );
   },
 
-  getErrorMessage_() {
-    switch (this.state.errorCode) {
-      case errors.login.UNABLE_TO_LOG_IN:
-        return 'Unable to log in with the provided username and password.';
-      case errors.login.NO_USERNAME:
-        return 'Username field is empty!';
-      case errors.login.NO_PASSWORD:
-        return 'Password field is empty!';
-    }
+  inProgress_(inProgress) {
+    return this.state.inProgress === inProgress;
   },
 
   handleSubmit_(event) {

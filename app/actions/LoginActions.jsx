@@ -21,14 +21,19 @@ export default class LoginActions extends Actions {
    */
   login(username, password, flux) {
 
-    // Validate input
-    if (username === '') return failedResponse({
-      actionError: errors.login.NO_USERNAME,
-    });
+    // Make sure the username field is not empty
+    if (username === '') {
+      return failedResponse({
+        actionError: errors.NO_USERNAME,
+      });
+    }
 
-    if (password === '') return failedResponse({
-      actionError: errors.login.NO_PASSWORD,
-    });
+    // Make sure the password field is not empty
+    if (password === '') {
+      return failedResponse({
+        actionError: errors.NO_PASSWORD,
+      });
+    }
 
     // Perform the AJAX request
     return post(
@@ -61,20 +66,43 @@ export default class LoginActions extends Actions {
 
   register(user, flux) {
 
-    // Validate input
-    if (user.username === '') return failedResponse({
-      actionError: errors.register.NO_USERNAME,
-    });
+    // Make sure username field is not empty
+    if (user.username === '') {
+      return failedResponse({
+        actionError: errors.NO_USERNAME,
+      });
+    }
 
-    if (user.email === '') return failedResponse({
-      actionError: errors.register.NO_EMAIL,
-    });
+    // Make sure email field is not empty
+    if (user.email === '') {
+      return failedResponse({
+        actionError: errors.NO_EMAIL,
+      });
+    }
 
+    // Make sure email field has a valid email
     let emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+/;
-    if (!emailRegex.test(user.email)) return failedResponse({
-      actionError: errors.register.INVALID_EMAIL,
-    });
+    if (!emailRegex.test(user.email)) {
+      return failedResponse({
+        actionError: errors.INVALID_EMAIL,
+      });
+    }
 
+    // Make sure password field is not empty
+    if (user.password1 === '') {
+      return failedResponse({
+        actionError: errors.NO_PASSWORD,
+      });
+    }
+
+    // Make sure password and confirm password fields have the same value
+    if (user.password2 !== user.password1) {
+      return failedResponse({
+        actionError: errors.NOT_SAME_PASSWORD,
+      });
+    }
+
+    // Call the API
     return post(
       '/register/',
       {
@@ -88,6 +116,23 @@ export default class LoginActions extends Actions {
   }
 
   resetPassword(email, flux) {
+
+    // Make sure email field is not empty
+    if (email === '') {
+      return failedResponse({
+        actionError: errors.NO_EMAIL,
+      });
+    }
+
+    // Make sure email field has a valid email
+    let emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+/;
+    if (!emailRegex.test(email)) {
+      return failedResponse({
+        actionError: errors.INVALID_EMAIL,
+      });
+    }
+
+    // Call the API
     return post(
       '/password/reset/',
       { email },
@@ -96,6 +141,22 @@ export default class LoginActions extends Actions {
   }
 
   resetPasswordConfirm(user, uid, token, flux) {
+
+    // Make sure password field is not empty
+    if (user.password1 === '') {
+      return failedResponse({
+        actionError: errors.NO_PASSWORD,
+      });
+    }
+
+    // Make sure password and confirm password fields have the same value
+    if (user.password2 !== user.password1) {
+      return failedResponse({
+        actionError: errors.NOT_SAME_PASSWORD,
+      });
+    }
+
+    // Call the API
     return post(
       '/password/reset/confirm/',
       {
@@ -109,6 +170,21 @@ export default class LoginActions extends Actions {
   }
 
   changePassword(user, flux) {
+
+    // Make sure password field is not empty
+    if (user.password1 === '') {
+      return failedResponse({
+        actionError: errors.NO_PASSWORD,
+      });
+    }
+
+    // Make sure password and confirm password fields have the same value
+    if (user.password2 !== user.password1) {
+      return failedResponse({
+        actionError: errors.NOT_SAME_PASSWORD,
+      });
+    }
+
     return post(
       '/password/change/',
       {

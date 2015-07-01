@@ -1,20 +1,25 @@
 
+import classNames from 'classnames';
+import fluxMixin from 'flummox/mixin';
 import FontAwesome from 'react-fontawesome';
 import React from 'react';
 import { addons } from 'react/addons';
 import { Link } from 'react-router';
 
-// Pure render mixin
-let { PureRenderMixin } = addons;
+import { errors } from 'app/utils/constants';
 
 export default React.createClass({
 
-  mixins: [PureRenderMixin],
+  mixins: [fluxMixin({
+    login: store => ({
+      errorCode: store.state.errorCode,
+      inProgress: store.state.inProgress,
+    }),
+  })],
 
   getInitialState() {
     return {
-      registerInProgress: false,
-      facebookInProgress: false,
+      inProgress: null,
     };
   },
 
@@ -24,10 +29,11 @@ export default React.createClass({
 
   render() {
     let errorMessage = null;
+    let error = this.state.errorCode;
 
-    if (this.state.errorCode &&
-        !this.state.loginInProgress &&
-        !this.state.facebookInProgress) {
+    if (error &&
+        !this.inProgress_('register') &&
+        !this.inProgress_('facebookLogin')) {
       errorMessage = (
         <div className="authentication__error">
           <FontAwesome className="authentication__error-icon" name="exclamation-circle" size="lg" />
@@ -35,6 +41,25 @@ export default React.createClass({
         </div>
       );
     }
+
+    // Assign the correct class names based on whether there's an error or not
+    let classes = {
+      username: classNames('authentication__input', {
+        'authentication__input--error': error === errors.NO_USERNAME ||
+                                        error === errors.USERNAME_TAKEN,
+      }),
+      email: classNames('authentication__input', {
+        'authentication__input--error': error === errors.NO_EMAIL ||
+                                        error === errors.INVALID_EMAIL,
+      }),
+      password1: classNames('authentication__input', {
+        'authentication__input--error': error === errors.NO_PASSWORD,
+      }),
+      password2: classNames('authentication__input', {
+        'authentication__input--error': error === errors.NOT_SAME_PASSWORD,
+      }),
+    };
+
 
     return (
       <div>
@@ -73,7 +98,7 @@ export default React.createClass({
 
 
   renderRegisterButton_() {
-    let registerButton = this.state.registerInProgress ? (
+    let registerButton = this.inProgress_('register') ? (
       <span>
         <FontAwesome name="cog" spin={true} />
       </span>
@@ -87,14 +112,14 @@ export default React.createClass({
     return (
       <button className="authentication__button authentication__button--register"
         type="submit"
-        disabled={this.state.registerInProgress || this.state.facebookInProgress}>
+        disabled={this.inProgress_('register') || this.inProgress_('facebookLogin')}>
         {registerButton}
       </button>
     );
   },
 
   renderFacebookButton_() {
-    let facebookButton = this.state.facebookInProgress ? (
+    let facebookButton = this.inProgress_('facebookLogin') ? (
       <span>
         <FontAwesome name="cog" spin={true} />
       </span>
@@ -108,7 +133,7 @@ export default React.createClass({
     return (
       <button className="authentication__button authentication__button--facebook"
         onClick={this.handleFacebook_}
-        disabled={this.state.registerInProgress || this.state.facebookInProgress}>
+        disabled={this.inProgress_('register') || this.inProgress_('facebookLogin')}>
         {facebookButton}
       </button>
     );
@@ -116,21 +141,25 @@ export default React.createClass({
 
   getErrorMessage_() {
     switch (this.state.errorCode) {
-      case errors.register.NO_USERNAME:
+      case errors.NO_USERNAME:
         return 'You did not enter a username!';
-      case errors.register.NO_EMAIL:
+      case errors.NO_EMAIL:
         return 'Please enter an email!';
-      case errors.register.INVALID_EMAIL:
+      case errors.INVALID_EMAIL:
         return 'The email you provided is invalid.';
-      case errors.register.NO_PASSWORD:
+      case errors.NO_PASSWORD:
         return 'You did not enter a password!';
-      case errors.register.NOT_SAME_PASSWORD:
+      case errors.NOT_SAME_PASSWORD:
         return 'The two password fields do not match.';
-      case errors.register.USERNAME_TAKEN:
+      case errors.USERNAME_TAKEN:
         return 'Sorry, that username is taken.';
-      case errors.register.UNABLE_TO_REGISTER:
-        return 'Unable to register for a new account.';
+      default:
+        return 'An unknown error occurred!';
     }
+  },
+
+  inProgress_(inProgress) {
+    return this.state.inProgress === inProgress;
   },
 
   handleSubmit_(event) {

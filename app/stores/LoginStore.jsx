@@ -33,15 +33,17 @@ export default class MessageStore extends Store {
 
   loginStart() {
     this.setState({
-      loginInProgress: true
+      inProgress: 'login'
     });
   }
 
   loginSuccess(res) {
     let data = JSON.parse(res.text);
 
+    console.log('loggedin! heres the flux req obj', this.flux.request);
+
     this.setState({
-      loginInProgress: false,
+      inProgress: 'login',
     });
   }
 
@@ -56,12 +58,12 @@ export default class MessageStore extends Store {
     } else if (data.non_field_errors &&
         data.non_field_errors[0] === 'Unable to log in with provided credentials.') {
       // Standard 'unable to log in' error
-      errorCode = errors.login.UNABLE_TO_LOG_IN;
+      errorCode = errors.UNABLE_TO_LOG_IN;
     }
 
     this.setState({
       errorCode,
-      loginInProgress: false,
+      inProgress: null,
     });
   }
 
@@ -82,15 +84,13 @@ export default class MessageStore extends Store {
 
   registerStart() {
     this.setState({
-      registerInProgress: true,
+      inProgress: 'register',
     });
   }
 
   registerSuccess(res) {
-
-
     this.setState({
-      registerInProgress: false,
+      inProgress: 'register',
     });
   }
 
@@ -103,8 +103,37 @@ export default class MessageStore extends Store {
     }
 
     this.setState({
-      registerInProgress: false,
+      errorCode,
+      inProgress: null,
     });
+  }
+
+  /**
+   * FACEBOOK methods
+   */
+  facebookLoginStart() {
+    this.setState({
+      inProgress: 'facebookLogin',
+    });
+
+  }
+
+  facebookLoginSuccess(res) {
+    this.setState({
+      inProgress: 'facebookLogin',
+    });
+
+  }
+
+  facebookLoginError(res) {
+    let data = JSON.parse(res.text);
+    let errorCode = 0;
+
+    this.setState({
+      errorCode,
+      inProgress: null,
+    });
+
   }
 
 }

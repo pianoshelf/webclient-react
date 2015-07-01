@@ -5,11 +5,11 @@ import Router from 'react-router';
 
 // Import internal modules
 import App from 'app/components/App';
-import Authentication from 'app/components/Authentication';
+import Authentication from 'app/components/authentication/Authentication';
+import ResetPassword from 'app/components/authentication/ResetPassword';
 import Homepage from 'app/components/Homepage';
-import Register from 'app/components/Register';
-import Login from 'app/components/Login';
-import ForgotPassword from 'app/components/ForgotPassword';
+import Login from 'app/components/authentication/Login';
+import Register from 'app/components/authentication/Register';
 
 // Extract router components from Router
 const { Route, DefaultRoute, NotFoundRoute } = Router;
@@ -25,7 +25,7 @@ export default (
     <Route name="authentication" handler={Authentication}>
       <Route name="register" path="/register" handler={Register} />
       <Route name="login" path="/login" handler={Login} />
-      <Route name="forgot-password" path="/login/forgot" handler={ForgotPassword} />
+      <Route name="forgot-password" path="/login/forgot" handler={ResetPassword} />
     </Route>
     <Route name="search" />
     <Route name="sheetmusic" />
