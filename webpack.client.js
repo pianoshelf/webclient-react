@@ -13,11 +13,11 @@ module.exports = {
   cache: true,
   debug: false,
   devtool: 'none',
-  entry: [ config.files.js.entry ],
+  entry: [ config.files.client.entry ],
 
   output: {
     path: path.join(__dirname, 'build'),
-    filename: config.files.js.out,
+    filename: config.files.client.out,
     chunkFilename: '[name].[id].js',
     publicPath: '/assets/',
   },

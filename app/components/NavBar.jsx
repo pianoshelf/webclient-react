@@ -9,7 +9,7 @@ import { addons } from 'react/addons';
 import { Link } from 'react-router';
 
 // Import internal module
-import ResponsiveContainer from 'app/components/ResponsiveContainer';
+import ResponsiveContainer from './ResponsiveContainer';
 
 // Get mixins
 let PureRenderMixin = addons.PureRenderMixin;

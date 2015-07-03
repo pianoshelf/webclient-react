@@ -11,10 +11,10 @@ import React from 'react';
 import Router from 'react-router';
 
 // Import internal modules
-import config from 'config';
-import Flux from 'app/Flux';
-import routes from 'app/Routes';
-import { prefetchRouteData } from 'app/utils/routeutils';
+import config from '../config';
+import Flux from './Flux';
+import routes from './Routes';
+import { prefetchRouteData } from './utils/routeutils';
 
 // Launch application
 let app = express();
@@ -33,16 +33,16 @@ app.use(cookieParser());
 let jsPath, cssPath;
 
 // Use build directory as assets
-app.use('/assets/', express.static(path.join(__dirname, '..', 'build')));
+app.use('/assets/', express.static(path.join(__dirname, '..', 'build', 'static')));
 
 if (process.env.NODE_ENV === 'production') {
   // If we're in production, we want to make the build directory a static directory in /assets
-  jsPath = `/assets/${config.files.js.out}`;
-  cssPath = `/assets/${config.files.css.out}`;
+  jsPath = `/assets/${config.files.client.out}`;
+  cssPath = `/assets/${config.files.css.out}/main.css`;
 } else {
   // If we're in development, we want to point to webpack-dev-server.
-  jsPath = `http://localhost:${config.ports.webpack}/${config.files.js.out}`;
-  cssPath = `http://localhost:${config.ports.webpack}/${config.files.css.out}`;
+  jsPath = `http://localhost:${config.ports.webpack}/${config.files.client.out}`;
+  cssPath = `http://localhost:${config.ports.webpack}/static/${config.files.css.out}/main.css`;
 }
 
 // Capture all requests

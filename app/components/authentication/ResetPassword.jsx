@@ -1,4 +1,6 @@
 
+import classNames from 'classnames';
+import fluxMixin from 'flummox/mixin';
 import FontAwesome from 'react-fontawesome';
 import React from 'react';
 import { addons } from 'react/addons';
@@ -9,11 +11,16 @@ let { PureRenderMixin } = addons;
 
 export default React.createClass({
 
-  mixins: [PureRenderMixin],
+  mixins: [fluxMixin({
+    login: store => ({
+      errorCode: store.state.errorCode,
+      inProgress: store.state.inProgress,
+    }),
+  })],
 
   getInitialState() {
     return {
-      resetInProgress: false,
+      inProgress: null,
     };
   },
 
@@ -23,7 +30,7 @@ export default React.createClass({
 
   render() {
 
-    let resetButton = this.state.resetInProgress ? (
+    let resetButton = this.inProgress_('resetPassword') ? (
       <span>
         <FontAwesome name="cog" spin={true} />
       </span>
@@ -51,13 +58,17 @@ export default React.createClass({
           </div>
           <button className="authentication__button authentication__button--reset-password"
             type="submit"
-            disabled={this.state.resetInProgress}>
+            disabled={this.inProgress_('resetPassword')}>
             {resetButton}
           </button>
         </form>
         <Link className="authentication__link" to="login">I want to log in</Link>
       </div>
     );
+  },
+
+  inProgress_(inProgress) {
+    return this.state.inProgress === inProgress;
   },
 
   handleSubmit_(event) {

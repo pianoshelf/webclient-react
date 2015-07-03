@@ -6,7 +6,7 @@ import React from 'react';
 import { addons } from 'react/addons';
 import { Link } from 'react-router';
 
-import { errors } from 'app/utils/constants';
+import { errors } from '../../utils/constants';
 
 export default React.createClass({
 

@@ -1,7 +1,7 @@
 
 import { Store } from 'flummox';
 
-import { errors } from 'app/utils/constants';
+import { errors } from '../utils/constants';
 
 
 export default class MessageStore extends Store {

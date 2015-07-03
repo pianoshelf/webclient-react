@@ -1,6 +1,6 @@
 
 // Import internal modules
-import BaseStore from 'app/stores/BaseStore';
+import BaseStore from '../stores/BaseStore';
 
 // Export store
 export default class SheetMusicStore extends BaseStore {

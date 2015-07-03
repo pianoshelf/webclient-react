@@ -3,14 +3,14 @@
 import { Flummox } from 'flummox';
 
 // Import actions
-import LoginActions from 'app/actions/LoginActions';
-import SheetMusicActions from 'app/actions/SheetMusicActions';
-import ShelfActions from 'app/actions/ShelfActions';
-import ProfileActions from 'app/actions/ProfileActions';
+import LoginActions from './actions/LoginActions';
+import SheetMusicActions from './actions/SheetMusicActions';
+import ShelfActions from './actions/ShelfActions';
+import ProfileActions from './actions/ProfileActions';
 
 // Import stores
-import LoginStore from 'app/stores/LoginStore';
-import SheetMusicStore from 'app/stores/SheetMusicStore';
+import LoginStore from './stores/LoginStore';
+import SheetMusicStore from './stores/SheetMusicStore';
 
 // Export Flux class
 export default class Flux extends Flummox {

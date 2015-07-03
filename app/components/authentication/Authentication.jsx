@@ -5,10 +5,10 @@ import React from 'react';
 import { addons } from 'react/addons';
 import { RouteHandler } from 'react-router';
 
-let { PureRenderMixin } = addons;
-
 // Import other components
-import NavBar from 'app/components/NavBar';
+import NavBar from '../NavBar';
+
+let { PureRenderMixin } = addons;
 
 export default React.createClass({
 

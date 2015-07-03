@@ -3,8 +3,8 @@
 import { Actions } from 'flummox';
 
 // Import internal modules
-import { post, failedResponse } from 'app/utils/api';
-import { errors } from 'app/utils/constants';
+import { post, failedResponse } from '../utils/api';
+import { errors } from '../utils/constants';
 
 /**
  * Actions for anything that has to do with authentication.

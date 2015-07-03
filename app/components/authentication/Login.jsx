@@ -6,11 +6,13 @@ import React from 'react';
 import { addons } from 'react/addons';
 import { Link } from 'react-router';
 
-import { errors } from 'app/utils/constants';
+import { errors } from '../../utils/constants';
+
+let { LinkedStateMixin } = addons;
 
 export default React.createClass({
 
-  mixins: [fluxMixin({
+  mixins: [LinkedStateMixin, fluxMixin({
     login: store => ({
       errorCode: store.state.errorCode,
       isLoggedIn: store.state.isLoggedIn,
@@ -23,6 +25,8 @@ export default React.createClass({
       errorCode: 0,
       isLoggedIn: false,
       inProgress: null,
+      username: '',
+      password: '',
     };
   },
 
@@ -63,14 +67,12 @@ export default React.createClass({
           <div className="authentication__inputs">
             <input className={classes.username}
               type="text"
-              ref="username"
-              name="username"
-              placeholder="Username" />
+              placeholder="Username"
+              valueLink={this.linkState('username')} />
             <input className={classes.password}
               type="password"
-              ref="password"
-              name="password"
-              placeholder="Password" />
+              placeholder="Password"
+              valueLink={this.linkState('password')} />
           </div>
           {this.renderLoginButton_()}
         </form>
@@ -116,6 +118,8 @@ export default React.createClass({
   },
 
   renderFacebookButton_() {
+
+
     let facebookButton = this.inProgress_('facebookLogin') ? (
       <span>
         <FontAwesome name="cog" spin={true} />
@@ -131,7 +135,13 @@ export default React.createClass({
       <button className="authentication__button authentication__button--facebook"
         onClick={this.handleFacebook_}
         disabled={this.inProgress_('login') || this.inProgress_('facebookLogin')}>
-        {facebookButton}
+
+        <If condition={true}>
+
+          {facebookButton}
+
+
+        </If>
       </button>
     );
   },
@@ -143,9 +153,7 @@ export default React.createClass({
   handleSubmit_(event) {
     event.preventDefault();
 
-    // Get parameters
-    let username = this.refs.username.getDOMNode().value;
-    let password = this.refs.password.getDOMNode().value;
+    let { username, password } = this.state;
 
     // Trigger action
     let loginActions = this.flux.getActions('login');

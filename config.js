@@ -7,20 +7,25 @@ module.exports = {
   },
 
   files: {
-    js: {
+    client: {
       entry: './app/client.jsx',
       src: ['./app/**/*.js', './app/**/*.jsx'],
-      out: 'bundle.js',
+      out: 'static/js/bundle.js',
     },
     css: {
       entry: './assets/css/main.sass',
       src: './assets/css/**/**/*.sass',
-      out: 'main.css',
+      out: 'css',
     },
     images: {
       src: './assets/images/*',
+      out: 'img',
     },
-    out: './build/',
+    server: {
+      src: ['app/**/*.js', 'app/**/*.jsx'],
+      out: 'build',
+    },
+    staticAssets: 'build/static/',
   },
 
   api: {
