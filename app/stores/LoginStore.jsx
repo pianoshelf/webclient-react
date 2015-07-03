@@ -13,7 +13,7 @@ export default class MessageStore extends Store {
     const loginActions = flux.getActions('login');
     let actions = [
       'login',
-      'logout',
+      'register',
     ];
 
     // Register each action's success and failure handler
@@ -100,6 +100,10 @@ export default class MessageStore extends Store {
 
     if (res.failedResponse) {
       errorCode = data.actionError;
+    } else if (data.username && data.username[0] === 'This username is already taken. Please choose another.') {
+      errorCode = errors.USERNAME_TAKEN;
+    } else if (data.email && data.email[0] === 'A user is already registered with this e-mail address.') {
+      errorCode = errors.EMAIL_ALREADY_REGISTERED;
     }
 
     this.setState({

@@ -18,7 +18,7 @@ export default React.createClass({
       isLoggedIn: store.state.isLoggedIn,
       inProgress: store.state.inProgress,
     }),
-  })],
+  }), ],
 
   getInitialState() {
     return {
@@ -31,56 +31,7 @@ export default React.createClass({
   },
 
   componentDidMount() {
-    this.refs.username.getDOMNode().focus();
-  },
-
-  render() {
-    let errorMessage = null;
-    let error = this.state.errorCode;
-
-    if (error &&
-        !this.inProgress_('login') &&
-        !this.inProgress_('facebookLogin')) {
-      errorMessage = (
-        <div className="authentication__error">
-          <FontAwesome className="authentication__error-icon" name="exclamation-circle" size="lg" />
-          {this.getErrorMessage_()}
-        </div>
-      );
-    }
-
-    // Assign the correct class names based on whether there's an error or not
-    let classes = {
-      username: classNames('authentication__input', {
-        'authentication__input--error': error === errors.NO_USERNAME,
-      }),
-      password: classNames('authentication__input', {
-        'authentication__input--error': error === errors.NO_PASSWORD,
-      }),
-    };
-
-    return (
-      <div>
-        <div className="authentication__title">Log in to PianoShelf</div>
-        {errorMessage}
-        <form className="authentication__form" onSubmit={this.handleSubmit_}>
-          <div className="authentication__inputs">
-            <input className={classes.username}
-              type="text"
-              placeholder="Username"
-              valueLink={this.linkState('username')} />
-            <input className={classes.password}
-              type="password"
-              placeholder="Password"
-              valueLink={this.linkState('password')} />
-          </div>
-          {this.renderLoginButton_()}
-        </form>
-        <Link className="authentication__link" to="forgot-password">I forgot my password</Link>
-        <hr className="authentication__hr" />
-        {this.renderFacebookButton_()}
-      </div>
-    );
+    this.refs.initFocus.getDOMNode().focus();
   },
 
   getErrorMessage_() {
@@ -96,53 +47,68 @@ export default React.createClass({
     }
   },
 
-  renderLoginButton_() {
-    let loginButton = this.inProgress_('login') ? (
-      <span>
-        <FontAwesome name="cog" spin={true} />
-      </span>
-    ) : (
-      <span>
-        <FontAwesome className="authentication__button-icon" name="sign-in" />
-        Log in
-      </span>
-    );
+  render() {
+    let error = this.state.errorCode;
+
+    // Assign the correct class names based on whether there's an error or not
+    let classes = {
+      username: classNames('authentication__input', {
+        'authentication__input--error': error === errors.NO_USERNAME,
+      }),
+      password: classNames('authentication__input', {
+        'authentication__input--error': error === errors.NO_PASSWORD,
+      }),
+    };
 
     return (
-      <button className="authentication__button authentication__button--login"
-        type="submit"
-        disabled={this.inProgress_('login') || this.inProgress_('facebookLogin')}>
-        {loginButton}
-      </button>
-    );
-  },
-
-  renderFacebookButton_() {
-
-
-    let facebookButton = this.inProgress_('facebookLogin') ? (
-      <span>
-        <FontAwesome name="cog" spin={true} />
-      </span>
-    ) : (
-      <span>
-        <FontAwesome className="authentication__button-icon" name="facebook-square" />
-        Sign in using Facebook
-      </span>
-    );
-
-    return (
-      <button className="authentication__button authentication__button--facebook"
-        onClick={this.handleFacebook_}
-        disabled={this.inProgress_('login') || this.inProgress_('facebookLogin')}>
-
-        <If condition={true}>
-
-          {facebookButton}
-
-
+      <div>
+        <div className="authentication__title">Log in to PianoShelf</div>
+        <If condition={error && !this.inProgress_('login') && !this.inProgress_('facebookLogin')}>
+          <div className="authentication__error">
+            <FontAwesome className="authentication__error-icon" name="exclamation-circle" size="lg" />
+            {this.getErrorMessage_()}
+          </div>
         </If>
-      </button>
+        <form className="authentication__form" onSubmit={this.handleSubmit_}>
+          <div className="authentication__inputs">
+            <input className={classes.username}
+              type="text"
+              ref="initFocus"
+              placeholder="Username"
+              valueLink={this.linkState('username')} />
+            <input className={classes.password}
+              type="password"
+              placeholder="Password"
+              valueLink={this.linkState('password')} />
+          </div>
+          <button className="authentication__button authentication__button--login"
+            type="submit"
+            disabled={this.inProgress_('login') || this.inProgress_('facebookLogin')}>
+            <If condition={this.inProgress_('login')}>
+              <FontAwesome name="cog" spin={true} />
+            <Else />
+              <span>
+                <FontAwesome className="authentication__button-icon" name="sign-in" />
+                Log in
+              </span>
+            </If>
+          </button>
+        </form>
+        <Link className="authentication__link" to="forgot-password">I forgot my password</Link>
+        <hr className="authentication__hr" />
+        <button className="authentication__button authentication__button--facebook"
+          onClick={this.handleFacebook_}
+          disabled={this.inProgress_('login') || this.inProgress_('facebookLogin')}>
+          <If condition={this.inProgress_('facebookLogin')}>
+            <FontAwesome name="cog" spin={true} />
+          <Else />
+            <span>
+              <FontAwesome className="authentication__button-icon" name="facebook-square" />
+              Sign in using Facebook
+            </span>
+          </If>
+        </button>
+      </div>
     );
   },
 
@@ -157,7 +123,7 @@ export default React.createClass({
 
     // Trigger action
     let loginActions = this.flux.getActions('login');
-    loginActions.login(username, password);
+    loginActions.login(username, password, this.flux);
   },
 
   handleFacebook_(event) {

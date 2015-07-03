@@ -28,7 +28,10 @@
   },
   "globals": {
     "__SERVER__": true,
-    "__CLIENT__": true
+    "__CLIENT__": true,
+    "If": true,
+    "Else": true,
+    "For": true
   },
   "rules": {
     "strict": [2, "never"],

@@ -19,6 +19,7 @@ export const errors = {
   // Server side errors
   UNABLE_TO_LOG_IN: s++,
   USERNAME_TAKEN: s++,
+  EMAIL_ALREADY_REGISTERED: s++,
 
 };
 

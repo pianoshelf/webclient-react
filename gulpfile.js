@@ -83,6 +83,7 @@ gulp.task('build:server', function() {
     .pipe(plumber())
     .pipe(sourcemaps.init())
     .pipe(babel({
+      plugins: ['jsx-control-statements/babel'],
       blacklist: ['regenerator'],
     }))
     .pipe(sourcemaps.write('.'))
