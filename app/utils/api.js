@@ -177,14 +177,15 @@ export function setAuthToken(authToken, flux) {
  * useful when we want to failed promise without making an API call,
  * due to a clearly invalid value or something.
  *
- * @param {Object} dataToReturn The data we want to send to the store.
+ * @param {Object} dataToReturn The error code
  *
  * @return {Promise} A failed promise with the correct error format.
  */
-export function failedResponse(dataToReturn) {
-  let stringifiedData = JSON.stringify(dataToReturn);
+export function fail(errorCode) {
   return Promise.reject({
     failedResponse: true,
-    text: stringifiedData,
+    text: JSON.stringify({
+      actionError: errorCode,
+    }),
   });
 }

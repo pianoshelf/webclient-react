@@ -44,7 +44,7 @@ export default React.createClass({
       order_by: 'popular',
       page: 1,
       page_size: 12,
-    }, this.flux)
+    }, this.flux);
   },
 
   render() {
@@ -57,13 +57,6 @@ export default React.createClass({
         {this.renderFooter_()}
       </div>
     );
-  },
-
-  getSuggestions(input, callback) {
-    const regex = new RegExp('^' + input, 'i');
-    const suggestions = ['hi', 'hi2'].filter(suburb => regex.test(suburb));
-
-    setTimeout(() => callback(null, suggestions), 300); // Emulate API call
   },
 
   renderMainPanel_() {

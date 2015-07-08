@@ -10,6 +10,7 @@ import ProfileActions from './actions/ProfileActions';
 
 // Import stores
 import LoginStore from './stores/LoginStore';
+import ProgressStore from './stores/ProgressStore';
 import SheetMusicStore from './stores/SheetMusicStore';
 
 // Export Flux class
@@ -25,13 +26,13 @@ export default class Flux extends Flummox {
     this.request_ = request;
 
     this.createActions('login', LoginActions);
-    this.createStore('login', LoginStore, this);
-
-    this.createActions('sheetmusic', SheetMusicActions);
-    this.createStore('sheetmusic', SheetMusicStore, this);
-
-    this.createActions('shelf', ShelfActions);
     this.createActions('profile', ProfileActions);
+    this.createActions('sheetmusic', SheetMusicActions);
+    this.createActions('shelf', ShelfActions);
+
+    this.createStore('login', LoginStore, this);
+    this.createStore('progress', ProgressStore, this);
+    this.createStore('sheetmusic', SheetMusicStore, this);
   }
 
   /**

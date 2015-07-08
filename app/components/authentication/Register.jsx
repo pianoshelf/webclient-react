@@ -15,14 +15,14 @@ export default React.createClass({
   mixins: [LinkedStateMixin, fluxMixin({
     login: store => ({
       errorCode: store.state.errorCode,
+    }),
+    progress: store => ({
       inProgress: store.state.inProgress,
     }),
   }), ],
 
   getInitialState() {
     return {
-      errorCode: 0,
-      inProgress: null,
       username: '',
       email: '',
       password1: '',
@@ -138,7 +138,7 @@ export default React.createClass({
   },
 
   inProgress_(inProgress) {
-    return this.state.inProgress === inProgress;
+    return this.state.inProgress.indexOf(inProgress) !== -1;
   },
 
   handleSubmit_(event) {

@@ -1,8 +1,6 @@
 
 import { Store } from 'flummox';
-
 import { errors } from '../utils/constants';
-
 
 export default class MessageStore extends Store {
 
@@ -19,32 +17,24 @@ export default class MessageStore extends Store {
     // Register each action's success and failure handler
     actions.forEach(action => {
       this.registerAsync(loginActions[action],
-        this[`${action}Start`] ? this[`${action}Start`] : null,
+        null,
         this[`${action}Success`] ? this[`${action}Success`] : null,
         this[`${action}Error`] ? this[`${action}Error`] : null);
     });
 
-    this.state = {};
+    this.state = {
+      errorCode: 0,
+    };
   }
 
   /**
    * LOGIN methods
    */
 
-  loginStart() {
-    this.setState({
-      inProgress: 'login'
-    });
-  }
-
   loginSuccess(res) {
     let data = JSON.parse(res.text);
 
     console.log('loggedin! heres the flux req obj', this.flux.request);
-
-    this.setState({
-      inProgress: 'login',
-    });
   }
 
   loginError(res) {
@@ -63,7 +53,6 @@ export default class MessageStore extends Store {
 
     this.setState({
       errorCode,
-      inProgress: null,
     });
   }
 
@@ -82,18 +71,6 @@ export default class MessageStore extends Store {
    * REGISTER methods
    */
 
-  registerStart() {
-    this.setState({
-      inProgress: 'register',
-    });
-  }
-
-  registerSuccess(res) {
-    this.setState({
-      inProgress: 'register',
-    });
-  }
-
   registerError(res) {
     let data = JSON.parse(res.text);
     let errorCode = 0;
@@ -108,26 +85,12 @@ export default class MessageStore extends Store {
 
     this.setState({
       errorCode,
-      inProgress: null,
     });
   }
 
   /**
    * FACEBOOK methods
    */
-  facebookLoginStart() {
-    this.setState({
-      inProgress: 'facebookLogin',
-    });
-
-  }
-
-  facebookLoginSuccess(res) {
-    this.setState({
-      inProgress: 'facebookLogin',
-    });
-
-  }
 
   facebookLoginError(res) {
     let data = JSON.parse(res.text);
@@ -135,7 +98,6 @@ export default class MessageStore extends Store {
 
     this.setState({
       errorCode,
-      inProgress: null,
     });
 
   }
