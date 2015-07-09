@@ -90,6 +90,9 @@ app.use((req, res, next) => {
       }
     };
 
+    // Reset our progress bar
+    flux.getActions('progress').resetProgress();
+
     // Make sure we render our route even if the promise fails.
     prefetchRouteData(state.routes, { flux, state }).then(renderRoute, renderRoute);
   });

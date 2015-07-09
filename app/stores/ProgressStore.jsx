@@ -1,6 +1,5 @@
 
 import { Store } from 'flummox';
-import { errors } from '../utils/constants';
 
 export default class ProgressStore extends Store {
 
@@ -9,6 +8,7 @@ export default class ProgressStore extends Store {
     super();
 
     const loginActions = flux.getActions('login');
+    const progressActions = flux.getActions('progress');
 
     let actions = [
       { name: 'login', func: loginActions.login },
@@ -24,9 +24,12 @@ export default class ProgressStore extends Store {
         this.handleEnd(action.name));
     });
 
-    this.state = {
-      inProgress: [],
-    };
+    this.register(progressActions.resetProgress, this.resetProgress);
+    this.state = {};
+  }
+
+  resetProgress() {
+    this.setState({ inProgress: [] });
   }
 
   handleStart(param) {
@@ -43,6 +46,10 @@ export default class ProgressStore extends Store {
       inProgress.splice(inProgress.indexOf(param));
       this.setState({ inProgress });
     };
+  }
+
+  inProgress(item) {
+    return this.state.inProgress.indexOf(item) !== -1;
   }
 
 }

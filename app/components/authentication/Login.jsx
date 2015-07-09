@@ -17,9 +17,17 @@ export default React.createClass({
       errorCode: store.state.errorCode,
     }),
     progress: store => ({
-      inProgress: store.state.inProgress,
+      loginInProgress: store.inProgress('login'),
+      facebookInProgress: store.inProgress('facebookLogin'),
     }),
   }), ],
+
+  statics: {
+    routeWillRun({ flux, state }) {
+      const loginActions = flux.getActions('login');
+      return loginActions.resetErrorCode();
+    },
+  },
 
   getInitialState() {
     return {
@@ -61,7 +69,7 @@ export default React.createClass({
     return (
       <div>
         <div className="authentication__title">Log in to PianoShelf</div>
-        <If condition={error && !this.inProgress_('login') && !this.inProgress_('facebookLogin')}>
+        <If condition={error && !this.state.loginInProgress && !this.state.facebookInProgress}>
           <div className="authentication__error">
             <FontAwesome className="authentication__error-icon" name="exclamation-circle" size="lg" />
             {this.getErrorMessage_()}
@@ -81,8 +89,8 @@ export default React.createClass({
           </div>
           <button className="authentication__button authentication__button--login"
             type="submit"
-            disabled={this.inProgress_('login') || this.inProgress_('facebookLogin')}>
-            <If condition={this.inProgress_('login')}>
+            disabled={this.state.loginInProgress || this.state.facebookInProgress}>
+            <If condition={this.state.loginInProgress}>
               <FontAwesome name="cog" spin={true} />
             <Else />
               <span>
@@ -96,8 +104,8 @@ export default React.createClass({
         <hr className="authentication__hr" />
         <button className="authentication__button authentication__button--facebook"
           onClick={this.handleFacebook_}
-          disabled={this.inProgress_('login') || this.inProgress_('facebookLogin')}>
-          <If condition={this.inProgress_('facebookLogin')}>
+          disabled={this.state.loginInProgress || this.state.facebookInProgress}>
+          <If condition={this.state.facebookInProgress}>
             <FontAwesome name="cog" spin={true} />
           <Else />
             <span>
@@ -108,10 +116,6 @@ export default React.createClass({
         </button>
       </div>
     );
-  },
-
-  inProgress_(inProgress) {
-    return this.state.inProgress.indexOf(inProgress) !== -1;
   },
 
   handleSubmit_(event) {

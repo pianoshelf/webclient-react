@@ -12,6 +12,7 @@ export default class MessageStore extends Store {
     let actions = [
       'login',
       'register',
+      'resetPassword',
     ];
 
     // Register each action's success and failure handler
@@ -22,9 +23,15 @@ export default class MessageStore extends Store {
         this[`${action}Error`] ? this[`${action}Error`] : null);
     });
 
-    this.state = {
-      errorCode: 0,
-    };
+    this.register(loginActions.resetErrorCode, this.resetErrorCode);
+    this.state = {};
+  }
+
+  /**
+   * Method for resetting the error code.
+   */
+  resetErrorCode() {
+    this.setState({ errorCode: 0 });
   }
 
   /**
@@ -42,18 +49,13 @@ export default class MessageStore extends Store {
     let errorCode = 0;
 
     if (res.failedResponse) {
-      // Intentionally failed response
       errorCode = data.actionError;
-
     } else if (data.non_field_errors &&
         data.non_field_errors[0] === 'Unable to log in with provided credentials.') {
-      // Standard 'unable to log in' error
       errorCode = errors.UNABLE_TO_LOG_IN;
     }
 
-    this.setState({
-      errorCode,
-    });
+    this.setState({ errorCode });
   }
 
   /**
@@ -83,9 +85,7 @@ export default class MessageStore extends Store {
       errorCode = errors.EMAIL_ALREADY_REGISTERED;
     }
 
-    this.setState({
-      errorCode,
-    });
+    this.setState({ errorCode });
   }
 
   /**
@@ -96,11 +96,28 @@ export default class MessageStore extends Store {
     let data = JSON.parse(res.text);
     let errorCode = 0;
 
-    this.setState({
-      errorCode,
-    });
+    this.setState({ errorCode });
 
   }
+
+  /**
+   * RESET PASSWORD methods
+   */
+  resetPasswordSuccess(res) {
+
+  }
+
+  resetPasswordError(res) {
+    let data = JSON.parse(res.text);
+    let errorCode = 0;
+
+    if (res.failedResponse) {
+      errorCode = data.actionError;
+    }
+
+    this.setState({ errorCode });
+  }
+
 
 }
 

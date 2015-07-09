@@ -7,6 +7,7 @@ import LoginActions from './actions/LoginActions';
 import SheetMusicActions from './actions/SheetMusicActions';
 import ShelfActions from './actions/ShelfActions';
 import ProfileActions from './actions/ProfileActions';
+import ProgressActions from './actions/ProgressActions';
 
 // Import stores
 import LoginStore from './stores/LoginStore';
@@ -27,6 +28,7 @@ export default class Flux extends Flummox {
 
     this.createActions('login', LoginActions);
     this.createActions('profile', ProfileActions);
+    this.createActions('progress', ProgressActions);
     this.createActions('sheetmusic', SheetMusicActions);
     this.createActions('shelf', ShelfActions);
 

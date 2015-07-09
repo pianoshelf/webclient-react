@@ -26,20 +26,16 @@ export default React.createClass({
   statics: {
     routeWillRun({ flux, state }) {
       const sheetMusicActions = flux.getActions('sheetmusic');
-
-      return Promise.all([
-        sheetMusicActions.getSheetMusicList({
-          order_by: 'popular',
-          page: 1,
-          page_size: 12,
-        }, flux),
-      ]);
+      return sheetMusicActions.getSheetMusicList({
+        order_by: 'popular',
+        page: 1,
+        page_size: 12,
+      }, flux);
     },
   },
 
   componentDidMount() {
     const sheetMusicActions = this.flux.getActions('sheetmusic');
-
     sheetMusicActions.getSheetMusicList({
       order_by: 'popular',
       page: 1,

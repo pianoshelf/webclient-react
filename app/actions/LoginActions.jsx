@@ -13,6 +13,13 @@ import { errors } from '../utils/constants';
 export default class LoginActions extends Actions {
 
   /**
+   * Action for resetting the error code.
+   */
+  resetErrorCode() {
+    return false;
+  }
+
+  /**
    * Logs in the user.
    *
    * @param {string} username User's username.
