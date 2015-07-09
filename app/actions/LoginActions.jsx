@@ -69,8 +69,6 @@ export default class LoginActions extends Actions {
 
   register(user, flux) {
 
-    console.log(user);
-
     // Make sure username field is not empty
     if (user.username === '') {
       return fail(errors.NO_USERNAME);
