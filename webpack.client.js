@@ -11,46 +11,58 @@ module.exports = {
 
   target: 'web',
   cache: true,
-  debug: false,
+  context: __dirname,
   devtool: 'none',
+  debug: false,
   entry: [ config.files.client.entry ],
 
   output: {
-    path: path.join(__dirname, 'build'),
+    path: path.join(__dirname, 'build/static/js'),
     filename: config.files.client.out,
     chunkFilename: '[name].[id].js',
-    publicPath: '/assets/',
+    publicPath: '/js/',
+  },
+
+  externals: {
+    'source-map-support': null,
   },
 
   plugins: [
-    new webpack.DefinePlugin({ 'process.env': { NODE_ENV: '"production"' } }),
-    new webpack.DefinePlugin({ __CLIENT__: true, __SERVER__: false }),
+    new webpack.DefinePlugin({
+      'process.env': { NODE_ENV: '"production"' },
+      __CLIENT__: true,
+      __SERVER__: false,
+    }),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } }),
+    new webpack.optimize.UglifyJsPlugin(),
   ],
+
+  babel: {
+    stage: 0,
+    plugins: ['jsx-control-statements/babel'],
+    loose: 'all',
+    blacklist: 'regenerator',
+  },
 
   module: {
     loaders: [
-      {
-        include: /\.json$/,
-        loaders: ['json'],
-      },
-      {
-        include: /\.jsx?$/,
-        exclude: /node_modules/,
-        loaders: ['babel-loader?stage=0&plugins[]=jsx-control-statements/babel'],
-      },
+      { include: /\.json$/, loaders: ['json'] },
+      { include: /\.jsx?$/, loaders: ['babel'], exclude: /node_modules/ },
     ],
   },
 
   node: {
     fs: 'empty',
+    buffer: 'empty',
+    util: 'empty',
+    events: 'empty',
+    assert: 'empty',
   },
 
   resolve: {
     extensions: ['', '.jsx', '.js'],
-    root: path.resolve('.'),
+    // root: path.resolve('.'),
   },
 
 };

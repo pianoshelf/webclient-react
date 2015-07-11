@@ -10,7 +10,7 @@ module.exports = {
     client: {
       entry: './app/client.jsx',
       src: ['./app/**/*.js', './app/**/*.jsx'],
-      out: 'static/js/bundle.js',
+      out: 'bundle.js',
     },
     css: {
       entry: './assets/css/main.sass',
