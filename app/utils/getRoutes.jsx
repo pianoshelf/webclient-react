@@ -16,7 +16,7 @@ import Login from '../components/authentication/Login';
 import Register from '../components/authentication/Register';
 
 /**
- * A function that retrieves the default Route object for both
+ * A function that retrieves the route configuration for both
  * the server and client.
  *
  * @param {Flux} flux The flux object.
