@@ -1,11 +1,12 @@
-
-import fluxMixin from 'flummox/mixin';
-import React from 'react';
-import { Navigation } from 'react-router';
-
-import { success } from './constants';
-
-
+/**
+ * This function returns a react-router transition callback that makes sure
+ * a user is authenticated before proceeding. It makes an async call to the
+ * getUsers API.
+ *
+ * @param {Flux} flux The flux object
+ *
+ * @return {Function} Callback to feed into react-router
+ */
 export default function requireAuth(flux) {
   return (nextState, transition, callback) => {
     const loginActions = flux.getActions('login');
@@ -17,35 +18,3 @@ export default function requireAuth(flux) {
     });
   };
 }
-
-
-// const authenticateComponent = WrappedComponent => {
-  // return React.createClass({
-
-    // displayName: 'Authenticator',
-
-    // mixins: [Navigation, fluxMixin({
-      // login: store => ({
-        // errorCode: store.state.errorCode,
-        // user: store.state.user,
-      // }),
-    // }), ],
-
-    // getInitialState() {
-      // return {};
-    // },
-
-    // componentWillMount() {
-      // // this.context.router.transitionTo('login');
-
-    // },
-
-    // render() {
-
-      // return <WrappedComponent {...this.props} user={this.state.user} />;
-    // },
-  // });
-// };
-
-// export default authenticateComponent;
-
