@@ -25,7 +25,7 @@ export default class MessageStore extends Store {
     });
 
     this.register(loginActions.getUser, this.loginSuccess);
-    this.register(loginActions.resetErrorCode, this.resetErrorCode);
+    this.register(loginActions.clearErrors, this.resetErrorCode);
     this.state = {};
   }
 

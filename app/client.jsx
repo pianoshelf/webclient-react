@@ -11,7 +11,7 @@ import Router from 'react-router';
 
 // Import internal modules
 import Flux from './Flux';
-import routes from './Routes';
+import getRoutes from './utils/getRoutes';
 import { prefetchRouteData } from './utils/routeutils';
 
 // Create the Flux object
@@ -24,10 +24,13 @@ let reactRoot = document.getElementById('react-root');
 let inlineData = document.getElementById('react-data').textContent;
 flux.deserialize(base64.decode(inlineData));
 
+// Create history object for the browser
+let browserHistory = new BrowserHistory();
+
 // Re-render everything on reactRoot
 React.render(
   <FluxComponent flux={flux}>
-    <Router history={new BrowserHistory} routes={routes} />
+    <Router history={browserHistory} routes={getRoutes(flux)} />
   </FluxComponent>,
   reactRoot
 );

@@ -14,6 +14,15 @@ import SheetMusicThumbnail from './SheetMusicThumbnail';
 
 let { PureRenderMixin } = addons;
 
+function retrieveInitialData(flux) {
+  const sheetMusicActions = flux.getActions('sheetmusic');
+  return sheetMusicActions.getSheetMusicList({
+    order_by: 'popular',
+    page: 1,
+    page_size: 12,
+  }, flux);
+}
+
 // Declare class
 export default React.createClass({
   mixins: [PureRenderMixin, fluxMixin({
@@ -25,22 +34,12 @@ export default React.createClass({
   // Define what should be fetched before route is renderred.
   statics: {
     routeWillRun({ flux, state }) {
-      const sheetMusicActions = flux.getActions('sheetmusic');
-      return sheetMusicActions.getSheetMusicList({
-        order_by: 'popular',
-        page: 1,
-        page_size: 12,
-      }, flux);
+      return retrieveInitialData(flux);
     },
   },
 
   componentDidMount() {
-    const sheetMusicActions = this.flux.getActions('sheetmusic');
-    sheetMusicActions.getSheetMusicList({
-      order_by: 'popular',
-      page: 1,
-      page_size: 12,
-    }, this.flux);
+    retrieveInitialData(this.flux);
   },
 
   render() {

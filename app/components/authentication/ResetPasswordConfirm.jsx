@@ -14,7 +14,5 @@ export default React.createClass({
     return <div>ayy lmao</div>
   }
 
-
 });
-
 

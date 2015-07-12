@@ -4,11 +4,16 @@ import fluxMixin from 'flummox/mixin';
 import FontAwesome from 'react-fontawesome';
 import React from 'react';
 import { addons } from 'react/addons';
-import { Link } from 'react-router';
+import { Link, TransitionHook } from 'react-router';
 
 import { errors } from '../../utils/constants';
 
 let { LinkedStateMixin } = addons;
+
+function retrieveInitialData(flux) {
+  const loginActions = flux.getActions('login');
+  return loginActions.clearErrors();
+}
 
 export default React.createClass({
 
@@ -24,8 +29,7 @@ export default React.createClass({
 
   statics: {
     routeWillRun({ flux, state }) {
-      const loginActions = flux.getActions('login');
-      return loginActions.resetErrorCode();
+      return retrieveInitialData(flux);
     },
   },
 
@@ -37,6 +41,7 @@ export default React.createClass({
   },
 
   componentDidMount() {
+    retrieveInitialData(this.flux);
     this.refs.initFocus.getDOMNode().focus();
   },
 

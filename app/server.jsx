@@ -9,18 +9,23 @@ import FluxComponent from 'flummox/component';
 import Location from 'react-router/lib/Location';
 import http from 'http';
 import path from 'path';
+import queryString from 'query-string';
 import React from 'react';
 import Router from 'react-router';
 
 // Import internal modules
 import config from '../config';
 import Flux from './Flux';
-import routes from './Routes';
+import getRoutes from './utils/getRoutes';
 import { prefetchRouteData } from './utils/routeutils';
 
 // Launch application
 let app = express();
 let httpServer = http.createServer(app);
+
+// Add our isomorphic constants
+global.__SERVER__ = true;
+global.__CLIENT__ = false;
 
 // Serve public folder
 app.use(express.static(path.join(__dirname, '..', 'public')));
@@ -52,9 +57,19 @@ app.use((req, res, next) => {
   // Create Flux object
   let flux = new Flux(req);
 
-  let query = new Location(req.path, req.query);
+  let routes = getRoutes(flux);
+  let target = new Location(req.path, req.query);
 
-  Router.run(routes, query, (error, initialState, transition) => {
+  Router.run(routes, target, (error, initialState, transition) => {
+
+    // If our transition is cancelled, we redirect the user with a 302.
+    if (transition.isCancelled) {
+      let { redirectInfo } = transition;
+      let { pathname, query } = redirectInfo;
+      let url = `${pathname}?${queryString.stringify(query)}`;
+      res.redirect(url);
+      return;
+    }
 
     // Function that renders the route.
     let renderRoute = () => {

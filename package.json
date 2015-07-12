@@ -67,6 +67,7 @@
     "lodash": "^3.9.3",
     "node-sass": "^3.2.0",
     "normalize.css": "^3.0.3",
+    "query-string": "^2.3.0",
     "react": "^0.13.3",
     "react-a11y": "^0.1.1",
     "react-autosuggest": "^1.15.0",

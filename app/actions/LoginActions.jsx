@@ -15,7 +15,7 @@ export default class LoginActions extends Actions {
   /**
    * Action for resetting the error code.
    */
-  resetErrorCode() {
+  clearErrors() {
     return false;
   }
 

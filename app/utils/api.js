@@ -85,12 +85,13 @@ function finishRequest_(flux, resolve, reject) {
  * @param {string} endpoint The API endpoint.
  * @param {Object} params The query parameters to send in the URL.
  * @param {Flux} flux The Flux object.
+ * @param {boolean=} auth Whether we should send it to the auth endpoints.
  *
  * @return {Promise} A promise that resolves when the request is complete.
  */
-export function get(endpoint, params, flux) {
+export function get(endpoint, params, flux, auth) {
   return new Promise((resolve, reject) => {
-    request.get(`${apiUrl}${endpoint}`)
+    request.get(`${auth ? authUrl : apiUrl}${endpoint}`)
       .query(params)
       .set(getHeaders_(flux))
       .end(finishRequest_(flux, resolve, reject));

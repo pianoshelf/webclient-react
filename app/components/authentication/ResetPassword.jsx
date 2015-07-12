@@ -10,6 +10,11 @@ import { errors } from '../../utils/constants';
 
 let { LinkedStateMixin } = addons;
 
+function retrieveInitialData(flux) {
+  const loginActions = flux.getActions('login');
+  return loginActions.clearErrors();
+}
+
 export default React.createClass({
 
   mixins: [LinkedStateMixin, fluxMixin({
@@ -23,8 +28,7 @@ export default React.createClass({
 
   statics: {
     routeWillRun({ flux, state }) {
-      const loginActions = flux.getActions('login');
-      return loginActions.resetErrorCode();
+      return retrieveInitialData(flux);
     },
   },
 
@@ -35,6 +39,7 @@ export default React.createClass({
   },
 
   componentDidMount() {
+    retrieveInitialData(this.flux);
     this.refs.initFocus.getDOMNode().focus();
   },
 
