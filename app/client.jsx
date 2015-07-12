@@ -8,6 +8,7 @@ import BrowserHistory from 'react-router/lib/BrowserHistory';
 import FluxComponent from 'flummox/component';
 import React from 'react';
 import Router from 'react-router';
+import utf8 from 'utf8';
 
 // Import internal modules
 import Flux from './Flux';
@@ -22,7 +23,7 @@ let reactRoot = document.getElementById('react-root');
 
 // Import inline flux data
 let inlineData = document.getElementById('react-data').textContent;
-flux.deserialize(base64.decode(inlineData));
+flux.deserialize(utf8.decode(base64.decode(inlineData)));
 
 // Create history object for the browser
 let browserHistory = new BrowserHistory();

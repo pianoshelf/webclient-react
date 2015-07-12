@@ -12,6 +12,8 @@ import path from 'path';
 import queryString from 'query-string';
 import React from 'react';
 import Router from 'react-router';
+import url from 'url';
+import utf8 from 'utf8';
 
 // Import internal modules
 import config from '../config';
@@ -84,7 +86,7 @@ app.use((req, res, next) => {
         );
 
         // Base64 encode all the data in our stores.
-        let inlineData = base64.encode(flux.serialize());
+        let inlineData = base64.encode(utf8.encode(flux.serialize()));
 
         // Generate boilerplate output.
         let output =
