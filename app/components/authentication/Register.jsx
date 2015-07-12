@@ -127,7 +127,7 @@ export default React.createClass({
             </If>
           </button>
         </form>
-        <Link className="authentication__link" to="login">I have an account</Link>
+        <Link to="/login" className="authentication__link">I have an account</Link>
         <hr className="authentication__hr" />
         <button className="authentication__button authentication__button--facebook"
           onClick={this.handleFacebook_}

@@ -5,6 +5,8 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import expressPromise from 'express-promise';
+import FluxComponent from 'flummox/component';
+import Location from 'react-router/lib/Location';
 import http from 'http';
 import path from 'path';
 import React from 'react';
@@ -35,14 +37,14 @@ let jsPath, cssPath;
 // Use build directory as assets
 app.use('/assets/', express.static(path.join(__dirname, '..', 'build', 'static')));
 
+cssPath = `/assets/${config.files.css.out}/main.css`;
+
 if (process.env.NODE_ENV === 'production') {
   // If we're in production, we want to make the build directory a static directory in /assets
   jsPath = `/assets/${config.files.client.out}`;
-  cssPath = `/assets/${config.files.css.out}/main.css`;
 } else {
   // If we're in development, we want to point to webpack-dev-server.
-  jsPath = `http://localhost:${config.ports.webpack}/${config.files.client.out}`;
-  cssPath = `http://localhost:${config.ports.webpack}/static/${config.files.css.out}/main.css`;
+  jsPath = `http://localhost:${config.ports.webpack}/js/${config.files.client.out}`;
 }
 
 // Capture all requests
@@ -50,15 +52,20 @@ app.use((req, res, next) => {
   // Create Flux object
   let flux = new Flux(req);
 
-  Router.run(routes, req.path, (Handler, state) => {
+  let query = new Location(req.path, req.query);
+
+  Router.run(routes, query, (error, initialState, transition) => {
 
     // Function that renders the route.
     let renderRoute = () => {
       try {
 
-        // Render our entire app to a string.
+        // Render our entire app to a string, and make sure we wrap everything
+        // with FluxComponent, which adds the flux context to the entire app.
         let renderedString = React.renderToString(
-          <Handler flux={flux} params={state.params} />
+          <FluxComponent flux={flux}>
+            <Router {...initialState} />
+          </FluxComponent>
         );
 
         // Base64 encode all the data in our stores.
@@ -94,7 +101,8 @@ app.use((req, res, next) => {
     flux.getActions('progress').resetProgress();
 
     // Make sure we render our route even if the promise fails.
-    prefetchRouteData(state.routes, { flux, state }).then(renderRoute, renderRoute);
+    prefetchRouteData(initialState.components, { flux, state: initialState })
+      .then(renderRoute, renderRoute);
   });
 });
 

@@ -25,7 +25,7 @@ export default class ProgressStore extends Store {
     });
 
     this.register(progressActions.resetProgress, this.resetProgress);
-    this.state = {};
+    this.state = { inProgress: [] };
   }
 
   resetProgress() {

@@ -3,7 +3,7 @@
 import { Actions } from 'flummox';
 
 // Import internal modules
-import { post, fail } from '../utils/api';
+import { get, post, fail } from '../utils/api';
 import { errors } from '../utils/constants';
 
 /**
@@ -17,6 +17,19 @@ export default class LoginActions extends Actions {
    */
   resetErrorCode() {
     return false;
+  }
+
+  /**
+   * Gets the current logged in user
+   *
+   * @param {Flux} flux The Flux object.
+   */
+  getUser(flux) {
+    return get(
+      '/user/',
+      {},
+      flux, true /* authUrl */
+    )
   }
 
   /**

@@ -1,6 +1,6 @@
 
 import { Store } from 'flummox';
-import { errors } from '../utils/constants';
+import { errors, success } from '../utils/constants';
 
 export default class MessageStore extends Store {
 
@@ -8,6 +8,7 @@ export default class MessageStore extends Store {
 
     super();
 
+    // TODO(ankit): Make this into something a little bit more straightforward.
     const loginActions = flux.getActions('login');
     let actions = [
       'login',
@@ -23,6 +24,7 @@ export default class MessageStore extends Store {
         this[`${action}Error`] ? this[`${action}Error`] : null);
     });
 
+    this.register(loginActions.getUser, this.loginSuccess);
     this.register(loginActions.resetErrorCode, this.resetErrorCode);
     this.state = {};
   }
@@ -31,7 +33,7 @@ export default class MessageStore extends Store {
    * Method for resetting the error code.
    */
   resetErrorCode() {
-    this.setState({ errorCode: 0 });
+    this.setState({ errorCode: 0, user: {} });
   }
 
   /**
@@ -41,7 +43,22 @@ export default class MessageStore extends Store {
   loginSuccess(res) {
     let data = JSON.parse(res.text);
 
-    console.log('loggedin! heres the flux req obj', this.flux.request);
+    // Set error code to success
+    let errorCode = success.LOGGED_IN;
+
+    // Extract user information
+    let { auth_token, username, first_name, last_name, email, is_superuser } = data;
+    let user = {
+      authToken: auth_token,
+      firstName: first_name,
+      lastName: last_name,
+      isSuperuser: is_superuser,
+      username,
+      email,
+    };
+
+    // Set the state
+    this.setState({ errorCode, user });
   }
 
   loginError(res) {

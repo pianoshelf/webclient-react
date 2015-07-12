@@ -100,7 +100,7 @@ export default React.createClass({
             </If>
           </button>
         </form>
-        <Link className="authentication__link" to="forgot-password">I forgot my password</Link>
+        <Link to="/login/forgot" className="authentication__link">I forgot my password</Link>
         <hr className="authentication__hr" />
         <button className="authentication__button authentication__button--facebook"
           onClick={this.handleFacebook_}

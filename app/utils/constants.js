@@ -3,18 +3,17 @@
  * such as error numbers.
  */
 
-let c = 100; // Client error starting point
-let s = 200; // Server error starting point
+let s = 1; // Starting point
 
 // Error constants
 export const errors = {
 
   // Client side errors
-  INVALID_EMAIL: c++,
-  NO_EMAIL: c++,
-  NO_PASSWORD: c++,
-  NO_USERNAME: c++,
-  NOT_SAME_PASSWORD: c++,
+  INVALID_EMAIL: s++,
+  NO_EMAIL: s++,
+  NO_PASSWORD: s++,
+  NO_USERNAME: s++,
+  NOT_SAME_PASSWORD: s++,
 
   // Server side errors
   UNABLE_TO_LOG_IN: s++,
@@ -23,4 +22,11 @@ export const errors = {
 
 };
 
+// Success constants
+export const success = {
+
+  // Authentication
+  LOGGED_IN: s++,
+
+}
 

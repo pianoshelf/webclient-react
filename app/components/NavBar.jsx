@@ -76,11 +76,11 @@ export default React.createClass({
 
     return (
       <ResponsiveContainer className={navbarClass}>
-        <Link to="home" className="navbar__logo" />
+        <Link to="/" className="navbar__logo" />
         <div className="navbar__logo-buffer" />
         {this.renderTitle_()}
-        <Link to="register" className={buttonClass(true /* important */)}>Sign Up</Link>
-        <Link to="login" className={buttonClass(false /* important */)}>Log In</Link>
+        <Link to="/register" className={buttonClass(true /* important */)}>Sign Up</Link>
+        <Link to="/login" className={buttonClass(false /* important */)}>Log In</Link>
       </ResponsiveContainer>
     );
   },

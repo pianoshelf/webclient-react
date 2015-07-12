@@ -68,10 +68,10 @@ export default React.createClass({
             Explore, share, and download sheet music for free.
           </h2>
           <div className="homepage__main-search">
-            <Link to="register" className="homepage__main-search-input">Browse Sheet Music</Link>
+            <Link to="/register" className="homepage__main-search-input">Browse Sheet Music</Link>
           </div>
           <div className="homepage__main-register">
-            or <Link to="register" className="homepage__main-register-link">sign up now</Link>.
+            or <Link to="/register" className="homepage__main-register-link">sign up now</Link>.
           </div>
         </div>
       </ResponsiveContainer>
@@ -155,6 +155,7 @@ export default React.createClass({
               {this.state.sheetMusicList.results.map((sheetmusic, index) => {
                 return <SheetMusicThumbnail
                   id={sheetmusic.id}
+                  key={sheetmusic.id}
                   name={sheetmusic.title}
                   thumbnail={sheetmusic.thumbnail_url}
                   musicStyle={sheetmusic.style}

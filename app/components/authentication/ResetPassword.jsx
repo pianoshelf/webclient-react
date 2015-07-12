@@ -1,5 +1,4 @@
 
-
 import classNames from 'classnames';
 import fluxMixin from 'flummox/mixin';
 import FontAwesome from 'react-fontawesome';
@@ -95,7 +94,7 @@ export default React.createClass({
             </If>
           </button>
         </form>
-        <Link className="authentication__link" to="login">I want to log in</Link>
+        <Link to="/login" className="authentication__link">I want to log in</Link>
       </div>
     );
   },
