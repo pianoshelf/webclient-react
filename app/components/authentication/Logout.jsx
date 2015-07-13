@@ -14,9 +14,13 @@ function retrieveInitialData(flux) {
 
 export default React.createClass({
 
-  mixins: [PureRenderMixin, CanLogoutMixin, fluxMixin({
-    login: store => store.state,
-  }), ],
+  mixins: [
+    PureRenderMixin,
+    CanLogoutMixin,
+    fluxMixin({
+      login: store => store.state,
+    }),
+  ],
 
   statics: {
     routeWillRun({ flux, state }) {

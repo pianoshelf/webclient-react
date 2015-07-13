@@ -6,7 +6,7 @@ import React from 'react';
 import { addons } from 'react/addons';
 import { Link } from 'react-router';
 
-import { errors } from '../../utils/constants';
+import { errors, success } from '../../utils/constants';
 import { CanLoginMixin, AuthMessagesMixin } from '../../utils/authUtils';
 
 let { LinkedStateMixin, PureRenderMixin } = addons;
@@ -18,12 +18,17 @@ function retrieveInitialData(flux) {
 
 export default React.createClass({
 
-  mixins: [PureRenderMixin, LinkedStateMixin, AuthMessagesMixin, fluxMixin({
-    login: store => store.state,
-    progress: store => ({
-      resetInProgress: store.inProgress('resetPassword'),
+  mixins: [
+    PureRenderMixin,
+    LinkedStateMixin,
+    AuthMessagesMixin,
+    fluxMixin({
+      login: store => store.state,
+      progress: store => ({
+        resetInProgress: store.inProgress('resetPassword'),
+      }),
     }),
-  }), ],
+  ],
 
   statics: {
     routeWillRun({ flux, state }) {

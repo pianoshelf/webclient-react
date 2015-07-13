@@ -47,7 +47,8 @@ export function requireNoAuth(flux) {
 }
 
 /**
- * A mixin that adds a login listener to the component.
+ * A mixin that adds a login listener to the component. The component this is
+ * connected to MUST BE connected to the LoginStore.
  */
 export let CanLoginMixin = {
   mixins: [Navigation],
@@ -71,7 +72,8 @@ export let CanLoginMixin = {
 };
 
 /**
- * A mixin that adds a logout listener to the component.
+ * A mixin that adds a logout listener to the component. The component this is
+ * connected to MUST BE connected to the LoginStore.
  */
 export let CanLogoutMixin = {
   mixins: [Navigation],
