@@ -22,9 +22,5 @@ export default class SheetMusicStore extends BaseStore {
     });
   }
 
-  sheetMusicList() {
-    return this.state.sheetMusicList;
-  }
-
 }
 

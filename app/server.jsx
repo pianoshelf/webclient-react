@@ -8,18 +8,18 @@ import expressPromise from 'express-promise';
 import FluxComponent from 'flummox/component';
 import Location from 'react-router/lib/Location';
 import http from 'http';
+import httpProxy from 'http-proxy';
 import path from 'path';
 import queryString from 'query-string';
 import React from 'react';
 import Router from 'react-router';
-import url from 'url';
 import utf8 from 'utf8';
 
 // Import internal modules
 import config from '../config';
 import Flux from './Flux';
 import getRoutes from './utils/getRoutes';
-import { prefetchRouteData } from './utils/routeutils';
+import { prefetchRouteData } from './utils/routeUtils';
 
 // Launch application
 let app = express();
@@ -34,6 +34,20 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // Allow returning promises to response object
 // app.use(expressPromise);
+
+// Proxy API requests to the python server if we're on a dev environment
+if (process.env.NODE_ENV !== 'production') {
+  let proxy = httpProxy.createProxyServer({});
+  app.use((req, res, next) => {
+    if (/^\/api/.test(req.url)) {
+      proxy.web(req, res, {
+        target: `http://localhost:${config.ports.django}`,
+      });
+    } else {
+      next();
+    }
+  });
+}
 
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -118,8 +132,10 @@ app.use((req, res, next) => {
     flux.getActions('progress').resetProgress();
 
     // Make sure we render our route even if the promise fails.
-    prefetchRouteData(initialState.components, { flux, state: initialState })
-      .then(renderRoute, renderRoute);
+    if (initialState.components) {
+      prefetchRouteData(initialState.components, { flux, state: initialState })
+        .then(renderRoute, renderRoute);
+    }
   });
 });
 

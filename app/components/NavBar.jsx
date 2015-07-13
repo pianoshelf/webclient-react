@@ -4,12 +4,14 @@
 
 // Import external modules
 import classNames from 'classnames';
+import fluxMixin from 'flummox/mixin';
 import React from 'react';
 import { addons } from 'react/addons';
 import { Link } from 'react-router';
 
 // Import internal module
 import ResponsiveContainer from './ResponsiveContainer';
+import { errors, success } from '../utils/constants';
 
 // Get mixins
 let PureRenderMixin = addons.PureRenderMixin;
@@ -17,7 +19,12 @@ let PureRenderMixin = addons.PureRenderMixin;
 // Export class
 export default React.createClass({
 
-  mixins: [PureRenderMixin],
+  mixins: [PureRenderMixin, fluxMixin({
+    login: store => ({
+      errorCode: store.state.errorCode,
+      user: store.state.user,
+    }),
+  }), ],
 
   propTypes: {
     // Whether we're on the homepage.
@@ -79,8 +86,16 @@ export default React.createClass({
         <Link to="/" className="navbar__logo" />
         <div className="navbar__logo-buffer" />
         {this.renderTitle_()}
-        <Link to="/register" className={buttonClass(true /* important */)}>Sign Up</Link>
-        <Link to="/login" className={buttonClass(false /* important */)}>Log In</Link>
+        <If condition={this.state.errorCode === success.LOGGED_IN}>
+          <div>
+            <Link to="/logout" className={buttonClass(false /* important */)}>Logout</Link>
+          </div>
+        <Else />
+          <div>
+            <Link to="/register" className={buttonClass(true /* important */)}>Sign Up</Link>
+            <Link to="/login" className={buttonClass(false /* important */)}>Log In</Link>
+          </div>
+        </If>
       </ResponsiveContainer>
     );
   },

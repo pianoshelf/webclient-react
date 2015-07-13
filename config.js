@@ -4,6 +4,7 @@ module.exports = {
   ports: {
     webpack: 8080,
     express: 5092,
+    django: 5000,
   },
 
   files: {
@@ -34,8 +35,8 @@ module.exports = {
       authPrefix: 'https://www.pianoshelf.com/api-auth',
     },
     dev: {
-      prefix: 'http://localhost:5000/api',
-      authPrefix: 'http://localhost:5000/api-auth',
+      prefix: '/api',
+      authPrefix: '/api-auth',
     },
   },
 

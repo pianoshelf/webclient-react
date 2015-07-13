@@ -51,6 +51,8 @@ export default class LoginActions extends Actions {
       return fail(errors.NO_PASSWORD);
     }
 
+    console.log('start loging in');
+
     // Perform the AJAX request
     return post(
       '/login/',

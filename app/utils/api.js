@@ -90,8 +90,9 @@ function finishRequest_(flux, resolve, reject) {
  * @return {Promise} A promise that resolves when the request is complete.
  */
 export function get(endpoint, params, flux, auth) {
+  let baseUrl = __SERVER__ ? `http://localhost:${config.ports.django}` : '';
   return new Promise((resolve, reject) => {
-    request.get(`${auth ? authUrl : apiUrl}${endpoint}`)
+    request.get(`${baseUrl}${auth ? authUrl : apiUrl}${endpoint}`)
       .query(params)
       .set(getHeaders_(flux))
       .end(finishRequest_(flux, resolve, reject));
@@ -109,8 +110,9 @@ export function get(endpoint, params, flux, auth) {
  * @return {Promise} A promise that resolves when the request is complete.
  */
 export function post(endpoint, params, flux, auth) {
+  let baseUrl = __SERVER__ ? `http://localhost:${config.ports.django}` : '';
   return new Promise((resolve, reject) => {
-    request.post(`${auth ? authUrl : apiUrl}${endpoint}`)
+    request.post(`${baseUrl}${auth ? authUrl : apiUrl}${endpoint}`)
       .send(params)
       .set(getHeaders_(flux))
       .end(finishRequest_(flux, resolve, reject));
@@ -128,8 +130,9 @@ export function post(endpoint, params, flux, auth) {
  * @return {Promise} A promise that resolves when the request is complete.
  */
 export function patch(endpoint, params, flux, auth) {
+  let baseUrl = __SERVER__ ? `http://localhost:${config.ports.django}` : '';
   return new Promise((resolve, reject) => {
-    request('PATCH', `${auth ? authUrl : apiUrl}${endpoint}`)
+    request('PATCH', `${baseUrl}${auth ? authUrl : apiUrl}${endpoint}`)
       .send(params)
       .set(getHeaders_(flux))
       .end(finishRequest_(flux, resolve, reject));
@@ -146,8 +149,9 @@ export function patch(endpoint, params, flux, auth) {
  * @return {Promise} A promise that resolves when the request is complete.
  */
 export function del(endpoint, params, flux) {
+  let baseUrl = __SERVER__ ? `http://localhost:${config.ports.django}` : '';
   return new Promise((resolve, reject) => {
-    request.del(`${apiUrl}${endpoint}`)
+    request.del(`${baseUrl}${apiUrl}${endpoint}`)
       .send(params)
       .set(getHeaders_(flux))
       .end(finishRequest_(flux, resolve, reject));
@@ -164,12 +168,30 @@ export function setAuthToken(authToken, flux) {
 
   // Return cookie if we're on the client.
   if (__CLIENT__) {
-    Cookie().set(config.cookie.authtoken, name);
+    Cookie().set(config.cookie.authtoken, authToken);
   }
 
   // Set cookie from request if we're on the server.
   if (__SERVER__) {
-    (new Cookie(flux.request)).set(config.cookie.authtoken, name);
+    (new Cookie(flux.request)).set(config.cookie.authtoken, authToken);
+  }
+}
+
+/**
+ * Deletes the auth token cookie.
+ *
+ * @param {Flux} flux The flux object.
+ */
+export function deleteAuthToken(flux) {
+
+  // Return cookie if we're on the client.
+  if (__CLIENT__) {
+    Cookie().remove(config.cookie.authtoken);
+  }
+
+  // Set cookie from request if we're on the server.
+  if (__SERVER__) {
+    (new Cookie(flux.request)).remove(config.cookie.authtoken);
   }
 }
 

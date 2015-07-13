@@ -7,20 +7,19 @@ import { addons } from 'react/addons';
 import { Link } from 'react-router';
 
 import { errors } from '../../utils/constants';
+import { CanLoginMixin, AuthMessagesMixin } from '../../utils/authUtils';
 
-let { LinkedStateMixin } = addons;
+let { LinkedStateMixin, PureRenderMixin } = addons;
 
 function retrieveInitialData(flux) {
   const loginActions = flux.getActions('login');
-  return loginActions.clearErrors();
+  return loginActions.getUser(flux);
 }
 
 export default React.createClass({
 
-  mixins: [LinkedStateMixin, fluxMixin({
-    login: store => ({
-      errorCode: store.state.errorCode,
-    }),
+  mixins: [PureRenderMixin, LinkedStateMixin, AuthMessagesMixin, CanLoginMixin, fluxMixin({
+    login: store => store.state,
     progress: store => ({
       registerInProgress: store.inProgress('register'),
       facebookInProgress: store.inProgress('facebookLogin'),
@@ -45,27 +44,6 @@ export default React.createClass({
   componentDidMount() {
     retrieveInitialData(this.flux);
     this.refs.initFocus.getDOMNode().focus();
-  },
-
-  getErrorMessage_() {
-    switch (this.state.errorCode) {
-      case errors.NO_USERNAME:
-        return 'You did not enter a username!';
-      case errors.NO_EMAIL:
-        return 'Please enter an email!';
-      case errors.INVALID_EMAIL:
-        return 'The email you provided is invalid.';
-      case errors.NO_PASSWORD:
-        return 'You did not enter a password!';
-      case errors.NOT_SAME_PASSWORD:
-        return 'The two password fields do not match.';
-      case errors.USERNAME_TAKEN:
-        return 'Sorry, that username is taken.';
-      case errors.EMAIL_ALREADY_REGISTERED:
-        return 'A user is already registered with this e-mail address.';
-      default:
-        return 'An unknown error occurred!';
-    }
   },
 
   render() {
@@ -93,10 +71,11 @@ export default React.createClass({
     return (
       <div>
         <div className="authentication__title">Sign up for PianoShelf</div>
-        <If condition={error && !this.state.registerInProgress && !this.state.facebookInProgress}>
+        <If condition={error && error !== success.LOGGED_IN &&
+            !this.state.registerInProgress && !this.state.facebookInProgress}>
           <div className="authentication__error">
             <FontAwesome className="authentication__error-icon" name="exclamation-circle" size="lg" />
-            {this.getErrorMessage_()}
+            {this.getErrorMessage(error)}
           </div>
         </If>
         <form className="authentication__form" onSubmit={this.handleSubmit_}>

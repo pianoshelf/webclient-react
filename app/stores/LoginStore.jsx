@@ -10,30 +10,38 @@ export default class MessageStore extends Store {
 
     // TODO(ankit): Make this into something a little bit more straightforward.
     const loginActions = flux.getActions('login');
-    let actions = [
-      'login',
-      'register',
-      'resetPassword',
-    ];
 
-    // Register each action's success and failure handler
-    actions.forEach(action => {
-      this.registerAsync(loginActions[action],
-        null,
-        this[`${action}Success`] ? this[`${action}Success`] : null,
-        this[`${action}Error`] ? this[`${action}Error`] : null);
-    });
+    this.registerAsync(loginActions.login,
+                       null,
+                       this.loginSuccess,
+                       this.loginError);
 
-    this.register(loginActions.getUser, this.loginSuccess);
+    this.registerAsync(loginActions.register,
+                       null,
+                       this.loginSuccess,
+                       this.registerError);
+
+    this.registerAsync(loginActions.facebookLogin,
+                       null,
+                       null,
+                       this.facebookLoginError);
+
+    this.registerAsync(loginActions.getUser,
+                       null,
+                       this.loginSuccess,
+                       this.resetErrorCode);
+
     this.register(loginActions.clearErrors, this.resetErrorCode);
-    this.state = {};
+    this.register(loginActions.logout, this.resetErrorCode);
+
+    this.state = { errorCode: 0, user: null };
   }
 
   /**
-   * Method for resetting the error code.
+   * Method for resetting the user state.
    */
   resetErrorCode() {
-    this.setState({ errorCode: 0, user: {} });
+    this.setState({ errorCode: 0, user: null });
   }
 
   /**
@@ -46,7 +54,7 @@ export default class MessageStore extends Store {
     // Set error code to success
     let errorCode = success.LOGGED_IN;
 
-    // Extract user information
+    // Extract user information and set it as the state
     let { auth_token, username, first_name, last_name, email, is_superuser } = data;
     let user = {
       authToken: auth_token,
@@ -73,17 +81,6 @@ export default class MessageStore extends Store {
     }
 
     this.setState({ errorCode });
-  }
-
-  /**
-   * LOGOUT methods
-   */
-
-  logoutSuccess(res) {
-
-    this.setState({
-
-    });
   }
 
   /**

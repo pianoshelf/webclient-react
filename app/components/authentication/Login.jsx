@@ -4,23 +4,22 @@ import fluxMixin from 'flummox/mixin';
 import FontAwesome from 'react-fontawesome';
 import React from 'react';
 import { addons } from 'react/addons';
-import { Link, TransitionHook } from 'react-router';
+import { Link } from 'react-router';
 
 import { errors } from '../../utils/constants';
+import { CanLoginMixin, AuthMessagesMixin } from '../../utils/authUtils';
 
-let { LinkedStateMixin } = addons;
+let { LinkedStateMixin, PureRenderMixin } = addons;
 
 function retrieveInitialData(flux) {
   const loginActions = flux.getActions('login');
-  return loginActions.clearErrors();
+  return loginActions.getUser(flux);
 }
 
 export default React.createClass({
 
-  mixins: [LinkedStateMixin, fluxMixin({
-    login: store => ({
-      errorCode: store.state.errorCode,
-    }),
+  mixins: [PureRenderMixin, LinkedStateMixin, AuthMessagesMixin, CanLoginMixin, fluxMixin({
+    login: store => store.state,
     progress: store => ({
       loginInProgress: store.inProgress('login'),
       facebookInProgress: store.inProgress('facebookLogin'),
@@ -45,19 +44,6 @@ export default React.createClass({
     this.refs.initFocus.getDOMNode().focus();
   },
 
-  getErrorMessage_() {
-    switch (this.state.errorCode) {
-      case errors.UNABLE_TO_LOG_IN:
-        return 'Unable to log in with the provided username and password.';
-      case errors.NO_USERNAME:
-        return 'Username field is empty!';
-      case errors.NO_PASSWORD:
-        return 'Password field is empty!';
-      default:
-        return 'An unknown error occurred!';
-    }
-  },
-
   render() {
     let error = this.state.errorCode;
 
@@ -74,10 +60,11 @@ export default React.createClass({
     return (
       <div>
         <div className="authentication__title">Log in to PianoShelf</div>
-        <If condition={error && !this.state.loginInProgress && !this.state.facebookInProgress}>
+        <If condition={error && error !== success.LOGGED_IN &&
+            !this.state.loginInProgress && !this.state.facebookInProgress}>
           <div className="authentication__error">
             <FontAwesome className="authentication__error-icon" name="exclamation-circle" size="lg" />
-            {this.getErrorMessage_()}
+            {this.getErrorMessage(error)}
           </div>
         </If>
         <form className="authentication__form" onSubmit={this.handleSubmit_}>

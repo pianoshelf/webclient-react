@@ -4,7 +4,7 @@ import React from 'react';
 import { Route } from 'react-router';
 
 // Import internal modules
-import requireAuth from './requireAuth';
+import { requireAuth, requireNoAuth } from './authUtils';
 
 // Import components
 import App from '../components/App';
@@ -13,6 +13,7 @@ import ResetPassword from '../components/authentication/ResetPassword';
 import ResetPasswordConfirm from '../components/authentication/ResetPasswordConfirm';
 import Homepage from '../components/Homepage';
 import Login from '../components/authentication/Login';
+import Logout from '../components/authentication/Logout';
 import Register from '../components/authentication/Register';
 
 /**
@@ -27,9 +28,10 @@ export default function getRoutes(flux) {
   return (
     <Route component={App}>
       <Route component={Authentication}>
-        <Route path="/register" component={Register} />
-        <Route path="/login" component={Login} />
-        <Route path="/login/forgot" component={ResetPassword} />
+        <Route path="/register" component={Register} onEnter={requireNoAuth(flux)} />
+        <Route path="/logout" component={Logout} />
+        <Route path="/login" component={Login} onEnter={requireNoAuth(flux)} />
+        <Route path="/login/forgot" component={ResetPassword} onEnter={requireNoAuth(flux)} />
         <Route path="/login/reset" component={ResetPasswordConfirm} onEnter={requireAuth(flux)} />
       </Route>
       <Route path="/" component={Homepage} />

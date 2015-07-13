@@ -23,11 +23,11 @@ function retrieveInitialData(flux) {
   }, flux);
 }
 
-// Declare class
 export default React.createClass({
+
   mixins: [PureRenderMixin, fluxMixin({
     sheetmusic: (store, props) => ({
-      sheetMusicList: store.sheetMusicList(),
+      sheetMusicList: store.state.sheetMusicList,
     }),
   })],
 
@@ -39,7 +39,9 @@ export default React.createClass({
   },
 
   componentDidMount() {
-    retrieveInitialData(this.flux);
+    if (!this.state.sheetMusicList) {
+      retrieveInitialData(this.flux);
+    }
   },
 
   render() {
