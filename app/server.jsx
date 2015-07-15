@@ -128,9 +128,6 @@ app.use((req, res, next) => {
       }
     };
 
-    // Reset our progress bar
-    flux.getActions('progress').resetProgress();
-
     // Make sure we render our route even if the promise fails.
     if (initialState.components) {
       prefetchRouteData(initialState.components, { flux, state: initialState })

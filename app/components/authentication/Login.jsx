@@ -11,11 +11,6 @@ import { CanLoginMixin, AuthMessagesMixin } from '../../utils/authUtils';
 
 let { LinkedStateMixin, PureRenderMixin } = addons;
 
-function retrieveInitialData(flux) {
-  const loginActions = flux.getActions('login');
-  return loginActions.getUser(flux);
-}
-
 export default React.createClass({
 
   mixins: [
@@ -32,12 +27,6 @@ export default React.createClass({
     }),
   ],
 
-  statics: {
-    routeWillRun({ flux, state }) {
-      return retrieveInitialData(flux);
-    },
-  },
-
   getInitialState() {
     return {
       username: '',
@@ -46,7 +35,6 @@ export default React.createClass({
   },
 
   componentDidMount() {
-    retrieveInitialData(this.flux);
     this.refs.initFocus.getDOMNode().focus();
   },
 

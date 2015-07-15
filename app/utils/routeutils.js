@@ -1,3 +1,5 @@
+import flattenDeep from 'lodash/array/flattenDeep';
+
 /**
  * This function allows us to call asynchronous functions on the server-side. When a
  * request is made to our Express server, we will make a call to prefetchRouteData()
@@ -23,10 +25,16 @@
  *     and call functions like React.renderToString.
  */
 export function prefetchRouteData(components, params) {
-  return Promise.all(
-    components
-      .map(component => component.routeWillRun)
-      .filter(routeWillRun => typeof routeWillRun === 'function')
-      .map(routeWillRun => routeWillRun(params))
-  );
+  let matchedPromises = components
+    .map(component => component.routeWillRun)
+    .filter(routeWillRun => typeof routeWillRun === 'function')
+    .map(routeWillRun => routeWillRun(params));
+
+  return Promise.all(flattenDeep(matchedPromises).map(promise => {
+    if (promise && typeof promise.then === 'function') {
+      return new Promise(resolve => promise.then(resolve, resolve));
+    } else {
+      return promise;
+    }
+  }));
 }

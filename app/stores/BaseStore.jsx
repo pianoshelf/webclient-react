@@ -11,15 +11,9 @@ import { Store } from 'flummox';
 export default class BaseStore extends Store {
 
   static assignState(oldState, newState) {
-    if (typeof oldState === 'undefined' || oldState === null)
+    if (typeof oldState === 'undefined' || oldState === null) {
       oldState = {};
-
-    console.log('');
-    console.log(oldState);
-    console.log('becomes');
-    console.log(newState);
-
-
+    }
 
     return merge(oldState, newState);
   }
