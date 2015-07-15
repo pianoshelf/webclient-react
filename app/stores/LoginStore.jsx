@@ -1,14 +1,13 @@
 
-import { Store } from 'flummox';
+import BaseStore from './BaseStore';
 import { errors, success } from '../utils/constants';
 
-export default class MessageStore extends Store {
+export default class LoginStore extends BaseStore {
 
   constructor(flux) {
 
     super();
 
-    // TODO(ankit): Make this into something a little bit more straightforward.
     const loginActions = flux.getActions('login');
 
     this.registerAsync(loginActions.login,

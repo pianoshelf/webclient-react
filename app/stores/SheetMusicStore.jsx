@@ -1,9 +1,9 @@
 
 // Import internal modules
-import DeepStructureStore from '../stores/DeepStructureStore';
+import BaseStore from './BaseStore';
 
 // Export store
-export default class SheetMusicStore extends DeepStructureStore {
+export default class SheetMusicStore extends BaseStore {
 
   constructor(flux) {
     super();

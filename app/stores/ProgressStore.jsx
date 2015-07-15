@@ -1,7 +1,7 @@
 
-import { Store } from 'flummox';
+import BaseStore from './BaseStore';
 
-export default class ProgressStore extends Store {
+export default class ProgressStore extends BaseStore {
 
   constructor(flux) {
 
