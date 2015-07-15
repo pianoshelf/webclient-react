@@ -8,7 +8,7 @@ import merge from 'lodash/object/merge';
 import { Store } from 'flummox';
 
 // Export base store
-export default class BaseStore extends Store {
+export default class DeepStructureStore extends Store {
 
   static assignState(oldState, newState) {
     if (typeof oldState === 'undefined' || oldState === null)

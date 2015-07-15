@@ -34,7 +34,7 @@ export default class MessageStore extends Store {
     this.register(loginActions.clearErrors, this.resetErrorCode);
     this.register(loginActions.logout, this.resetErrorCode);
 
-    this.state = { errorCode: 0, user: null };
+    this.state = {};
   }
 
   /**
