@@ -16,18 +16,14 @@ let { PureRenderMixin } = addons;
 
 function retrieveInitialData(flux) {
   const sheetMusicActions = flux.getActions('sheetmusic');
-  return sheetMusicActions.getSheetMusicList({
-    order_by: 'popular',
-    page: 1,
-    page_size: 12,
-  }, flux);
+  return sheetMusicActions.getMostPopularSheetMusic(flux);
 }
 
 export default React.createClass({
 
   mixins: [PureRenderMixin, fluxMixin({
     sheetmusic: (store, props) => ({
-      sheetMusicList: store.state.sheetMusicList,
+      mostPopularSheetMusic: store.state.mostPopularSheetMusic,
     }),
   })],
 
@@ -39,7 +35,7 @@ export default React.createClass({
   },
 
   componentDidMount() {
-    if (!this.state.sheetMusicList) {
+    if (!this.state.mostPopularSheetMusic) {
       retrieveInitialData(this.flux);
     }
   },
@@ -145,7 +141,7 @@ export default React.createClass({
       nextArrow: 'a',
     };
 
-    if (this.state.sheetMusicList) {
+    if (this.state.mostPopularSheetMusic) {
       return (
         <div className="homepage__popular-panel">
           <ResponsiveContainer absolute={false}>
@@ -153,10 +149,10 @@ export default React.createClass({
           </ResponsiveContainer>
           <div className="homepage__popular-sheetmusic-container">
             <Slider {...settings} className="homepage__popular-sheetmusic">
-              {this.state.sheetMusicList.results.map((sheetmusic, index) => {
+              {this.state.mostPopularSheetMusic.results.map((sheetmusic, index) => {
                 return <SheetMusicThumbnail
                   id={sheetmusic.id}
-                  key={sheetmusic.id}
+                  key={`sheetmusic-${sheetmusic.id}`}
                   name={sheetmusic.title}
                   thumbnail={sheetmusic.thumbnail_url}
                   musicStyle={sheetmusic.style}

@@ -59,6 +59,18 @@ export default class SheetMusicActions extends Actions {
     );
   }
 
+  getMostPopularSheetMusic(flux) {
+    return get(
+      '/sheetmusic/',
+      {
+        order_by: 'popular',
+        page: 1,
+        page_size: 12,
+      },
+      flux
+    );
+  }
+
   getRating(sheetId, flux) {
     return get(
       '/sheetmusic/getrating',
