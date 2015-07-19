@@ -27,6 +27,7 @@ export const success = {
 
   // Authentication
   LOGGED_IN: s++,
+  REGISTERED: s++,
 
-}
+};
 

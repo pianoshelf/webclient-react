@@ -68,7 +68,7 @@ gulp.task('build:client', function(callback) {
     // Emulate gulp-size
     let outputConfig = webpackDevConfig.output;
     let jsFilePath = path.join(outputConfig.path, outputConfig.filename);
-    gutil.log(`'${gutil.colors.cyan("Client JS")}' ${gutil.colors.green('all files ')}` +
+    gutil.log(`'${gutil.colors.cyan('Client JS')}' ${gutil.colors.green('all files ')}` +
               `${gutil.colors.magenta(pretty(fs.statSync(jsFilePath).size))}`);
 
     // Set boolean to true if we're not running the server.
@@ -121,7 +121,6 @@ gulp.task('build:client:prod', function(callback) {
  * Clean out build folder so we are sure we're not building from some cache
  */
 gulp.task('clean', function(callback) {
-  let del = require('del');
   del(['build'], callback);
 });
 

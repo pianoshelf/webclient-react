@@ -1,9 +1,11 @@
 
 import defer from 'lodash/function/defer';
+import extend from 'lodash/object/extend';
 import { Navigation } from 'react-router';
 
+import config from '../../config';
 import { setAuthToken, deleteAuthToken } from './api';
-import { success } from './constants';
+import { errors, success } from './constants';
 
 /**
  * This function returns a react-router transition callback that makes sure
@@ -15,14 +17,14 @@ import { success } from './constants';
  * @return {Function} Callback to feed into react-router
  */
 export function requireAuth(flux) {
-  return function (nextState, transition, callback) {
+  return function(nextState, transition, callback) {
     flux.getActions('login').getUser(flux).then(() => {
       callback();
     }).catch(() => {
       transition.to('/login/', { redirect: nextState.location.pathname });
       callback();
     });
-  }
+  };
 }
 
 /**
@@ -36,14 +38,14 @@ export function requireAuth(flux) {
  * @return {Function} Callback to feed into react-router
  */
 export function requireNoAuth(flux) {
-  return function (nextState, transition, callback) {
+  return function(nextState, transition, callback) {
     flux.getActions('login').getUser(flux).then(() => {
       transition.to('/');
       callback();
     }).catch(() => {
       callback();
     });
-  }
+  };
 }
 
 /**
@@ -52,8 +54,8 @@ export function requireNoAuth(flux) {
  */
 export let CanLoginMixin = {
   mixins: [Navigation],
-  componentDidMount() { this.loginUser_() },
-  componentDidUpdate() { this.loginUser_() },
+  componentDidMount() { this.loginUser_(); },
+  componentDidUpdate() { this.loginUser_(); },
 
   loginUser_() {
     if (this.state.errorCode === success.LOGGED_IN) {
@@ -77,8 +79,8 @@ export let CanLoginMixin = {
  */
 export let CanLogoutMixin = {
   mixins: [Navigation],
-  componentDidMount() { this.logoutUser_() },
-  componentDidUpdate() { this.logoutUser_() },
+  componentDidMount() { this.logoutUser_(); },
+  componentDidUpdate() { this.logoutUser_(); },
 
   logoutUser_() {
     if (this.state.errorCode !== success.LOGGED_IN) {
@@ -121,4 +123,53 @@ export let AuthMessagesMixin = {
         return 'An unknown error occurred!';
     }
   },
-}
+};
+
+export let FacebookLoginMixin = {
+
+  componentDidMount() {
+
+    // Function that will run after Facebook is done initializing
+    window.fbAsyncInit = () => {
+      /*global FB*/
+      FB.init({
+        appId: config.facebook.appId,
+        xfbml: false,
+        version: 'v2.3',
+      });
+    };
+
+    // Asynchronously load Facebook
+    (function(d, s, id) {
+      let js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) { return; }
+      js = d.createElement(s); js.id = id;
+      js.src = '//connect.facebook.net/en_US/sdk.js';
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+  },
+
+  facebookLogin() {
+    /*global FB*/
+    FB.login(response => {
+      if (response.authResponse) {
+        FB.api('/me', loginResponse => {
+          extend(loginResponse, {
+            status: 'connected',
+            accessToken: response.authResponse.accessToken,
+            expiresIn: response.authResponse.expiresIn,
+            signedRequest: response.authResponse.signedRequest,
+          });
+
+          if (this.facebookLoginHandler) this.facebookLoginHandler(loginResponse);
+        });
+      } else {
+        if (this.facebookLoginHandler) {
+          this.facebookLoginHandler({ status: response.status });
+        }
+      }
+    }, {
+      scope: 'public_profile, email, user_birthday',
+    });
+  },
+};

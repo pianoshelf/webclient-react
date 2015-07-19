@@ -1,29 +1,28 @@
 
 import classNames from 'classnames';
+import defer from 'lodash/function/defer';
 import fluxMixin from 'flummox/mixin';
 import FontAwesome from 'react-fontawesome';
+import includes from 'lodash/collection/includes';
 import React from 'react';
 import { addons } from 'react/addons';
 import { Link } from 'react-router';
 
 import { errors, success } from '../../utils/constants';
-import { CanLoginMixin, AuthMessagesMixin } from '../../utils/authUtils';
+import { CanLoginMixin, AuthMessagesMixin, FacebookLoginMixin } from '../../utils/authUtils';
 
-let { LinkedStateMixin, PureRenderMixin } = addons;
+let { LinkedStateMixin } = addons;
 
 export default React.createClass({
 
   mixins: [
-    PureRenderMixin,
     LinkedStateMixin,
     AuthMessagesMixin,
     CanLoginMixin,
+    FacebookLoginMixin,
     fluxMixin({
       login: store => store.state,
-      progress: store => ({
-        registerInProgress: store.inProgress('register'),
-        facebookInProgress: store.inProgress('facebookLogin'),
-      }),
+      progress: store => store.state,
     }),
   ],
 
@@ -40,8 +39,18 @@ export default React.createClass({
     this.refs.initFocus.getDOMNode().focus();
   },
 
+  componentDidUpdate() {
+    if (this.state.errorCode === success.REGISTERED) {
+      defer(this.handlePostRegister_);
+    }
+  },
+
   render() {
     let error = this.state.errorCode;
+
+    let registerInProgress = includes(this.state.inProgress, 'register') ||
+                             includes(this.state.inProgress, 'login');
+    let facebookInProgress = includes(this.state.inProgress, 'facebookLogin');
 
     // Assign the correct class names based on whether there's an error or not
     let classes = {
@@ -66,7 +75,8 @@ export default React.createClass({
       <div>
         <div className="authentication__title">Sign up for PianoShelf</div>
         <If condition={error && error !== success.LOGGED_IN &&
-            !this.state.registerInProgress && !this.state.facebookInProgress}>
+            error !== success.REGISTERED &&
+            !registerInProgress && !facebookInProgress}>
           <div className="authentication__error">
             <FontAwesome className="authentication__error-icon" name="exclamation-circle" size="lg" />
             {this.getErrorMessage(error)}
@@ -94,8 +104,8 @@ export default React.createClass({
           </div>
           <button className="authentication__button authentication__button--register"
             type="submit"
-            disabled={this.state.registerInProgress || this.state.facebookInProgress}>
-            <If condition={this.state.registerInProgress}>
+            disabled={registerInProgress || facebookInProgress}>
+            <If condition={registerInProgress}>
               <FontAwesome name="cog" spin={true} />
             <Else />
               <span>
@@ -109,8 +119,8 @@ export default React.createClass({
         <hr className="authentication__hr" />
         <button className="authentication__button authentication__button--facebook"
           onClick={this.handleFacebook_}
-          disabled={this.state.registerInProgress || this.state.facebookInProgress}>
-          <If condition={this.state.facebookInProgress}>
+          disabled={registerInProgress || facebookInProgress}>
+          <If condition={facebookInProgress}>
             <FontAwesome name="cog" spin={true} />
           <Else />
             <span>
@@ -137,6 +147,25 @@ export default React.createClass({
 
   handleFacebook_(event) {
     event.preventDefault();
+    this.facebookLogin();
+  },
+
+  facebookLoginHandler(response) {
+    if (response.status === 'connected') {
+      let { accessToken } = response;
+
+      // Trigger action
+      let loginActions = this.flux.getActions('login');
+      loginActions.facebookLogin({ accessToken }, this.flux);
+    }
+  },
+
+  handlePostRegister_() {
+    let { username, password1 } = this.state;
+
+    // Trigger action
+    let loginActions = this.flux.getActions('login');
+    loginActions.login(username, password1, this.flux);
   },
 
 });

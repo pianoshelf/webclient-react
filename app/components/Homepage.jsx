@@ -22,7 +22,7 @@ function retrieveInitialData(flux) {
 export default React.createClass({
 
   mixins: [PureRenderMixin, fluxMixin({
-    sheetmusic: (store, props) => ({
+    sheetmusic: store => ({
       mostPopularSheetMusic: store.state.mostPopularSheetMusic,
     }),
   })],

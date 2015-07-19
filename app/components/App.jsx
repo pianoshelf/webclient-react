@@ -7,10 +7,7 @@ export default React.createClass({
 
   statics: {
     routeWillRun({ flux }) {
-      return [
-        flux.getActions('progress').resetProgress(),
-        flux.getActions('login').getUser(flux),
-      ];
+      return flux.getActions('login').getUser(flux);
     },
   },
 

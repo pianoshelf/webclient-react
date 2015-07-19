@@ -19,9 +19,9 @@ export default class ProgressStore extends BaseStore {
     // Register each action's success and failure handler
     actions.forEach(action => {
       this.registerAsync(action.func,
-        this.handleStart(action.name),
-        this.handleEnd(action.name),
-        this.handleEnd(action.name));
+                         () => this.handleStart(action.name),
+                         () => this.handleEnd(action.name),
+                         () => this.handleEnd(action.name));
     });
 
     this.register(progressActions.resetProgress, this.resetProgress);
@@ -33,23 +33,15 @@ export default class ProgressStore extends BaseStore {
   }
 
   handleStart(param) {
-    return () => {
-      let { inProgress } = this.state;
-      inProgress.push(param);
-      this.setState({ inProgress });
-    };
+    let { inProgress } = this.state;
+    inProgress.push(param);
+    this.setState({ inProgress });
   }
 
   handleEnd(param) {
-    return () => {
-      let { inProgress } = this.state;
-      inProgress.splice(inProgress.indexOf(param));
-      this.setState({ inProgress });
-    };
-  }
-
-  inProgress(item) {
-    return this.state.inProgress.indexOf(item) !== -1;
+    let { inProgress } = this.state;
+    inProgress.splice(inProgress.indexOf(param));
+    this.setState({ inProgress });
   }
 
 }

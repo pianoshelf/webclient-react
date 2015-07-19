@@ -40,6 +40,9 @@ module.exports = {
     },
   },
 
+  facebook: {
+    appId: '1549195551980295',
+  },
 
   cookie: {
     authtoken: 'pianoshelf-authtoken',

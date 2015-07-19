@@ -12,22 +12,22 @@ export default class LoginStore extends BaseStore {
 
     this.registerAsync(loginActions.login,
                        null,
-                       this.loginSuccess,
+                       this.logInUser,
                        this.loginError);
 
     this.registerAsync(loginActions.register,
                        null,
-                       this.loginSuccess,
+                       this.registerUser,
                        this.registerError);
 
     this.registerAsync(loginActions.facebookLogin,
                        null,
-                       null,
-                       this.facebookLoginError);
+                       this.logInUser,
+                       null);
 
     this.registerAsync(loginActions.getUser,
                        null,
-                       this.loginSuccess,
+                       this.logInUser,
                        this.resetErrorCode);
 
     this.register(loginActions.clearErrors, this.resetErrorCode);
@@ -43,11 +43,7 @@ export default class LoginStore extends BaseStore {
     this.setState({ errorCode: 0, user: null });
   }
 
-  /**
-   * LOGIN methods
-   */
-
-  loginSuccess(res) {
+  logInUser(res) {
     let data = JSON.parse(res.text);
 
     // Set error code to success
@@ -68,9 +64,19 @@ export default class LoginStore extends BaseStore {
     this.setState({ errorCode, user });
   }
 
+  registerUser(res) {
+    let data = JSON.parse(res.text);
+
+    // Set error code to registered
+    let errorCode = success.REGISTERED;
+
+    this.setState({ errorCode });
+  }
+
   loginError(res) {
     let data = JSON.parse(res.text);
     let errorCode = 0;
+
 
     if (res.failedResponse) {
       errorCode = data.actionError;
@@ -81,10 +87,6 @@ export default class LoginStore extends BaseStore {
 
     this.setState({ errorCode });
   }
-
-  /**
-   * REGISTER methods
-   */
 
   registerError(res) {
     let data = JSON.parse(res.text);
@@ -99,25 +101,6 @@ export default class LoginStore extends BaseStore {
     }
 
     this.setState({ errorCode });
-  }
-
-  /**
-   * FACEBOOK methods
-   */
-
-  facebookLoginError(res) {
-    let data = JSON.parse(res.text);
-    let errorCode = 0;
-
-    this.setState({ errorCode });
-
-  }
-
-  /**
-   * RESET PASSWORD methods
-   */
-  resetPasswordSuccess(res) {
-
   }
 
   resetPasswordError(res) {

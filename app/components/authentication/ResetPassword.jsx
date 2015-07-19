@@ -2,6 +2,7 @@
 import classNames from 'classnames';
 import fluxMixin from 'flummox/mixin';
 import FontAwesome from 'react-fontawesome';
+import includes from 'lodash/collection/includes';
 import React from 'react';
 import { addons } from 'react/addons';
 import { Link } from 'react-router';
@@ -9,19 +10,16 @@ import { Link } from 'react-router';
 import { errors, success } from '../../utils/constants';
 import { CanLoginMixin, AuthMessagesMixin } from '../../utils/authUtils';
 
-let { LinkedStateMixin, PureRenderMixin } = addons;
+let { LinkedStateMixin } = addons;
 
 export default React.createClass({
 
   mixins: [
-    PureRenderMixin,
     LinkedStateMixin,
     AuthMessagesMixin,
     fluxMixin({
       login: store => store.state,
-      progress: store => ({
-        resetInProgress: store.inProgress('resetPassword'),
-      }),
+      progress: store => store.state,
     }),
   ],
 
@@ -38,6 +36,8 @@ export default React.createClass({
   render() {
     let error = this.state.errorCode;
 
+    let inProgress = includes(this.state.inProgress, 'resetPassword');
+
     // Assign the correct class names based on whether there's an error or not
     let classes = {
       email: classNames('authentication__input', {
@@ -50,7 +50,7 @@ export default React.createClass({
       <div>
         <div className="authentication__title">Reset your password</div>
         <If condition={error && error !== success.LOGGED_IN &&
-            !this.state.resetInProgress}>
+            !inProgress}>
           <div className="authentication__error">
             <FontAwesome className="authentication__error-icon" name="exclamation-circle" size="lg" />
             {this.getErrorMessage(error)}
@@ -70,8 +70,8 @@ export default React.createClass({
           </div>
           <button className="authentication__button authentication__button--reset-password"
             type="submit"
-            disabled={this.state.resetInProgress}>
-            <If condition={this.state.resetInProgress}>
+            disabled={inProgress}>
+            <If condition={inProgress}>
               <FontAwesome name="cog" spin={true} />
             <Else />
               <span>
