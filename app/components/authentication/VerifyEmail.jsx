@@ -4,44 +4,46 @@ import React from 'react';
 import { addons } from 'react/addons';
 
 import InfoText from './utils/InfoText';
-import { CanLogoutMixin } from '../../utils/authUtils';
 
 let { PureRenderMixin } = addons;
 
-function retrieveInitialData(flux) {
+function retrieveInitialData(flux, state) {
   const loginActions = flux.getActions('login');
-  return loginActions.logout(flux);
 }
 
 export default React.createClass({
 
   mixins: [
     PureRenderMixin,
-    CanLogoutMixin,
     fluxMixin({
       login: store => store.state,
+      progress: store => store.state,
     }),
   ],
 
   statics: {
     routeWillRun({ flux, state }) {
-      return retrieveInitialData(flux);
+      return retrieveInitialData(flux, state);
     },
   },
 
+  propTypes: {
+    params: React.PropTypes.object,
+  },
+
   componentDidMount() {
-    retrieveInitialData(this.flux);
+    let loginActions = this.flux.getActions('login');
+    loginActions.verifyEmail(this.props.params.key, this.flux);
   },
 
   render() {
     return (
       <div>
         <InfoText>
-          Enter a new password to reset your password.
+          Verifying your email...
         </InfoText>
       </div>
     );
   },
 
 });
-

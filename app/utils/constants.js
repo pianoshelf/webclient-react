@@ -13,12 +13,14 @@ export const errors = {
   NO_EMAIL: s++,
   NO_PASSWORD: s++,
   NO_USERNAME: s++,
+  NOT_STRONG_PASSWORD: s++,
   NOT_SAME_PASSWORD: s++,
 
   // Server side errors
   UNABLE_TO_LOG_IN: s++,
   USERNAME_TAKEN: s++,
   EMAIL_ALREADY_REGISTERED: s++,
+  EMAIL_NOT_REGISTERED: s++,
 
 };
 
@@ -28,6 +30,8 @@ export const success = {
   // Authentication
   LOGGED_IN: s++,
   REGISTERED: s++,
+  PASSWORD_RESET: s++,
+  PASSWORD_CONFIRM_RESET: s++,
 
 };
 

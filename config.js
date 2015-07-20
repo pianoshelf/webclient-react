@@ -10,7 +10,7 @@ module.exports = {
   files: {
     client: {
       entry: './app/client.jsx',
-      src: ['./app/**/*.js', './app/**/*.jsx'],
+      src: ['./app/**/**/**/*.js', './app/**/**/**/*.jsx'],
       out: 'bundle.js',
     },
     css: {
@@ -23,7 +23,7 @@ module.exports = {
       out: 'img',
     },
     server: {
-      src: ['app/**/*.js', 'app/**/*.jsx'],
+      src: ['./app/**/**/**/*.js', './app/**/**/**/*.jsx'],
       out: 'build',
     },
     staticAssets: 'build/static/',

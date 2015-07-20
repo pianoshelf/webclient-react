@@ -20,6 +20,16 @@ export default class LoginStore extends BaseStore {
                        this.registerUser,
                        this.registerError);
 
+    this.registerAsync(loginActions.resetPassword,
+                       null,
+                       this.resetPasswordSuccess,
+                       this.resetPasswordError);
+
+    this.registerAsync(loginActions.resetPasswordConfirm,
+                       null,
+                       this.resetPasswordConfirmSuccess,
+                       this.resetPasswordConfirmError);
+
     this.registerAsync(loginActions.facebookLogin,
                        null,
                        this.logInUser,
@@ -64,12 +74,21 @@ export default class LoginStore extends BaseStore {
     this.setState({ errorCode, user });
   }
 
-  registerUser(res) {
-    let data = JSON.parse(res.text);
-
+  registerUser() {
     // Set error code to registered
     let errorCode = success.REGISTERED;
+    this.setState({ errorCode });
+  }
 
+  resetPasswordSuccess() {
+    // Set error code to password reset
+    let errorCode = success.PASSWORD_RESET;
+    this.setState({ errorCode });
+  }
+
+  resetPasswordConfirmSuccess() {
+    // Set error code to password reset confirm
+    let errorCode = success.PASSWORD_CONFIRM_RESET;
     this.setState({ errorCode });
   }
 
@@ -77,11 +96,10 @@ export default class LoginStore extends BaseStore {
     let data = JSON.parse(res.text);
     let errorCode = 0;
 
-
     if (res.failedResponse) {
       errorCode = data.actionError;
     } else if (data.non_field_errors &&
-        data.non_field_errors[0] === 'Unable to log in with provided credentials.') {
+               data.non_field_errors[0] === 'Unable to log in with provided credentials.') {
       errorCode = errors.UNABLE_TO_LOG_IN;
     }
 
@@ -94,9 +112,11 @@ export default class LoginStore extends BaseStore {
 
     if (res.failedResponse) {
       errorCode = data.actionError;
-    } else if (data.username && data.username[0] === 'This username is already taken. Please choose another.') {
+    } else if (data.username &&
+               data.username[0] === 'This username is already taken. Please choose another.') {
       errorCode = errors.USERNAME_TAKEN;
-    } else if (data.email && data.email[0] === 'A user is already registered with this e-mail address.') {
+    } else if (data.email &&
+               data.email[0] === 'A user is already registered with this e-mail address.') {
       errorCode = errors.EMAIL_ALREADY_REGISTERED;
     }
 
@@ -109,11 +129,24 @@ export default class LoginStore extends BaseStore {
 
     if (res.failedResponse) {
       errorCode = data.actionError;
+    } else if (data.email &&
+               data.email[0] === 'Invalid Email') {
+      errorCode = errors.EMAIL_NOT_REGISTERED;
     }
 
     this.setState({ errorCode });
   }
 
+  resetPasswordConfirmError(res) {
+    let data = JSON.parse(res.text);
+    let errorCode = 0;
+
+    if (res.failedResponse) {
+      errorCode = data.actionError;
+    }
+
+    this.setState({ errorCode });
+  }
 
 }
 

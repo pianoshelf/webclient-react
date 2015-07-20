@@ -41,15 +41,18 @@
   text-align: center
   margin-bottom: 15px
 
-.authentication__error
+.authentication__message
   font-size: 15px
   padding: 5px 10px 5px 35px
   margin-bottom: 5px
   position: relative
   +standard-borders
-  +color-area-gradient(lighten($red, 10%))
+  &--info
+    +color-area-gradient(lighten($blue-light, 10%))
+  &--error
+    +color-area-gradient(lighten($red, 10%))
 
-.authentication__error-icon
+.authentication__message-icon
   position: absolute
   top: 10px
   left: 10px

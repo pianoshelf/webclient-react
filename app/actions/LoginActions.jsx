@@ -103,6 +103,11 @@ export default class LoginActions extends Actions {
       return fail(errors.NO_PASSWORD);
     }
 
+    // Make sure password is strong
+    if (user.password1.length < 6) {
+      return fail(errors.NOT_STRONG_PASSWORD);
+    }
+
     // Make sure password and confirm password fields have the same value
     if (user.password2 !== user.password1) {
       return fail(errors.NOT_SAME_PASSWORD);
@@ -147,6 +152,11 @@ export default class LoginActions extends Actions {
     // Make sure password field is not empty
     if (user.password1 === '') {
       return fail(errors.NO_PASSWORD);
+    }
+
+    // Make sure password is strong
+    if (user.password1.length < 6) {
+      return fail(errors.NOT_STRONG_PASSWORD);
     }
 
     // Make sure password and confirm password fields have the same value

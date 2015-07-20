@@ -20,7 +20,7 @@ export default React.createClass({
     /**
      * The current error code
      */
-    errorCode: React.PropTypes.number.isRequired,
+    errorCode: React.PropTypes.number,
 
     /**
      * The error codes that cause this component to have the error class

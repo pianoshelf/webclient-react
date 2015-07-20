@@ -20,7 +20,10 @@ export default React.createClass({
 
   mixins: [
     LinkedStateMixin,
-    fluxMixin('progress'),
+    fluxMixin({
+      login: store => store.state,
+      progress: store => store.state,
+    }),
   ],
 
   getInitialState() {
@@ -35,8 +38,8 @@ export default React.createClass({
     return (
       <div>
         <Title>Reset your password</Title>
-        <ErrorMessage errorCode={this.props.errorCode}
-          dontDisplayIf={this.props.errorCode === success.LOGGED_IN || inProgress} />
+        <ErrorMessage errorCode={this.state.errorCode}
+          dontDisplayIf={this.state.errorCode === success.LOGGED_IN || inProgress} />
         <InfoText>
           Enter the email address you used to sign up for PianoShelf, and we will email you
           a link to reset your password.
@@ -44,7 +47,7 @@ export default React.createClass({
         <form className="authentication__form" onSubmit={this.handleSubmit_}>
           <div className="authentication__inputs">
             <Input placeholder="Email"
-              errorCode={this.props.errorCode}
+              errorCode={this.state.errorCode}
               errorWhen={[errors.NO_EMAIL, errors.INVALID_EMAIL]}
               focusOnLoad={true}
               valueLink={this.linkState('email')} />

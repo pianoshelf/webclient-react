@@ -5,6 +5,7 @@ let babel = require('gulp-babel');
 let browserSync = require('browser-sync');
 let cache = require('gulp-cached');
 let del = require('del');
+let eslint = require('gulp-eslint');
 let fs = require('fs');
 let gulp = require('gulp');
 let gutil = require('gulp-util');
@@ -52,6 +53,16 @@ gulp.task('build:css', function() {
     .pipe(prefix('ie >= 9'))
     .pipe(gulp.dest(`${config.files.staticAssets}${config.files.css.out}`))
     .pipe(reload({ stream: true }));
+});
+
+/**
+ * Lint all our JS files.
+ */
+gulp.task('lint:js', function() {
+  return gulp.src(config.files.client.src)
+    .pipe(cache('lint:js'))
+    .pipe(eslint())
+    .pipe(eslint.format());
 });
 
 /**
@@ -128,9 +139,10 @@ gulp.task('clean', function(callback) {
  * Watch the necessary directories and launch BrowserSync.
  */
 gulp.task('watch', ['clean'], function(callback) {
-  runSequence(['build:images', 'build:css'], ['build:client', 'build:server'], function() {
+  runSequence(['build:images', 'build:css'], ['lint:js'], ['build:client', 'build:server'], function() {
     gulp.watch(config.files.client.src, ['build:client']);
     gulp.watch(config.files.server.src, ['build:server']);
+    gulp.watch(config.files.client.src, ['lint:js']);
     gulp.watch(config.files.css.src, ['build:css']);
     gulp.watch(config.files.images.src, ['build:images']);
 

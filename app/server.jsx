@@ -4,7 +4,6 @@ import base64 from 'base-64';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import express from 'express';
-import expressPromise from 'express-promise';
 import FluxComponent from 'flummox/component';
 import Location from 'react-router/lib/Location';
 import http from 'http';
@@ -31,9 +30,6 @@ global.__CLIENT__ = false;
 
 // Serve public folder
 app.use(express.static(path.join(__dirname, '..', 'public')));
-
-// Allow returning promises to response object
-// app.use(expressPromise);
 
 // Proxy API requests to the python server if we're on a dev environment
 if (process.env.NODE_ENV !== 'production') {

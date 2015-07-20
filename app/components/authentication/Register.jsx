@@ -1,5 +1,4 @@
 
-import classNames from 'classnames';
 import defer from 'lodash/function/defer';
 import fluxMixin from 'flummox/mixin';
 import FontAwesome from 'react-fontawesome';
@@ -63,7 +62,7 @@ export default React.createClass({
             <Input placeholder="Password"
               password={true}
               errorCode={this.state.errorCode}
-              errorWhen={[errors.NO_PASSWORD]}
+              errorWhen={[errors.NO_PASSWORD, errors.NOT_STRONG_PASSWORD]}
               valueLink={this.linkState('password1')} />
             <Input placeholder="Confirm Password"
               password={true}

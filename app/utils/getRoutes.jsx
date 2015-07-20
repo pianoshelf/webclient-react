@@ -9,12 +9,13 @@ import { requireAuth, requireNoAuth } from './authUtils';
 // Import components
 import App from '../components/App';
 import Authentication from '../components/authentication/Authentication';
-import ResetPassword from '../components/authentication/ResetPassword';
-import ResetPasswordConfirm from '../components/authentication/ResetPasswordConfirm';
 import Homepage from '../components/Homepage';
 import Login from '../components/authentication/Login';
 import Logout from '../components/authentication/Logout';
 import Register from '../components/authentication/Register';
+import ResetPassword from '../components/authentication/ResetPassword';
+import ResetPasswordConfirm from '../components/authentication/ResetPasswordConfirm';
+import VerifyEmail from '../components/authentication/VerifyEmail';
 
 /**
  * A function that retrieves the route configuration for both
@@ -33,7 +34,9 @@ export default function getRoutes(flux) {
         <Route path="/login" component={Login} onEnter={requireNoAuth(flux)} />
         <Route path="/login/forgot" component={ResetPassword} onEnter={requireNoAuth(flux)} />
         <Route path="/login/reset/:uid/:token" component={ResetPasswordConfirm} />
+        <Route path="/login/verify/:key" component={VerifyEmail} />
         <Redirect from="/password-reset-confirm/:uid/:token" to="/login/reset/:uid/:token" />
+        <Redirect from="/verify-email/:key" to="/login/verify/:key" />
       </Route>
       <Route path="/" component={Homepage} />
     </Route>

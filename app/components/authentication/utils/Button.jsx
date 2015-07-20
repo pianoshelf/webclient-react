@@ -3,8 +3,6 @@ import classNames from 'classnames';
 import React from 'react';
 import FontAwesome from 'react-fontawesome';
 
-import { errors } from '../../../utils/constants';
-
 export default React.createClass({
 
   propTypes: {
@@ -17,6 +15,11 @@ export default React.createClass({
      * Condition in which to disable the button.
      */
     disableIf: React.PropTypes.bool.isRequired,
+
+    /**
+     * Children of the element
+     */
+    children: React.PropTypes.node,
 
     /**
      * Color of the button
@@ -40,7 +43,9 @@ export default React.createClass({
         <If condition={this.props.submittedIf}>
           <FontAwesome name="cog" spin={true} />
         <Else />
-          {this.props.children}
+          <span>
+            {this.props.children}
+          </span>
         </If>
       </button>
     );

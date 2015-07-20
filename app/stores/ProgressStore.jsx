@@ -15,6 +15,8 @@ export default class ProgressStore extends BaseStore {
     let actions = [
       { name: 'login', func: loginActions.login },
       { name: 'register', func: loginActions.register },
+      { name: 'resetPassword', func: loginActions.resetPassword },
+      { name: 'resetPasswordConfirm', func: loginActions.resetPasswordConfirm },
       { name: 'facebookLogin', func: loginActions.facebookLogin },
     ];
 
