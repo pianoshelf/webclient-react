@@ -7,8 +7,12 @@ import React from 'react';
 import { addons } from 'react/addons';
 import { Link } from 'react-router';
 
+import Button from './utils/Button';
+import ErrorMessage from './utils/ErrorMessage';
+import InfoText from './utils/InfoText';
+import Input from './utils/Input';
+import Title from './utils/Title';
 import { errors, success } from '../../utils/constants';
-import { CanLoginMixin, AuthMessagesMixin } from '../../utils/authUtils';
 
 let { LinkedStateMixin } = addons;
 
@@ -16,11 +20,7 @@ export default React.createClass({
 
   mixins: [
     LinkedStateMixin,
-    AuthMessagesMixin,
-    fluxMixin({
-      login: store => store.state,
-      progress: store => store.state,
-    }),
+    fluxMixin('progress'),
   ],
 
   getInitialState() {
@@ -29,57 +29,30 @@ export default React.createClass({
     };
   },
 
-  componentDidMount() {
-    this.refs.initFocus.getDOMNode().focus();
-  },
-
   render() {
-    let error = this.state.errorCode;
-
     let inProgress = includes(this.state.inProgress, 'resetPassword');
-
-    // Assign the correct class names based on whether there's an error or not
-    let classes = {
-      email: classNames('authentication__input', {
-        'authentication__input--error': error === errors.NO_EMAIL ||
-                                        error === errors.INVALID_EMAIL,
-      }),
-    };
 
     return (
       <div>
-        <div className="authentication__title">Reset your password</div>
-        <If condition={error && error !== success.LOGGED_IN &&
-            !inProgress}>
-          <div className="authentication__error">
-            <FontAwesome className="authentication__error-icon" name="exclamation-circle" size="lg" />
-            {this.getErrorMessage(error)}
-          </div>
-        </If>
-        <p className="authentication__text">
+        <Title>Reset your password</Title>
+        <ErrorMessage errorCode={this.props.errorCode}
+          dontDisplayIf={this.props.errorCode === success.LOGGED_IN || inProgress} />
+        <InfoText>
           Enter the email address you used to sign up for PianoShelf, and we will email you
           a link to reset your password.
-        </p>
+        </InfoText>
         <form className="authentication__form" onSubmit={this.handleSubmit_}>
           <div className="authentication__inputs">
-            <input className="authentication__input"
-              type="text"
-              ref="initFocus"
-              placeholder="Email"
+            <Input placeholder="Email"
+              errorCode={this.props.errorCode}
+              errorWhen={[errors.NO_EMAIL, errors.INVALID_EMAIL]}
+              focusOnLoad={true}
               valueLink={this.linkState('email')} />
           </div>
-          <button className="authentication__button authentication__button--reset-password"
-            type="submit"
-            disabled={inProgress}>
-            <If condition={inProgress}>
-              <FontAwesome name="cog" spin={true} />
-            <Else />
-              <span>
-                <FontAwesome className="authentication__button-icon" name="paper-plane" />
-                Reset password
-              </span>
-            </If>
-          </button>
+          <Button color="red" disableIf={inProgress} submittedIf={inProgress}>
+            <FontAwesome className="authentication__button-icon" name="paper-plane" />
+            Reset password
+          </Button>
         </form>
         <Link to="/login" className="authentication__link">I want to log in</Link>
       </div>

@@ -8,8 +8,12 @@ import React from 'react';
 import { addons } from 'react/addons';
 import { Link } from 'react-router';
 
+import Button from './utils/Button';
+import ErrorMessage from './utils/ErrorMessage';
+import Input from './utils/Input';
+import Title from './utils/Title';
 import { errors, success } from '../../utils/constants';
-import { CanLoginMixin, AuthMessagesMixin, FacebookLoginMixin } from '../../utils/authUtils';
+import { CanLoginMixin, FacebookLoginMixin } from '../../utils/authUtils';
 
 let { LinkedStateMixin } = addons;
 
@@ -17,7 +21,6 @@ export default React.createClass({
 
   mixins: [
     LinkedStateMixin,
-    AuthMessagesMixin,
     CanLoginMixin,
     FacebookLoginMixin,
     fluxMixin({
@@ -35,102 +38,62 @@ export default React.createClass({
     };
   },
 
-  componentDidMount() {
-    this.refs.initFocus.getDOMNode().focus();
+  render() {
+    let registerInProgress = includes(this.state.inProgress, 'register') ||
+                             includes(this.state.inProgress, 'login');
+    let facebookInProgress = includes(this.state.inProgress, 'facebookLogin');
+
+    return (
+      <div>
+        <Title>Sign up for PianoShelf</Title>
+        <ErrorMessage errorCode={this.state.errorCode}
+          dontDisplayIf={this.state.errorCode === success.LOGGED_IN ||
+            registerInProgress || facebookInProgress} />
+        <form className="authentication__form" onSubmit={this.handleSubmit_}>
+          <div className="authentication__inputs">
+            <Input placeholder="Username"
+              errorCode={this.state.errorCode}
+              errorWhen={[errors.NO_USERNAME, errors.USERNAME_TAKEN]}
+              focusOnLoad={true}
+              valueLink={this.linkState('username')} />
+            <Input placeholder="Email"
+              errorCode={this.state.errorCode}
+              errorWhen={[errors.NO_EMAIL, errors.INVALID_EMAIL, errors.EMAIL_ALREADY_REGISTERED]}
+              valueLink={this.linkState('email')} />
+            <Input placeholder="Password"
+              password={true}
+              errorCode={this.state.errorCode}
+              errorWhen={[errors.NO_PASSWORD]}
+              valueLink={this.linkState('password1')} />
+            <Input placeholder="Confirm Password"
+              password={true}
+              errorCode={this.state.errorCode}
+              errorWhen={[errors.NOT_SAME_PASSWORD]}
+              valueLink={this.linkState('password2')} />
+          </div>
+          <Button color="blue-light" submittedIf={registerInProgress}
+              disableIf={registerInProgress || facebookInProgress}>
+            <FontAwesome className="authentication__button-icon" name="star" />
+            Sign up
+          </Button>
+        </form>
+        <Link to="/login" className="authentication__link">I have an account</Link>
+        <hr className="authentication__hr" />
+        <form onSubmit={this.handleFacebook_}>
+          <Button color="facebook" submittedIf={facebookInProgress}
+              disableIf={registerInProgress || facebookInProgress}>
+            <FontAwesome className="authentication__button-icon" name="facebook-square" />
+            Sign up using Facebook
+          </Button>
+        </form>
+      </div>
+    );
   },
 
   componentDidUpdate() {
     if (this.state.errorCode === success.REGISTERED) {
       defer(this.handlePostRegister_);
     }
-  },
-
-  render() {
-    let error = this.state.errorCode;
-
-    let registerInProgress = includes(this.state.inProgress, 'register') ||
-                             includes(this.state.inProgress, 'login');
-    let facebookInProgress = includes(this.state.inProgress, 'facebookLogin');
-
-    // Assign the correct class names based on whether there's an error or not
-    let classes = {
-      username: classNames('authentication__input', {
-        'authentication__input--error': error === errors.NO_USERNAME ||
-                                        error === errors.USERNAME_TAKEN,
-      }),
-      email: classNames('authentication__input', {
-        'authentication__input--error': error === errors.NO_EMAIL ||
-                                        error === errors.INVALID_EMAIL ||
-                                        error === errors.EMAIL_ALREADY_REGISTERED,
-      }),
-      password1: classNames('authentication__input', {
-        'authentication__input--error': error === errors.NO_PASSWORD,
-      }),
-      password2: classNames('authentication__input', {
-        'authentication__input--error': error === errors.NOT_SAME_PASSWORD,
-      }),
-    };
-
-    return (
-      <div>
-        <div className="authentication__title">Sign up for PianoShelf</div>
-        <If condition={error && error !== success.LOGGED_IN &&
-            error !== success.REGISTERED &&
-            !registerInProgress && !facebookInProgress}>
-          <div className="authentication__error">
-            <FontAwesome className="authentication__error-icon" name="exclamation-circle" size="lg" />
-            {this.getErrorMessage(error)}
-          </div>
-        </If>
-        <form className="authentication__form" onSubmit={this.handleSubmit_}>
-          <div className="authentication__inputs">
-            <input className={classes.username}
-              type="text"
-              ref="initFocus"
-              placeholder="Username"
-              valueLink={this.linkState('username')} />
-            <input className={classes.email}
-              type="text"
-              placeholder="Email"
-              valueLink={this.linkState('email')} />
-            <input className={classes.password1}
-              type="password"
-              placeholder="Password"
-              valueLink={this.linkState('password1')} />
-            <input className={classes.password2}
-              type="password"
-              placeholder="Confirm Password"
-              valueLink={this.linkState('password2')} />
-          </div>
-          <button className="authentication__button authentication__button--register"
-            type="submit"
-            disabled={registerInProgress || facebookInProgress}>
-            <If condition={registerInProgress}>
-              <FontAwesome name="cog" spin={true} />
-            <Else />
-              <span>
-                <FontAwesome className="authentication__button-icon" name="star" />
-                Sign up
-              </span>
-            </If>
-          </button>
-        </form>
-        <Link to="/login" className="authentication__link">I have an account</Link>
-        <hr className="authentication__hr" />
-        <button className="authentication__button authentication__button--facebook"
-          onClick={this.handleFacebook_}
-          disabled={registerInProgress || facebookInProgress}>
-          <If condition={facebookInProgress}>
-            <FontAwesome name="cog" spin={true} />
-          <Else />
-            <span>
-              <FontAwesome className="authentication__button-icon" name="facebook-square" />
-              Sign up using Facebook
-            </span>
-          </If>
-        </button>
-      </div>
-    );
   },
 
   handleSubmit_(event) {

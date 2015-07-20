@@ -1,4 +1,6 @@
 
+import defer from 'lodash/function/defer';
+
 import BaseStore from './BaseStore';
 
 export default class ProgressStore extends BaseStore {
@@ -29,19 +31,19 @@ export default class ProgressStore extends BaseStore {
   }
 
   resetProgress() {
-    this.setState({ inProgress: [] });
+    defer(() => this.setState({ inProgress: [] }));
   }
 
   handleStart(param) {
     let { inProgress } = this.state;
     inProgress.push(param);
-    this.setState({ inProgress });
+    defer(() => this.setState({ inProgress }));
   }
 
   handleEnd(param) {
     let { inProgress } = this.state;
     inProgress.splice(inProgress.indexOf(param));
-    this.setState({ inProgress });
+    defer(() => this.setState({ inProgress }));
   }
 
 }

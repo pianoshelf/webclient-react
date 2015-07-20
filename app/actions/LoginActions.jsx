@@ -29,7 +29,7 @@ export default class LoginActions extends Actions {
       '/user/',
       {},
       flux, true /* authUrl */
-    )
+    );
   }
 
   /**

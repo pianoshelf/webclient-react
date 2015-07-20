@@ -98,33 +98,9 @@ export let CanLogoutMixin = {
 };
 
 /**
- * A mixin that adds a function that retrieves a standardized set of error messages.
+ * A mixin that adds the ability to log in to Facebook by asynchronously loading
+ * the Facebook Javascript SDK.
  */
-export let AuthMessagesMixin = {
-  getErrorMessage(errorCode) {
-    switch (errorCode) {
-      case errors.INVALID_EMAIL:
-        return 'The email you provided is invalid.';
-      case errors.NO_EMAIL:
-        return 'Please enter an email!';
-      case errors.NO_PASSWORD:
-        return 'You did not enter a password!';
-      case errors.NO_USERNAME:
-        return 'You did not enter a username!';
-      case errors.NOT_SAME_PASSWORD:
-        return 'The two password fields do not match.';
-      case errors.UNABLE_TO_LOG_IN:
-        return 'Unable to log in with the provided username and password.';
-      case errors.USERNAME_TAKEN:
-        return 'Sorry, that username is taken.';
-      case errors.EMAIL_ALREADY_REGISTERED:
-        return 'A user is already registered with this e-mail address.';
-      default:
-        return 'An unknown error occurred!';
-    }
-  },
-};
-
 export let FacebookLoginMixin = {
 
   componentDidMount() {

@@ -10,6 +10,10 @@ import { Store } from 'flummox';
 // Export base store
 export default class BaseStore extends Store {
 
+  constructor() {
+    super();
+  }
+
   static assignState(oldState, newState) {
     if (typeof oldState === 'undefined' || oldState === null) {
       oldState = {};
