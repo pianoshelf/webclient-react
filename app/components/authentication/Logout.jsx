@@ -37,7 +37,7 @@ export default React.createClass({
     return (
       <div>
         <InfoText>
-          Enter a new password to reset your password.
+          You are now being logged out...
         </InfoText>
       </div>
     );
