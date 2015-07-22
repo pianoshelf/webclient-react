@@ -67,7 +67,7 @@ export default React.createClass({
         placeholder={this.props.placeholder}
         valueLink={this.props.valueLink} />
     );
-  }
+  },
 
 });
 

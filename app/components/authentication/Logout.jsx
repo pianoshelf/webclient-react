@@ -24,7 +24,7 @@ export default React.createClass({
   ],
 
   statics: {
-    routeWillRun({ flux, state }) {
+    routeWillRun({ flux }) {
       return retrieveInitialData(flux);
     },
   },

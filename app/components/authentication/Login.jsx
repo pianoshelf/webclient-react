@@ -1,5 +1,4 @@
 
-import classNames from 'classnames';
 import fluxMixin from 'flummox/mixin';
 import FontAwesome from 'react-fontawesome';
 import includes from 'lodash/collection/includes';
@@ -11,7 +10,7 @@ import Button from './utils/Button';
 import ErrorMessage from './utils/ErrorMessage';
 import Input from './utils/Input';
 import Title from './utils/Title';
-import { errors, success } from '../../utils/constants';
+import { errors } from '../../utils/constants';
 import { CanLoginMixin, FacebookLoginMixin } from '../../utils/authUtils';
 
 let { LinkedStateMixin } = addons;

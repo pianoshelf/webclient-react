@@ -13,7 +13,6 @@ import utf8 from 'utf8';
 // Import internal modules
 import Flux from './Flux';
 import getRoutes from './utils/getRoutes';
-import { prefetchRouteData } from './utils/routeUtils';
 
 // Create the Flux object
 let flux = new Flux();

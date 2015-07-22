@@ -18,12 +18,15 @@ let PureRenderMixin = addons.PureRenderMixin;
 // Export class
 export default React.createClass({
 
-  mixins: [PureRenderMixin, fluxMixin({
-    login: store => ({
-      loggedIn: store.state.loggedIn,
-      user: store.state.user,
+  mixins: [
+    PureRenderMixin,
+    fluxMixin({
+      login: store => ({
+        loggedIn: store.state.loggedIn,
+        user: store.state.user,
+      }),
     }),
-  }), ],
+  ],
 
   propTypes: {
     // Whether we're on the homepage.

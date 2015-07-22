@@ -58,10 +58,12 @@ export default React.createClass({
 
     let musicStyle = null;
     if (this.props.musicStyle) {
-      musicStyle = <span>
-        <strong className="sheet-music-thumbnail__description--bold">{this.props.musicStyle}</strong>
-        &nbsp;by&nbsp;
-      </span>
+      musicStyle = (
+        <span>
+          <strong className="sheet-music-thumbnail__description--bold">{this.props.musicStyle}</strong>
+          &nbsp;by&nbsp;
+        </span>
+      );
     }
 
     return (
@@ -80,11 +82,6 @@ export default React.createClass({
         </div>
       </a>
     );
-  }
+  },
 
 });
-
-
-
-
-

@@ -1,5 +1,4 @@
 
-import classNames from 'classnames';
 import fluxMixin from 'flummox/mixin';
 import FontAwesome from 'react-fontawesome';
 import includes from 'lodash/collection/includes';
@@ -12,7 +11,7 @@ import ErrorMessage from './utils/ErrorMessage';
 import InfoText from './utils/InfoText';
 import Input from './utils/Input';
 import Title from './utils/Title';
-import { errors, success } from '../../utils/constants';
+import { errors } from '../../utils/constants';
 
 let { LinkedStateMixin } = addons;
 

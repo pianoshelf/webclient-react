@@ -5,7 +5,6 @@ import { Navigation } from 'react-router';
 
 import config from '../../config';
 import { setAuthToken, deleteAuthToken } from './api';
-import { errors, success } from './constants';
 
 /**
  * This function returns a react-router transition callback that makes sure

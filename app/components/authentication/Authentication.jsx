@@ -1,15 +1,18 @@
 
-import fluxMixin from 'flummox/mixin';
-import FontAwesome from 'react-fontawesome';
 import React from 'react';
 import { addons } from 'react/addons';
 
 // Import other components
 import NavBar from '../NavBar';
-
 let { PureRenderMixin } = addons;
 
 export default React.createClass({
+
+  mixins: [PureRenderMixin],
+
+  propTypes: {
+    children: React.PropTypes.node,
+  },
 
   render() {
     return (

@@ -15,11 +15,12 @@ export default class BaseStore extends Store {
   }
 
   static assignState(oldState, newState) {
-    if (typeof oldState === 'undefined' || oldState === null) {
-      oldState = {};
+    let state = oldState;
+    if (typeof state === 'undefined' || state === null) {
+      state = {};
     }
 
-    return merge(oldState, newState);
+    return merge(state, newState);
   }
 
   static serialize(state) {

@@ -19,29 +19,6 @@ export default React.createClass({
     dontDisplayIf: React.PropTypes.bool.isRequired,
   },
 
-  render() {
-    if (this.props.errorCode && !this.props.dontDisplayIf) {
-      let [ isError, errorMessage ] = this.getErrorMessage_(this.props.errorCode);
-
-      let className = classNames({
-        'authentication__message': true,
-        'authentication__message--info': !isError,
-        'authentication__message--error': isError,
-      });
-
-      return (
-        <div className={className}>
-          <FontAwesome className="authentication__message-icon"
-            name={isError ? 'exclamation-circle' : 'info-circle'}
-            size="lg" />
-          {errorMessage}
-        </div>
-      );
-    } else {
-      return null;
-    }
-  },
-
   getErrorMessage_(errorCode) {
     switch (errorCode) {
       case errors.INVALID_EMAIL:
@@ -72,6 +49,29 @@ export default React.createClass({
         return [false, 'Your password has been reset.'];
       default:
         return [true, 'An unknown error occurred!'];
+    }
+  },
+
+  render() {
+    if (this.props.errorCode && !this.props.dontDisplayIf) {
+      let [ isError, errorMessage ] = this.getErrorMessage_(this.props.errorCode);
+
+      let className = classNames({
+        'authentication__message': true,
+        'authentication__message--info': !isError,
+        'authentication__message--error': isError,
+      });
+
+      return (
+        <div className={className}>
+          <FontAwesome className="authentication__message-icon"
+            name={isError ? 'exclamation-circle' : 'info-circle'}
+            size="lg" />
+          {errorMessage}
+        </div>
+      );
+    } else {
+      return null;
     }
   },
 
