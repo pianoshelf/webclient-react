@@ -8,60 +8,42 @@ import { addons } from 'react/addons';
 import { Link } from 'react-router';
 
 // Import components
-import NavBar from 'app/components/NavBar';
-import ResponsiveContainer from 'app/components/ResponsiveContainer';
-import SheetMusicThumbnail from 'app/components/SheetMusicThumbnail';
+import NavBar from './NavBar';
+import ResponsiveContainer from './ResponsiveContainer';
+import SheetMusicThumbnail from './SheetMusicThumbnail';
 
 let { PureRenderMixin } = addons;
 
-// Declare class
+function retrieveInitialData(flux) {
+  const sheetMusicActions = flux.getActions('sheetmusic');
+  return sheetMusicActions.getMostPopularSheetMusic(flux);
+}
+
 export default React.createClass({
-  mixins: [PureRenderMixin, fluxMixin({
-    sheetmusic: (store, props) => ({
-      sheetMusicList: store.sheetMusicList(),
+
+  mixins: [
+    PureRenderMixin,
+    fluxMixin({
+      sheetmusic: store => ({
+        mostPopularSheetMusic: store.state.mostPopularSheetMusic,
+      }),
     }),
-  })],
+  ],
 
   // Define what should be fetched before route is renderred.
   statics: {
-    routeWillRun({ flux, state }) {
-      const sheetMusicActions = flux.getActions('sheetmusic');
-
-      return Promise.all([
-        sheetMusicActions.getSheetMusicList({
-          order_by: 'popular',
-          page: 1,
-          page_size: 12,
-        }, flux),
-      ]);
+    routeWillRun({ flux }) {
+      return retrieveInitialData(flux);
     },
   },
 
-  render() {
-    return (
-      <div className="homepage">
-        <NavBar homepage={true} yOffsetLimit={50} />
-        {this.renderMainPanel_()}
-        {this.renderPopularPanel_()}
-        {this.renderInfoPanel_()}
-        {this.renderFooter_()}
-      </div>
-    );
-  },
-
-  getSuggestions(input, callback) {
-    const regex = new RegExp('^' + input, 'i');
-    const suggestions = ['hi', 'hi2'].filter(suburb => regex.test(suburb));
-
-    setTimeout(() => callback(null, suggestions), 300); // Emulate API call
+  componentDidMount() {
+    if (!this.state.mostPopularSheetMusic) {
+      retrieveInitialData(this.flux);
+    }
   },
 
   renderMainPanel_() {
-    let inputAttributes = {
-      className: 'homepage__main-search-input-field',
-      placeholder: 'Search sheet music...',
-    };
-
     return (
       <ResponsiveContainer className="homepage__main-panel">
         <div ref="main" className="homepage__main">
@@ -69,10 +51,10 @@ export default React.createClass({
             Explore, share, and download sheet music for free.
           </h2>
           <div className="homepage__main-search">
-            <Link to="register" className="homepage__main-search-input">Browse Sheet Music</Link>
+            <Link to="/register" className="homepage__main-search-input">Browse Sheet Music</Link>
           </div>
           <div className="homepage__main-register">
-            or <Link to="register" className="homepage__main-register-link">sign up now</Link>.
+            or <Link to="/register" className="homepage__main-register-link">sign up now</Link>.
           </div>
         </div>
       </ResponsiveContainer>
@@ -145,25 +127,32 @@ export default React.createClass({
       nextArrow: 'a',
     };
 
-    return (
-      <div className="homepage__popular-panel">
-        <ResponsiveContainer absolute={false}>
-          <h2 className="homepage__popular-title">Our most popular sheet music:</h2>
-        </ResponsiveContainer>
-        <div className="homepage__popular-sheetmusic-container">
-          <Slider {...settings} className="homepage__popular-sheetmusic">
-            {this.state.sheetMusicList.results.map((sheetmusic, index) => {
-              return <SheetMusicThumbnail
-                id={sheetmusic.id}
-                name={sheetmusic.title}
-                thumbnail={sheetmusic.thumbnail_url}
-                musicStyle={sheetmusic.style}
-                composer={sheetmusic.composer_name} />;
-            })}
-          </Slider>
+    if (this.state.mostPopularSheetMusic) {
+      return (
+        <div className="homepage__popular-panel">
+          <ResponsiveContainer absolute={false}>
+            <h2 className="homepage__popular-title">Our most popular sheet music:</h2>
+          </ResponsiveContainer>
+          <div className="homepage__popular-sheetmusic-container">
+            <Slider {...settings} className="homepage__popular-sheetmusic">
+              {this.state.mostPopularSheetMusic.results.map(sheetmusic => {
+                return (
+                  <SheetMusicThumbnail
+                    id={sheetmusic.id}
+                    key={`sheetmusic-${sheetmusic.id}`}
+                    name={sheetmusic.title}
+                    thumbnail={sheetmusic.thumbnail_url}
+                    musicStyle={sheetmusic.style}
+                    composer={sheetmusic.composer_name} />
+                );
+              })}
+            </Slider>
+          </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return null;
+    }
   },
 
   renderFooter_() {
@@ -173,6 +162,18 @@ export default React.createClass({
         <ResponsiveContainer className="homepage__footer-text">
           &copy; PianoShelf 2015
         </ResponsiveContainer>
+      </div>
+    );
+  },
+
+  render() {
+    return (
+      <div className="homepage">
+        <NavBar homepage={true} yOffsetLimit={50} />
+        {this.renderMainPanel_()}
+        {this.renderPopularPanel_()}
+        {this.renderInfoPanel_()}
+        {this.renderFooter_()}
       </div>
     );
   },

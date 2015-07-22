@@ -11,7 +11,7 @@
 .homepage__main-panel
   padding-top: $navbar-height
   height: 400px + $navbar-height
-  background-image: url('bg.jpg')
+  background-image: url('../img/bg.jpg')
   background-position: center
   background-size: cover
   background-repeat: no-repeat
@@ -56,8 +56,8 @@
   font-family: $title-font
   font-size: 22px
   width: 55%
-  +button
-  +clickable-orange-gradient
+  +standard-borders
+  +clickable-gradient($orange)
   +when-tablet
     width: 45%
   +when-desktop

@@ -1,0 +1,104 @@
+
+@import 'variables/buttons'
+@import 'variables/fonts'
+@import 'variables/globals'
+@import 'variables/responsive'
+
+.authentication__box
+  +when-tablet
+    display: table
+    min-height: 600px
+    height: 100vh
+    width: 100%
+    background-color: $grey-light
+
+.authentication__box-inner
+  +when-tablet
+    display: table-cell
+    vertical-align: middle
+
+.authentication__box-container
+  margin-top: $navbar-height-mobile
+  padding: 20px 20px
+  +when-tablet
+    width: 100%
+    max-width: 300px
+    margin: auto
+    padding: 15px
+    +standard-borders
+    border-color: $grey-normal
+    background-color: $white
+
+.authentication__text
+  color: $grey-text-dark
+  font-size: 15px
+  margin: 5px 0 5px 0
+  padding: 0 5px
+
+.authentication__title
+  font-family: $title-font
+  font-size: 22px
+  text-align: center
+  margin-bottom: 15px
+
+.authentication__message
+  font-size: 15px
+  padding: 5px 10px 5px 35px
+  margin-bottom: 5px
+  position: relative
+  +standard-borders
+  &--info
+    +color-area-gradient(lighten($blue-light, 10%))
+  &--error
+    +color-area-gradient(lighten($red, 10%))
+
+.authentication__message-icon
+  position: absolute
+  top: 10px
+  left: 10px
+
+.authentication__inputs
+  margin-top: 5px
+  margin-bottom: 5px
+
+.authentication__input
+  padding: 3px 8px
+  margin: 2px 0
+  width: 100%
+  +standard-borders
+  border-color: $grey-light;
+  &--error
+    border-color: lighten($red, 10%)
+
+.authentication__button
+  border: 0
+  padding: 5px 10px
+  width: 100%
+  margin: 5px 0
+  +standard-borders
+  &--orange
+    +clickable($orange)
+  &--blue-light
+    +clickable($blue-light)
+  &--red
+    +clickable($red)
+  &--facebook
+    +clickable(lighten($facebook, 25%))
+
+.authentication__button-icon
+  margin-right: 5px
+
+.authentication__link
+  margin-top: 5px
+  font-size: 14px
+  display: block
+  text-decoration: none
+  text-align: center
+  color: $grey-text-normal
+
+.authentication__hr
+  border: 0
+  border-bottom: 2px solid $grey-light
+  margin: 10px
+
+

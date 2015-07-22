@@ -34,7 +34,7 @@ $navbar-logo-height-mobile: 67.5px
   height: $navbar-logo-height-mobile
   position: absolute
   left: 0
-  background-image: url('logo.svg')
+  background-image: url('../img/logo.svg')
   +when-tablet
     width: $navbar-logo-height
     height: $navbar-logo-height
@@ -102,13 +102,13 @@ $navbar-logo-height-mobile: 67.5px
   line-height: $navbar-height-mobile - 40px
   transition-duration: 0.2s
   transition-property: color, background-color, border-color
-  +button
-  +clickable-blue
+  +standard-borders
+  +clickable($blue-light)
   +when-tablet
     line-height: $navbar-height - 40px
     font-size: 20px
   &--important
-    +clickable-green
+    +clickable($green)
   &--homepage
     background: transparent
     border-color: transparent

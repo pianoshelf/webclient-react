@@ -7,6 +7,10 @@ import React from 'react';
 export default React.createClass({
 
   propTypes: {
+
+    // Children of the element
+    children: React.PropTypes.node,
+
     // Class name for this element
     className: React.PropTypes.string,
   },
@@ -19,7 +23,7 @@ export default React.createClass({
         </div>
       </div>
     );
-  }
+  },
 
 });
 

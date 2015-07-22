@@ -1,6 +1,6 @@
 
 // Import internal modules
-import BaseStore from 'app/stores/BaseStore';
+import BaseStore from './BaseStore';
 
 // Export store
 export default class SheetMusicStore extends BaseStore {
@@ -9,21 +9,17 @@ export default class SheetMusicStore extends BaseStore {
     super();
 
     const sheetMusicActions = flux.getActions('sheetmusic');
-    this.register(sheetMusicActions.getSheetMusicList, this.getSheetMusicList);
+    this.register(sheetMusicActions.getMostPopularSheetMusic, this.getMostPopularSheetMusic);
 
     this.state = {};
   }
 
-  getSheetMusicList(res) {
-    const { results, count } = JSON.parse(res.text);
+  getMostPopularSheetMusic(res) {
+    const { results } = JSON.parse(res.text);
 
     this.setState({
-      sheetMusicList: { results, count },
+      mostPopularSheetMusic: { results },
     });
-  }
-
-  sheetMusicList() {
-    return this.state.sheetMusicList;
   }
 
 }

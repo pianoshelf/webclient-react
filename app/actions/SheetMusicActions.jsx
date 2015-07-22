@@ -3,7 +3,7 @@
 import { Actions } from 'flummox';
 
 // Import internal modules
-import { get, post, patch, del } from 'app/utils/api';
+import { get, post, patch, del } from '../utils/api';
 
 /**
  * Actions for anything that has to do with sheet music.
@@ -55,6 +55,18 @@ export default class SheetMusicActions extends Actions {
     return get(
       '/sheetmusic/',
       filterOptions,
+      flux
+    );
+  }
+
+  getMostPopularSheetMusic(flux) {
+    return get(
+      '/sheetmusic/',
+      {
+        order_by: 'popular',
+        page: 1,
+        page_size: 12,
+      },
       flux
     );
   }

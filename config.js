@@ -4,23 +4,29 @@ module.exports = {
   ports: {
     webpack: 8080,
     express: 5092,
+    django: 5000,
   },
 
   files: {
-    js: {
+    client: {
       entry: './app/client.jsx',
-      src: ['./app/**/*.js', './app/**/*.jsx'],
+      src: ['./app/**/**/**/*.js', './app/**/**/**/*.jsx'],
       out: 'bundle.js',
     },
     css: {
       entry: './assets/css/main.sass',
       src: './assets/css/**/**/*.sass',
-      out: 'main.css',
+      out: 'css',
     },
     images: {
       src: './assets/images/*',
+      out: 'img',
     },
-    out: './build/',
+    server: {
+      src: ['./app/**/**/**/*.js', './app/**/**/**/*.jsx'],
+      out: 'build',
+    },
+    staticAssets: 'build/static/',
   },
 
   api: {
@@ -29,11 +35,14 @@ module.exports = {
       authPrefix: 'https://www.pianoshelf.com/api-auth',
     },
     dev: {
-      prefix: 'http://localhost:5000/api',
-      authPrefix: 'http://localhost:5000/api-auth',
+      prefix: '/api',
+      authPrefix: '/api-auth',
     },
   },
 
+  facebook: {
+    appId: '1549195551980295',
+  },
 
   cookie: {
     authtoken: 'pianoshelf-authtoken',

@@ -4,12 +4,15 @@ import 'babel/polyfill';
 
 // Import external modules
 import base64 from 'base-64';
+import BrowserHistory from 'react-router/lib/BrowserHistory';
+import FluxComponent from 'flummox/component';
 import React from 'react';
 import Router from 'react-router';
+import utf8 from 'utf8';
 
 // Import internal modules
 import Flux from './Flux';
-import routes from './Routes';
+import getRoutes from './utils/getRoutes';
 
 // Create the Flux object
 let flux = new Flux();
@@ -19,16 +22,19 @@ let reactRoot = document.getElementById('react-root');
 
 // Import inline flux data
 let inlineData = document.getElementById('react-data').textContent;
-flux.deserialize(base64.decode(inlineData));
+flux.deserialize(utf8.decode(base64.decode(inlineData)));
 
-// Fire up the router
-Router.run(routes, Router.HistoryLocation, (Handler, state) => {
+// Create history object for the browser
+let browserHistory = new BrowserHistory();
 
-  // Re-render everything on reactRoot
-  React.render(
-    <Handler flux={flux} params={state.params} />,
-    reactRoot
-  );
+// Re-render everything on reactRoot
+React.render(
+  <FluxComponent flux={flux}>
+    <Router history={browserHistory} routes={getRoutes(flux)} />
+  </FluxComponent>,
+  reactRoot
+);
 
-});
+// Reset our progress bar
+flux.getActions('progress').resetProgress();
 

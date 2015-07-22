@@ -10,11 +10,17 @@ import { Store } from 'flummox';
 // Export base store
 export default class BaseStore extends Store {
 
-  static assignState(oldState, newState) {
-    if (typeof oldState === 'undefined' || oldState === null)
-      oldState = new newState.constructor();
+  constructor() {
+    super();
+  }
 
-    return merge(oldState, newState);
+  static assignState(oldState, newState) {
+    let state = oldState;
+    if (typeof state === 'undefined' || state === null) {
+      state = {};
+    }
+
+    return merge(state, newState);
   }
 
   static serialize(state) {

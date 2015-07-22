@@ -7,7 +7,7 @@ import Cookie from 'cookie-dough';
 import request from 'superagent';
 
 // Import internal modules
-import config from 'config';
+import config from '../../config';
 
 // Select the correct URL prefix based on environment variables.
 let apiUrl, authUrl;
@@ -74,7 +74,7 @@ function finishRequest_(flux, resolve, reject) {
     }
 
     // Reject if there's an error, otherwise resolve.
-    if (err) reject(err);
+    if (err) reject(res);
     else resolve(res);
   };
 }
@@ -85,12 +85,14 @@ function finishRequest_(flux, resolve, reject) {
  * @param {string} endpoint The API endpoint.
  * @param {Object} params The query parameters to send in the URL.
  * @param {Flux} flux The Flux object.
+ * @param {boolean=} auth Whether we should send it to the auth endpoints.
  *
  * @return {Promise} A promise that resolves when the request is complete.
  */
-export function get(endpoint, params, flux) {
+export function get(endpoint, params, flux, auth) {
+  let baseUrl = __SERVER__ ? `http://localhost:${config.ports.django}` : '';
   return new Promise((resolve, reject) => {
-    request.get(`${apiUrl}${endpoint}`)
+    request.get(`${baseUrl}${auth ? authUrl : apiUrl}${endpoint}`)
       .query(params)
       .set(getHeaders_(flux))
       .end(finishRequest_(flux, resolve, reject));
@@ -108,8 +110,9 @@ export function get(endpoint, params, flux) {
  * @return {Promise} A promise that resolves when the request is complete.
  */
 export function post(endpoint, params, flux, auth) {
+  let baseUrl = __SERVER__ ? `http://localhost:${config.ports.django}` : '';
   return new Promise((resolve, reject) => {
-    request.post(`${auth ? authUrl : apiUrl}${endpoint}`)
+    request.post(`${baseUrl}${auth ? authUrl : apiUrl}${endpoint}`)
       .send(params)
       .set(getHeaders_(flux))
       .end(finishRequest_(flux, resolve, reject));
@@ -127,8 +130,9 @@ export function post(endpoint, params, flux, auth) {
  * @return {Promise} A promise that resolves when the request is complete.
  */
 export function patch(endpoint, params, flux, auth) {
+  let baseUrl = __SERVER__ ? `http://localhost:${config.ports.django}` : '';
   return new Promise((resolve, reject) => {
-    request('PATCH', `${auth ? authUrl : apiUrl}${endpoint}`)
+    request('PATCH', `${baseUrl}${auth ? authUrl : apiUrl}${endpoint}`)
       .send(params)
       .set(getHeaders_(flux))
       .end(finishRequest_(flux, resolve, reject));
@@ -145,8 +149,9 @@ export function patch(endpoint, params, flux, auth) {
  * @return {Promise} A promise that resolves when the request is complete.
  */
 export function del(endpoint, params, flux) {
+  let baseUrl = __SERVER__ ? `http://localhost:${config.ports.django}` : '';
   return new Promise((resolve, reject) => {
-    request.del(`${apiUrl}${endpoint}`)
+    request.del(`${baseUrl}${apiUrl}${endpoint}`)
       .send(params)
       .set(getHeaders_(flux))
       .end(finishRequest_(flux, resolve, reject));
@@ -163,11 +168,47 @@ export function setAuthToken(authToken, flux) {
 
   // Return cookie if we're on the client.
   if (__CLIENT__) {
-    Cookie().set(config.cookie.authtoken, name);
+    Cookie().set(config.cookie.authtoken, authToken);
   }
 
   // Set cookie from request if we're on the server.
   if (__SERVER__) {
-    (new Cookie(flux.request)).set(config.cookie.authtoken, name);
+    (new Cookie(flux.request)).set(config.cookie.authtoken, authToken);
   }
+}
+
+/**
+ * Deletes the auth token cookie.
+ *
+ * @param {Flux} flux The flux object.
+ */
+export function deleteAuthToken(flux) {
+
+  // Return cookie if we're on the client.
+  if (__CLIENT__) {
+    Cookie().remove(config.cookie.authtoken);
+  }
+
+  // Set cookie from request if we're on the server.
+  if (__SERVER__) {
+    (new Cookie(flux.request)).remove(config.cookie.authtoken);
+  }
+}
+
+/**
+ * Returns a failed promise with the correct error format. This is
+ * useful when we want to failed promise without making an API call,
+ * due to a clearly invalid value or something.
+ *
+ * @param {Object} dataToReturn The error code
+ *
+ * @return {Promise} A failed promise with the correct error format.
+ */
+export function fail(errorCode) {
+  return Promise.reject({
+    failedResponse: true,
+    text: JSON.stringify({
+      actionError: errorCode,
+    }),
+  });
 }

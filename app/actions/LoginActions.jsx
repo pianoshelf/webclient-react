@@ -3,13 +3,34 @@
 import { Actions } from 'flummox';
 
 // Import internal modules
-import { post } from 'app/utils/api';
+import { get, post, fail } from '../utils/api';
+import { errors } from '../utils/constants';
 
 /**
  * Actions for anything that has to do with authentication.
  * @class
  */
 export default class LoginActions extends Actions {
+
+  /**
+   * Action for resetting the error code.
+   */
+  clearErrors() {
+    return false;
+  }
+
+  /**
+   * Gets the current logged in user
+   *
+   * @param {Flux} flux The Flux object.
+   */
+  getUser(flux) {
+    return get(
+      '/user/',
+      {},
+      flux, true /* authUrl */
+    );
+  }
 
   /**
    * Logs in the user.
@@ -19,6 +40,18 @@ export default class LoginActions extends Actions {
    * @param {Flux} flux The Flux object.
    */
   login(username, password, flux) {
+
+    // Make sure the username field is not empty
+    if (username === '') {
+      return fail(errors.NO_USERNAME);
+    }
+
+    // Make sure the password field is not empty
+    if (password === '') {
+      return fail(errors.NO_PASSWORD);
+    }
+
+    // Perform the AJAX request
     return post(
       '/login/',
       { username, password },
@@ -48,6 +81,39 @@ export default class LoginActions extends Actions {
   }
 
   register(user, flux) {
+
+    // Make sure username field is not empty
+    if (user.username === '') {
+      return fail(errors.NO_USERNAME);
+    }
+
+    // Make sure email field is not empty
+    if (user.email === '') {
+      return fail(errors.NO_EMAIL);
+    }
+
+    // Make sure email field has a valid email
+    let emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+/;
+    if (!emailRegex.test(user.email)) {
+      return fail(errors.INVALID_EMAIL);
+    }
+
+    // Make sure password field is not empty
+    if (user.password1 === '') {
+      return fail(errors.NO_PASSWORD);
+    }
+
+    // Make sure password is strong
+    if (user.password1.length < 6) {
+      return fail(errors.NOT_STRONG_PASSWORD);
+    }
+
+    // Make sure password and confirm password fields have the same value
+    if (user.password2 !== user.password1) {
+      return fail(errors.NOT_SAME_PASSWORD);
+    }
+
+    // Call the API
     return post(
       '/register/',
       {
@@ -61,6 +127,19 @@ export default class LoginActions extends Actions {
   }
 
   resetPassword(email, flux) {
+
+    // Make sure email field is not empty
+    if (email === '') {
+      return fail(errors.NO_EMAIL);
+    }
+
+    // Make sure email field has a valid email
+    let emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+/;
+    if (!emailRegex.test(email)) {
+      return fail(errors.INVALID_EMAIL);
+    }
+
+    // Call the API
     return post(
       '/password/reset/',
       { email },
@@ -69,6 +148,23 @@ export default class LoginActions extends Actions {
   }
 
   resetPasswordConfirm(user, uid, token, flux) {
+
+    // Make sure password field is not empty
+    if (user.password1 === '') {
+      return fail(errors.NO_PASSWORD);
+    }
+
+    // Make sure password is strong
+    if (user.password1.length < 6) {
+      return fail(errors.NOT_STRONG_PASSWORD);
+    }
+
+    // Make sure password and confirm password fields have the same value
+    if (user.password2 !== user.password1) {
+      return fail(errors.NOT_SAME_PASSWORD);
+    }
+
+    // Call the API
     return post(
       '/password/reset/confirm/',
       {
@@ -82,6 +178,17 @@ export default class LoginActions extends Actions {
   }
 
   changePassword(user, flux) {
+
+    // Make sure password field is not empty
+    if (user.password1 === '') {
+      return fail(errors.NO_PASSWORD);
+    }
+
+    // Make sure password and confirm password fields have the same value
+    if (user.password2 !== user.password1) {
+      return fail(errors.NOT_SAME_PASSWORD);
+    }
+
     return post(
       '/password/change/',
       {

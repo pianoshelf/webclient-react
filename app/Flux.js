@@ -3,14 +3,16 @@
 import { Flummox } from 'flummox';
 
 // Import actions
-import LoginActions from 'app/actions/LoginActions';
-import SheetMusicActions from 'app/actions/SheetMusicActions';
-import ShelfActions from 'app/actions/ShelfActions';
-import ProfileActions from 'app/actions/ProfileActions';
+import LoginActions from './actions/LoginActions';
+import SheetMusicActions from './actions/SheetMusicActions';
+import ShelfActions from './actions/ShelfActions';
+import ProfileActions from './actions/ProfileActions';
+import ProgressActions from './actions/ProgressActions';
 
 // Import stores
-import LoginStore from 'app/stores/LoginStore';
-import SheetMusicStore from 'app/stores/SheetMusicStore';
+import LoginStore from './stores/LoginStore';
+import ProgressStore from './stores/ProgressStore';
+import SheetMusicStore from './stores/SheetMusicStore';
 
 // Export Flux class
 export default class Flux extends Flummox {
@@ -25,13 +27,14 @@ export default class Flux extends Flummox {
     this.request_ = request;
 
     this.createActions('login', LoginActions);
-    this.createStore('login', LoginStore, this);
-
-    this.createActions('sheetmusic', SheetMusicActions);
-    this.createStore('sheetmusic', SheetMusicStore, this);
-
-    this.createActions('shelf', ShelfActions);
     this.createActions('profile', ProfileActions);
+    this.createActions('progress', ProgressActions);
+    this.createActions('sheetmusic', SheetMusicActions);
+    this.createActions('shelf', ShelfActions);
+
+    this.createStore('login', LoginStore, this);
+    this.createStore('progress', ProgressStore, this);
+    this.createStore('sheetmusic', SheetMusicStore, this);
   }
 
   /**

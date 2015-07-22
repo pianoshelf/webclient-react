@@ -4,12 +4,13 @@
 
 // Import external modules
 import classNames from 'classnames';
+import fluxMixin from 'flummox/mixin';
 import React from 'react';
 import { addons } from 'react/addons';
 import { Link } from 'react-router';
 
 // Import internal module
-import ResponsiveContainer from 'app/components/ResponsiveContainer';
+import ResponsiveContainer from './ResponsiveContainer';
 
 // Get mixins
 let PureRenderMixin = addons.PureRenderMixin;
@@ -17,7 +18,15 @@ let PureRenderMixin = addons.PureRenderMixin;
 // Export class
 export default React.createClass({
 
-  mixins: [PureRenderMixin],
+  mixins: [
+    PureRenderMixin,
+    fluxMixin({
+      login: store => ({
+        loggedIn: store.state.loggedIn,
+        user: store.state.user,
+      }),
+    }),
+  ],
 
   propTypes: {
     // Whether we're on the homepage.
@@ -52,15 +61,19 @@ export default React.createClass({
 
   renderTitle_() {
     if (this.state.homepageMode) {
-      return <div>
-        <div className="navbar__title navbar__title--homepage">PianoShelf</div>
-        <div className="navbar__title-beta navbar__title-beta--homepage">BETA</div>
-      </div>;
+      return (
+        <div>
+          <div className="navbar__title navbar__title--homepage">PianoShelf</div>
+          <div className="navbar__title-beta navbar__title-beta--homepage">BETA</div>
+        </div>
+      );
     } else {
-      return <div>
-        <div className="navbar__title">PianoShelf</div>
-        <div className="navbar__title-beta">BETA</div>
-      </div>;
+      return (
+        <div>
+          <div className="navbar__title">PianoShelf</div>
+          <div className="navbar__title-beta">BETA</div>
+        </div>
+      );
     }
   },
 
@@ -76,11 +89,19 @@ export default React.createClass({
 
     return (
       <ResponsiveContainer className={navbarClass}>
-        <Link className="navbar__logo" to="home" />
+        <Link to="/" className="navbar__logo" />
         <div className="navbar__logo-buffer" />
         {this.renderTitle_()}
-        <Link to="register" className={buttonClass(true /* important */)}>Sign Up</Link>
-        <Link to="login" className={buttonClass(false /* important */)}>Log In</Link>
+        <If condition={this.state.loggedIn}>
+          <div>
+            <Link to="/logout" className={buttonClass(false /* important */)}>Logout</Link>
+          </div>
+        <Else />
+          <div>
+            <Link to="/register" className={buttonClass(true /* important */)}>Sign Up</Link>
+            <Link to="/login" className={buttonClass(false /* important */)}>Log In</Link>
+          </div>
+        </If>
       </ResponsiveContainer>
     );
   },
