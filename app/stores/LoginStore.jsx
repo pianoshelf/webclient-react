@@ -30,6 +30,11 @@ export default class LoginStore extends BaseStore {
                        this.resetPasswordConfirmSuccess,
                        this.resetPasswordConfirmError);
 
+    this.registerAsync(loginActions.verifyEmail,
+                       null,
+                       this.verifyEmailSuccess,
+                       this.verifyEmailError);
+
     this.registerAsync(loginActions.facebookLogin,
                        null,
                        this.logInUser,
@@ -50,7 +55,7 @@ export default class LoginStore extends BaseStore {
    * Method for resetting the user state.
    */
   resetErrorCode() {
-    this.setState({ errorCode: 0, user: null });
+    this.setState({ errorCode: 0, user: null, loggedIn: false });
   }
 
   logInUser(res) {
@@ -70,8 +75,11 @@ export default class LoginStore extends BaseStore {
       email,
     };
 
+    // Set logged in state to true
+    let loggedIn = true;
+
     // Set the state
-    this.setState({ errorCode, user });
+    this.setState({ errorCode, user, loggedIn });
   }
 
   registerUser() {
@@ -89,6 +97,12 @@ export default class LoginStore extends BaseStore {
   resetPasswordConfirmSuccess() {
     // Set error code to password reset confirm
     let errorCode = success.PASSWORD_CONFIRM_RESET;
+    this.setState({ errorCode });
+  }
+
+  verifyEmailSuccess() {
+    // Set error code to verified email
+    let errorCode = success.EMAIL_VERIFIED;
     this.setState({ errorCode });
   }
 
@@ -138,14 +152,44 @@ export default class LoginStore extends BaseStore {
   }
 
   resetPasswordConfirmError(res) {
-    let data = JSON.parse(res.text);
+
+    let data;
     let errorCode = 0;
+
+    // When submitting a completely invalid token and uid, the backend spits out errors that aren't
+    // JSON. This else statement exists so we can take care of that specific situation.
+    // TODO(ankit): When the backend bug is fixed, remove this hack.
+    try {
+      data = JSON.parse(res.text);
+    } catch (e) {
+      this.setState({ errorCode: errors.EXPIRED_LINK });
+      return;
+    }
 
     if (res.failedResponse) {
       errorCode = data.actionError;
+    } else if (data.token &&
+               data.token[0] === 'Invalid value') {
+      errorCode = errors.EXPIRED_LINK;
+    } else if (data.uid &&
+               data.uid[0] === 'Invalid value') {
+      errorCode = errors.EXPIRED_LINK;
     }
 
     this.setState({ errorCode });
+  }
+
+  verifyEmailError(res) {
+    let data = JSON.parse(res.text);
+    let errorCode = 0;
+
+    if (data.detail &&
+        data.detail === 'Not found') {
+      errorCode = errors.EMAIL_UNVERIFIED;
+    }
+
+    this.setState({ errorCode });
+
   }
 
 }

@@ -123,6 +123,22 @@ export let FacebookLoginMixin = {
       js.src = '//connect.facebook.net/en_US/sdk.js';
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
+
+    // Inject fb-root div if it doesn't exist
+    if (!document.getElementById('fb-root')) {
+      let fbRoot = document.createElement('div');
+      fbRoot.setAttribute('id', 'fb-root');
+      document.querySelector('body').appendChild(fbRoot);
+    }
+  },
+
+  componentDidUnmount() {
+
+    // Remove fb-root div
+    if (document.getElementById('fb-root')) {
+      let fbRoot = document.getElementById('fb-root');
+      fbRoot.parentElement.removeChild(fbRoot);
+    }
   },
 
   facebookLogin() {

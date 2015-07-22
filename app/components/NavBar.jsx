@@ -11,7 +11,6 @@ import { Link } from 'react-router';
 
 // Import internal module
 import ResponsiveContainer from './ResponsiveContainer';
-import { errors, success } from '../utils/constants';
 
 // Get mixins
 let PureRenderMixin = addons.PureRenderMixin;
@@ -21,7 +20,7 @@ export default React.createClass({
 
   mixins: [PureRenderMixin, fluxMixin({
     login: store => ({
-      errorCode: store.state.errorCode,
+      loggedIn: store.state.loggedIn,
       user: store.state.user,
     }),
   }), ],
@@ -59,15 +58,19 @@ export default React.createClass({
 
   renderTitle_() {
     if (this.state.homepageMode) {
-      return <div>
-        <div className="navbar__title navbar__title--homepage">PianoShelf</div>
-        <div className="navbar__title-beta navbar__title-beta--homepage">BETA</div>
-      </div>;
+      return (
+        <div>
+          <div className="navbar__title navbar__title--homepage">PianoShelf</div>
+          <div className="navbar__title-beta navbar__title-beta--homepage">BETA</div>
+        </div>
+      );
     } else {
-      return <div>
-        <div className="navbar__title">PianoShelf</div>
-        <div className="navbar__title-beta">BETA</div>
-      </div>;
+      return (
+        <div>
+          <div className="navbar__title">PianoShelf</div>
+          <div className="navbar__title-beta">BETA</div>
+        </div>
+      );
     }
   },
 
@@ -86,7 +89,7 @@ export default React.createClass({
         <Link to="/" className="navbar__logo" />
         <div className="navbar__logo-buffer" />
         {this.renderTitle_()}
-        <If condition={this.state.errorCode === success.LOGGED_IN}>
+        <If condition={this.state.loggedIn}>
           <div>
             <Link to="/logout" className={buttonClass(false /* important */)}>Logout</Link>
           </div>

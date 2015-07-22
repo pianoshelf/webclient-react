@@ -5,7 +5,7 @@
   "main": "build/server",
   "scripts": {
     "compile": "NODE_PATH=\".\" ./node_modules/.bin/gulp compile",
-    "lint": "./node_modules/.bin/eslint app",
+    "lint": "./node_modules/.bin/gulp lint:js",
     "watch": "NODE_PATH=\".\" ./node_modules/.bin/gulp watch",
     "test": "NODE_PATH=\".\" ./node_modules/.bin/mocha --compilers js:babel/register --recursive"
   },

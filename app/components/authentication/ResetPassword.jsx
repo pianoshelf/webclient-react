@@ -47,6 +47,7 @@ export default React.createClass({
         <form className="authentication__form" onSubmit={this.handleSubmit_}>
           <div className="authentication__inputs">
             <Input placeholder="Email"
+              name="email"
               errorCode={this.state.errorCode}
               errorWhen={[errors.NO_EMAIL, errors.INVALID_EMAIL]}
               focusOnLoad={true}

@@ -7,15 +7,6 @@ export default React.createClass({
 
 
   propTypes: {
-    /**
-     * Placeholder to display in the input box
-     */
-    placeholder: React.PropTypes.string.isRequired,
-
-    /**
-     * Whether to focus this textbox on load
-     */
-    focusOnLoad: React.PropTypes.bool,
 
     /**
      * The current error code
@@ -28,14 +19,30 @@ export default React.createClass({
     errorWhen: React.PropTypes.array.isRequired,
 
     /**
-     * Passes down the valueLink prop from the parent component
+     * Whether to focus this textbox on load
      */
-    valueLink: React.PropTypes.any.isRequired,
+    focusOnLoad: React.PropTypes.bool,
+
+    /**
+     * The name of the element. Useful for autofilling forms
+     */
+    name: React.PropTypes.string,
 
     /**
      * Whether this is a password field or not
      */
     password: React.PropTypes.bool,
+
+    /**
+     * Placeholder to display in the input box
+     */
+    placeholder: React.PropTypes.string.isRequired,
+
+    /**
+     * Passes down the valueLink prop from the parent component
+     */
+    valueLink: React.PropTypes.any.isRequired,
+
   },
 
   componentDidMount() {
@@ -55,6 +62,7 @@ export default React.createClass({
 
     return (
       <input type={isPassword ? 'password' : 'text'} ref="input"
+        name={this.props.name}
         className={className}
         placeholder={this.props.placeholder}
         valueLink={this.props.valueLink} />

@@ -33,7 +33,7 @@ export default function getRoutes(flux) {
         <Route path="/logout" component={Logout} />
         <Route path="/login" component={Login} onEnter={requireNoAuth(flux)} />
         <Route path="/login/forgot" component={ResetPassword} onEnter={requireNoAuth(flux)} />
-        <Route path="/login/reset/:uid/:token" component={ResetPasswordConfirm} />
+        <Route path="/login/reset/:uid/:token" component={ResetPasswordConfirm} onEnter={requireNoAuth(flux)} />
         <Route path="/login/verify/:key" component={VerifyEmail} />
         <Redirect from="/password-reset-confirm/:uid/:token" to="/login/reset/:uid/:token" />
         <Redirect from="/verify-email/:key" to="/login/verify/:key" />

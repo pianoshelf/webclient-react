@@ -48,11 +48,13 @@ export default React.createClass({
         <form className="authentication__form" onSubmit={this.handleSubmit_}>
           <div className="authentication__inputs">
             <Input placeholder="Username"
+              name="username"
               errorCode={this.state.errorCode}
               errorWhen={[errors.NO_USERNAME]}
               focusOnLoad={true}
               valueLink={this.linkState('username')} />
             <Input placeholder="Password"
+              name="password"
               password={true}
               errorCode={this.state.errorCode}
               errorWhen={[errors.NO_PASSWORD]}

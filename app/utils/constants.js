@@ -21,6 +21,8 @@ export const errors = {
   USERNAME_TAKEN: s++,
   EMAIL_ALREADY_REGISTERED: s++,
   EMAIL_NOT_REGISTERED: s++,
+  EXPIRED_LINK: s++,
+  EMAIL_UNVERIFIED: s++,
 
 };
 
@@ -32,6 +34,7 @@ export const success = {
   REGISTERED: s++,
   PASSWORD_RESET: s++,
   PASSWORD_CONFIRM_RESET: s++,
+  EMAIL_VERIFIED: s++,
 
 };
 

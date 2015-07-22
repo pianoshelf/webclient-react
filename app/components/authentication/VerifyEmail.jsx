@@ -2,13 +2,17 @@
 import fluxMixin from 'flummox/mixin';
 import React from 'react';
 import { addons } from 'react/addons';
+import { Link } from 'react-router';
 
 import InfoText from './utils/InfoText';
 
+import { errors, success } from '../../utils/constants';
+
 let { PureRenderMixin } = addons;
 
-function retrieveInitialData(flux, state) {
+function retrieveInitialData(flux, params) {
   const loginActions = flux.getActions('login');
+  return loginActions.verifyEmail(params.key, flux);
 }
 
 export default React.createClass({
@@ -23,7 +27,7 @@ export default React.createClass({
 
   statics: {
     routeWillRun({ flux, state }) {
-      return retrieveInitialData(flux, state);
+      return retrieveInitialData(flux, state.params);
     },
   },
 
@@ -32,16 +36,27 @@ export default React.createClass({
   },
 
   componentDidMount() {
-    let loginActions = this.flux.getActions('login');
-    loginActions.verifyEmail(this.props.params.key, this.flux);
+    retrieveInitialData(this.flux, this.props.params);
   },
 
   render() {
     return (
       <div>
-        <InfoText>
-          Verifying your email...
-        </InfoText>
+        <If condition={this.state.errorCode === success.EMAIL_VERIFIED}>
+          <InfoText>
+            Your email has been verified. Click <Link to="/">here</Link> to go to the homepage.
+          </InfoText>
+        <Else />
+          <If condition={this.state.errorCode === errors.EMAIL_UNVERIFIED}>
+            <InfoText>
+              Sorry, your email cannot be verified. This link has either expired or is invalid.
+            </InfoText>
+          <Else />
+            <InfoText>
+              Verifying your email...
+            </InfoText>
+          </If>
+        </If>
       </div>
     );
   },
