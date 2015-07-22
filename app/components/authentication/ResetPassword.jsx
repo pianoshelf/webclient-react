@@ -39,7 +39,7 @@ export default React.createClass({
       <div>
         <Title>Reset your password</Title>
         <ErrorMessage errorCode={this.state.errorCode}
-          dontDisplayIf={this.state.errorCode === success.LOGGED_IN || inProgress} />
+          dontDisplayIf={this.state.loggedIn || inProgress} />
         <InfoText>
           Enter the email address you used to sign up for PianoShelf, and we will email you
           a link to reset your password.

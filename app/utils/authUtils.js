@@ -58,7 +58,7 @@ export let CanLoginMixin = {
   componentDidUpdate() { this.loginUser_(); },
 
   loginUser_() {
-    if (this.state.errorCode === success.LOGGED_IN) {
+    if (this.state.loggedIn) {
 
       // Set authorization token
       let { user } = this.state;
@@ -83,7 +83,7 @@ export let CanLogoutMixin = {
   componentDidUpdate() { this.logoutUser_(); },
 
   logoutUser_() {
-    if (this.state.errorCode !== success.LOGGED_IN) {
+    if (!this.state.loggedIn) {
 
       // Delete authorization token
       deleteAuthToken(this.flux);

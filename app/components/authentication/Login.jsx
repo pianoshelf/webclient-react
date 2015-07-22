@@ -43,7 +43,7 @@ export default React.createClass({
       <div>
         <Title>Log in to PianoShelf</Title>
         <ErrorMessage errorCode={this.state.errorCode}
-          dontDisplayIf={this.state.errorCode === success.LOGGED_IN ||
+          dontDisplayIf={this.state.loggedIn ||
             loginInProgress || facebookInProgress} />
         <form className="authentication__form" onSubmit={this.handleSubmit_}>
           <div className="authentication__inputs">

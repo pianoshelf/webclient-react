@@ -30,7 +30,7 @@ export default React.createClass({
   },
 
   componentDidMount() {
-    retrieveInitialData(this.flux);
+    if (this.state.loggedIn) retrieveInitialData(this.flux);
   },
 
   render() {

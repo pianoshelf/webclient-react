@@ -43,7 +43,7 @@ export default React.createClass({
       <div>
         <Title>Reset your password</Title>
         <ErrorMessage errorCode={this.state.errorCode}
-          dontDisplayIf={inProgress} />
+          dontDisplayIf={this.state.loggedIn || inProgress} />
         <If condition={this.state.errorCode === success.PASSWORD_CONFIRM_RESET}>
           <div>
             <InfoText>
