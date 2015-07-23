@@ -9,10 +9,10 @@ import { addons } from 'react/addons';
 import { Link } from 'react-router';
 
 // Import components
-import NavBar from './fixtures/NavBar';
-import Footer from './fixtures/Footer';
-import ResponsiveContainer from './ResponsiveContainer';
-import SheetMusicThumbnail from './SheetMusicThumbnail';
+import NavBar from './Fixtures/NavBar';
+import Footer from './Fixtures/Footer';
+import ResponsiveContainer from './Misc/ResponsiveContainer';
+import SheetMusicThumbnail from './Misc/SheetMusicThumbnail';
 
 let { PureRenderMixin } = addons;
 
@@ -159,7 +159,7 @@ export default React.createClass({
 
   render() {
     return (
-      <Helmet title="PianoShelf - free piano sheet music" titleTemplate="">
+      <Helmet title="PianoShelf - free piano sheet music" titleTemplate="%s">
         <div className="homepage">
           <NavBar homepage={true} yOffsetLimit={50} />
           {this.renderMainPanel_()}
