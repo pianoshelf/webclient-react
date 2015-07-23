@@ -1,5 +1,6 @@
 
 import fluxMixin from 'flummox/mixin';
+import Helmet from 'react-helmet';
 import React from 'react';
 
 export default React.createClass({
@@ -16,7 +17,15 @@ export default React.createClass({
   },
 
   render() {
-    return <div>{this.props.children}</div>;
+    return (
+      <Helmet
+        title="Welcome"
+        titleTemplate="%s | PianoShelf - free piano sheet music"
+        meta={[
+          { name: 'description', content: 'PianoShelf' },
+        ]}>
+        {this.props.children}
+      </Helmet>
+    );
   },
 });
-

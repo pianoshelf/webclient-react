@@ -1,6 +1,7 @@
 
 import fluxMixin from 'flummox/mixin';
 import FontAwesome from 'react-fontawesome';
+import Helmet from 'react-helmet';
 import includes from 'lodash/collection/includes';
 import React from 'react';
 import { addons } from 'react/addons';
@@ -40,7 +41,7 @@ export default React.createClass({
     let inProgress = includes(this.state.inProgress, 'resetPasswordConfirm');
 
     return (
-      <div>
+      <Helmet title="Reset Password">
         <Title>Reset your password</Title>
         <ErrorMessage errorCode={this.state.errorCode}
           dontDisplayIf={this.state.loggedIn || inProgress} />
@@ -78,7 +79,7 @@ export default React.createClass({
             </form>
           </div>
         </If>
-      </div>
+      </Helmet>
     );
   },
 

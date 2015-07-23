@@ -2,6 +2,7 @@
 import defer from 'lodash/function/defer';
 import fluxMixin from 'flummox/mixin';
 import FontAwesome from 'react-fontawesome';
+import Helmet from 'react-helmet';
 import includes from 'lodash/collection/includes';
 import React from 'react';
 import { addons } from 'react/addons';
@@ -43,7 +44,7 @@ export default React.createClass({
     let facebookInProgress = includes(this.state.inProgress, 'facebookLogin');
 
     return (
-      <div>
+      <Helmet title="Register">
         <Title>Sign up for PianoShelf</Title>
         <ErrorMessage errorCode={this.state.errorCode}
           dontDisplayIf={this.state.loggedIn ||
@@ -89,7 +90,7 @@ export default React.createClass({
             Sign up using Facebook
           </Button>
         </form>
-      </div>
+      </Helmet>
     );
   },
 

@@ -1,5 +1,6 @@
 
 import fluxMixin from 'flummox/mixin';
+import Helmet from 'react-helmet';
 import React from 'react';
 import { addons } from 'react/addons';
 
@@ -35,11 +36,11 @@ export default React.createClass({
 
   render() {
     return (
-      <div>
+      <Helmet title="Logging out...">
         <InfoText>
           You are now being logged out...
         </InfoText>
-      </div>
+      </Helmet>
     );
   },
 

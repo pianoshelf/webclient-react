@@ -2,6 +2,7 @@
 // Import external modules
 import fluxMixin from 'flummox/mixin';
 import FontAwesome from 'react-fontawesome';
+import Helmet from 'react-helmet';
 import React from 'react';
 import Slider from 'react-slick';
 import { addons } from 'react/addons';
@@ -158,13 +159,15 @@ export default React.createClass({
 
   render() {
     return (
-      <div className="homepage">
-        <NavBar homepage={true} yOffsetLimit={50} />
-        {this.renderMainPanel_()}
-        {this.renderPopularPanel_()}
-        {this.renderInfoPanel_()}
-        <Footer />
-      </div>
+      <Helmet title="PianoShelf - free piano sheet music" titleTemplate="">
+        <div className="homepage">
+          <NavBar homepage={true} yOffsetLimit={50} />
+          {this.renderMainPanel_()}
+          {this.renderPopularPanel_()}
+          {this.renderInfoPanel_()}
+          <Footer />
+        </div>
+      </Helmet>
     );
   },
 

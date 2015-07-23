@@ -5,9 +5,10 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import FluxComponent from 'flummox/component';
-import Location from 'react-router/lib/Location';
+import Helmet from 'react-helmet';
 import http from 'http';
 import httpProxy from 'http-proxy';
+import Location from 'react-router/lib/Location';
 import path from 'path';
 import queryString from 'query-string';
 import React from 'react';
@@ -98,6 +99,9 @@ app.use((req, res, next) => {
         // Base64 encode all the data in our stores.
         let inlineData = base64.encode(utf8.encode(flux.serialize()));
 
+        // Get title, meta, and link tags.
+        let { title, meta, link } = Helmet.rewind();
+
         // Generate boilerplate output.
         let output =
           `<!DOCTYPE html>
@@ -105,8 +109,10 @@ app.use((req, res, next) => {
             <head>
               <meta charset="utf-8" />
               <meta name="viewport" content="width=device-width,initial-scale=1" />
-              <title>PianoShelf</title>
+              ${meta}
+              <title>${title}</title>
               <link rel="stylesheet" href="${cssPath}" />
+              ${link}
             </head>
             <body>
               <div id="react-root">${renderedString}</div>
