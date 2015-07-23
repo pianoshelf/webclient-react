@@ -79,7 +79,9 @@ app.use((req, res, next) => {
     if (transition.isCancelled) {
       let { redirectInfo } = transition;
       let { pathname, query } = redirectInfo;
-      let url = `${pathname}?${queryString.stringify(query)}`;
+
+      let urlParams = queryString.stringify(query);
+      let url = urlParams ? `${pathname}?${urlParams}` : pathname;
       res.redirect(url);
       return;
     }
