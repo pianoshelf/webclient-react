@@ -5,7 +5,7 @@ import { addons } from 'react/addons';
 // Import other components
 import NavBar from '../Fixtures/NavBar';
 import Footer from '../Fixtures/Footer';
-import ResponsiveContainer from '../ResponsiveContainer';
+import ResponsiveContainer from '../Misc/ResponsiveContainer';
 let { PureRenderMixin } = addons;
 
 export default React.createClass({

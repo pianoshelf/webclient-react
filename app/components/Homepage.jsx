@@ -11,8 +11,8 @@ import { Link } from 'react-router';
 // Import components
 import NavBar from './Fixtures/NavBar';
 import Footer from './Fixtures/Footer';
-import ResponsiveContainer from './ResponsiveContainer';
-import SheetMusicThumbnail from './SheetMusicThumbnail';
+import ResponsiveContainer from './Misc/ResponsiveContainer';
+import SheetMusicThumbnail from './Misc/SheetMusicThumbnail';
 
 let { PureRenderMixin } = addons;
 

@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-import ResponsiveContainer from '../ResponsiveContainer';
+import ResponsiveContainer from '../Misc/ResponsiveContainer';
 
 export default React.createClass({
   render() {
