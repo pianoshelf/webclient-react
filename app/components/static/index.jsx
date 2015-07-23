@@ -3,7 +3,9 @@ import React from 'react';
 import { addons } from 'react/addons';
 
 // Import other components
-import NavBar from '../fixtures/NavBar';
+import NavBar from '../Fixtures/NavBar';
+import Footer from '../Fixtures/Footer';
+import ResponsiveContainer from '../ResponsiveContainer';
 let { PureRenderMixin } = addons;
 
 export default React.createClass({
@@ -16,18 +18,14 @@ export default React.createClass({
 
   render() {
     return (
-      <div className="authentication">
+      <div className="static">
         <NavBar />
-        <div className="authentication__box">
-          <div className="authentication__box-inner">
-            <div className="authentication__box-container">
-              {this.props.children}
-            </div>
-          </div>
-        </div>
+        <ResponsiveContainer className="static__container">
+          {this.props.children}
+        </ResponsiveContainer>
+        <Footer />
       </div>
     );
   },
 
 });
-

@@ -3,10 +3,6 @@ import Helmet from 'react-helmet';
 import Markdown from 'react-markdown';
 import React from 'react';
 
-import NavBar from '../fixtures/NavBar';
-import Footer from '../fixtures/Footer';
-import ResponsiveContainer from '../ResponsiveContainer';
-
 let input = `
 
 # Terms of Service
@@ -86,13 +82,7 @@ export default React.createClass({
   render() {
     return (
       <Helmet title="Terms of Service">
-        <div className="static">
-          <NavBar />
-          <ResponsiveContainer className="static__container">
-            <Markdown className="static__markdown" source={input} />
-          </ResponsiveContainer>
-          <Footer />
-        </div>
+        <Markdown className="static__markdown" source={input} />
       </Helmet>
     );
   },
