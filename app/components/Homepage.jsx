@@ -8,7 +8,8 @@ import { addons } from 'react/addons';
 import { Link } from 'react-router';
 
 // Import components
-import NavBar from './NavBar';
+import NavBar from './fixtures/NavBar';
+import Footer from './fixtures/Footer';
 import ResponsiveContainer from './ResponsiveContainer';
 import SheetMusicThumbnail from './SheetMusicThumbnail';
 
@@ -155,17 +156,6 @@ export default React.createClass({
     }
   },
 
-  renderFooter_() {
-
-    return (
-      <div className="homepage__footer-panel">
-        <ResponsiveContainer className="homepage__footer-text">
-          &copy; PianoShelf 2015
-        </ResponsiveContainer>
-      </div>
-    );
-  },
-
   render() {
     return (
       <div className="homepage">
@@ -173,7 +163,7 @@ export default React.createClass({
         {this.renderMainPanel_()}
         {this.renderPopularPanel_()}
         {this.renderInfoPanel_()}
-        {this.renderFooter_()}
+        <Footer />
       </div>
     );
   },

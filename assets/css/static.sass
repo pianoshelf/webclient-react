@@ -1,0 +1,47 @@
+
+@import 'variables/globals'
+@import 'variables/fonts'
+
+.static__container
+  padding: $navbar-height 20px 20px 20px
+
+.static__markdown
+  font-size: 15px
+
+  h1
+    font-family: $title-font
+    font-weight: $weight-light
+    font-size: 25px
+    border-bottom: 2px solid $grey-normal
+    padding-bottom: 0.2em
+    margin: 0.5em 0
+    text-transform: uppercase
+    text-align: center
+    +when-tablet
+      font-size: 30px
+      margin: 1em 0
+
+  h2
+    font-family: $title-font
+    font-weight: $weight-normal
+    font-size: 20px
+    +when-tablet
+      font-size: 25px
+
+  h3
+    font-family: $title-font
+    font-weight: $weight-normal
+    font-size: 18px
+    +when-tablet
+      font-size: 20px
+
+  p
+    text-align: left
+    +when-tablet
+      text-align: justify
+
+
+
+
+
+
