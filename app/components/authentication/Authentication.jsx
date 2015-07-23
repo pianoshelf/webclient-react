@@ -3,7 +3,7 @@ import React from 'react';
 import { addons } from 'react/addons';
 
 // Import other components
-import NavBar from '../NavBar';
+import NavBar from '../fixtures/NavBar';
 let { PureRenderMixin } = addons;
 
 export default React.createClass({
