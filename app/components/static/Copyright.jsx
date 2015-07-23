@@ -1,6 +1,7 @@
 
-import React from 'react';
+import Helmet from 'react-helmet';
 import Markdown from 'react-markdown';
+import React from 'react';
 
 import NavBar from '../fixtures/NavBar';
 import Footer from '../fixtures/Footer';
@@ -89,13 +90,15 @@ understand the repercussions of submitting a false claim.
 export default React.createClass({
   render() {
     return (
-      <div className="static">
-        <NavBar />
-        <ResponsiveContainer className="static__container">
-          <Markdown className="static__markdown" source={input} />
-        </ResponsiveContainer>
-        <Footer />
-      </div>
+      <Helmet title="Copyright">
+        <div className="static">
+          <NavBar />
+          <ResponsiveContainer className="static__container">
+            <Markdown className="static__markdown" source={input} />
+          </ResponsiveContainer>
+          <Footer />
+        </div>
+      </Helmet>
     );
   },
 });

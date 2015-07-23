@@ -1,5 +1,6 @@
 
 import fluxMixin from 'flummox/mixin';
+import Helmet from 'react-helmet';
 import React from 'react';
 import { addons } from 'react/addons';
 import { Link } from 'react-router';
@@ -41,7 +42,7 @@ export default React.createClass({
 
   render() {
     return (
-      <div>
+      <Helmet title="Verify Email">
         <If condition={this.state.errorCode === success.EMAIL_VERIFIED}>
           <InfoText>
             Your email has been verified. Click <Link to="/">here</Link> to go to the homepage.
@@ -57,7 +58,7 @@ export default React.createClass({
             </InfoText>
           </If>
         </If>
-      </div>
+      </Helmet>
     );
   },
 
