@@ -132,7 +132,8 @@ export function post(endpoint, params, flux, auth) {
 export function patch(endpoint, params, flux, auth) {
   let baseUrl = __SERVER__ ? `http://localhost:${config.ports.django}` : '';
   return new Promise((resolve, reject) => {
-    request('PATCH', `${baseUrl}${auth ? authUrl : apiUrl}${endpoint}`)
+    request('PATCH',
+            `${baseUrl}${auth ? authUrl : apiUrl}${endpoint}`)
       .send(params)
       .set(getHeaders_(flux))
       .end(finishRequest_(flux, resolve, reject));

@@ -3,6 +3,7 @@
 
 // Import modules
 let _ = require('lodash');
+let path = require('path');
 let webpack = require('webpack');
 
 // Import production webpack configuration
@@ -20,7 +21,7 @@ webpackConfig.devtool = 'eval-source-map';
 
 webpackConfig.plugins = [
     new webpack.DefinePlugin({
-      'process.env': { NODE_ENV: '"development"' },
+      'process.env': { NODE_ENV: JSON.stringify('production') },
       __CLIENT__: true,
       __SERVER__: false,
     }),
@@ -51,10 +52,10 @@ webpackConfig.entry.unshift(
 );
 
 // Modify JS loader so that react-hot works
-webpackConfig.module.loaders[1] = {
-  include: /\.jsx?$/,
-  loaders: ['react-hot', 'babel-loader'],
-  exclude: /node_modules/,
+webpackConfig.module.loaders[0] = {
+  test: /\.jsx?$/,
+  loaders: ['react-hot', 'babel'],
+  include: [path.resolve(__dirname, 'app')],
 };
 
 module.exports = webpackConfig;

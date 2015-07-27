@@ -35,6 +35,9 @@
   },
   "rules": {
     "strict": [2, "never"],
+
+    "max-len": [1, 100, 2],
+
     "no-var": 2,
     "no-shadow": 2,
     "no-shadow-restricted-names": 2,
