@@ -48,7 +48,7 @@ export default React.createClass({
     link.addEventListener('mouseup', event => {
       if (event.clientX === currentMousePointX &&
           event.clientY === currentMousePointY) {
-        console.log('you intend to go to some sheet music');
+        console.log('you intend to go to some sheet music'); // eslint-disable-line no-console
       }
     });
   },
@@ -60,7 +60,9 @@ export default React.createClass({
     if (this.props.musicStyle) {
       musicStyle = (
         <span>
-          <strong className="sheet-music-thumbnail__description--bold">{this.props.musicStyle}</strong>
+          <strong className="sheet-music-thumbnail__description--bold">
+            {this.props.musicStyle}
+          </strong>
           &nbsp;by&nbsp;
         </span>
       );
@@ -77,7 +79,9 @@ export default React.createClass({
           </div>
           <div className="sheet-music-thumbnail__description">
             {musicStyle}
-            <strong className="sheet-music-thumbnail__description--bold">{this.props.composer}</strong>
+            <strong className="sheet-music-thumbnail__description--bold">
+              {this.props.composer}
+            </strong>
           </div>
         </div>
       </a>

@@ -40,7 +40,11 @@ export default React.createClass({
       case errors.EMAIL_ALREADY_REGISTERED:
         return [true, 'A user is already registered with this e-mail address.'];
       case errors.EMAIL_NOT_REGISTERED:
-        return [true, 'Either the email you specified is not registered with PianoShelf or your email address hasn\'t been activated yet.'];
+        return [
+          true,
+          'Either the email you specified is not registered with PianoShelf or your email address' +
+            'hasn\'t been activated yet.',
+        ];
       case errors.EXPIRED_LINK:
         return [true, 'This link has expired and you cannot reset your password.'];
       case success.PASSWORD_RESET:
