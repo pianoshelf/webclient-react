@@ -8,6 +8,8 @@ let { PureRenderMixin } = addons;
 
 export default React.createClass({
 
+  displayName: 'Authentication',
+
   mixins: [PureRenderMixin],
 
   propTypes: {

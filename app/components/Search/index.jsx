@@ -4,13 +4,11 @@ import { addons } from 'react/addons';
 
 // Import other components
 import NavBar from '../Fixtures/NavBar';
-import Footer from '../Fixtures/Footer';
-import ResponsiveContainer from '../Misc/ResponsiveContainer';
 let { PureRenderMixin } = addons;
 
 export default React.createClass({
 
-  displayName: 'Static',
+  displayName: 'Search',
 
   mixins: [PureRenderMixin],
 
@@ -20,12 +18,9 @@ export default React.createClass({
 
   render() {
     return (
-      <div className="static">
+      <div className="search">
         <NavBar />
-        <ResponsiveContainer className="static__container">
-          {this.props.children}
-        </ResponsiveContainer>
-        <Footer />
+        {this.props.children}
       </div>
     );
   },
