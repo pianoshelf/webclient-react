@@ -53,7 +53,7 @@ export default React.createClass({
             Explore, share, and download sheet music for free.
           </h2>
           <div className="homepage__main-search">
-            <Link to="/register" className="homepage__main-search-input">Browse Sheet Music</Link>
+            <Link to="/browse" className="homepage__main-search-input">Browse Sheet Music</Link>
           </div>
           <div className="homepage__main-register">
             or <Link to="/register" className="homepage__main-register-link">sign up now</Link>.
