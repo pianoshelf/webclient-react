@@ -59,10 +59,10 @@ cssPath = `/assets/${config.files.css.out}/main.css`;
 
 if (process.env.NODE_ENV === 'production') {
   // If we're in production, we want to make the build directory a static directory in /assets
-  jsPath = `/assets/${config.files.client.out}`;
+  jsPath = `/assets/${config.files.client.outFile}`;
 } else {
   // If we're in development, we want to point to webpack-dev-server.
-  jsPath = `http://localhost:${config.ports.webpack}/js/${config.files.client.out}`;
+  jsPath = `http://localhost:${config.ports.webpack}/js/${config.files.client.outFile}`;
 }
 
 // Capture all requests

@@ -66,6 +66,30 @@ gulp.task('lint:js', function() {
 });
 
 /**
+ * Lint all our JS files, and fail on error. Useful on CI machines and build tools.
+ */
+gulp.task('build:lint', function() {
+  return gulp.src(config.files.client.src)
+    .pipe(eslint())
+    .pipe(eslint.format())
+    .pipe(eslint.failOnError());
+});
+
+/**
+ * Compile our server files.
+ */
+gulp.task('build:server', function() {
+  return gulp.src(config.files.server.src)
+    .pipe(cache('src:server'))
+    .pipe(plumber())
+    .pipe(sourcemaps.init())
+    .pipe(babel(config.babelOptions))
+    .pipe(sourcemaps.write('.'))
+    .pipe(size({ title: 'Server JS' }))
+    .pipe(gulp.dest(config.files.server.out));
+});
+
+/**
  * Compile our JS files for development and launch webpack-dev-server.
  */
 gulp.task('build:client', function(callback) {
@@ -73,8 +97,11 @@ gulp.task('build:client', function(callback) {
   let webpackDevCompiler = webpack(webpackDevConfig);
 
   // Run webpack
-  webpackDevCompiler.run(function(err) {
+  webpackDevCompiler.run(function(err, stats) {
     if (err) throw new gutil.PluginError('build:client', err);
+
+    // Output stats
+    gutil.log(stats.toString({ colors: true }));
 
     // Emulate gulp-size
     let outputConfig = webpackDevConfig.output;
@@ -99,25 +126,6 @@ gulp.task('build:client', function(callback) {
 });
 
 /**
- * Compile our server files.
- */
-gulp.task('build:server', function() {
-  return gulp.src(config.files.server.src)
-    .pipe(cache('src:server'))
-    .pipe(plumber())
-    .pipe(sourcemaps.init())
-    .pipe(babel({
-      stage: 0,
-      plugins: ['jsx-control-statements/babel'],
-      loose: 'all',
-      blacklist: 'regenerator',
-    }))
-    .pipe(sourcemaps.write('.'))
-    .pipe(size({ title: 'Server JS' }))
-    .pipe(gulp.dest(config.files.server.out));
-});
-
-/**
  * Compile our JS files for production.
  */
 gulp.task('build:client:prod', function(callback) {
@@ -125,7 +133,17 @@ gulp.task('build:client:prod', function(callback) {
   let webpackProdCompiler = webpack(webpackProdConfig);
 
   // Run webpack
-  webpackProdCompiler.run(callback);
+  webpackProdCompiler.run(function(err) {
+    if (err) throw new gutil.PluginError('build:client:prod', err);
+
+    // Emulate gulp-size
+    let outputConfig = webpackProdConfig.output;
+    let jsFilePath = path.join(outputConfig.path, outputConfig.filename);
+    gutil.log(`'${gutil.colors.cyan('Client Prod JS')}' ${gutil.colors.green('all files ')}` +
+              `${gutil.colors.magenta(pretty(fs.statSync(jsFilePath).size))}`);
+
+    callback();
+  });
 });
 
 /**
@@ -136,47 +154,71 @@ gulp.task('clean', function(callback) {
 });
 
 /**
+ * Task to compile our files for production
+ */
+gulp.task('compile', function(callback) {
+  runSequence('clean', 'build:lint', [
+    'build:css',
+    'build:images',
+    'build:client:prod',
+    'build:server',
+  ], callback);
+});
+
+/**
  * Watch the necessary directories and launch BrowserSync.
  */
 gulp.task('watch', ['clean'], function(callback) {
-  runSequence(['build:images', 'build:css'], ['lint:js'], ['build:client', 'build:server'], function() {
-    gulp.watch(config.files.client.src, ['build:client']);
-    gulp.watch(config.files.server.src, ['build:server']);
-    gulp.watch(config.files.client.src, ['lint:js']);
-    gulp.watch(config.files.css.src, ['build:css']);
-    gulp.watch(config.files.images.src, ['build:images']);
+  runSequence(
+    [
+      'build:images',
+      'build:css',
+    ], [
+      'lint:js',
+    ], [
+      'build:client',
+      'build:server',
+    ], function() {
 
-    // Launch Nodemon
-    nodemon({
-      env: { NODE_ENV: 'development' },
-      watch: [ config.files.server.out ],
-    });
+      // Watch files
+      gulp.watch(config.files.client.src, ['build:client']);
+      gulp.watch(config.files.server.src, ['build:server']);
+      gulp.watch(config.files.client.src, ['lint:js']);
+      gulp.watch(config.files.css.src, ['build:css']);
+      gulp.watch(config.files.images.src, ['build:images']);
 
-    // Boolean to check if BrowserSync has started.
-    let isBrowserSyncStarted = false;
+      // Launch Nodemon
+      nodemon({
+        env: { NODE_ENV: 'development' },
+        watch: [ config.files.server.out ],
+      });
 
-    // Perform action right when nodemon starts
-    nodemon.on('start', function() {
+      // Boolean to check if BrowserSync has started.
+      let isBrowserSyncStarted = false;
 
-      // Only perform action when boolean is false
-      if (!isBrowserSyncStarted) {
-        isBrowserSyncStarted = true;
+      // Perform action right when nodemon starts
+      nodemon.on('start', function() {
 
-        // Set a timeout of 500 ms so that the server has time to start
-        setTimeout(function() {
+        // Only perform action when boolean is false
+        if (!isBrowserSyncStarted) {
+          isBrowserSyncStarted = true;
 
-          // Launch BrowserSync
-          browserSync({
-            proxy: `localhost:${config.ports.express}`,
-            open: false,
-          });
+          // Set a timeout of 500 ms so that the server has time to start
+          setTimeout(function() {
 
-          // Call callback function to end gulp task
-          callback();
+            // Launch BrowserSync
+            browserSync({
+              proxy: `localhost:${config.ports.express}`,
+              open: false,
+            });
 
-        }, 500);
-      }
-    });
-  });
+            // Call callback function to end gulp task
+            callback();
+
+          }, 500);
+        }
+      });
+    }
+  );
 });
 

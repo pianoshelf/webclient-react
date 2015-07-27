@@ -10,8 +10,8 @@ module.exports = {
   files: {
     client: {
       entry: './app/client.jsx',
-      src: ['./app/**/**/**/*.js', './app/**/**/**/*.jsx'],
-      out: 'bundle.js',
+      src: ['./app/**/**/**/**/*.js', './app/**/**/**/**/*.jsx'],
+      outFile: 'bundle.js',
     },
     css: {
       entry: './assets/css/main.sass',
@@ -47,6 +47,13 @@ module.exports = {
   cookie: {
     authtoken: 'pianoshelf-authtoken',
     csrf: 'csrftoken',
+  },
+
+  babelOptions: {
+    stage: 0,
+    plugins: ['jsx-control-statements/babel'],
+    loose: 'all',
+    blacklist: 'regenerator',
   },
 
 };

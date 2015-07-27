@@ -17,10 +17,10 @@ module.exports = {
   entry: [ config.files.client.entry ],
 
   output: {
-    path: path.join(__dirname, 'build/static/js'),
-    filename: config.files.client.out,
+    path: path.join(__dirname, 'build', 'static', 'js'),
+    filename: config.files.client.outFile,
     chunkFilename: '[name].[id].js',
-    publicPath: '/js/',
+    publicPath: 'js/',
   },
 
   externals: {
@@ -29,7 +29,7 @@ module.exports = {
 
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': { NODE_ENV: '"production"' },
+      'process.env': { NODE_ENV: JSON.stringify('production') },
       __CLIENT__: true,
       __SERVER__: false,
     }),
@@ -38,17 +38,11 @@ module.exports = {
     new webpack.optimize.UglifyJsPlugin(),
   ],
 
-  babel: {
-    stage: 0,
-    plugins: ['jsx-control-statements/babel'],
-    loose: 'all',
-    blacklist: 'regenerator',
-  },
+  babel: config.babelOptions,
 
   module: {
     loaders: [
-      { include: /\.json$/, loaders: ['json'] },
-      { include: /\.jsx?$/, loaders: ['babel'], exclude: /node_modules/ },
+      { test: /\.jsx?$/, loaders: ['babel'], include: [path.resolve(__dirname, 'app')] },
     ],
   },
 
@@ -62,7 +56,6 @@ module.exports = {
 
   resolve: {
     extensions: ['', '.jsx', '.js'],
-    // root: path.resolve('.'),
   },
 
 };
