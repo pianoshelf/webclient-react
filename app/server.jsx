@@ -151,6 +151,8 @@ app.use((req, res, next) => {
         // Send output to ExpressJS.
         res.send(output);
       } catch (err) {
+        log.error('There was a problem renderring the page. Here\'s the error:');
+        log.error(err);
 
         // Forward to next request if there's an error.
         next(err);
