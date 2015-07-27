@@ -1,4 +1,4 @@
-# React-Shelf
+# PianoShelf Web Client
 
 [![Circle CI](https://circleci.com/gh/Pianoshelf/react-shelf/tree/master.svg?style=svg)](https://circleci.com/gh/Pianoshelf/webclient-react/tree/master)
 
