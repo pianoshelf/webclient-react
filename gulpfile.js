@@ -10,12 +10,14 @@ let fs = require('fs');
 let gulp = require('gulp');
 let gutil = require('gulp-util');
 let imagemin = require('gulp-imagemin');
+let minifyCss = require('gulp-minify-css');
 let nodemon = require('nodemon');
 let path = require('path');
 let plumber = require('gulp-plumber');
 let prefix = require('gulp-autoprefixer');
 let pretty = require('prettysize');
 let reload = browserSync.reload;
+let rev = require('gulp-rev');
 let runSequence = require('run-sequence');
 let sass = require('gulp-sass');
 let size = require('gulp-size');
@@ -53,26 +55,41 @@ gulp.task('build:css', function() {
       style: 'compact',
       includePaths: ['./assets/css', './node_modules'],
     }))
-    .on('error', gutil.log)
     .pipe(prefix('ie >= 9'))
+    .pipe(size({ title: 'CSS' }))
     .pipe(gulp.dest(`${config.files.staticAssets}${config.files.css.out}`))
     .pipe(reload({ stream: true }));
 });
 
 /**
+ * Compile our CSS files for production. This minifies our CSS as well.
+ */
+gulp.task('build:css:prod', function() {
+  return gulp.src(config.files.css.entry)
+    .pipe(sass({
+      style: 'compact',
+      includePaths: ['./assets/css', './node_modules'],
+    }))
+    .pipe(prefix('ie >= 9'))
+    .pipe(minifyCss())
+    .pipe(size({ title: 'CSS' }))
+    .pipe(gulp.dest(`${config.files.staticAssets}${config.files.css.out}`));
+});
+
+/**
  * Lint all our JS files.
  */
-gulp.task('lint:js', function() {
+gulp.task('build:lint', function() {
   return gulp.src(config.files.client.src)
-    .pipe(cache('lint:js'))
+    .pipe(cache('build:lint'))
     .pipe(eslint())
     .pipe(eslint.format());
 });
 
 /**
- * Lint all our JS files, and fail on error. Useful on CI machines and build tools.
+ * Lint all our JS files, and fail on error. Useful on CI machines and build scripts.
  */
-gulp.task('build:lint', function() {
+gulp.task('build:lint:prod', function() {
   return gulp.src(config.files.client.src)
     .pipe(eslint())
     .pipe(eslint.format())
@@ -146,6 +163,24 @@ gulp.task('build:client:prod', function(callback) {
 });
 
 /**
+ * Duplicate our CSS and JS files with hashes append to their names, so we can enable long term
+ * caching.
+ */
+gulp.task('build:cache', function() {
+  gulp.src(`${config.files.staticAssets}${config.files.css.out}/*.css`)
+    .pipe(rev())
+    .pipe(gulp.dest(`${config.files.staticAssets}${config.files.css.out}`))
+    .pipe(rev.manifest())
+    .pipe(gulp.dest(`${config.files.staticAssets}${config.files.css.out}`));
+
+  gulp.src(`${config.files.staticAssets}${config.files.client.out}/*.js`)
+    .pipe(rev())
+    .pipe(gulp.dest(`${config.files.staticAssets}${config.files.client.out}`))
+    .pipe(rev.manifest())
+    .pipe(gulp.dest(`${config.files.staticAssets}${config.files.client.out}`));
+});
+
+/**
  * Clean out build folder so we are sure we're not building from some cache
  */
 gulp.task('clean', function(callback) {
@@ -156,12 +191,12 @@ gulp.task('clean', function(callback) {
  * Task to compile our files for production
  */
 gulp.task('compile', function(callback) {
-  runSequence('clean', 'build:lint', [
-    'build:css',
+  runSequence('clean', 'build:lint:prod', [
     'build:images',
+    'build:css:prod',
     'build:client:prod',
     'build:server',
-  ], callback);
+  ], 'build:cache', callback);
 });
 
 /**
@@ -169,12 +204,9 @@ gulp.task('compile', function(callback) {
  */
 gulp.task('watch', ['clean'], function(callback) {
   runSequence(
-    [
+    'build:lint', [
       'build:images',
       'build:css',
-    ], [
-      'lint:js',
-    ], [
       'build:client',
       'build:server',
     ], function() {
@@ -182,7 +214,7 @@ gulp.task('watch', ['clean'], function(callback) {
       // Watch files
       gulp.watch(config.files.client.src, ['build:client']);
       gulp.watch(config.files.server.src, ['build:server']);
-      gulp.watch(config.files.client.src, ['lint:js']);
+      gulp.watch(config.files.client.src, ['build:lint']);
       gulp.watch(config.files.css.src, ['build:css']);
       gulp.watch(config.files.images.src, ['build:images']);
 
@@ -190,6 +222,7 @@ gulp.task('watch', ['clean'], function(callback) {
       nodemon({
         env: { NODE_ENV: 'development' },
         watch: [ config.files.server.out ],
+        execMap: { js: 'iojs {{filename}} | node_modules/.bin/bunyan' },
       });
 
       // Boolean to check if BrowserSync has started.

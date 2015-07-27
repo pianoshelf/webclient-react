@@ -7,6 +7,7 @@
     "compile": "./node_modules/.bin/gulp compile",
     "lint": "./node_modules/.bin/gulp lint:js",
     "watch": "./node_modules/.bin/gulp watch",
+    "production:start": "NODE_ENV=production iojs build/server | ./node_modules/.bin/bunyan",
     "test": "./node_modules/.bin/mocha --compilers js:babel/register --recursive"
   },
   "repository": {
@@ -35,7 +36,9 @@
     "gulp-cached": "^1.1.0",
     "gulp-eslint": "^0.15.0",
     "gulp-imagemin": "^2.3.0",
+    "gulp-minify-css": "^1.2.0",
     "gulp-plumber": "^1.0.1",
+    "gulp-rev": "^5.1.0",
     "gulp-sass": "^2.0.4",
     "gulp-size": "^1.2.3",
     "gulp-sourcemaps": "^1.5.2",
@@ -56,6 +59,7 @@
     "base-64": "^0.1.0",
     "bluebird": "^2.9.34",
     "body-parser": "^1.12.4",
+    "bunyan": "^1.4.0",
     "classnames": "^2.1.2",
     "cookie-dough": "0.0.6",
     "cookie-parser": "^1.3.5",

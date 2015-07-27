@@ -11,6 +11,7 @@ module.exports = {
     client: {
       entry: './app/client.jsx',
       src: ['./app/**/**/**/**/*.js', './app/**/**/**/**/*.jsx'],
+      out: 'js',
       outFile: 'bundle.js',
     },
     css: {
@@ -30,9 +31,11 @@ module.exports = {
   },
 
   api: {
+    // The reason this is separated is so that later on, we can switch to a dedicated API subdomain
+    // easily, i.e https://api.pianoshelf.com.
     prod: {
-      prefix: 'https://www.pianoshelf.com/api',
-      authPrefix: 'https://www.pianoshelf.com/api-auth',
+      prefix: '/api',
+      authPrefix: '/api-auth',
     },
     dev: {
       prefix: '/api',

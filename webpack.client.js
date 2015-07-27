@@ -17,7 +17,7 @@ module.exports = {
   entry: [ config.files.client.entry ],
 
   output: {
-    path: path.join(__dirname, 'build', 'static', 'js'),
+    path: path.join(__dirname, config.files.staticAssets, config.files.client.out),
     filename: config.files.client.outFile,
     chunkFilename: '[name].[id].js',
     publicPath: 'js/',

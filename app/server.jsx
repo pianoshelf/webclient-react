@@ -2,9 +2,11 @@
 // Import external modules
 import base64 from 'base-64';
 import bodyParser from 'body-parser';
+import bunyan from 'bunyan';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import FluxComponent from 'flummox/component';
+import fs from 'fs';
 import Helmet from 'react-helmet';
 import http from 'http';
 import httpProxy from 'http-proxy';
@@ -25,6 +27,9 @@ import { prefetchRouteData } from './utils/routeUtils';
 let app = express();
 let httpServer = http.createServer(app);
 
+// Create logger
+let log = bunyan.createLogger({ name: 'PianoShelf' });
+
 // Add our isomorphic constants
 global.__SERVER__ = true;
 global.__CLIENT__ = false;
@@ -32,8 +37,9 @@ global.__CLIENT__ = false;
 // Serve public folder
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
-// Proxy API requests to the python server if we're on a dev environment
-if (process.env.NODE_ENV !== 'production') {
+// Proxy API requests to the python server if we're on a dev environment or if we specified the
+// override
+if (process.env.PROXY_API === 'true' || process.env.NODE_ENV !== 'production') {
   let proxy = httpProxy.createProxyServer({});
   app.use((req, res, next) => {
     if (/^\/api/.test(req.url)) {
@@ -55,14 +61,21 @@ let jsPath, cssPath;
 // Use build directory as assets
 app.use('/assets/', express.static(path.join(__dirname, '..', 'build', 'static')));
 
-cssPath = `/assets/${config.files.css.out}/main.css`;
-
 if (process.env.NODE_ENV === 'production') {
+  // In production, our node context will be under the root directory, so we need to include the
+  // build folder in our path when getting the manifest file.
+
+  // Get the manifest files for our CSS and JS files
+  let jsManifest = JSON.parse(fs.readFileSync('./build/static/js/rev-manifest.json', 'utf-8'));
+  let cssManifest = JSON.parse(fs.readFileSync('./build/static/css/rev-manifest.json', 'utf-8'));
+
   // If we're in production, we want to make the build directory a static directory in /assets
-  jsPath = `/assets/${config.files.client.outFile}`;
+  jsPath = `/assets/${config.files.client.out}/${jsManifest[config.files.client.outFile]}`;
+  cssPath = `/assets/${config.files.css.out}/${cssManifest['main.css']}`;
 } else {
   // If we're in development, we want to point to webpack-dev-server.
   jsPath = `http://localhost:${config.ports.webpack}/js/${config.files.client.outFile}`;
+  cssPath = `/assets/${config.files.css.out}/main.css`;
 }
 
 // Capture all requests
@@ -147,7 +160,7 @@ if (!!process.env.TESTING) {
 
   // Launch application
   httpServer.listen(config.ports.express, () => {
-    console.log(`PianoShelf listening on port ${config.ports.express}`); // eslint-disable-line no-console
+    log.info(`PianoShelf listening on port ${config.ports.express}`);
   });
 
 }
