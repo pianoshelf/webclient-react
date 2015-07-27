@@ -12,6 +12,7 @@ import http from 'http';
 import httpProxy from 'http-proxy';
 import Location from 'react-router/lib/Location';
 import path from 'path';
+import PrettyStream from 'bunyan-prettystream';
 import queryString from 'query-string';
 import React from 'react';
 import Router from 'react-router';
@@ -28,7 +29,18 @@ let app = express();
 let httpServer = http.createServer(app);
 
 // Create logger
-let log = bunyan.createLogger({ name: 'PianoShelf' });
+let prettyStream = new PrettyStream();
+prettyStream.pipe(process.stdout);
+let log = bunyan.createLogger({
+  name: 'PianoShelf',
+  streams: [
+    {
+      level: 'debug',
+      type: 'raw',
+      stream: prettyStream,
+    },
+  ],
+});
 
 // Add our isomorphic constants
 global.__SERVER__ = true;

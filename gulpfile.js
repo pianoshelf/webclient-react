@@ -222,7 +222,7 @@ gulp.task('watch', ['clean'], function(callback) {
       nodemon({
         env: { NODE_ENV: 'development' },
         watch: [ config.files.server.out ],
-        execMap: { js: 'iojs {{filename}} | node_modules/.bin/bunyan' },
+        ignore: [ config.files.staticAssets ],
       });
 
       // Boolean to check if BrowserSync has started.
