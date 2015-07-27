@@ -26,6 +26,10 @@ let WebpackDevServer = require('webpack-dev-server');
 // Import internal modules
 let config = require('./config');
 
+// Create an instance of the client compiler for caching
+let webpackDevConfig = require('./webpack.dev.client');
+let webpackDevCompiler = webpack(webpackDevConfig);
+
 // Boolean for whether we're running webpack-dev-server
 let isRunningDevServer = false;
 
@@ -93,15 +97,10 @@ gulp.task('build:server', function() {
  * Compile our JS files for development and launch webpack-dev-server.
  */
 gulp.task('build:client', function(callback) {
-  let webpackDevConfig = require('./webpack.dev.client');
-  let webpackDevCompiler = webpack(webpackDevConfig);
 
   // Run webpack
-  webpackDevCompiler.run(function(err, stats) {
+  webpackDevCompiler.run(function(err) {
     if (err) throw new gutil.PluginError('build:client', err);
-
-    // Output stats
-    gutil.log(stats.toString({ colors: true }));
 
     // Emulate gulp-size
     let outputConfig = webpackDevConfig.output;

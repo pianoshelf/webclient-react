@@ -34,7 +34,8 @@ export default React.createClass({
 
   render() {
 
-    let className = classNames('authentication__button', `authentication__button--${this.props.color}`);
+    let className = classNames('authentication__button',
+                               `authentication__button--${this.props.color}`);
 
     return (
       <button className={className}
