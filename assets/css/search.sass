@@ -1,0 +1,68 @@
+
+@import 'variables/globals'
+@import 'variables/fonts'
+@import 'variables/buttons'
+
+@import 'responsivecontainer'
+
+.search
+  min-height: 100vh
+
+.search__container
+  padding: $navbar-height 20px 20px 20px
+
+.search__browse-search
+  padding: 20px 5px 10px 5px
+  font-size: 15px
+  +when-tablet
+    padding: 40px 10px 20px 10px
+    font-size: 18px
+
+.search__browse-search-input
+  +standard-borders
+  border-color: $grey-light
+  margin: 0
+  width: 100%
+  padding: 10px
+  +when-tablet
+    padding: 10px
+
+.search__filters
+  width: 250px
+  min-height: 100px
+  display: inline-block
+  border-right: $button-border-width solid $grey-normal
+
+.search__filter-group
+  padding: 10px
+
+.search__filter-group-title
+  text-transform: uppercase
+  color: $grey-text-normal
+  font-weight: $weight-bold
+  font-family: $title-font
+  padding: 0 5px
+  margin-bottom: 10px
+
+.search__filter-groups
+  +standard-borders
+  border-color: $grey-normal
+
+.search__filter-group-filter
+  display: inline-block
+  width: 100%
+  color: $grey-text-dark
+  padding: 5px 10px
+
+.search__filter-group-filter--bottom-border
+  border-bottom: $button-border-width solid $grey-normal
+
+.search__filter-group-filter--right-border
+  border-right: $button-border-width solid $grey-normal
+
+.search__filter-group-filter--half-space
+  width: 50%
+
+.search__filter-group-filter--selected
+  background-color: $grey-light
+
