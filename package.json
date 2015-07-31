@@ -5,7 +5,7 @@
   "main": "build/server",
   "scripts": {
     "compile": "./node_modules/.bin/gulp compile",
-    "lint": "./node_modules/.bin/gulp lint:js",
+    "lint": "./node_modules/.bin/gulp build:lint",
     "watch": "./node_modules/.bin/gulp watch",
     "production:start": "NODE_ENV=production iojs build/server",
     "test": "./node_modules/.bin/mocha --compilers js:babel/register --recursive"
