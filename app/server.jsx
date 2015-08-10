@@ -4,6 +4,7 @@ import base64 from 'base-64';
 import bodyParser from 'body-parser';
 import bunyan from 'bunyan';
 import cookieParser from 'cookie-parser';
+import defer from 'lodash/function/defer';
 import express from 'express';
 import FluxComponent from 'flummox/component';
 import fs from 'fs';
@@ -68,10 +69,17 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 // Paths to javascript file and CSS file
-let jsPath, cssPath;
+let jsPath;
+let cssPath;
 
 // Use build directory as assets
-app.use('/assets/', express.static(path.join(__dirname, '..', 'build', 'static')));
+app.use('/assets/', express.static(path.join(__dirname, '../build/static')));
+
+// Store output files and directory for client JS and CSS files.
+let jsOutFile = config.files.client.outFile;
+let jsOutDir = config.files.client.out;
+let cssOutFile = 'main.css';
+let cssOutDir = config.files.css.out;
 
 if (process.env.NODE_ENV === 'production') {
   // In production, our node context will be under the root directory, so we need to include the
@@ -82,12 +90,12 @@ if (process.env.NODE_ENV === 'production') {
   let cssManifest = JSON.parse(fs.readFileSync('./build/static/css/rev-manifest.json', 'utf-8'));
 
   // If we're in production, we want to make the build directory a static directory in /assets
-  jsPath = `/assets/${config.files.client.out}/${jsManifest[config.files.client.outFile]}`;
-  cssPath = `/assets/${config.files.css.out}/${cssManifest['main.css']}`;
+  jsPath = `/assets/${jsOutDir}/${jsManifest[jsOutFile]}`;
+  cssPath = `/assets/${cssOutDir}/${cssManifest[cssOutFile]}`;
 } else {
   // If we're in development, we want to point to webpack-dev-server.
-  jsPath = `http://localhost:${config.ports.webpack}/js/${config.files.client.outFile}`;
-  cssPath = `/assets/${config.files.css.out}/main.css`;
+  jsPath = `http://localhost:${config.ports.webpack}/${jsOutDir}/${jsOutFile}`;
+  cssPath = `http://localhost:${config.ports.webpack}/${cssOutDir}/${cssOutFile}`;
 }
 
 // Capture all requests
@@ -99,7 +107,6 @@ app.use((req, res, next) => {
   let target = new Location(req.path, req.query);
 
   Router.run(routes, target, (error, initialState, transition) => {
-
     // If our transition is cancelled, we redirect the user with a 302.
     if (transition.isCancelled) {
       let { redirectInfo } = transition;
@@ -112,9 +119,8 @@ app.use((req, res, next) => {
     }
 
     // Function that renders the route.
-    let renderRoute = () => {
+    let renderRoute = () => defer(() => {
       try {
-
         // Render our entire app to a string, and make sure we wrap everything
         // with FluxComponent, which adds the flux context to the entire app.
         let renderedString = React.renderToString(
@@ -157,7 +163,7 @@ app.use((req, res, next) => {
         // Forward to next request if there's an error.
         next(err);
       }
-    };
+    });
 
     // Make sure we render our route even if the promise fails.
     if (initialState.components) {
@@ -171,11 +177,9 @@ app.use((req, res, next) => {
 if (!!process.env.TESTING) {
   module.exports = app;
 } else {
-
   // Launch application
   httpServer.listen(config.ports.express, () => {
     log.info(`PianoShelf listening on port ${config.ports.express}`);
   });
-
 }
 

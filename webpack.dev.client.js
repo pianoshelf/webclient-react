@@ -15,7 +15,6 @@ let config = require('./config');
 // Make sure we don't clobber our other configuration.
 let webpackConfig = _.cloneDeep(webpackProdConfig);
 
-webpackConfig.cache = true;
 webpackConfig.debug = true;
 webpackConfig.devtool = 'eval-source-map';
 
@@ -30,8 +29,8 @@ webpackConfig.plugins = [
 ];
 
 webpackConfig.devServer = {
-    publicPath: `http://localhost:${config.ports.webpack}/js/`,
-    contentBase: './build/static',
+    publicPath: `http://localhost:${config.ports.webpack}/${config.files.client.out}/`,
+    contentBase: path.join(__dirname, config.files.staticAssets),
     hot: true,
     inline: true,
     silent: true,
@@ -41,7 +40,8 @@ webpackConfig.devServer = {
 };
 
 // Update output information
-webpackConfig.output.publicPath = `http://localhost:${config.ports.webpack}/js/`;
+webpackConfig.output.publicPath =
+  `http://localhost:${config.ports.webpack}/${config.files.client.out}/`;
 webpackConfig.output.hotUpdateMainFilename = 'update/[hash]/update.json';
 webpackConfig.output.hotUpdateChunkFilename = 'update/[hash]/[id].update.js';
 
@@ -52,11 +52,7 @@ webpackConfig.entry.unshift(
 );
 
 // Modify JS loader so that react-hot works
-webpackConfig.module.loaders[0] = {
-  test: /\.jsx?$/,
-  loaders: ['react-hot', 'babel'],
-  include: [path.resolve(__dirname, 'app')],
-};
+webpackConfig.module.loaders[0].loaders.unshift('react-hot');
 
 module.exports = webpackConfig;
 

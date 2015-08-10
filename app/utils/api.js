@@ -10,7 +10,8 @@ import request from 'superagent';
 import config from '../../config';
 
 // Select the correct URL prefix based on environment variables.
-let apiUrl, authUrl;
+let apiUrl;
+let authUrl;
 if (process.env.NODE_ENV === 'production') {
   apiUrl = config.api.prod.prefix;
   authUrl = config.api.prod.authPrefix;
@@ -23,7 +24,6 @@ if (process.env.NODE_ENV === 'production') {
  * Gets the value of a cookie in an isomorphic way.
  */
 function getCookie_(flux, name) {
-
   // Return cookie if we're on the client.
   if (__CLIENT__) {
     return Cookie().get(name);
@@ -39,7 +39,6 @@ function getCookie_(flux, name) {
  * Retrieves a list of headers to send with the request given the Flux object
  */
 function getHeaders_(flux) {
-
   // Initial set of headers.
   let headers = {};
 
@@ -61,10 +60,8 @@ function getHeaders_(flux) {
  * Create a callback that does post-processing on the response.
  */
 function finishRequest_(flux, resolve, reject) {
-
   // Return anonymous function
   return function(err, res) {
-
     // If we're on the server and the 'Set-Cookie' header is in the response, propogate
     // that to the client by appending it to the response header.
     if (!err && __SERVER__ && res.headers['set-cookie']) {
@@ -166,7 +163,6 @@ export function del(endpoint, params, flux) {
  * @param {Flux} flux The flux object.
  */
 export function setAuthToken(authToken, flux) {
-
   // Return cookie if we're on the client.
   if (__CLIENT__) {
     Cookie().set(config.cookie.authtoken, authToken);
@@ -184,7 +180,6 @@ export function setAuthToken(authToken, flux) {
  * @param {Flux} flux The flux object.
  */
 export function deleteAuthToken(flux) {
-
   // Return cookie if we're on the client.
   if (__CLIENT__) {
     Cookie().remove(config.cookie.authtoken);

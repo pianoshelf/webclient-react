@@ -52,7 +52,6 @@ export default React.createClass({
   },
 
   render() {
-
     let isPassword = this.props.password === true;
 
     let className = classNames({

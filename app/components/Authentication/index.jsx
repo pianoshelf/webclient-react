@@ -10,11 +10,11 @@ export default React.createClass({
 
   displayName: 'Authentication',
 
-  mixins: [PureRenderMixin],
-
   propTypes: {
     children: React.PropTypes.node,
   },
+
+  mixins: [PureRenderMixin],
 
   render() {
     return (

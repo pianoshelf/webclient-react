@@ -12,11 +12,11 @@ export default React.createClass({
 
   displayName: 'Static',
 
-  mixins: [PureRenderMixin],
-
   propTypes: {
     children: React.PropTypes.node,
   },
+
+  mixins: [PureRenderMixin],
 
   render() {
     return (

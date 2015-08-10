@@ -45,16 +45,22 @@ export default class SheetMusicActions extends Actions {
 
   getTrendingSheetMusic(days, results, flux) {
     return get(
-      '/sheetmusic/trending',
+      '/sheetmusic/trending/',
       { days, results },
       flux
     );
   }
 
-  getSheetMusicList(filterOptions, flux) {
+  getSheetMusicList(options, flux) {
+    let filters = {
+      order_by: options.orderBy,
+      page: options.page,
+      page_size: options.pageSize,
+    };
+
     return get(
       '/sheetmusic/',
-      filterOptions,
+      filters,
       flux
     );
   }
@@ -129,7 +135,7 @@ export default class SheetMusicActions extends Actions {
 
   search(query, flux) {
     return get(
-      '/search',
+      '/search/',
       { query },
       flux
     );

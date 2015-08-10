@@ -18,6 +18,18 @@ let PureRenderMixin = addons.PureRenderMixin;
 // Export class
 export default React.createClass({
 
+  propTypes: {
+    /**
+     * Whether we're on the homepage.
+     */
+    homepage: React.PropTypes.bool,
+
+    /**
+     * The maximum YOffset at which we should pretend this.props.homepage is false.
+     */
+    yOffsetLimit: React.PropTypes.number,
+  },
+
   mixins: [
     PureRenderMixin,
     fluxMixin({
@@ -27,14 +39,6 @@ export default React.createClass({
       }),
     }),
   ],
-
-  propTypes: {
-    // Whether we're on the homepage.
-    homepage: React.PropTypes.bool,
-
-    // The maximum YOffset at which we should pretend this.props.homepage is false.
-    yOffsetLimit: React.PropTypes.number,
-  },
 
   getInitialState() {
     return {

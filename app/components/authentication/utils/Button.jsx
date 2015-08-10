@@ -1,7 +1,7 @@
 
 import classNames from 'classnames';
-import React from 'react';
 import FontAwesome from 'react-fontawesome';
+import React from 'react';
 
 export default React.createClass({
 
@@ -33,10 +33,8 @@ export default React.createClass({
   },
 
   render() {
-
     let className = classNames('authentication__button',
                                `authentication__button--${this.props.color}`);
-
     return (
       <button className={className}
         type="submit"

@@ -5,7 +5,6 @@ import { errors, success } from '../utils/constants';
 export default class LoginStore extends BaseStore {
 
   constructor(flux) {
-
     super();
 
     const loginActions = flux.getActions('login');
@@ -152,7 +151,6 @@ export default class LoginStore extends BaseStore {
   }
 
   resetPasswordConfirmError(res) {
-
     let data;
     let errorCode = 0;
 
@@ -189,8 +187,5 @@ export default class LoginStore extends BaseStore {
     }
 
     this.setState({ errorCode });
-
   }
-
 }
-

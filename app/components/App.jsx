@@ -4,16 +4,16 @@ import Helmet from 'react-helmet';
 import React from 'react';
 
 export default React.createClass({
+  propTypes: {
+    children: React.PropTypes.node,
+  },
+
   mixins: [fluxMixin()],
 
   statics: {
     routeWillRun({ flux }) {
       return flux.getActions('login').getUser(flux);
     },
-  },
-
-  propTypes: {
-    children: React.PropTypes.node,
   },
 
   render() {

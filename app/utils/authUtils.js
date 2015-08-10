@@ -58,7 +58,6 @@ export let CanLoginMixin = {
 
   loginUser_() {
     if (this.state.loggedIn) {
-
       // Set authorization token
       let { user } = this.state;
       setAuthToken(user.authToken, this.flux);
@@ -83,7 +82,6 @@ export let CanLogoutMixin = {
 
   logoutUser_() {
     if (!this.state.loggedIn) {
-
       // Delete authorization token
       deleteAuthToken(this.flux);
 
@@ -101,12 +99,10 @@ export let CanLogoutMixin = {
  * the Facebook Javascript SDK.
  */
 export let FacebookLoginMixin = {
-
   componentDidMount() {
-
     // Function that will run after Facebook is done initializing
     window.fbAsyncInit = () => {
-      /*global FB*/
+      /* global FB */
       FB.init({
         appId: config.facebook.appId,
         xfbml: false,
@@ -116,7 +112,8 @@ export let FacebookLoginMixin = {
 
     // Asynchronously load Facebook
     (function(d, s, id) {
-      let js, fjs = d.getElementsByTagName(s)[0];
+      let js;
+      let fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) { return; }
       js = d.createElement(s); js.id = id;
       js.src = '//connect.facebook.net/en_US/sdk.js';
@@ -132,7 +129,6 @@ export let FacebookLoginMixin = {
   },
 
   componentDidUnmount() {
-
     // Remove fb-root div
     if (document.getElementById('fb-root')) {
       let fbRoot = document.getElementById('fb-root');
@@ -141,7 +137,7 @@ export let FacebookLoginMixin = {
   },
 
   facebookLogin() {
-    /*global FB*/
+    /* global FB */
     FB.login(response => {
       if (response.authResponse) {
         FB.api('/me', loginResponse => {

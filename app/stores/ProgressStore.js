@@ -6,18 +6,26 @@ import BaseStore from './BaseStore';
 export default class ProgressStore extends BaseStore {
 
   constructor(flux) {
-
     super();
 
     const loginActions = flux.getActions('login');
     const progressActions = flux.getActions('progress');
+    const sheetMusicActions = flux.getActions('sheetmusic');
 
     let actions = [
+
+      // Login actions
+      { name: 'facebookLogin', func: loginActions.facebookLogin },
       { name: 'login', func: loginActions.login },
       { name: 'register', func: loginActions.register },
       { name: 'resetPassword', func: loginActions.resetPassword },
       { name: 'resetPasswordConfirm', func: loginActions.resetPasswordConfirm },
-      { name: 'facebookLogin', func: loginActions.facebookLogin },
+
+      // Sheet music actions
+      { name: 'search', func: sheetMusicActions.search },
+      { name: 'sheetMusicList', func: sheetMusicActions.getSheetMusicList },
+      { name: 'trendingSheetMusic', func: sheetMusicActions.getTrendingSheetMusic },
+
     ];
 
     // Register each action's success and failure handler

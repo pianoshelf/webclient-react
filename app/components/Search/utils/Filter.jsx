@@ -1,5 +1,4 @@
 
-import defer from 'lodash/function/defer';
 import classNames from 'classnames';
 import React from 'react';
 
@@ -30,7 +29,7 @@ export default React.createClass({
     /**
      * The semantic value of this filter.
      */
-    value: React.PropTypes.any.isRequired,
+    value: React.PropTypes.string.isRequired,
 
     /**
      * The text value of this filter.
@@ -42,11 +41,6 @@ export default React.createClass({
      */
     onChange: React.PropTypes.func.isRequired,
 
-  },
-
-  handleOnClick_(event) {
-    event.preventDefault();
-    defer(() => this.props.onChange(this.props.value, !this.props.isSelected));
   },
 
   render() {
@@ -63,6 +57,11 @@ export default React.createClass({
         {this.props.valueNode}
       </a>
     );
+  },
+
+  handleOnClick_(event) {
+    event.preventDefault();
+    this.props.onChange(this.props.value, !this.props.isSelected);
   },
 
 });

@@ -18,6 +18,10 @@ function retrieveInitialData(flux, params) {
 
 export default React.createClass({
 
+  propTypes: {
+    params: React.PropTypes.object,
+  },
+
   mixins: [
     PureRenderMixin,
     fluxMixin({
@@ -30,10 +34,6 @@ export default React.createClass({
     routeWillRun({ flux, state }) {
       return retrieveInitialData(flux, state.params);
     },
-  },
-
-  propTypes: {
-    params: React.PropTypes.object,
   },
 
   componentDidMount() {

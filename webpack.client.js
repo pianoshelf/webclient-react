@@ -20,7 +20,7 @@ module.exports = {
     path: path.join(__dirname, config.files.staticAssets, config.files.client.out),
     filename: config.files.client.outFile,
     chunkFilename: '[name].[id].js',
-    publicPath: '/js/',
+    publicPath: '/assets/js/',
   },
 
   externals: {

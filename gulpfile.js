@@ -129,8 +129,8 @@ gulp.task('build:client', function(callback) {
     if (!isRunningDevServer) {
       isRunningDevServer = true;
 
-      // Start the dev server
-      let devServer = new WebpackDevServer(webpackDevCompiler, webpackDevConfig.devServer);
+      // Start the dev server. We have to make sure we send a new instance of the webpack compiler.
+      let devServer = new WebpackDevServer(webpack(webpackDevConfig), webpackDevConfig.devServer);
       devServer.listen(config.ports.webpack, 'localhost', function(serverErr) {
         if (serverErr) throw new gutil.PluginError('webpack-dev-server', serverErr);
       });

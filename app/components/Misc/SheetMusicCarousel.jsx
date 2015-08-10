@@ -26,13 +26,7 @@ export default React.createClass({
     /**
      * The sheet music objects to display.
      */
-    sheetMusic: React.PropTypes.arrayOf(React.PropTypes.shape([
-      'id',
-      'title',
-      'thumbnail_url',
-      'style',
-      'composer_name',
-    ])),
+    sheetMusic: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
   },
 
   render() {
@@ -73,17 +67,10 @@ export default React.createClass({
         <If condition={this.props.sheetMusic.length !== 0}>
           <div className="sheet-music-carousel__slider">
             <Slider {...settings} className="sheet-music-carousel__slick">
-              {this.props.sheetMusic.map(sheetmusic => {
-                return (
-                  <SheetMusicThumbnail
-                    id={sheetmusic.id}
-                    key={`sheetmusic-${sheetmusic.id}`}
-                    name={sheetmusic.title}
-                    thumbnail={sheetmusic.thumbnail_url}
-                    musicStyle={sheetmusic.style}
-                    composer={sheetmusic.composer_name} />
-                );
-              })}
+              {this.props.sheetMusic.map(sheetMusic => (
+                <SheetMusicThumbnail sheetMusic={sheetMusic}
+                  key={sheetMusic.id} />
+              ))}
             </Slider>
           </div>
         <Else />
