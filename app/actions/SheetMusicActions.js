@@ -56,6 +56,7 @@ export default class SheetMusicActions extends Actions {
       order_by: options.orderBy,
       page: options.page,
       page_size: options.pageSize,
+      sort_by: options.sortBy,
     };
 
     return get(

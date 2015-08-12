@@ -110,13 +110,14 @@ export default React.createClass({
   componentDidMount() {
     let { query } = this.props.location.query || {};
 
-    if ((query && !this.state.searchResults.count) ||
-       (!query && !this.state.sheetMusicList)) {
+    if ((query && !this.state.searchResults.free.length) ||
+       (!query && !this.state.sheetMusicList.length)) {
       retrieveInitialData(this.flux, this.props.location.query || {});
     }
   },
 
   componentDidUpdate(prevProps) {
+    // If query params change, reload the data
     if (!isEqual(prevProps.location.query, this.props.location.query)) {
       retrieveInitialData(this.flux, this.props.location.query || {});
     }
@@ -139,6 +140,7 @@ export default React.createClass({
             value: 'popular',
             valueNode: (
               <span>
+                <FontAwesome name="thumbs-up" className="search__filter-group-filter-icon" />
                 Popular
               </span>
             ),
@@ -146,6 +148,7 @@ export default React.createClass({
             value: 'new',
             valueNode: (
               <span>
+                <FontAwesome name="star" className="search__filter-group-filter-icon" />
                 New
               </span>
             ),
@@ -153,6 +156,7 @@ export default React.createClass({
             value: 'trending',
             valueNode: (
               <span>
+                <FontAwesome name="line-chart" className="search__filter-group-filter-icon" />
                 Trending
               </span>
             ),
@@ -160,7 +164,8 @@ export default React.createClass({
             value: 'difficulty',
             valueNode: (
               <span>
-                Difficulty
+                <FontAwesome name="frown-o" className="search__filter-group-filter-icon" />
+                Most Difficult
               </span>
             ),
           },
@@ -194,18 +199,17 @@ export default React.createClass({
     return (
       <div className="search__results-free">
         <If condition={searchResults.free.length > 0}>
-          {searchResults.free.map(sheetMusic => (
+          {searchResults.free.map((sheetMusic, index) => (
             <SearchResult sheetMusic={sheetMusic}
-              key={sheetMusic.id} />
+              key={sheetMusic.id}
+              firstItem={index === 0}
+              lastItem={index === searchResults.free.length - 1} />
           ))}
         <Else />
           <div className="search__results-not-found">
             Nothing to display!
           </div>
         </If>
-        <div className="search__results-count">
-          {searchResults.count} results
-        </div>
       </div>
     );
   },
@@ -214,13 +218,15 @@ export default React.createClass({
     let { sheetMusicList } = this.state;
     return (
       <If condition={sheetMusicList.length > 0}>
-        {sheetMusicList.map(sheetMusic => (
+        {sheetMusicList.map((sheetMusic, index) => (
           <SearchResult sheetMusic={sheetMusic}
-            key={sheetMusic.id} />
+            key={sheetMusic.id}
+            firstItem={index === 0}
+            lastItem={index === sheetMusicList.length - 1} />
         ))}
       <Else />
         <div className="search__results-not-found">
-          Nothing to display!
+          Could not find anything.
         </div>
       </If>
     );
@@ -238,10 +244,15 @@ export default React.createClass({
     // Condition to display filters
     let displayFilters = !query;
 
+    let resultWrapperClassName = classNames({
+      'search__result-wrapper': true,
+      'search__result-wrapper--with-filters': displayFilters,
+    });
+
     let resultsClassName = classNames({
       'search__results': true,
-      'search__results--with-filters': displayFilters,
-    });
+      'search__results--in-progress': inProgress,
+    })
 
     return (
       <Helmet title="Browse Sheet Music">
@@ -250,22 +261,38 @@ export default React.createClass({
             className="search__browse-search-input"
             placeholder="Search for sheet music..."
             defaultValue={query || ''}
-            onChange={debounce(this.handleSearchQueryChange_, 500)}
+            onChange={this.handleSearchTextChange_}
             ref="searchBox" />
-        </div>
-        <If condition={displayFilters}>
-          {this.renderSearchFilters_()}
-        </If>
-        <div className={resultsClassName}>
-          <If condition={inProgress}>
-            {this.renderSpinner_()}
-          <Else />
-            <If condition={query}>
-              {this.renderSearchResults_()}
-            <Else />
-              {this.renderBrowsePage_()}
-            </If>
+          <If condition={query}>
+            <div className="search__browse-search-count">
+              <If condition={this.state.searchResults.count === 1}>
+                <span>1 result</span>
+              <Else />
+                <span>{this.state.searchResults.count} results</span>
+              </If>
+            </div>
           </If>
+        </div>
+        <div className="search__results-panel">
+          <If condition={displayFilters}>
+            <div className="search__filter-wrapper">
+              {this.renderSearchFilters_()}
+            </div>
+          </If>
+          <div className={resultWrapperClassName}>
+            <div className={resultsClassName}>
+              <If condition={query}>
+                {this.renderSearchResults_()}
+              <Else />
+                {this.renderBrowsePage_()}
+              </If>
+            </div>
+            <If condition={inProgress}>
+              <div className="search__spinner">
+                {this.renderSpinner_()}
+              </div>
+            </If>
+          </div>
         </div>
       </Helmet>
     );
@@ -277,6 +304,20 @@ export default React.createClass({
         show: nextValue,
       });
     }
+  },
+
+  handleSearchTextChange_() {
+    // HACK: As soon as the search text changes, manually update inProgress so that the UI changes.
+    this.setState({
+      inProgress: ['search'],
+    });
+
+    // Attach debounce function to this instance and cache it.
+    this.searchQueryChangeFunction_ = this.searchQueryChangeFunction_ ||
+      debounce(this.handleSearchQueryChange_, 500);
+
+    // Call the retrieved property.
+    this.searchQueryChangeFunction_();
   },
 
   handleSearchQueryChange_() {
