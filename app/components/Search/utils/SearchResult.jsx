@@ -32,30 +32,30 @@ export default React.createClass({
 
   getDifficultyText_(difficultyLevel) {
     switch (difficultyLevel) {
-      case 1: return (
-        <span>Beginner</span>
-      );
-      case 2: return (
-        <span>Novice</span>
-      );
-      case 3: return (
-        <span>Intermediate</span>
-      );
-      case 4: return (
-        <span>Advanced</span>
-      );
-      case 5: return (
-        <span>Expert</span>
-      );
-      default: return (
-        <span>Not Rated</span>
-      );
+    case 1: return (
+      <span>Beginner</span>
+    );
+    case 2: return (
+      <span>Novice</span>
+    );
+    case 3: return (
+      <span>Intermediate</span>
+    );
+    case 4: return (
+      <span>Advanced</span>
+    );
+    case 5: return (
+      <span>Expert</span>
+    );
+    default: return (
+      <span>Not Rated</span>
+    );
     }
   },
 
   renderViewsTag_(viewCount) {
     if (!viewCount) return null;
-    let className = "search__result-property search__result-property--dark";
+    let className = 'search__result-property search__result-property--dark';
     return (
       <div className={className} key="views">
         <FontAwesome name="eye" className="search__result-property-icon" />
@@ -126,9 +126,6 @@ export default React.createClass({
 
   normalizeKey_() {
     let key = this.props.sheetMusic.musicKey;
-    if (key) {
-
-    }
     return key;
   },
 

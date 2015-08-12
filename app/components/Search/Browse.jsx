@@ -252,7 +252,7 @@ export default React.createClass({
     let resultsClassName = classNames({
       'search__results': true,
       'search__results--in-progress': inProgress,
-    })
+    });
 
     return (
       <Helmet title="Browse Sheet Music">
