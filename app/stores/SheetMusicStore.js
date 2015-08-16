@@ -48,7 +48,7 @@ export default class SheetMusicStore extends BaseStore {
       sheetMusicList: {
         list: mapSheetMusic(results, result => result.sheetmusic),
         count: 0, // TODO(ankit): Add counts and pagination for trending page.
-      }
+      },
     });
   }
 

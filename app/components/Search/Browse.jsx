@@ -362,7 +362,7 @@ export default React.createClass({
   handleSearchTextChange_() {
     // HACK: As soon as the search text changes, manually update inProgress so that the UI changes.
     this.setState({
-      inProgress: [...this.'search'],
+      inProgress: ['search'],
     });
 
     // Attach debounce function to this instance and cache it.
