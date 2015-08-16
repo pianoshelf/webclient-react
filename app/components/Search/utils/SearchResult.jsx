@@ -95,29 +95,32 @@ export default React.createClass({
     // TODO: use <Link>
     return (
       <a className={className} href="#">
-        <div className="search__result-title">
-          {this.props.sheetMusic.title}
-        </div>
+        <img src={this.props.sheetMusic.thumbnailUrl} className="search__result-thumbnail" />
         <div className="search__result-details">
-          <If condition={this.props.sheetMusic.musicStyle}>
-            <span>
-              <strong>{this.props.sheetMusic.musicStyle}</strong>
-              &nbsp;by&nbsp;
-              <strong>{this.props.sheetMusic.composer}</strong>
-            </span>
-          <Else />
-            <span>
-              By&nbsp;
-              <strong>{this.props.sheetMusic.composer}</strong>
-            </span>
-          </If>
-        </div>
-        <div className="search__result-properties">
-          {this.renderViewsTag_(this.props.sheetMusic.viewCount)}
-          {this.renderDifficultyTag_(this.props.sheetMusic.difficulty)}
-          {tags.map((tag, index) => (
-            <div className="search__result-property" key={index}>{tag}</div>
-          ))}
+          <div className="search__result-title">
+            {this.props.sheetMusic.title}
+          </div>
+          <div className="search__result-details">
+            <If condition={this.props.sheetMusic.musicStyle}>
+              <span>
+                <strong>{this.props.sheetMusic.musicStyle}</strong>
+                &nbsp;by&nbsp;
+                <strong>{this.props.sheetMusic.composer}</strong>
+              </span>
+            <Else />
+              <span>
+                By&nbsp;
+                <strong>{this.props.sheetMusic.composer}</strong>
+              </span>
+            </If>
+          </div>
+          <ul className="search__result-properties">
+            {this.renderViewsTag_(this.props.sheetMusic.viewCount)}
+            {this.renderDifficultyTag_(this.props.sheetMusic.difficulty)}
+            {tags.map((tag, index) => (
+              <li className="search__result-property" key={index}>{tag}</li>
+            ))}
+          </ul>
         </div>
         <FontAwesome name="angle-right" className="search__result-right-arrow" />
       </a>

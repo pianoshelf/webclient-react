@@ -16,7 +16,10 @@ export default class SheetMusicStore extends BaseStore {
     this.register(sheetMusicActions.getSheetMusicList, this.getSheetMusicList);
 
     this.state = {
-      sheetMusicList: [],
+      sheetMusic: {
+        list: [],
+        count: 0,
+      },
       searchResults: {
         count: 0,
         free: [],
@@ -42,15 +45,21 @@ export default class SheetMusicStore extends BaseStore {
   getTrendingSheetMusic(res) {
     const results = JSON.parse(res.text);
     this.setState({
-      sheetMusicList: mapSheetMusic(results, result => result.sheetmusic),
+      sheetMusicList: {
+        list: mapSheetMusic(results, result => result.sheetmusic),
+        count: 0, // TODO(ankit): Add counts and pagination for trending page.
+      }
     });
   }
 
   // Process browsing sheet music
   getSheetMusicList(res) {
-    const { results } = JSON.parse(res.text);
+    const { results, count } = JSON.parse(res.text);
     this.setState({
-      sheetMusicList: mapSheetMusic(results),
+      sheetMusicList: {
+        count,
+        list: mapSheetMusic(results),
+      },
     });
   }
 

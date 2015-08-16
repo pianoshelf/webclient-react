@@ -9,11 +9,18 @@ import isEqual from 'lodash/lang/isEqual';
 import React from 'react';
 import debounce from 'lodash/function/debounce';
 import { addons } from 'react/addons';
+import { Link } from 'react-router';
 
 import FilterGroup from './utils/FilterGroup';
 import SearchResult from './utils/SearchResult';
 
 let { PureRenderMixin } = addons;
+
+// The number of items per search page
+let PAGE_SIZE = 12;
+
+// We want trending sheet music over 7 days
+let TRENDING_DAYS = 7;
 
 function retrieveInitialData(flux, query) {
   let sheetMusicActions = flux.getActions('sheetmusic');
@@ -25,19 +32,13 @@ function retrieveInitialData(flux, query) {
   // Default to the popular view
   show = show || 'popular';
 
-  // Items to show per page
-  let pageSize = 12;
-
-  // We want trending sheet music over 7 days
-  let trendingDays = 7;
-
   if (searchQuery) {
     return sheetMusicActions.search(searchQuery, flux);
   } else if (show === 'trending') {
-    return sheetMusicActions.getTrendingSheetMusic(trendingDays, pageSize, flux);
+    return sheetMusicActions.getTrendingSheetMusic(TRENDING_DAYS, PAGE_SIZE, flux);
   } else {
     let orderBy = includes(['popular', 'new', 'difficulty'], show) ? show : 'popular';
-    return sheetMusicActions.getSheetMusicList({ orderBy, page, pageSize }, flux);
+    return sheetMusicActions.getSheetMusicList({ orderBy, page, pageSize: PAGE_SIZE }, flux);
   }
 }
 
@@ -111,7 +112,7 @@ export default React.createClass({
     let { query } = this.props.location.query || {};
 
     if ((query && !this.state.searchResults.free.length) ||
-       (!query && !this.state.sheetMusicList.length)) {
+       (!query && !this.state.sheetMusicList.list.length)) {
       retrieveInitialData(this.flux, this.props.location.query || {});
     }
   },
@@ -195,19 +196,19 @@ export default React.createClass({
   },
 
   renderSearchResults_() {
-    let { searchResults } = this.state;
+    let { free } = this.state.searchResults;
     return (
       <div className="search__results-free">
-        <If condition={searchResults.free.length > 0}>
-          {searchResults.free.map((sheetMusic, index) => (
+        <If condition={free.length > 0}>
+          {free.map((sheetMusic, index) => (
             <SearchResult sheetMusic={sheetMusic}
               key={sheetMusic.id}
               firstItem={index === 0}
-              lastItem={index === searchResults.free.length - 1} />
+              lastItem={index === free.length - 1} />
           ))}
         <Else />
           <div className="search__results-not-found">
-            Nothing to display!
+            Could not find anything.
           </div>
         </If>
       </div>
@@ -215,20 +216,68 @@ export default React.createClass({
   },
 
   renderBrowsePage_() {
-    let { sheetMusicList } = this.state;
+    let { list } = this.state.sheetMusicList;
     return (
-      <If condition={sheetMusicList.length > 0}>
-        {sheetMusicList.map((sheetMusic, index) => (
+      <If condition={list.length > 0}>
+        {list.map((sheetMusic, index) => (
           <SearchResult sheetMusic={sheetMusic}
             key={sheetMusic.id}
             firstItem={index === 0}
-            lastItem={index === sheetMusicList.length - 1} />
+            lastItem={index === list.length - 1} />
         ))}
       <Else />
         <div className="search__results-not-found">
-          Could not find anything.
+          Nothing to display!
         </div>
       </If>
+    );
+  },
+
+  renderPagination_() {
+    let { count } = this.state.sheetMusicList;
+    let { page, query } = this.props.location.query || {};
+
+    // Don't display pagination if we have a search query.
+    // TODO(ankit): Remove this once pagination is implemented on search page.
+    if (count === 0 || query) return null;
+
+    let numberOfPages = Math.ceil(count / PAGE_SIZE);
+    let currentPage = parseInt(page || 1, 10);
+
+    // Don't display pagination buttons if we have less than 2 pages
+    if (numberOfPages < 2) return null;
+
+    return (
+      <div className="search__pagination">
+        <If condition={currentPage > 1}>
+          <Link to={this.props.location.pathname}
+            query={{
+              ...this.props.location.query,
+              page: currentPage - 1,
+            }}
+            className="search__pagination-button">
+            <FontAwesome name="angle-left" />
+          </Link>
+        <Else />
+          <div className="search__pagination-button" />
+        </If>
+        <div className="search__pagination-current-page">
+          {`Page ${currentPage}`}
+        </div>
+        <If condition={currentPage < numberOfPages}>
+          <Link to={this.props.location.pathname}
+            query={{
+              ...this.props.location.query,
+              page: currentPage + 1,
+            }}
+            className="search__pagination-button">
+            <FontAwesome name="angle-right" />
+          </Link>
+        <Else />
+          <div className="search__pagination-button" />
+        </If>
+        <div className="search__pagination-clearfix" />
+      </div>
     );
   },
 
@@ -263,15 +312,18 @@ export default React.createClass({
             defaultValue={query || ''}
             onChange={this.handleSearchTextChange_}
             ref="searchBox" />
-          <If condition={query}>
-            <div className="search__browse-search-count">
-              <If condition={this.state.searchResults.count === 1}>
-                <span>1 result</span>
-              <Else />
-                <span>{this.state.searchResults.count} results</span>
-              </If>
-            </div>
-          </If>
+          {/*
+            Add this back once the API returns a proper search result count.
+            <If condition={query}>
+              <div className="search__browse-search-count">
+                <If condition={this.state.searchResults.count === 1}>
+                  <span>1 result</span>
+                <Else />
+                  <span>{this.state.searchResults.count} results</span>
+                </If>
+              </div>
+            </If>
+            */}
         </div>
         <div className="search__results-panel">
           <If condition={displayFilters}>
@@ -292,6 +344,7 @@ export default React.createClass({
                 {this.renderSpinner_()}
               </div>
             </If>
+            {this.renderPagination_()}
           </div>
         </div>
       </Helmet>
@@ -309,7 +362,7 @@ export default React.createClass({
   handleSearchTextChange_() {
     // HACK: As soon as the search text changes, manually update inProgress so that the UI changes.
     this.setState({
-      inProgress: ['search'],
+      inProgress: [...this.'search'],
     });
 
     // Attach debounce function to this instance and cache it.

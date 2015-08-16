@@ -4,6 +4,7 @@
  */
 
 // Import external libraries
+import isArray from 'lodash/lang/isArray';
 import merge from 'lodash/object/merge';
 import { Store } from 'flummox';
 
@@ -20,7 +21,9 @@ export default class BaseStore extends Store {
       state = {};
     }
 
-    return merge(state, newState);
+    return merge(state, newState, (oldParam, newParam) => {
+      if (isArray(oldParam)) return newParam;
+    });
   }
 
   static serialize(state) {
