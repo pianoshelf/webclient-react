@@ -57,8 +57,8 @@ export default class SheetMusicStore extends BaseStore {
     const { results, count } = JSON.parse(res.text);
     this.setState({
       sheetMusicList: {
-        count,
         list: mapSheetMusic(results),
+        count,
       },
     });
   }

@@ -19,12 +19,14 @@ let { PureRenderMixin } = addons;
 // The number of items per search page
 let PAGE_SIZE = 12;
 
-// We want trending sheet music over 7 days
-let TRENDING_DAYS = 7;
-
 function retrieveInitialData(flux, query) {
   let sheetMusicActions = flux.getActions('sheetmusic');
-  let { query: searchQuery, show, page } = query || {};
+  let {
+    show,
+    page,
+    trending,
+    query: searchQuery,
+  } = query || {};
 
   // Default to the first page
   page = page || 1;
@@ -32,13 +34,47 @@ function retrieveInitialData(flux, query) {
   // Default to the popular view
   show = show || 'popular';
 
+  // Default to seven days
+  trending = trending || 7;
+
   if (searchQuery) {
     return sheetMusicActions.search(searchQuery, flux);
   } else if (show === 'trending') {
-    return sheetMusicActions.getTrendingSheetMusic(TRENDING_DAYS, PAGE_SIZE, flux);
-  } else {
-    let orderBy = includes(['popular', 'new', 'difficulty'], show) ? show : 'popular';
-    return sheetMusicActions.getSheetMusicList({ orderBy, page, pageSize: PAGE_SIZE }, flux);
+    if (trending === '90days') {
+      return sheetMusicActions.getTrendingSheetMusic(90, PAGE_SIZE, flux);
+    } else if (trending === '30days') {
+      return sheetMusicActions.getTrendingSheetMusic(30, PAGE_SIZE, flux);
+    } else {
+      return sheetMusicActions.getTrendingSheetMusic(7, PAGE_SIZE, flux);
+    }
+  } else if (show === 'new') {
+    return sheetMusicActions.getSheetMusicList({
+      page,
+      orderBy: 'new',
+      sortBy: 'desc',
+      pageSize: PAGE_SIZE,
+    }, flux);
+  } else if (show === 'most_difficult') {
+    return sheetMusicActions.getSheetMusicList({
+      page,
+      orderBy: 'difficulty',
+      sortBy: 'desc',
+      pageSize: PAGE_SIZE,
+    }, flux);
+  } else if (show === 'least_difficult') {
+    return sheetMusicActions.getSheetMusicList({
+      page,
+      orderBy: 'difficulty',
+      sortBy: 'asc',
+      pageSize: PAGE_SIZE,
+    }, flux);
+  } else { // Popular
+    return sheetMusicActions.getSheetMusicList({
+      page,
+      orderBy: 'popular',
+      sortBy: 'desc',
+      pageSize: PAGE_SIZE,
+    }, flux);
   }
 }
 
@@ -72,14 +108,25 @@ export default React.createClass({
           // When there is no search query
 
           /**
-           * What to show when there are no results (popular, new, trending, difficulty)
+           * What to show when a query is not made
            */
-          show: React.PropTypes.oneOf(['popular', 'new', 'trending', 'difficulty']),
+          show: React.PropTypes.oneOf([
+            'popular',
+            'new',
+            'trending',
+            'most_difficult',
+            'least_difficult',
+          ]),
 
           /**
            * The page number
            */
           page: React.PropTypes.string,
+
+          /**
+           * How many days to calculate trending over
+           */
+          trendingBy: React.PropTypes.string,
         }),
       ]),
     }),
@@ -120,71 +167,100 @@ export default React.createClass({
   },
 
   componentDidUpdate(prevProps) {
-    // If query params change, reload the data
+    // If query params change, reload the data.
     if (!isEqual(prevProps.location.query, this.props.location.query)) {
+      // Scroll to the top of the page.
+      window.scrollTo(0, 0);
+
+      // Update state given the query.
       retrieveInitialData(this.flux, this.props.location.query || {});
     }
   },
 
-  getFilters_() {
-    let { show } = this.props.location.query || {};
+  getFilter_(text, icon) {
+    return (
+      <span>
+        <If condition={icon}>
+          <FontAwesome name={icon} className="search__filter-group-filter-icon" />
+        </If>
+        {text}
+      </span>
+    );
+  },
 
-    let sort = includes(['popular', 'new', 'trending', 'difficulty'], show) ? show : 'popular';
+  getFilters_() {
+    let { show, trending } = this.props.location.query || {};
+
+    let sort = includes([
+      'popular',
+      'new',
+      'trending',
+      'most_difficult',
+      'least_difficult',
+    ], show) ? show : 'popular';
+
+    let sortByFilters = {
+      groupName: 'sort',
+      groupTitle: 'Sort by',
+      multiSelect: false,
+      isHalfSpace: false,
+      value: sort,
+      filters: [
+        {
+          value: 'popular',
+          valueNode: this.getFilter_('Popular', 'thumbs-up'),
+        }, {
+          value: 'new',
+          valueNode: this.getFilter_('New', 'star'),
+        }, {
+          value: 'trending',
+          valueNode: this.getFilter_('Trending', 'line-chart'),
+        }, {
+          value: 'most_difficult',
+          valueNode: this.getFilter_('Most Difficult', 'frown-o'),
+        }, {
+          value: 'least_difficult',
+          valueNode: this.getFilter_('Least Difficult', 'smile-o'),
+        },
+      ],
+    };
+
+    let trendingFilters = {
+      groupName: 'trending',
+      groupTitle: 'Trending by',
+      multiSelect: false,
+      isHalfSpace: false,
+      value: trending,
+      filters: [
+        {
+          value: '7days',
+          valueNode: this.getFilter_('Last Week'),
+        }, {
+          value: '30days',
+          valueNode: this.getFilter_('Last Month'),
+        }, {
+          value: '90days',
+          valueNode: this.getFilter_('Last 3 Months'),
+        },
+      ],
+    };
 
     return [
-      {
-        groupName: 'sort',
-        groupTitle: 'Sort by',
-        multiSelect: false,
-        isHalfSpace: false,
-        value: sort,
-        filters: [
-          {
-            value: 'popular',
-            valueNode: (
-              <span>
-                <FontAwesome name="thumbs-up" className="search__filter-group-filter-icon" />
-                Popular
-              </span>
-            ),
-          }, {
-            value: 'new',
-            valueNode: (
-              <span>
-                <FontAwesome name="star" className="search__filter-group-filter-icon" />
-                New
-              </span>
-            ),
-          }, {
-            value: 'trending',
-            valueNode: (
-              <span>
-                <FontAwesome name="line-chart" className="search__filter-group-filter-icon" />
-                Trending
-              </span>
-            ),
-          }, {
-            value: 'difficulty',
-            valueNode: (
-              <span>
-                <FontAwesome name="frown-o" className="search__filter-group-filter-icon" />
-                Most Difficult
-              </span>
-            ),
-          },
-        ],
-      },
+      sortByFilters,
+      sort === 'trending' ? trendingFilters : {},
     ];
   },
 
   renderSearchFilters_() {
     return (
       <div className="search__filters">
-        {this.getFilters_().map(filterGroup => (
-          <FilterGroup {...filterGroup}
-            key={filterGroup.groupName}
-            onChange={this.handleFilterChange_} />
-        ))}
+        {this.getFilters_()
+          .filter(filterGroup => filterGroup.groupName)
+          .map(filterGroup => (
+            <FilterGroup {...filterGroup}
+              key={filterGroup.groupName}
+              onChange={this.handleFilterChange_} />
+          ))}
       </div>
     );
   },
@@ -288,6 +364,7 @@ export default React.createClass({
 
     let inProgress = intersection(this.state.inProgress, [
       'search',
+      'searchQuery',
       'sheetMusicList',
       'trendingSheetMusic',
     ]).length > 0;
@@ -354,18 +431,21 @@ export default React.createClass({
   },
 
   handleFilterChange_(groupName, nextValue) {
+    let nextParams = {};
     if (groupName === 'sort') {
-      this.context.router.transitionTo(this.props.location.pathname, {
-        show: nextValue,
-      });
+      if (nextValue === 'trending') {
+        nextParams = { show: 'trending', trending: '7days' };
+      } else {
+        nextParams = { show: nextValue };
+      }
+    } else if (groupName === 'trending') {
+      nextParams = { show: 'trending', trending: nextValue };
     }
+    this.context.router.transitionTo(this.props.location.pathname, nextParams);
   },
 
   handleSearchTextChange_() {
-    // HACK: As soon as the search text changes, manually update inProgress so that the UI changes.
-    this.setState({
-      inProgress: ['search'],
-    });
+    this.flux.getActions('progress').addProgress('searchQuery');
 
     // Attach debounce function to this instance and cache it.
     this.searchQueryChangeFunction_ = this.searchQueryChangeFunction_ ||
@@ -376,13 +456,14 @@ export default React.createClass({
   },
 
   handleSearchQueryChange_() {
+    this.flux.getActions('progress').removeProgress('searchQuery');
     let value = React.findDOMNode(this.refs.searchBox).value;
     if (value === '') {
-      this.context.router.transitionTo(this.props.location.pathname, {
+      this.context.router.replaceWith(this.props.location.pathname, {
         show: 'popular',
       });
     } else {
-      this.context.router.transitionTo(this.props.location.pathname, {
+      this.context.router.replaceWith(this.props.location.pathname, {
         query: value,
       });
     }

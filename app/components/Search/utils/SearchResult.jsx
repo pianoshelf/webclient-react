@@ -95,7 +95,9 @@ export default React.createClass({
     // TODO: use <Link>
     return (
       <a className={className} href="#">
-        <img src={this.props.sheetMusic.thumbnailUrl} className="search__result-thumbnail" />
+        <If condition={this.props.sheetMusic.thumbnailUrl}>
+          <img src={this.props.sheetMusic.thumbnailUrl} className="search__result-thumbnail" />
+        </If>
         <div className="search__result-details">
           <div className="search__result-title">
             {this.props.sheetMusic.title}

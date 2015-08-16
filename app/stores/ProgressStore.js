@@ -1,4 +1,5 @@
 
+import clone from 'lodash/lang/clone';
 import defer from 'lodash/function/defer';
 
 import BaseStore from './BaseStore';
@@ -37,23 +38,27 @@ export default class ProgressStore extends BaseStore {
     });
 
     this.register(progressActions.resetProgress, this.resetProgress);
+    this.register(progressActions.addProgress, this.handleStart);
+    this.register(progressActions.removeProgress, this.handleEnd);
     this.state = { inProgress: [] };
   }
 
   resetProgress() {
-    defer(() => this.setState({ inProgress: [] }));
+    this.setState({ inProgress: [] });
   }
 
   handleStart(param) {
-    let { inProgress } = this.state;
-    inProgress.push(param);
-    defer(() => this.setState({ inProgress }));
+    let inProgress = clone(this.state.inProgress);
+    if (inProgress.indexOf(param) === -1) {
+      inProgress.push(param);
+      this.setState({ inProgress });
+    }
   }
 
   handleEnd(param) {
-    let { inProgress } = this.state;
+    let inProgress = clone(this.state.inProgress);
     inProgress.splice(inProgress.indexOf(param));
-    defer(() => this.setState({ inProgress }));
+    this.setState({ inProgress });
   }
 
 }
