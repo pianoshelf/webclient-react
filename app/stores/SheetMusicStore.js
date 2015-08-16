@@ -16,7 +16,7 @@ export default class SheetMusicStore extends BaseStore {
     this.register(sheetMusicActions.getSheetMusicList, this.getSheetMusicList);
 
     this.state = {
-      sheetMusic: {
+      sheetMusicList: {
         list: [],
         count: 0,
       },

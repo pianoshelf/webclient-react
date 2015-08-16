@@ -45,10 +45,12 @@ function retrieveInitialData(flux, query) {
 export default React.createClass({
 
   propTypes: {
+
     /**
      * An object containing location information
      */
     location: React.PropTypes.shape({
+
       /**
        * The current path name
        */
