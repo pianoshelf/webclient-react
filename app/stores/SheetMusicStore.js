@@ -1,7 +1,7 @@
 
 // Import internal modules
 import BaseStore from './BaseStore';
-import { mapSheetMusic } from '../utils/sheetMusicUtils';
+import { mapSheetMusic, mapPaidSheetMusic } from '../utils/sheetMusicUtils';
 
 // Export store
 export default class SheetMusicStore extends BaseStore {
@@ -32,11 +32,12 @@ export default class SheetMusicStore extends BaseStore {
   // Process search results
   search(res) {
     let { count, free, paid } = JSON.parse(res.text);
+
     this.setState({
       searchResults: {
         count,
         free: mapSheetMusic(free),
-        paid,
+        paid: mapPaidSheetMusic(paid),
       },
     });
   }

@@ -26,6 +26,7 @@ export default React.createClass({
   getDefaultProps() {
     return {
       sheetMusic: {},
+      firstItem: false,
       lastItem: false,
     };
   },
@@ -96,13 +97,14 @@ export default React.createClass({
     return (
       <a className={className} href="#">
         <If condition={this.props.sheetMusic.thumbnailUrl}>
-          <img src={this.props.sheetMusic.thumbnailUrl} className="search__result-thumbnail" />
+          <img src={this.props.sheetMusic.thumbnailUrl}
+            className="search__result-thumbnail" />
         </If>
         <div className="search__result-details">
           <div className="search__result-title">
             {this.props.sheetMusic.title}
           </div>
-          <div className="search__result-details">
+          <div className="search__result-info">
             <If condition={this.props.sheetMusic.musicStyle}>
               <span>
                 <strong>{this.props.sheetMusic.musicStyle}</strong>

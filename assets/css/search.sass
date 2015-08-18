@@ -125,6 +125,14 @@
 .search__results--in-progress
   opacity: 0.2
 
+.search__results-other-sources
+  text-transform: uppercase
+  color: $grey-text-normal
+  font-weight: $weight-bold
+  font-family: $title-font
+  padding: 0 5px
+  margin: 20px 0
+
 .search__results-not-found
   width: 100%
   min-height: 100px
@@ -140,6 +148,9 @@
   color: #000
   border-bottom: $button-border-width solid $grey-normal
   padding: 10px 0
+
+.search__result--paid
+  border-bottom: none
 
 .search__result--first-item
   padding-top: 5px
@@ -169,12 +180,31 @@
   height: 80px
   margin-right: 10px
 
+.search__result-thumbnail--paid
+  width: 50px
+  height: 70px
+
+.search__result-details
+  padding-left: 70px
+  padding-bottom: 5px
+
+.search__result-details--paid
+  padding-left: 60px
+
 .search__result-title
   font-family: $title-font
   font-size: 16px
   padding-bottom: 5px
 
-.search__result-details
+.search__result-description
+  font-size: 13px
+  padding-bottom: 5px
+  overflow: hidden
+  width: 100%
+  // white-space: nowrap
+  text-overflow: ellipsis
+
+.search__result-info
   font-size: 15px
   padding-bottom: 5px
 

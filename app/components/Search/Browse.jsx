@@ -13,11 +13,12 @@ import { Link } from 'react-router';
 
 import FilterGroup from './utils/FilterGroup';
 import SearchResult from './utils/SearchResult';
+import PaidSearchResult from './utils/PaidSearchResult';
 
 let { PureRenderMixin } = addons;
 
 // The number of items per search page
-let PAGE_SIZE = 12;
+const PAGE_SIZE = 12;
 
 function retrieveInitialData(flux, query) {
   let sheetMusicActions = flux.getActions('sheetmusic');
@@ -35,7 +36,7 @@ function retrieveInitialData(flux, query) {
   show = show || 'popular';
 
   // Default to seven days
-  trending = trending || 7;
+  trending = trending || '7days';
 
   if (searchQuery) {
     return sheetMusicActions.search(searchQuery, flux);
@@ -191,7 +192,7 @@ export default React.createClass({
   getFilters_() {
     let { show, trending } = this.props.location.query || {};
 
-    let sort = includes([
+    show = includes([
       'popular',
       'new',
       'trending',
@@ -199,12 +200,18 @@ export default React.createClass({
       'least_difficult',
     ], show) ? show : 'popular';
 
+    trending = includes([
+      '7days',
+      '30days',
+      '90days',
+    ], trending) ? trending : '7days';
+
     let sortByFilters = {
       groupName: 'sort',
       groupTitle: 'Sort by',
       multiSelect: false,
       isHalfSpace: false,
-      value: sort,
+      value: show,
       filters: [
         {
           value: 'popular',
@@ -247,7 +254,7 @@ export default React.createClass({
 
     return [
       sortByFilters,
-      sort === 'trending' ? trendingFilters : {},
+      show === 'trending' ? trendingFilters : {},
     ];
   },
 
@@ -274,19 +281,36 @@ export default React.createClass({
   },
 
   renderSearchResults_() {
-    let { free } = this.state.searchResults;
+    let { free, paid } = this.state.searchResults;
     return (
-      <div className="search__results-free">
-        <If condition={free.length > 0}>
-          {free.map((sheetMusic, index) => (
-            <SearchResult sheetMusic={sheetMusic}
-              key={sheetMusic.id}
-              firstItem={index === 0}
-              lastItem={index === free.length - 1} />
-          ))}
-        <Else />
-          <div className="search__results-not-found">
-            Could not find anything.
+      <div>
+        <div className="search__results-free">
+          <If condition={free.length > 0}>
+            {free.map((sheetMusic, index) => (
+              <SearchResult sheetMusic={sheetMusic}
+                key={index}
+                firstItem={index === 0}
+                lastItem={index === free.length - 1} />
+            ))}
+          <Else />
+            <div className="search__results-not-found">
+              Could not find anything.
+            </div>
+          </If>
+        </div>
+        <If condition={paid && paid.length > 0}>
+          <div>
+            <div className="search__results-other-sources">
+              Other Sources
+            </div>
+            <div className="search__results-paid">
+              {paid.map((sheetMusic, index) => (
+                <PaidSearchResult paidSheetMusic={sheetMusic}
+                  key={index}
+                  firstItem={index === 0}
+                  lastItem={index === free.length - 1} />
+              ))}
+            </div>
           </div>
         </If>
       </div>
