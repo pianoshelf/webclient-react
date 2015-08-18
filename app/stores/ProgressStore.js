@@ -1,6 +1,5 @@
 
 import clone from 'lodash/lang/clone';
-import defer from 'lodash/function/defer';
 
 import BaseStore from './BaseStore';
 
