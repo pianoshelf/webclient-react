@@ -122,15 +122,15 @@ gulp.task('build:client', function(callback) {
     // Emulate gulp-size
     let outputConfig = webpackDevConfig.output;
     let jsFilePath = path.join(outputConfig.path, outputConfig.filename);
-    gutil.log(`'${gutil.colors.cyan('Client JS')}' ${gutil.colors.green('all files ')}` +
+    gutil.log(`${gutil.colors.cyan('Client JS')} ${gutil.colors.green('all files ')}` +
               `${gutil.colors.magenta(pretty(fs.statSync(jsFilePath).size))}`);
 
     // Set boolean to true if we're not running the server.
     if (!isRunningDevServer) {
       isRunningDevServer = true;
 
-      // Start the dev server
-      let devServer = new WebpackDevServer(webpackDevCompiler, webpackDevConfig.devServer);
+      // Start the dev server. We have to make sure we send a new instance of the webpack compiler.
+      let devServer = new WebpackDevServer(webpack(webpackDevConfig), webpackDevConfig.devServer);
       devServer.listen(config.ports.webpack, 'localhost', function(serverErr) {
         if (serverErr) throw new gutil.PluginError('webpack-dev-server', serverErr);
       });

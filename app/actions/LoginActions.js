@@ -40,7 +40,6 @@ export default class LoginActions extends Actions {
    * @param {Flux} flux The Flux object.
    */
   login(username, password, flux) {
-
     // Make sure the username field is not empty
     if (username === '') {
       return fail(errors.NO_USERNAME);
@@ -81,7 +80,6 @@ export default class LoginActions extends Actions {
   }
 
   register(user, flux) {
-
     // Make sure username field is not empty
     if (user.username === '') {
       return fail(errors.NO_USERNAME);
@@ -127,7 +125,6 @@ export default class LoginActions extends Actions {
   }
 
   resetPassword(email, flux) {
-
     // Make sure email field is not empty
     if (email === '') {
       return fail(errors.NO_EMAIL);
@@ -148,7 +145,6 @@ export default class LoginActions extends Actions {
   }
 
   resetPasswordConfirm(user, uid, token, flux) {
-
     // Make sure password field is not empty
     if (user.password1 === '') {
       return fail(errors.NO_PASSWORD);
@@ -178,7 +174,6 @@ export default class LoginActions extends Actions {
   }
 
   changePassword(user, flux) {
-
     // Make sure password field is not empty
     if (user.password1 === '') {
       return fail(errors.NO_PASSWORD);

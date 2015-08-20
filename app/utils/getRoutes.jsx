@@ -19,6 +19,10 @@ import ResetPassword from '../components/Authentication/ResetPassword';
 import ResetPasswordConfirm from '../components/Authentication/ResetPasswordConfirm';
 import VerifyEmail from '../components/Authentication/VerifyEmail';
 
+// Search components
+import Search from '../components/Search';
+import Browse from '../components/Search/Browse';
+
 // Static components
 import Static from '../components/Static';
 import Copyright from '../components/Static/Copyright';
@@ -51,6 +55,12 @@ export default function getRoutes(flux) {
         <Route path="/register" component={Register} onEnter={requireNoAuth(flux)} />
         <Redirect from="/password-reset-confirm/:uid/:token" to="/login/reset/:uid/:token" />
         <Redirect from="/verify-email/:key" to="/login/verify/:key" />
+      </Route>
+
+      { /* Search routes */ }
+      <Route component={Search}>
+        <Route path="/browse" component={Browse} />
+        <Redirect path="/sheetmusic" to="/browse" />
       </Route>
 
       { /* Static routes */ }

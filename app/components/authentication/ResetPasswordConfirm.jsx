@@ -18,6 +18,10 @@ let { LinkedStateMixin } = addons;
 
 export default React.createClass({
 
+  propTypes: {
+    params: React.PropTypes.object,
+  },
+
   mixins: [
     LinkedStateMixin,
     fluxMixin({
@@ -25,10 +29,6 @@ export default React.createClass({
       progress: store => store.state,
     }),
   ],
-
-  propTypes: {
-    params: React.PropTypes.object,
-  },
 
   getInitialState() {
     return {

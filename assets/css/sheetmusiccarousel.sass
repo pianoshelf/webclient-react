@@ -1,0 +1,48 @@
+
+@import 'variables/fonts'
+@import 'variables/colors'
+
+@import 'responsivecontainer'
+@import 'sheetmusicthumbnail'
+
+.sheet-music-carousel__container
+  overflow: hidden
+
+.sheet-music-carousel__spinner
+  height: 260px
+  text-align: center
+  line-height: 200px
+
+.sheet-music-carousel__title
+  margin: 0
+  padding: 30px 20px
+  font-size: 20px
+  font-weight: $weight-normal
+  font-family: $title-font
+  +when-tablet
+    font-size: 24px
+
+.sheet-music-carousel__slider
+  position: relative
+
+.sheet-music-carousel__slick
+  height: 200px
+  max-width: 280px
+  margin: auto
+  +when-tablet
+    max-width: 560px
+  +when-desktop
+    max-width: 800px
+    height: 260px
+
+  &.slick-slider
+    &:not(.slick-initialized)
+      display: none
+    .slick-prev, .slick-next
+      position: absolute
+      top: 10px
+    .slick-prev
+      left: 10px
+    .slick-next
+      right: 10px
+

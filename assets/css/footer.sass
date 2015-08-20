@@ -1,12 +1,20 @@
 
+@import 'variables/globals'
+
 .footer
   background-color: $grey-light
   text-align: center
+  height: $footer-height
+  font-size: 12px
+  +when-tablet
+    font-size: 16px
 
 .footer__text
-  padding: 20px 0
   font-weight: $weight-light
   font-family: $title-font
+  padding: 22px 0
+  +when-tablet
+    padding: 20px 0
 
 .footer__link
   color: $grey-text-dark

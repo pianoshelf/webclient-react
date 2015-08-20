@@ -3,27 +3,19 @@
 import React from 'react';
 import { Navigation } from 'react-router';
 
+import { sheetMusicPropType } from '../../utils/sheetMusicUtils';
+
 // Export component
 export default React.createClass({
 
-  mixins: [Navigation],
-
   propTypes: {
-    // ID of the sheet music
-    id: React.PropTypes.number,
-
-    // Name of the sheet music
-    name: React.PropTypes.string.isRequired,
-
-    // URL of the sheet music thumbnail
-    thumbnail: React.PropTypes.string.isRequired,
-
-    // Style of the sheet music
-    musicStyle: React.PropTypes.string.isRequired,
-
-    // Composer of the sheet music
-    composer: React.PropTypes.string.isRequired,
+    /**
+     * Make sure a valid sheet music was inputted.
+     */
+    sheetMusic: sheetMusicPropType().isRequired,
   },
+
+  mixins: [Navigation],
 
   /**
    * The reason we are doing this is because sheet music thumbnails can be part of
@@ -54,14 +46,14 @@ export default React.createClass({
   },
 
   render() {
-    let href = '#'; // this.makeHref('sheetmusic', { id: this.props.id })
+    let href = '#'; // this.makeHref('sheetmusic', { id: this.props.sheetMusic.id })
 
     let musicStyle = null;
-    if (this.props.musicStyle) {
+    if (this.props.sheetMusic.musicStyle) {
       musicStyle = (
         <span>
           <strong className="sheet-music-thumbnail__description--bold">
-            {this.props.musicStyle}
+            {this.props.sheetMusic.musicStyle}
           </strong>
           &nbsp;by&nbsp;
         </span>
@@ -70,17 +62,18 @@ export default React.createClass({
 
     return (
       <a ref="link" href={href} className="sheet-music-thumbnail__link"
-        title={`${this.props.name} - ${this.props.musicStyle} by ${this.props.composer}`}>
+        title={`${this.props.sheetMusic.title} - ${this.props.sheetMusic.musicStyle}` +
+          `by ${this.props.sheetMusic.composer}`}>
         <div className="sheet-music-thumbnail">
           <div className="sheet-music-thumbnail__thumbnail"
-            style={{backgroundImage: `url(${this.props.thumbnail})`}} />
+            style={{backgroundImage: `url(${this.props.sheetMusic.thumbnailUrl})`}} />
           <div className="sheet-music-thumbnail__title">
-            {this.props.name}
+            {this.props.sheetMusic.title}
           </div>
           <div className="sheet-music-thumbnail__description">
             {musicStyle}
             <strong className="sheet-music-thumbnail__description--bold">
-              {this.props.composer}
+              {this.props.sheetMusic.composer}
             </strong>
           </div>
         </div>

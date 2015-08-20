@@ -4,11 +4,13 @@ import { addons } from 'react/addons';
 
 // Import other components
 import NavBar from '../Fixtures/NavBar';
+import Footer from '../Fixtures/Footer';
+import ResponsiveContainer from '../Misc/ResponsiveContainer';
 let { PureRenderMixin } = addons;
 
 export default React.createClass({
 
-  displayName: 'Authentication',
+  displayName: 'Search',
 
   propTypes: {
     children: React.PropTypes.node,
@@ -18,18 +20,14 @@ export default React.createClass({
 
   render() {
     return (
-      <div className="authentication">
+      <div className="search">
         <NavBar />
-        <div className="authentication__box">
-          <div className="authentication__box-inner">
-            <div className="authentication__box-container">
-              {this.props.children}
-            </div>
-          </div>
-        </div>
+        <ResponsiveContainer className="search__container">
+          {this.props.children}
+        </ResponsiveContainer>
+        <Footer />
       </div>
     );
   },
 
 });
-

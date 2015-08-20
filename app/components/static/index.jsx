@@ -10,11 +10,13 @@ let { PureRenderMixin } = addons;
 
 export default React.createClass({
 
-  mixins: [PureRenderMixin],
+  displayName: 'Static',
 
   propTypes: {
     children: React.PropTypes.node,
   },
+
+  mixins: [PureRenderMixin],
 
   render() {
     return (

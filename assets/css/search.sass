@@ -1,0 +1,290 @@
+
+@import 'variables/globals'
+@import 'variables/fonts'
+@import 'variables/colors'
+@import 'variables/buttons'
+
+@import 'responsivecontainer'
+
+.search
+  min-height: 100vh
+
+.search__container
+  padding: $navbar-height 20px 0 20px
+  min-height: calc(100vh - #{$footer-height})
+
+.search__browse-search
+  position: relative
+  padding: 20px 5px 10px 5px
+  font-size: 15px
+  height: 75px
+  +when-tablet
+    padding: 40px 10px 20px 10px
+    font-size: 18px
+    height: 110px
+
+.search__browse-search-input
+  +standard-borders
+  border-color: $grey-light
+  margin: 0
+  width: 100%
+  padding: 10px
+  +when-tablet
+    padding: 10px
+
+.search__browse-search-count
+  position: absolute
+  color: $grey-text-dark
+  font-weight: $weight-light
+  right: 10px
+  top: 20px
+  line-height: 45px
+  +when-tablet
+    right: 20px
+    top: 40px
+    line-height: 50px
+
+.search__results-panel
+  display: table
+  padding-bottom: 20px
+  width: 100%
+  min-height: calc(100vh - #{$footer-height + $navbar-height + 75px})
+  +when-tablet
+    min-height: calc(100vh - #{$footer-height + $navbar-height + 110px})
+
+.search__filter-wrapper
+  +when-tablet
+    width: 170px
+    vertical-align: top
+    display: table-cell
+
+.search__filters
+  padding: 10px 0
+  font-size: 12px
+  +when-tablet
+    padding: 0
+    min-height: 100px
+    float: left
+    font-size: 14px
+
+.search__filter-group
+  padding: 0 15px 10px 10px
+
+.search__filter-group-title
+  text-transform: uppercase
+  color: $grey-text-normal
+  font-weight: $weight-bold
+  font-family: $title-font
+  font-size: 14px
+  padding: 0 5px
+  margin-bottom: 10px
+  +when-tablet
+    font-size: 16px
+
+.search__filter-groups
+  +standard-borders
+  border-color: $grey-normal
+
+.search__filter-group-filter
+  display: inline-block
+  width: 100%
+  color: $grey-text-dark
+  padding: 3px 10px
+  +when-tablet
+    padding: 5px 10px
+
+.search__filter-group-filter--bottom-border
+  border-bottom: $button-border-width solid $grey-normal
+
+.search__filter-group-filter--right-border
+  border-right: $button-border-width solid $grey-normal
+
+.search__filter-group-filter--half-space
+  width: 50%
+
+.search__filter-group-filter--selected
+  background-color: $grey-light
+
+.search__filter-group-filter-icon
+  width: 20px
+  display: inline-block
+
+.search__result-wrapper
+  position: relative
+  +when-tablet
+    display: table-cell
+
+.search__result-wrapper--with-filters
+  +when-tablet
+    border-left: $button-border-width solid $grey-normal
+    width: calc(100% - 170px)
+
+.search__spinner
+  position: absolute
+  top: 0
+  left: 0
+  width: 100%
+  min-height: 100px
+  line-height: 100px
+  text-align: center
+  color: $grey-text-dark
+
+.search__results
+  +when-tablet
+    padding: 0 15px
+
+.search__results--in-progress
+  opacity: 0.2
+
+.search__results-other-sources
+  text-transform: uppercase
+  color: $grey-text-normal
+  font-weight: $weight-bold
+  font-family: $title-font
+  padding: 0 5px
+  margin: 20px 0
+
+.search__results-not-found
+  width: 100%
+  min-height: 100px
+  line-height: 100px
+  text-align: center
+  color: $grey-text-dark
+  font-size: 18px
+  font-family: $title-font
+
+.search__result
+  position: relative
+  display: block
+  color: #000
+  border-bottom: $button-border-width solid $grey-normal
+  padding: 10px 0 5px 0
+
+.search__result--paid
+  border-bottom: none
+
+.search__result--first-item
+  padding-top: 5px
+
+.search__result--last-item
+  border-bottom: 0
+  padding-bottom: 5px
+
+.search__result-right-arrow
+  display: block
+  position: absolute
+  right: 0
+  top: 50%
+  margin-top: -0.5em
+  font-size: 22px
+  color: $grey-text-light
+
+.search__result:hover .search__result-right-arrow
+  color: $grey-text-dark
+
+.search__result:hover .search__result-property
+  opacity: 1
+
+.search__result-thumbnail
+  float: left
+  width: 60px
+  height: 80px
+  margin-right: 10px
+
+.search__result-thumbnail--paid
+  width: 50px
+  height: 70px
+
+.search__result-details
+  padding-left: 70px
+  padding-bottom: 5px
+
+.search__result-details--paid
+  padding-left: 60px
+
+.search__result-title
+  font-family: $title-font
+  padding-bottom: 5px
+  font-size: 15px
+  +when-tablet
+    font-size: 16px
+
+.search__result-description
+  padding-bottom: 5px
+  font-size: 12px
+  +when-tablet
+    font-size: 13px
+
+.search__result-info
+  padding-bottom: 5px
+  font-size: 14px
+  +when-tablet
+    font-size: 15px
+
+.search__result-properties
+  padding: 0
+  margin: 0
+  font-size: 12px
+  +when-tablet
+    font-size: 13px
+
+.search__result-property
+  display: inline-block
+  background-color: $grey-light
+  padding: 2px 5px
+  margin: 0 5px 5px 0
+  border-radius: 5px
+  opacity: 0.8
+  transition: 0.1s opacity
+
+.search__result-property--blue
+  background-color: lighten($blue-light, 10%)
+
+.search__result-property--green
+  background-color: lighten($green, 10%)
+
+.search__result-property--orange
+  background-color: lighten($orange, 10%)
+
+.search__result-property--red
+  background-color: lighten($red, 10%)
+
+.search__result-property--dark
+  background-color: $grey-normal
+
+.search__result-property-icon
+  width: 16px
+
+.search__pagination
+  width: 200px
+  margin: 0 auto
+  +when-tablet
+    margin-top: 20px
+
+.search__pagination-button
+  color: $grey-text-normal
+  display: inline-block
+  width: 20%
+  float: left
+  height: 35px
+  line-height: 35px
+  text-align: center
+  font-size: 20px
+
+.search__pagination-button:hover
+  color: $grey-text-dark
+
+.search__pagination-current-page
+  font-weight: $weight-bold
+  color: $grey-text-dark
+  display: inline-block
+  width: 60%
+  float: left
+  height: 35px
+  line-height: 35px
+  text-align: center
+  font-size: 14px
+
+.search__pagination-clearfix
+  clear: both
+

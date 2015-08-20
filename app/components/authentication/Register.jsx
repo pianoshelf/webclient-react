@@ -38,6 +38,12 @@ export default React.createClass({
     };
   },
 
+  componentDidUpdate() {
+    if (this.state.errorCode === success.REGISTERED) {
+      defer(this.handlePostRegister_);
+    }
+  },
+
   render() {
     let registerInProgress = includes(this.state.inProgress, 'register') ||
                              includes(this.state.inProgress, 'login');
@@ -92,12 +98,6 @@ export default React.createClass({
         </form>
       </Helmet>
     );
-  },
-
-  componentDidUpdate() {
-    if (this.state.errorCode === success.REGISTERED) {
-      defer(this.handlePostRegister_);
-    }
   },
 
   handleSubmit_(event) {

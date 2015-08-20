@@ -4,7 +4,6 @@ import fluxMixin from 'flummox/mixin';
 import FontAwesome from 'react-fontawesome';
 import Helmet from 'react-helmet';
 import React from 'react';
-import Slider from 'react-slick';
 import { addons } from 'react/addons';
 import { Link } from 'react-router';
 
@@ -12,7 +11,7 @@ import { Link } from 'react-router';
 import NavBar from './Fixtures/NavBar';
 import Footer from './Fixtures/Footer';
 import ResponsiveContainer from './Misc/ResponsiveContainer';
-import SheetMusicThumbnail from './Misc/SheetMusicThumbnail';
+import SheetMusicCarousel from './Misc/SheetMusicCarousel';
 
 let { PureRenderMixin } = addons;
 
@@ -40,7 +39,7 @@ export default React.createClass({
   },
 
   componentDidMount() {
-    if (!this.state.mostPopularSheetMusic) {
+    if (this.state.mostPopularSheetMusic.length === 0) {
       retrieveInitialData(this.flux);
     }
   },
@@ -53,7 +52,7 @@ export default React.createClass({
             Explore, share, and download sheet music for free.
           </h2>
           <div className="homepage__main-search">
-            <Link to="/register" className="homepage__main-search-input">Browse Sheet Music</Link>
+            <Link to="/browse" className="homepage__main-search-input">Browse Sheet Music</Link>
           </div>
           <div className="homepage__main-register">
             or <Link to="/register" className="homepage__main-register-link">sign up now</Link>.
@@ -110,59 +109,12 @@ export default React.createClass({
   },
 
   renderPopularPanel_() {
-    const responsive = [
-      {
-        breakpoint: 580,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-        },
-      },
-      {
-        breakpoint: 900,
-        settings: {
-          slidesToShow: 4,
-          slidesToScroll: 4,
-        },
-      },
-    ];
-
-    const settings = {
-      responsive,
-      infinite: true,
-      slidesToShow: 4,
-      slidesToScroll: 4,
-      lazyLoading: false,
-      prevArrow: 'a',
-      nextArrow: 'a',
-    };
-
-    if (this.state.mostPopularSheetMusic) {
-      return (
-        <div className="homepage__popular-panel">
-          <ResponsiveContainer absolute={false}>
-            <h2 className="homepage__popular-title">Our most popular sheet music:</h2>
-          </ResponsiveContainer>
-          <div className="homepage__popular-sheetmusic-container">
-            <Slider {...settings} className="homepage__popular-sheetmusic">
-              {this.state.mostPopularSheetMusic.results.map(sheetmusic => {
-                return (
-                  <SheetMusicThumbnail
-                    id={sheetmusic.id}
-                    key={`sheetmusic-${sheetmusic.id}`}
-                    name={sheetmusic.title}
-                    thumbnail={sheetmusic.thumbnail_url}
-                    musicStyle={sheetmusic.style}
-                    composer={sheetmusic.composer_name} />
-                );
-              })}
-            </Slider>
-          </div>
-        </div>
-      );
-    } else {
-      return null;
-    }
+    return (
+      <SheetMusicCarousel
+        title="Our most popular sheet music"
+        className="homepage__popular-panel"
+        sheetMusic={this.state.mostPopularSheetMusic} />
+    );
   },
 
   render() {

@@ -6,7 +6,7 @@
 @import 'variables/responsive'
 
 @import 'responsivecontainer'
-@import 'sheetmusicthumbnail'
+@import 'sheetmusiccarousel'
 
 .homepage__main-panel
   padding-top: $navbar-height
@@ -185,38 +185,4 @@
 
 .homepage__popular-panel
   background-color: $grey-light
-  overflow: hidden
-
-.homepage__popular-title
-  margin: 0
-  padding: 30px 20px
-  font-size: 20px
-  font-weight: $weight-normal
-  font-family: $title-font
-  +when-tablet
-    font-size: 24px
-
-.homepage__popular-sheetmusic-container
-  position: relative
-
-.homepage__popular-sheetmusic
-  height: 200px
-  max-width: 280px
-  margin: auto
-  +when-tablet
-    max-width: 560px
-  +when-desktop
-    max-width: 800px
-    height: 260px
-
-  &.slick-slider
-    &:not(.slick-initialized)
-      display: none
-    .slick-prev, .slick-next
-      position: absolute
-      top: 10px
-    .slick-prev
-      left: 10px
-    .slick-next
-      right: 10px
 
