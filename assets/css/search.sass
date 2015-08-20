@@ -53,13 +53,19 @@
     min-height: calc(100vh - #{$footer-height + $navbar-height + 110px})
 
 .search__filter-wrapper
-  display: table-cell
-  width: 170px
-  vertical-align: top
+  +when-tablet
+    width: 170px
+    vertical-align: top
+    display: table-cell
 
 .search__filters
-  min-height: 100px
-  float: left
+  padding: 10px 0
+  font-size: 12px
+  +when-tablet
+    padding: 0
+    min-height: 100px
+    float: left
+    font-size: 14px
 
 .search__filter-group
   padding: 0 15px 10px 10px
@@ -69,8 +75,11 @@
   color: $grey-text-normal
   font-weight: $weight-bold
   font-family: $title-font
+  font-size: 14px
   padding: 0 5px
   margin-bottom: 10px
+  +when-tablet
+    font-size: 16px
 
 .search__filter-groups
   +standard-borders
@@ -80,8 +89,9 @@
   display: inline-block
   width: 100%
   color: $grey-text-dark
-  padding: 5px 10px
-  font-size: 14px
+  padding: 3px 10px
+  +when-tablet
+    padding: 5px 10px
 
 .search__filter-group-filter--bottom-border
   border-bottom: $button-border-width solid $grey-normal
@@ -100,14 +110,14 @@
   display: inline-block
 
 .search__result-wrapper
-  display: table-cell
-  vertical-align: top
-  width: 100%
   position: relative
+  +when-tablet
+    display: table-cell
 
 .search__result-wrapper--with-filters
-  border-left: $button-border-width solid $grey-normal
-  width: calc(100% - 170px)
+  +when-tablet
+    border-left: $button-border-width solid $grey-normal
+    width: calc(100% - 170px)
 
 .search__spinner
   position: absolute
@@ -120,7 +130,8 @@
   color: $grey-text-dark
 
 .search__results
-  padding: 0 15px
+  +when-tablet
+    padding: 0 15px
 
 .search__results--in-progress
   opacity: 0.2
@@ -147,7 +158,7 @@
   display: block
   color: #000
   border-bottom: $button-border-width solid $grey-normal
-  padding: 10px 0
+  padding: 10px 0 5px 0
 
 .search__result--paid
   border-bottom: none
@@ -193,31 +204,35 @@
 
 .search__result-title
   font-family: $title-font
-  font-size: 16px
   padding-bottom: 5px
+  font-size: 15px
+  +when-tablet
+    font-size: 16px
 
 .search__result-description
-  font-size: 13px
   padding-bottom: 5px
-  overflow: hidden
-  width: 100%
-  // white-space: nowrap
-  text-overflow: ellipsis
+  font-size: 12px
+  +when-tablet
+    font-size: 13px
 
 .search__result-info
-  font-size: 15px
   padding-bottom: 5px
+  font-size: 14px
+  +when-tablet
+    font-size: 15px
 
 .search__result-properties
   padding: 0
   margin: 0
-  font-size: 13px
+  font-size: 12px
+  +when-tablet
+    font-size: 13px
 
 .search__result-property
   display: inline-block
   background-color: $grey-light
   padding: 2px 5px
-  margin-right: 5px
+  margin: 0 5px 5px 0
   border-radius: 5px
   opacity: 0.8
   transition: 0.1s opacity
@@ -242,7 +257,9 @@
 
 .search__pagination
   width: 200px
-  margin: 20px auto 0 auto
+  margin: 0 auto
+  +when-tablet
+    margin-top: 20px
 
 .search__pagination-button
   color: $grey-text-normal
