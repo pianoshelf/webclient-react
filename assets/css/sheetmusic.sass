@@ -22,12 +22,18 @@ $controls-height: 50px
   font-size: 40px
   color: $grey-text-dark
 
+.sheetmusic__main
+  width: 100%
+
 .sheetmusic__viewer-container
   height: calc(100vh - #{$controls-height + $button-border-width})
   padding: $navbar-height 0 0 0
   background-color: $grey-normal
   overflow: hidden
   position: relative
+  :fullscreen &
+    background-color: #000
+    padding-top: 0
 
 .sheetmusic__viewer
   // HACK: We're doing this to override nuka-carousel's height setting, which is 'auto' by default.
@@ -48,24 +54,44 @@ $controls-height: 50px
   height: 100%
 
 .sheetmusic-viewer-arrow
-  color: #000
+  display: inline-block
+  text-align: center
+  color: $grey-text-normal
   text-decoration: none
   font-size: 50px
-  &--left
-    padding-left: 10px
-  &--right
-    padding-right: 10px
+  width: 70px
+  &:hover
+    color: $grey-text-dark
+  :fullscreen &
+    color: #fff
 
 .sheetmusic__controls-container
   font-family: $title-font
   height: $controls-height
   border-top: $button-border-width solid $blue-light
-  background-color: #fff
+  position: relative
+  :fullscreen &
+    border-top: none
+    background-color: #000
+    color: #fff
 
 .sheetmusic__controls-page-number
   text-align: center
-
   line-height: $controls-height
+
+.sheetmusic__controls-full-screen
+  font-family: $body-font
+  line-height: $controls-height
+  color: #000
+  display: inline-block
+  position: absolute
+  right: 0
+  top: 0
+  :fullscreen &
+    color: #fff
+
+.sheetmusic__controls-full-screen-icon
+  padding-right: 7px
 
 .sheetmusic__details
 

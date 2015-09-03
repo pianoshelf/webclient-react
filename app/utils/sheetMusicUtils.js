@@ -143,3 +143,21 @@ export function paidSheetMusicPropType() {
   });
 }
 
+/**
+ * Function that converts a difficulty integer to text.
+ *
+ * @param {Number} difficulty Number representing the difficulty of sheet music. Ex. 1 for Beginner.
+ *
+ * @return {String} A string representing the difficulty.
+ */
+export function getDifficultyText(difficultyLevel) {
+  switch (difficultyLevel) {
+    case 1: return 'Beginner';
+    case 2: return 'Novice';
+    case 3: return 'Intermediate';
+    case 4: return 'Advanced';
+    case 5: return 'Expert';
+    default: return 'Not Rated';
+  }
+}
+

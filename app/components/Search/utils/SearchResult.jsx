@@ -4,7 +4,7 @@ import FontAwesome from 'react-fontawesome';
 import React from 'react';
 import { Link } from 'react-router';
 
-import { sheetMusicPropType } from '../../../utils/sheetMusicUtils';
+import { sheetMusicPropType, getDifficultyText } from '../../../utils/sheetMusicUtils';
 
 export default React.createClass({
   propTypes: {
@@ -33,26 +33,11 @@ export default React.createClass({
   },
 
   getDifficultyText_(difficultyLevel) {
-    switch (difficultyLevel) {
-    case 1: return (
-      <span>Beginner</span>
+    return (
+      <span>
+        {getDifficultyText(difficultyLevel)}
+      </span>
     );
-    case 2: return (
-      <span>Novice</span>
-    );
-    case 3: return (
-      <span>Intermediate</span>
-    );
-    case 4: return (
-      <span>Advanced</span>
-    );
-    case 5: return (
-      <span>Expert</span>
-    );
-    default: return (
-      <span>Not Rated</span>
-    );
-    }
   },
 
   renderViewsTag_(viewCount) {

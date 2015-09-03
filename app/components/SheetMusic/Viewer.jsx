@@ -1,7 +1,10 @@
 
+import defer from 'lodash/function/defer';
 import fluxMixin from 'flummox/mixin';
 import FontAwesome from 'react-fontawesome';
+import FullScreenMixin from 'react-fullscreen-component';
 import Helmet from 'react-helmet';
+import isEqual from 'lodash/lang/isEqual';
 import React from 'react';
 import Carousel from 'nuka-carousel';
 import times from 'lodash/utility/times';
@@ -10,6 +13,7 @@ import { addons } from 'react/addons';
 import Detail from './utils/Detail';
 import InfoBox from './utils/InfoBox';
 import ResponsiveContainer from '../Misc/ResponsiveContainer';
+import { getDifficultyText } from '../../utils/sheetMusicUtils';
 
 let { PureRenderMixin } = addons;
 
@@ -23,6 +27,11 @@ function retrieveInitialData(flux, params) {
 }
 
 let LeftButton = React.createClass({
+  propTypes: {
+    currentSlide: React.PropTypes.number,
+    slideCount: React.PropTypes.number,
+    previousSlide: React.PropTypes.func,
+  },
   render() {
     if (this.props.currentSlide === 0) return null;
     return (
@@ -35,6 +44,11 @@ let LeftButton = React.createClass({
 });
 
 let RightButton = React.createClass({
+  propTypes: {
+    currentSlide: React.PropTypes.number,
+    slideCount: React.PropTypes.number,
+    nextSlide: React.PropTypes.func,
+  },
   render() {
     if (this.props.currentSlide + 1 === this.props.slideCount) return null;
     return (
@@ -85,6 +99,7 @@ export default React.createClass({
 
   mixins: [
     PureRenderMixin,
+    FullScreenMixin,
     fluxMixin({
       sheetmusic: store => ({
         errorCode: store.state.errorCode,
@@ -115,7 +130,11 @@ export default React.createClass({
   componentDidMount() {
     retrieveInitialData(this.flux, this.props.params);
     window.addEventListener('keydown', this.handleRightOrLeftKeyPress_);
-    this.handleSetCarouselData_()
+    defer(() => this.handleSetCarouselData_());
+  },
+
+  componentDidUpdate() {
+    defer(() => this.handleSetCarouselData_());
   },
 
   componentWillUnmount() {
@@ -172,6 +191,25 @@ export default React.createClass({
             Page {this.state.pageNumber} / {this.state.pageCount}
           </div>
         </If>
+        <If condition={this.state.hasFullscreen}>
+          <a className="sheetmusic__controls-full-screen"
+            onClick={this.handleFullscreen_}
+            href="#">
+            <If condition={this.state.isFullscreen}>
+              <span>
+                <FontAwesome name="times"
+                  className="sheetmusic__controls-full-screen-icon" />
+                Exit
+              </span>
+            <Else />
+              <span>
+                <FontAwesome name="arrows-alt"
+                  className="sheetmusic__controls-full-screen-icon" />
+                Full Screen
+              </span>
+            </If>
+          </a>
+        </If>
       </ResponsiveContainer>
     );
   },
@@ -222,12 +260,12 @@ export default React.createClass({
   renderInfo_() {
     let result = this.state.sheetMusicResult;
 
-    let difficulty = null;
+    let difficultyNode = null;
     if (result.difficulty) {
       let fullStarCount = result.difficulty;
       let emptyStarCount = 5 - result.difficulty;
 
-      difficulty = (
+      difficultyNode = (
         <Detail title="Difficulty">
           <div className="sheetmusic__difficulty-stars">
             {times(fullStarCount, index => (
@@ -240,7 +278,7 @@ export default React.createClass({
             ))}
           </div>
           <div className="sheetmusic__difficulty-text">
-            Oh So Difficult
+            {getDifficultyText(result.difficulty)}
           </div>
         </Detail>
       );
@@ -273,7 +311,7 @@ export default React.createClass({
             {result.license}
           </Detail>
         </If>
-        {difficulty}
+        {difficultyNode}
       </InfoBox>
     );
   },
@@ -292,8 +330,10 @@ export default React.createClass({
 
     return (
       <Helmet title={title}>
-        {this.renderSheetMusicViewer_()}
-        {this.renderSheetMusicControls_()}
+        <div className="sheetmusic__main" ref="mainViewer">
+          {this.renderSheetMusicViewer_()}
+          {this.renderSheetMusicControls_()}
+        </div>
         <ResponsiveContainer className="sheetmusic__details">
           <div className="sheetmusic__details-left">
             {this.renderDescription_()}
@@ -316,9 +356,6 @@ export default React.createClass({
     if (this.refs.carousel) {
       // HACK: Get carousel state properties
       let carouselState = this.refs.carousel.state;
-
-      console.log('in viewer');
-      console.log(carouselState.slideCount);
 
       this.setState({
         pageNumber: carouselState.currentSlide + 1,
@@ -344,6 +381,15 @@ export default React.createClass({
       this.refs.carousel.nextSlide();
     } else if (event.keyCode === 37) { // Left key press
       this.refs.carousel.previousSlide();
+    }
+  },
+
+  handleFullscreen_(event) {
+    event.preventDefault();
+    if (this.state.isFullscreen) {
+      this.exitFullscreen();
+    } else {
+      this.requestFullscreen(this.refs.mainViewer);
     }
   },
 
