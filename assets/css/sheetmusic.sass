@@ -1,3 +1,133 @@
 
+@import 'variables/globals'
+@import 'variables/fonts'
+@import 'variables/colors'
+@import 'variables/buttons'
+
+@import 'responsivecontainer'
+
+$controls-height: 50px
+
+.sheetmusic
+  min-height: 100vh
+
+.sheetmusic__spinner
+  position: absolute
+  top: $navbar-height + 20px
+  left: 0
+  width: 100%
+  min-height: 200px
+  line-height: 200px
+  text-align: center
+  font-size: 40px
+  color: $grey-text-dark
+
+.sheetmusic__viewer-container
+  height: calc(100vh - #{$controls-height + $button-border-width})
+  padding: $navbar-height 0 0 0
+  background-color: $grey-normal
+  overflow: hidden
+  position: relative
+
+.sheetmusic__viewer
+  // HACK: We're doing this to override nuka-carousel's height setting, which is 'auto' by default.
+  // TODO(ankit): Make a PR on nuka-carousel to add a height setting.
+  &.slider, .slider-frame, .slider-list, .slider-slide
+    height: 100% !important
+
+  // HACK: This hides the dots at the bottom, we don't need them.
+  .slider-decorator-2
+    display: none
+
+.sheetmusic__viewer-page
+  height: 100%
+
+.sheetmusic__viewer-page-image
+  display: block
+  margin: auto
+  height: 100%
+
+.sheetmusic-viewer-arrow
+  color: #000
+  text-decoration: none
+  font-size: 50px
+  &--left
+    padding-left: 10px
+  &--right
+    padding-right: 10px
+
+.sheetmusic__controls-container
+  font-family: $title-font
+  height: $controls-height
+  border-top: $button-border-width solid $blue-light
+  background-color: #fff
+
+.sheetmusic__controls-page-number
+  text-align: center
+
+  line-height: $controls-height
+
+.sheetmusic__details
+
+.sheetmusic__details-left
+  margin: 10px 0 0 0
+  +when-tablet
+    display: inline-block
+    width: 70%
+    margin: 10px 0
+    vertical-align: top
+
+.sheetmusic__details-right
+  margin: 0 0 10px 0
+  +when-tablet
+    display: inline-block
+    width: 30%
+    margin: 10px 0
+    vertical-align: top
+
+.sheetmusic__details-info-box
+  margin: 0 10px
+
+.sheetmusic__details-info-box-title
+  padding: 10px
+  font-family: $title-font
+  font-size: 20px
+  border-bottom: $button-border-width solid $grey-normal
+
+.sheetmusic__details-info-box-icon
+  color: $grey-text-dark
+  padding-right: 10px
+
+.sheetmusic__details-info-box-content
+  padding: 10px
+
+.sheetmusic__description
+  font-size: 15px
+
+.sheetmusic__description-none
+  color: $grey-text-normal
+  font-style: italic
+
+.sheetmusic__detail
+  margin: 10px 0 20px 0
+
+.sheetmusic__detail-title
+  font-family: $title-font
+  text-transform: uppercase
+  color: $grey-text-normal
+  font-weight: $weight-bold
+  padding-bottom: 5px
+
+.sheetmusic__video iframe
+  width: 100%
+
+.sheetmusic__video-show-more
+  display: block
+  text-align: center
+  color: $grey-text-normal
+  font-size: 14px
+
+.sheetmusic__video-show-more-icon
+  padding-right: 5px
 
 

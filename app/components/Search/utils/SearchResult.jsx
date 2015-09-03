@@ -2,6 +2,7 @@
 import classNames from 'classnames';
 import FontAwesome from 'react-fontawesome';
 import React from 'react';
+import { Link } from 'react-router';
 
 import { sheetMusicPropType } from '../../../utils/sheetMusicUtils';
 
@@ -93,9 +94,9 @@ export default React.createClass({
     let normalizedKey = this.normalizeKey_();
     if (normalizedKey) tags.push(normalizedKey);
 
-    // TODO: use <Link>
     return (
-      <a className={className} href="#">
+      <Link className={className}
+          to={`/sheetmusic/${this.props.sheetMusic.id}/${this.props.sheetMusic.uniqueUrl}`}>
         <If condition={this.props.sheetMusic.thumbnailUrl}>
           <img src={this.props.sheetMusic.thumbnailUrl}
             className="search__result-thumbnail" />
@@ -127,7 +128,7 @@ export default React.createClass({
           </ul>
         </div>
         <FontAwesome name="angle-right" className="search__result-right-arrow" />
-      </a>
+      </Link>
     );
   },
 

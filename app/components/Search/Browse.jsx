@@ -1,5 +1,6 @@
 
 import classNames from 'classnames';
+import debounce from 'lodash/function/debounce';
 import fluxMixin from 'flummox/mixin';
 import FontAwesome from 'react-fontawesome';
 import Helmet from 'react-helmet';
@@ -7,13 +8,12 @@ import includes from 'lodash/collection/includes';
 import intersection from 'lodash/array/intersection';
 import isEqual from 'lodash/lang/isEqual';
 import React from 'react';
-import debounce from 'lodash/function/debounce';
 import { addons } from 'react/addons';
 import { Link } from 'react-router';
 
 import FilterGroup from './utils/FilterGroup';
-import SearchResult from './utils/SearchResult';
 import PaidSearchResult from './utils/PaidSearchResult';
+import SearchResult from './utils/SearchResult';
 
 let { PureRenderMixin } = addons;
 

@@ -4,7 +4,6 @@ import { addons } from 'react/addons';
 
 import NavBar from '../Fixtures/NavBar';
 import Footer from '../Fixtures/Footer';
-import ResponsiveContainer from '../Misc/ResponsiveContainer';
 
 let { PureRenderMixin } = addons;
 
@@ -22,9 +21,7 @@ export default React.createClass({
     return (
       <div className="sheetmusic">
         <NavBar />
-        <ResponsiveContainer className="sheetmusic__container">
-          {this.props.children}
-        </ResponsiveContainer>
+        {this.props.children}
         <Footer />
       </div>
     );

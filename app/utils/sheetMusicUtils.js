@@ -3,6 +3,48 @@ import cloneDeep from 'lodash/lang/cloneDeep';
 import React from 'react';
 
 /**
+ * Function that converts a sheet music object to a format we're comfortable with on the client
+ * side. For example, keys with underscores are converted to a camelCase format.
+ *
+ * @param {Object} sheetMusic An object representing the sheet music.
+ *
+ * @return {Object} An object with all the necessary properties representing a sheet music.
+ */
+export function convertSheetMusic(sheetMusic) {
+  let videos = sheetMusic.videos || [];
+  return {
+    id: sheetMusic.id,
+    title: sheetMusic.title,
+    musicStyle: sheetMusic.style,
+    musicKey: sheetMusic.key,
+    date: sheetMusic.date,
+    composer: sheetMusic.composer_name,
+    license: sheetMusic.license,
+    submittedBy: sheetMusic.submitted_by,
+    thumbnailUrl: sheetMusic.thumbnail_url,
+    viewCount: sheetMusic.view_count,
+    uniqueUrl: sheetMusic.uniqueurl,
+    difficulty: sheetMusic.difficulty,
+    videos: videos.map(video => ({
+      title: video.title,
+      youtubeId: video.youtube_id,
+      date: video.date,
+      grade: video.grade,
+      user: video.user,
+    })),
+    images: sheetMusic.images,
+    comments: sheetMusic.comments,
+    fileSize: sheetMusic.file_size,
+    originalFormat: sheetMusic.original_format,
+    lilypondFile: sheetMusic.lilypond_file,
+    midiFile: sheetMusic.midi_file,
+    shortDescription: sheetMusic.short_description,
+    longDescription: sheetMusic.long_description,
+    inShelf: sheetMusic.in_shelf,
+  };
+}
+
+/**
  * Function that maps through sheet music keys and returns a format we're comfortable with on the
  * client side.
  *
@@ -14,20 +56,7 @@ import React from 'react';
 export function mapSheetMusic(sheetMusicArray, iterator) {
   return sheetMusicArray.map(sheetMusicItem => {
     let sheetMusic = iterator ? iterator(cloneDeep(sheetMusicItem)) : sheetMusicItem;
-    return {
-      id: sheetMusic.id,
-      title: sheetMusic.title,
-      musicStyle: sheetMusic.style,
-      musicKey: sheetMusic.key,
-      date: sheetMusic.date,
-      composer: sheetMusic.composer_name,
-      license: sheetMusic.license,
-      submittedBy: sheetMusic.submitted_by,
-      thumbnailUrl: sheetMusic.thumbnail_url,
-      viewCount: sheetMusic.view_count,
-      uniqueUrl: sheetMusic.uniqueurl,
-      difficulty: sheetMusic.difficulty,
-    };
+    return convertSheetMusic(sheetMusic);
   });
 }
 
@@ -50,6 +79,22 @@ export function sheetMusicPropType() {
     viewCount: React.PropTypes.number.isRequired,
     uniqueUrl: React.PropTypes.string.isRequired,
     difficulty: React.PropTypes.number.isRequired,
+    videos: React.PropTypes.arrayOf(React.PropTypes.shape({
+      title: React.PropTypes.string.isRequired,
+      youtubeId: React.PropTypes.string.isRequired,
+      date: React.PropTypes.string.isRequired,
+      grade: React.PropTypes.string.isRequired,
+      user: React.PropTypes.string.isRequired,
+    })),
+    images: React.PropTypes.arrayOf(React.PropTypes.string),
+    comments: React.PropTypes.any,
+    fileSize: React.PropTypes.string,
+    originalFormat: React.PropTypes.string,
+    lilypondFile: React.PropTypes.any,
+    midiFile: React.PropTypes.any,
+    shortDescription: React.PropTypes.string,
+    longDescription: React.PropTypes.string,
+    inShelf: React.PropTypes.bool,
   });
 }
 

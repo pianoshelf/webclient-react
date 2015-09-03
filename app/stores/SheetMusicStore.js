@@ -1,7 +1,7 @@
 
 // Import internal modules
 import BaseStore from './BaseStore';
-import { mapSheetMusic, mapPaidSheetMusic } from '../utils/sheetMusicUtils';
+import { convertSheetMusic, mapSheetMusic, mapPaidSheetMusic } from '../utils/sheetMusicUtils';
 
 // Export store
 export default class SheetMusicStore extends BaseStore {
@@ -10,6 +10,7 @@ export default class SheetMusicStore extends BaseStore {
     super();
 
     const sheetMusicActions = flux.getActions('sheetmusic');
+    this.register(sheetMusicActions.getSheetMusic, this.getSheetMusic);
     this.register(sheetMusicActions.search, this.search);
     this.register(sheetMusicActions.getTrendingSheetMusic, this.getTrendingSheetMusic);
     this.register(sheetMusicActions.getMostPopularSheetMusic, this.getMostPopularSheetMusic);
@@ -26,7 +27,17 @@ export default class SheetMusicStore extends BaseStore {
         paid: [],
       },
       mostPopularSheetMusic: [],
+      sheetMusicResult: {},
+      errorCode: 0,
     };
+  }
+
+  getSheetMusic(res) {
+    let result = JSON.parse(res.text);
+
+    this.setState({
+      sheetMusicResult: convertSheetMusic(result),
+    });
   }
 
   // Process search results

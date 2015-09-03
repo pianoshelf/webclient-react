@@ -22,6 +22,7 @@ export default class ProgressStore extends BaseStore {
       { name: 'resetPasswordConfirm', func: loginActions.resetPasswordConfirm },
 
       // Sheet music actions
+      { name: 'getSheetMusic', func: sheetMusicActions.getSheetMusic },
       { name: 'search', func: sheetMusicActions.search },
       { name: 'sheetMusicList', func: sheetMusicActions.getSheetMusicList },
       { name: 'trendingSheetMusic', func: sheetMusicActions.getTrendingSheetMusic },

@@ -119,11 +119,13 @@ gulp.task('build:client', function(callback) {
   webpackDevCompiler.run(function(err) {
     if (err) throw new gutil.PluginError('build:client', err);
 
-    // Emulate gulp-size
-    let outputConfig = webpackDevConfig.output;
-    let jsFilePath = path.join(outputConfig.path, outputConfig.filename);
-    gutil.log(`${gutil.colors.cyan('Client JS')} ${gutil.colors.green('all files ')}` +
-              `${gutil.colors.magenta(pretty(fs.statSync(jsFilePath).size))}`);
+    // Emulate gulp-size and ignore errors
+    try {
+      let outputConfig = webpackDevConfig.output;
+      let jsFilePath = path.join(outputConfig.path, outputConfig.filename);
+      gutil.log(`${gutil.colors.cyan('Client JS')} ${gutil.colors.green('all files ')}` +
+                `${gutil.colors.magenta(pretty(fs.statSync(jsFilePath).size))}`);
+    } catch (e) {}
 
     // Set boolean to true if we're not running the server.
     if (!isRunningDevServer) {

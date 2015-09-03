@@ -15,6 +15,13 @@ export default React.createClass({
     sheetMusic: sheetMusicPropType().isRequired,
   },
 
+  contextTypes: {
+    /**
+     * The router context, which we need if we want to make link changes.
+     */
+    router: React.PropTypes.object,
+  },
+
   mixins: [Navigation],
 
   /**
@@ -40,13 +47,15 @@ export default React.createClass({
     link.addEventListener('mouseup', event => {
       if (event.clientX === currentMousePointX &&
           event.clientY === currentMousePointY) {
-        console.log('you intend to go to some sheet music'); // eslint-disable-line no-console
+        this.context.router.transitionTo(
+          `/sheetmusic/${this.props.sheetMusic.id}/${this.props.sheetMusic.uniqueUrl}`
+        );
       }
     });
   },
 
   render() {
-    let href = '#'; // this.makeHref('sheetmusic', { id: this.props.sheetMusic.id })
+    let href = `/sheetmusic/${this.props.sheetMusic.id}/${this.props.sheetMusic.uniqueUrl}`;
 
     let musicStyle = null;
     if (this.props.sheetMusic.musicStyle) {
