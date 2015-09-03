@@ -7,13 +7,14 @@
 @import 'responsivecontainer'
 
 $controls-height: 50px
+$controls-height-mobile: 30px
 
 .sheetmusic
   min-height: 100vh
 
 .sheetmusic__spinner
   position: absolute
-  top: $navbar-height + 20px
+  top: $navbar-height-mobile + 20px
   left: 0
   width: 100%
   min-height: 200px
@@ -21,16 +22,21 @@ $controls-height: 50px
   text-align: center
   font-size: 40px
   color: $grey-text-dark
+  +when-tablet
+    top: $navbar-height + 20px
 
 .sheetmusic__main
   width: 100%
 
 .sheetmusic__viewer-container
-  height: calc(100vh - #{$controls-height + $button-border-width})
-  padding: $navbar-height 0 0 0
+  height: calc(100vh - #{$controls-height-mobile + $button-border-width})
+  padding-top: $navbar-height-mobile
   background-color: $grey-normal
   overflow: hidden
   position: relative
+  +when-tablet
+    padding-top: $navbar-height
+    height: calc(100vh - #{$controls-height + $button-border-width})
   :fullscreen &
     background-color: #000
     padding-top: 0
@@ -46,7 +52,8 @@ $controls-height: 50px
     display: none
 
 .sheetmusic__viewer-page
-  height: 100%
+  // HACK: In some cases, this is being overridden with a `height: auto`.
+  height: 100% !important
 
 .sheetmusic__viewer-page-image
   display: block
@@ -64,29 +71,41 @@ $controls-height: 50px
     color: $grey-text-dark
   :fullscreen &
     color: #fff
+    text-shadow: 0 0 5px #000
 
 .sheetmusic__controls-container
-  font-family: $title-font
-  height: $controls-height
+  font-size: 14px
+  height: $controls-height-mobile
   border-top: $button-border-width solid $blue-light
   position: relative
+  padding: 0 10px
+  +when-tablet
+    height: $controls-height
+    font-size: 16px
   :fullscreen &
     border-top: none
     background-color: #000
     color: #fff
 
 .sheetmusic__controls-page-number
+  font-family: $title-font
   text-align: center
-  line-height: $controls-height
+  line-height: $controls-height-mobile
+  +when-tablet
+    line-height: $controls-height
 
 .sheetmusic__controls-full-screen
-  font-family: $body-font
-  line-height: $controls-height
-  color: #000
-  display: inline-block
+  color: $grey-text-normal
   position: absolute
   right: 0
   top: 0
+  display: none
+  line-height: $controls-height-mobile
+  +when-tablet
+    line-height: $controls-height
+    display: inline-block
+  &:hover
+    color: $grey-text-dark
   :fullscreen &
     color: #fff
 
