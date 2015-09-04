@@ -12,7 +12,9 @@ import { addons } from 'react/addons';
 
 import Detail from './utils/Detail';
 import InfoBox from './utils/InfoBox';
+import LeftButton from './utils/LeftButton';
 import ResponsiveContainer from '../Misc/ResponsiveContainer';
+import RightButton from './utils/RightButton';
 import { getDifficultyText } from '../../utils/sheetMusicUtils';
 
 let { PureRenderMixin } = addons;
@@ -25,40 +27,6 @@ function retrieveInitialData(flux, params) {
     sheetMusicActions.getSheetMusic(parseInt(params.id, 10), flux),
   ]);
 }
-
-let LeftButton = React.createClass({
-  propTypes: {
-    currentSlide: React.PropTypes.number,
-    slideCount: React.PropTypes.number,
-    previousSlide: React.PropTypes.func,
-  },
-  render() {
-    if (this.props.currentSlide === 0) return null;
-    return (
-      <a href="#" onClick={this.props.previousSlide}
-        className="sheetmusic-viewer-arrow sheetmusic-viewer-arrow--left">
-        <FontAwesome name="angle-left" />
-      </a>
-    );
-  },
-});
-
-let RightButton = React.createClass({
-  propTypes: {
-    currentSlide: React.PropTypes.number,
-    slideCount: React.PropTypes.number,
-    nextSlide: React.PropTypes.func,
-  },
-  render() {
-    if (this.props.currentSlide + 1 === this.props.slideCount) return null;
-    return (
-      <a href="#" onClick={this.props.nextSlide}
-        className="sheetmusic-viewer-arrow sheetmusic-viewer-arrow--right">
-        <FontAwesome name="angle-right" />
-      </a>
-    );
-  },
-});
 
 export default React.createClass({
 
@@ -172,8 +140,8 @@ export default React.createClass({
           ref="carousel">
           {images.map((image, index) => (
             <div className="sheetmusic__viewer-page" key={index}>
-              <img src={image}
-                className="sheetmusic__viewer-page-image"
+              <img className="sheetmusic__viewer-page-image"
+                src={image}
                 onDragStart={this.handleNullify_}
                 onClick={this.handleNullify_} />
             </div>
@@ -197,14 +165,14 @@ export default React.createClass({
             href="#">
             <If condition={this.state.isFullscreen}>
               <span>
-                <FontAwesome name="times"
-                  className="sheetmusic__controls-full-screen-icon" />
+                <FontAwesome className="sheetmusic__controls-full-screen-icon"
+                  name="times" />
                 Exit
               </span>
             <Else />
               <span>
-                <FontAwesome name="arrows-alt"
-                  className="sheetmusic__controls-full-screen-icon" />
+                <FontAwesome className="sheetmusic__controls-full-screen-icon"
+                  name="arrows-alt" />
                 Full Screen
               </span>
             </If>
@@ -217,11 +185,13 @@ export default React.createClass({
   renderDescription_() {
     let longDescription = this.state.sheetMusicResult.longDescription;
     return (
-      <InfoBox title="Description" className="sheetmusic__description">
+      <InfoBox className="sheetmusic__description" title="Description">
         <If condition={longDescription}>
           {longDescription}
         <Else />
-          <span className="sheetmusic__description-none">no description</span>
+          <span className="sheetmusic__description-none">
+            no description
+          </span>
         </If>
       </InfoBox>
     );
@@ -239,11 +209,11 @@ export default React.createClass({
           </div>
         ))}
         <If condition={this.state.showVideos < videos.length}>
-          <a href="#"
-            className="sheetmusic__video-show-more"
+          <a className="sheetmusic__video-show-more"
+            href="#"
             onClick={this.handleShowMoreVideos_}>
-            <FontAwesome name="angle-down"
-              className="sheetmusic__video-show-more-icon" />
+            <FontAwesome className="sheetmusic__video-show-more-icon"
+              name="angle-down" />
             See More Videos
           </a>
         </If>
@@ -269,12 +239,12 @@ export default React.createClass({
         <Detail title="Difficulty">
           <div className="sheetmusic__difficulty-stars">
             {times(fullStarCount, index => (
-              <FontAwesome name="star" key={index}
-                className="sheetmusic__difficulty-star" />
+              <FontAwesome className="sheetmusic__difficulty-star"
+                name="star" key={index} />
             ))}
             {times(emptyStarCount, index => (
-              <FontAwesome name="star-o" key={index + 5}
-                className="sheetmusic__difficulty-star" />
+              <FontAwesome className="sheetmusic__difficulty-star"
+                name="star-o" key={index + 5} />
             ))}
           </div>
           <div className="sheetmusic__difficulty-text">
