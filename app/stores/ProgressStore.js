@@ -44,10 +44,16 @@ export default class ProgressStore extends BaseStore {
     this.state = { inProgress: [] };
   }
 
+  /**
+   * Resets the progress array to its initial state.
+   */
   resetProgress() {
     this.setState({ inProgress: [] });
   }
 
+  /**
+   * Called when a function has just been called.
+   */
   handleStart(param) {
     let inProgress = clone(this.state.inProgress);
     if (inProgress.indexOf(param) === -1) {
@@ -56,6 +62,10 @@ export default class ProgressStore extends BaseStore {
     }
   }
 
+  /**
+   * Called when a function is finished. The reason we defer the setState call is so that inProgress
+   * is modified last.
+   */
   handleEnd(param) {
     let inProgress = clone(this.state.inProgress);
     inProgress.splice(inProgress.indexOf(param));

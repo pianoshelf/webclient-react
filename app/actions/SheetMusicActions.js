@@ -190,4 +190,12 @@ export default class SheetMusicActions extends Actions {
     );
   }
 
+  getSheetMusicDownloadLink(sheetId, flux) {
+    return get(
+      '/sheetmusic/downloads/',
+      { sheetmusic_id: sheetId },
+      flux
+    );
+  }
+
 }

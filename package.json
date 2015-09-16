@@ -7,7 +7,8 @@
     "compile": "./node_modules/.bin/gulp compile",
     "lint": "./node_modules/.bin/gulp build:lint",
     "watch": "./node_modules/.bin/gulp watch",
-    "production:start": "NODE_ENV=production iojs build/server",
+    "production": "NODE_ENV=production node build/server",
+    "production:proxy": "PROXY_API=true NODE_ENV=production node build/server",
     "test": "./node_modules/.bin/mocha --compilers js:babel/register --recursive"
   },
   "repository": {

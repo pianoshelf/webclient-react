@@ -42,18 +42,17 @@ $controls-height-mobile: 30px
     padding-top: 0
 
 .sheetmusic__viewer
+  // Enables hardware acceleration
+  transform: translate3d(0,0,0)
   // HACK: We're doing this to override nuka-carousel's height setting, which is 'auto' by default.
   // TODO(ankit): Make a PR on nuka-carousel to add a height setting.
   &.slider, .slider-frame, .slider-list, .slider-slide
     height: 100% !important
 
-  // HACK: This hides the dots at the bottom, we don't need them.
-  .slider-decorator-2
-    display: none
-
 .sheetmusic__viewer-page
   // HACK: In some cases, this is being overridden with a `height: auto`.
   height: 100% !important
+  max-width: 100%
 
 .sheetmusic__viewer-page-image
   display: block
@@ -94,10 +93,9 @@ $controls-height-mobile: 30px
   +when-tablet
     line-height: $controls-height
 
-.sheetmusic__controls-full-screen
+.sheetmusic__controls
   color: $grey-text-normal
   position: absolute
-  right: 0
   top: 0
   display: none
   line-height: $controls-height-mobile
@@ -109,7 +107,13 @@ $controls-height-mobile: 30px
   :fullscreen &
     color: #fff
 
-.sheetmusic__controls-full-screen-icon
+.sheetmusic__controls--full-screen
+  right: 0
+
+.sheetmusic__controls--download
+  left: 0
+
+.sheetmusic__controls-icon
   padding-right: 7px
 
 .sheetmusic__details

@@ -4,13 +4,13 @@ import fluxMixin from 'flummox/mixin';
 import FontAwesome from 'react-fontawesome';
 import FullScreenMixin from 'react-fullscreen-component';
 import Helmet from 'react-helmet';
-import isEqual from 'lodash/lang/isEqual';
 import React from 'react';
 import Carousel from 'nuka-carousel';
 import times from 'lodash/utility/times';
 import { addons } from 'react/addons';
 
 import Detail from './utils/Detail';
+import EmptyComponent from './utils/EmptyComponent';
 import InfoBox from './utils/InfoBox';
 import LeftButton from './utils/LeftButton';
 import ResponsiveContainer from '../Misc/ResponsiveContainer';
@@ -21,7 +21,6 @@ let { PureRenderMixin } = addons;
 
 function retrieveInitialData(flux, params) {
   let sheetMusicActions = flux.getActions('sheetmusic');
-  let loginActions = flux.getActions('login');
 
   return Promise.all([
     sheetMusicActions.getSheetMusic(parseInt(params.id, 10), flux),
@@ -96,8 +95,15 @@ export default React.createClass({
   },
 
   componentDidMount() {
-    retrieveInitialData(this.flux, this.props.params);
+    // Retrieve initial data when sheet music and params are out of sync.
+    if (parseInt(this.props.params.id, 10) !== this.state.sheetMusicResult.id) {
+      retrieveInitialData(this.flux, this.props.params);
+    }
+
+    // Add window listeners for left or right keys
     window.addEventListener('keydown', this.handleRightOrLeftKeyPress_);
+
+    // Update carousel data, such as page state.
     defer(() => this.handleSetCarouselData_());
   },
 
@@ -123,6 +129,7 @@ export default React.createClass({
     let decorators = [
       { component: LeftButton, position: 'CenterLeft' },
       { component: RightButton, position: 'CenterRight' },
+      { component: EmptyComponent }, // The dots at the bottom
     ];
 
     return (
@@ -160,24 +167,33 @@ export default React.createClass({
           </div>
         </If>
         <If condition={this.state.hasFullscreen}>
-          <a className="sheetmusic__controls-full-screen"
+          <a className="sheetmusic__controls sheetmusic__controls--full-screen"
             onClick={this.handleFullscreen_}
             href="#">
             <If condition={this.state.isFullscreen}>
               <span>
-                <FontAwesome className="sheetmusic__controls-full-screen-icon"
+                <FontAwesome className="sheetmusic__controls-icon"
                   name="times" />
                 Exit
               </span>
             <Else />
               <span>
-                <FontAwesome className="sheetmusic__controls-full-screen-icon"
+                <FontAwesome className="sheetmusic__controls-icon"
                   name="arrows-alt" />
                 Full Screen
               </span>
             </If>
           </a>
         </If>
+        <a className="sheetmusic__controls sheetmusic__controls--download"
+          onClick={this.handleDownload_}
+          href="#">
+          <span>
+            <FontAwesome className="sheetmusic__controls-icon"
+              name="cloud-download" />
+            Download PDF
+          </span>
+        </a>
       </ResponsiveContainer>
     );
   },

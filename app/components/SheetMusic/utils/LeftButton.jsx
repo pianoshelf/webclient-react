@@ -1,5 +1,5 @@
 
-import FontAwesome from 'react-fontawesome';
+import Fa from 'react-fontawesome';
 import React from 'react';
 
 export default React.createClass({
@@ -13,7 +13,7 @@ export default React.createClass({
     return (
       <a href="#" onClick={this.props.previousSlide}
         className="sheetmusic-viewer-arrow">
-        <FontAwesome name="angle-left" />
+        <Fa name="angle-left" />
       </a>
     );
   },
