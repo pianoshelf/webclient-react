@@ -190,10 +190,22 @@ gulp.task('clean', function(callback) {
 });
 
 /**
- * Task to compile our files for production
+ * Task to compile our files for production.
  */
 gulp.task('compile', function(callback) {
   runSequence('clean', 'build:lint:prod', [
+    'build:images',
+    'build:css:prod',
+    'build:client:prod',
+    'build:server',
+  ], 'build:cache', callback);
+});
+
+/**
+ * Task to compile our files for production, ignoring linting.
+ */
+gulp.task('compile:nolint', function(callback) {
+  runSequence('clean', [
     'build:images',
     'build:css:prod',
     'build:client:prod',
