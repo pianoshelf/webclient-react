@@ -1,7 +1,7 @@
 
 // Import external modules
 import React from 'react';
-import { Navigation } from 'react-router';
+import { History } from 'react-router';
 
 import { sheetMusicPropType } from '../../utils/sheetMusicUtils';
 
@@ -15,14 +15,7 @@ export default React.createClass({
     sheetMusic: sheetMusicPropType().isRequired,
   },
 
-  contextTypes: {
-    /**
-     * The router context, which we need if we want to make link changes.
-     */
-    router: React.PropTypes.object,
-  },
-
-  mixins: [Navigation],
+  mixins: [History],
 
   /**
    * The reason we are doing this is because sheet music thumbnails can be part of
@@ -47,9 +40,8 @@ export default React.createClass({
     link.addEventListener('mouseup', event => {
       if (event.clientX === currentMousePointX &&
           event.clientY === currentMousePointY) {
-        this.context.router.transitionTo(
-          `/sheetmusic/${this.props.sheetMusic.id}/${this.props.sheetMusic.uniqueUrl}`
-        );
+        this.history.pushState(null,
+          `/sheetmusic/${this.props.sheetMusic.id}/${this.props.sheetMusic.uniqueUrl}`);
       }
     });
   },

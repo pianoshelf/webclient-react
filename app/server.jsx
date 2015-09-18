@@ -162,7 +162,7 @@ app.use((req, res, next) => {
       });
 
       // Make sure we render our route even if the promise fails.
-      prefetchRouteData(renderProps.components, { flux, state: initialState })
+      prefetchRouteData(renderProps.components, { flux, state: renderProps })
         .then(renderRoute, renderRoute);
     }
   });

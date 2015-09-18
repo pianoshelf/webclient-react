@@ -9,7 +9,7 @@ import intersection from 'lodash/array/intersection';
 import isEqual from 'lodash/lang/isEqual';
 import React from 'react';
 import { addons } from 'react/addons';
-import { Link } from 'react-router';
+import { History, Link } from 'react-router';
 
 import FilterGroup from './utils/FilterGroup';
 import PaidSearchResult from './utils/PaidSearchResult';
@@ -133,14 +133,8 @@ export default React.createClass({
     }),
   },
 
-  contextTypes: {
-    /**
-     * The router context, which we need if we want to make link changes.
-     */
-    router: React.PropTypes.object,
-  },
-
   mixins: [
+    History,
     PureRenderMixin,
     fluxMixin({
       sheetmusic: store => ({
@@ -269,7 +263,7 @@ export default React.createClass({
     } else if (groupName === 'trending') {
       nextParams = { show: 'trending', trending: nextValue };
     }
-    this.context.router.transitionTo(this.props.location.pathname, nextParams);
+    this.history.pushState(null, this.props.location.pathname, nextParams);
   },
 
   handleSearchTextChange_() {
@@ -287,11 +281,11 @@ export default React.createClass({
     this.flux.getActions('progress').removeProgress('searchQuery');
     let value = React.findDOMNode(this.refs.searchBox).value;
     if (value === '') {
-      this.context.router.replaceWith(this.props.location.pathname, {
+      this.history.replaceState(null, this.props.location.pathname, {
         show: 'popular',
       });
     } else {
-      this.context.router.replaceWith(this.props.location.pathname, {
+      this.history.replaceState(null, this.props.location.pathname, {
         query: value,
       });
     }

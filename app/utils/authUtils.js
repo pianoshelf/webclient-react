@@ -1,7 +1,7 @@
 
 import defer from 'lodash/function/defer';
 import extend from 'lodash/object/extend';
-import { Navigation } from 'react-router';
+import { History } from 'react-router';
 
 import config from '../../config';
 import { setAuthToken, deleteAuthToken } from './api';
@@ -52,7 +52,7 @@ export function requireNoAuth(flux) {
  * connected to MUST BE connected to the LoginStore.
  */
 export let CanLoginMixin = {
-  mixins: [Navigation],
+  mixins: [History],
   componentDidMount() { this.loginUser_(); },
   componentDidUpdate() { this.loginUser_(); },
 
@@ -63,9 +63,9 @@ export let CanLoginMixin = {
       setAuthToken(user.authToken, this.flux);
 
       if (this.props.location.query && this.props.location.query.redirect) {
-        defer(() => this.transitionTo(this.props.location.query.redirect));
+        defer(() => this.history.pushState(null, this.props.location.query.redirect));
       } else {
-        defer(() => this.transitionTo('/'));
+        defer(() => this.history.pushState(null, '/'));
       }
     }
   },
@@ -76,7 +76,7 @@ export let CanLoginMixin = {
  * connected to MUST BE connected to the LoginStore.
  */
 export let CanLogoutMixin = {
-  mixins: [Navigation],
+  mixins: [History],
   componentDidMount() { this.logoutUser_(); },
   componentDidUpdate() { this.logoutUser_(); },
 
@@ -86,9 +86,9 @@ export let CanLogoutMixin = {
       deleteAuthToken(this.flux);
 
       if (this.props.location.query && this.props.location.query.redirect) {
-        defer(() => this.transitionTo(this.props.location.query.redirect));
+        defer(() => this.history.pushState(null, this.props.location.query.redirect));
       } else {
-        defer(() => this.transitionTo('/'));
+        defer(() => this.history.pushState(null, '/'));
       }
     }
   },
