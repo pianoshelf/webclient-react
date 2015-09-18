@@ -115,10 +115,55 @@ export default React.createClass({
     window.removeEventListener('keydown', this.handleRightOrLeftKeyPress_);
   },
 
+  componentWillReceiveNewProps() {
+    retrieveInitialData(this.flux, this.props.params);
+  },
+
+  handleSetCarouselData_() {
+    if (this.refs.carousel) {
+      // HACK: Get carousel state properties
+      let carouselState = this.refs.carousel.state;
+
+      this.setState({
+        pageNumber: carouselState.currentSlide + 1,
+        pageCount: carouselState.slideCount,
+      });
+    }
+  },
+
+  handleShowMoreVideos_(event) {
+    event.preventDefault();
+    this.setState({
+      showVideos: this.state.showVideos + 5,
+    });
+  },
+
+  handleNullify_(event) {
+    event.preventDefault();
+  },
+
+  handleRightOrLeftKeyPress_(event) {
+    if (!this.refs.carousel) return;
+    if (event.keyCode === 39) { // Right key press
+      this.refs.carousel.nextSlide();
+    } else if (event.keyCode === 37) { // Left key press
+      this.refs.carousel.previousSlide();
+    }
+  },
+
+  handleFullscreen_(event) {
+    event.preventDefault();
+    if (this.state.isFullscreen) {
+      this.exitFullscreen();
+    } else {
+      this.requestFullscreen(this.refs.mainViewer);
+    }
+  },
+
   renderLoadingScreen_() {
     return (
       <div className="sheetmusic__spinner">
-        <FontAwesome name="cog" spin={true} />
+        <FontAwesome name="cog" spin />
       </div>
     );
   },
@@ -136,7 +181,7 @@ export default React.createClass({
       <div className="sheetmusic__viewer-container">
         <Carousel className="sheetmusic__viewer"
           cellAlign="center"
-          dragging={true}
+          dragging
           slidesToShow={1}
           slidesToScroll={1}
           slideWidth={1}
@@ -332,51 +377,6 @@ export default React.createClass({
         </ResponsiveContainer>
       </Helmet>
     );
-  },
-
-  componentWillReceiveNewProps() {
-    retrieveInitialData(this.flux, this.props.params);
-  },
-
-  handleSetCarouselData_() {
-    if (this.refs.carousel) {
-      // HACK: Get carousel state properties
-      let carouselState = this.refs.carousel.state;
-
-      this.setState({
-        pageNumber: carouselState.currentSlide + 1,
-        pageCount: carouselState.slideCount,
-      });
-    }
-  },
-
-  handleShowMoreVideos_(event) {
-    event.preventDefault();
-    this.setState({
-      showVideos: this.state.showVideos + 5,
-    });
-  },
-
-  handleNullify_(event) {
-    event.preventDefault();
-  },
-
-  handleRightOrLeftKeyPress_(event) {
-    if (!this.refs.carousel) return;
-    if (event.keyCode === 39) { // Right key press
-      this.refs.carousel.nextSlide();
-    } else if (event.keyCode === 37) { // Left key press
-      this.refs.carousel.previousSlide();
-    }
-  },
-
-  handleFullscreen_(event) {
-    event.preventDefault();
-    if (this.state.isFullscreen) {
-      this.exitFullscreen();
-    } else {
-      this.requestFullscreen(this.refs.mainViewer);
-    }
   },
 
 });

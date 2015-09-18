@@ -43,6 +43,11 @@ export default React.createClass({
 
   },
 
+  handleOnClick_(event) {
+    event.preventDefault();
+    this.props.onChange(this.props.value, !this.props.isSelected);
+  },
+
   render() {
     let className = classNames({
       'search__filter-group-filter': true,
@@ -57,11 +62,6 @@ export default React.createClass({
         {this.props.valueNode}
       </a>
     );
-  },
-
-  handleOnClick_(event) {
-    event.preventDefault();
-    this.props.onChange(this.props.value, !this.props.isSelected);
   },
 
 });

@@ -40,7 +40,7 @@ export default React.createClass({
         type="submit"
         disabled={this.props.disableIf}>
         <If condition={this.props.submittedIf}>
-          <FontAwesome name="cog" spin={true} />
+          <FontAwesome name="cog" spin />
         <Else />
           <span>
             {this.props.children}

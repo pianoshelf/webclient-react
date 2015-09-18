@@ -64,6 +64,25 @@ export default React.createClass({
     PureRenderMixin,
   ],
 
+  handleOnChange_(value, willBeSelected) {
+    let nextValue = this.props.value;
+
+    if (this.props.multiSelect) {
+      if (willBeSelected) {
+        nextValue.push(value);
+      } else {
+        nextValue.splice(nextValue.indexOf(value), 1);
+      }
+    } else {
+      if (willBeSelected) {
+        nextValue = value;
+      }
+    }
+
+    // Defer onChange event
+    defer(() => this.props.onChange(this.props.groupName, nextValue));
+  },
+
   render() {
     return (
       <div className="search__filter-group">
@@ -91,25 +110,6 @@ export default React.createClass({
         </div>
       </div>
     );
-  },
-
-  handleOnChange_(value, willBeSelected) {
-    let nextValue = this.props.value;
-
-    if (this.props.multiSelect) {
-      if (willBeSelected) {
-        nextValue.push(value);
-      } else {
-        nextValue.splice(nextValue.indexOf(value), 1);
-      }
-    } else {
-      if (willBeSelected) {
-        nextValue = value;
-      }
-    }
-
-    // Defer onChange event
-    defer(() => this.props.onChange(this.props.groupName, nextValue));
   },
 
 });

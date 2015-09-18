@@ -258,6 +258,45 @@ export default React.createClass({
     ];
   },
 
+  handleFilterChange_(groupName, nextValue) {
+    let nextParams = {};
+    if (groupName === 'sort') {
+      if (nextValue === 'trending') {
+        nextParams = { show: 'trending', trending: '7days' };
+      } else {
+        nextParams = { show: nextValue };
+      }
+    } else if (groupName === 'trending') {
+      nextParams = { show: 'trending', trending: nextValue };
+    }
+    this.context.router.transitionTo(this.props.location.pathname, nextParams);
+  },
+
+  handleSearchTextChange_() {
+    this.flux.getActions('progress').addProgress('searchQuery');
+
+    // Attach debounce function to this instance and cache it.
+    this.searchQueryChangeFunction_ = this.searchQueryChangeFunction_ ||
+      debounce(this.handleSearchQueryChange_, 500);
+
+    // Call the retrieved property.
+    this.searchQueryChangeFunction_();
+  },
+
+  handleSearchQueryChange_() {
+    this.flux.getActions('progress').removeProgress('searchQuery');
+    let value = React.findDOMNode(this.refs.searchBox).value;
+    if (value === '') {
+      this.context.router.replaceWith(this.props.location.pathname, {
+        show: 'popular',
+      });
+    } else {
+      this.context.router.replaceWith(this.props.location.pathname, {
+        query: value,
+      });
+    }
+  },
+
   renderSearchFilters_() {
     return (
       <div className="search__filters">
@@ -275,7 +314,7 @@ export default React.createClass({
   renderSpinner_() {
     return (
       <div className="search__spinner">
-        <FontAwesome name="cog" spin={true} />
+        <FontAwesome name="cog" spin />
       </div>
     );
   },
@@ -452,45 +491,6 @@ export default React.createClass({
         </div>
       </Helmet>
     );
-  },
-
-  handleFilterChange_(groupName, nextValue) {
-    let nextParams = {};
-    if (groupName === 'sort') {
-      if (nextValue === 'trending') {
-        nextParams = { show: 'trending', trending: '7days' };
-      } else {
-        nextParams = { show: nextValue };
-      }
-    } else if (groupName === 'trending') {
-      nextParams = { show: 'trending', trending: nextValue };
-    }
-    this.context.router.transitionTo(this.props.location.pathname, nextParams);
-  },
-
-  handleSearchTextChange_() {
-    this.flux.getActions('progress').addProgress('searchQuery');
-
-    // Attach debounce function to this instance and cache it.
-    this.searchQueryChangeFunction_ = this.searchQueryChangeFunction_ ||
-      debounce(this.handleSearchQueryChange_, 500);
-
-    // Call the retrieved property.
-    this.searchQueryChangeFunction_();
-  },
-
-  handleSearchQueryChange_() {
-    this.flux.getActions('progress').removeProgress('searchQuery');
-    let value = React.findDOMNode(this.refs.searchBox).value;
-    if (value === '') {
-      this.context.router.replaceWith(this.props.location.pathname, {
-        show: 'popular',
-      });
-    } else {
-      this.context.router.replaceWith(this.props.location.pathname, {
-        query: value,
-      });
-    }
   },
 
 });

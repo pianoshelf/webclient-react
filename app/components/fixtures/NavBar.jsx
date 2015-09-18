@@ -48,19 +48,25 @@ export default React.createClass({
 
   componentDidMount() {
     if (this.props.disappearing) {
-      this.handleStickyEvent();
-      window.addEventListener('load', this.handleStickyEvent);
-      window.addEventListener('scroll', this.handleStickyEvent);
-      window.addEventListener('resize', this.handleStickyEvent);
+      this.handleStickyEvent_();
+      window.addEventListener('load', this.handleStickyEvent_);
+      window.addEventListener('scroll', this.handleStickyEvent_);
+      window.addEventListener('resize', this.handleStickyEvent_);
     }
   },
 
   componentWillUnmount() {
     if (this.props.disappearing) {
-      window.removeEventListener('load', this.handleStickyEvent);
-      window.removeEventListener('scroll', this.handleStickyEvent);
-      window.removeEventListener('resize', this.handleStickyEvent);
+      window.removeEventListener('load', this.handleStickyEvent_);
+      window.removeEventListener('scroll', this.handleStickyEvent_);
+      window.removeEventListener('resize', this.handleStickyEvent_);
     }
+  },
+
+  handleStickyEvent_() {
+    let disappearingMode = this.props.disappearing &&
+      window.pageYOffset < this.props.disappearingOffset;
+    this.setState({ disappearingMode });
   },
 
   renderTitle_() {
@@ -108,12 +114,6 @@ export default React.createClass({
         </If>
       </ResponsiveContainer>
     );
-  },
-
-  handleStickyEvent() {
-    let disappearingMode = this.props.disappearing &&
-      window.pageYOffset < this.props.disappearingOffset;
-    this.setState({ disappearingMode });
   },
 
 });

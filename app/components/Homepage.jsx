@@ -126,7 +126,7 @@ export default React.createClass({
     return (
       <Helmet title="PianoShelf - free piano sheet music" titleTemplate="%s">
         <div className="homepage">
-          <NavBar disappearing={true} disappearingOffset={50} />
+          <NavBar disappearing disappearingOffset={50} />
           {this.renderMainPanel_()}
           {this.renderPopularPanel_()}
           {this.renderInfoPanel_()}

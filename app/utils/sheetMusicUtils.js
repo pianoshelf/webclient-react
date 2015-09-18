@@ -152,12 +152,12 @@ export function paidSheetMusicPropType() {
  */
 export function getDifficultyText(difficultyLevel) {
   switch (difficultyLevel) {
-    case 1: return 'Beginner';
-    case 2: return 'Novice';
-    case 3: return 'Intermediate';
-    case 4: return 'Advanced';
-    case 5: return 'Expert';
-    default: return 'Not Rated';
+  case 1: return 'Beginner';
+  case 2: return 'Novice';
+  case 3: return 'Intermediate';
+  case 4: return 'Advanced';
+  case 5: return 'Expert';
+  default: return 'Not Rated';
   }
 }
 

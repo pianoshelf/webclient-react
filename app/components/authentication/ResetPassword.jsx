@@ -32,6 +32,16 @@ export default React.createClass({
     };
   },
 
+  handleSubmit_(event) {
+    event.preventDefault();
+
+    let { email } = this.state;
+
+    // Trigger action
+    let loginActions = this.flux.getActions('login');
+    loginActions.resetPassword(email, this.flux);
+  },
+
   render() {
     let inProgress = includes(this.state.inProgress, 'resetPassword');
 
@@ -50,7 +60,7 @@ export default React.createClass({
               name="email"
               errorCode={this.state.errorCode}
               errorWhen={[errors.NO_EMAIL, errors.INVALID_EMAIL]}
-              focusOnLoad={true}
+              focusOnLoad
               valueLink={this.linkState('email')} />
           </div>
           <Button color="red" disableIf={inProgress} submittedIf={inProgress}>
@@ -61,16 +71,6 @@ export default React.createClass({
         <Link to="/login" className="authentication__link">I want to log in</Link>
       </Helmet>
     );
-  },
-
-  handleSubmit_(event) {
-    event.preventDefault();
-
-    let { email } = this.state;
-
-    // Trigger action
-    let loginActions = this.flux.getActions('login');
-    loginActions.resetPassword(email, this.flux);
   },
 
 });

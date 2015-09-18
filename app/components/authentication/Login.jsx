@@ -35,50 +35,6 @@ export default React.createClass({
     };
   },
 
-  render() {
-    let loginInProgress = includes(this.state.inProgress, 'login');
-    let facebookInProgress = includes(this.state.inProgress, 'facebookLogin');
-
-    return (
-      <Helmet title="Log in">
-        <Title>Log in to PianoShelf</Title>
-        <ErrorMessage errorCode={this.state.errorCode}
-          dontDisplayIf={this.state.loggedIn ||
-            loginInProgress || facebookInProgress} />
-        <form className="authentication__form" onSubmit={this.handleSubmit_}>
-          <div className="authentication__inputs">
-            <Input placeholder="Username"
-              name="username"
-              errorCode={this.state.errorCode}
-              errorWhen={[errors.NO_USERNAME]}
-              focusOnLoad={true}
-              valueLink={this.linkState('username')} />
-            <Input placeholder="Password"
-              name="password"
-              password={true}
-              errorCode={this.state.errorCode}
-              errorWhen={[errors.NO_PASSWORD]}
-              valueLink={this.linkState('password')} />
-          </div>
-          <Button color="orange" submittedIf={loginInProgress}
-              disableIf={loginInProgress || facebookInProgress}>
-            <FontAwesome className="authentication__button-icon" name="sign-in" />
-            Log in
-          </Button>
-        </form>
-        <Link to="/login/forgot" className="authentication__link">I forgot my password</Link>
-        <hr className="authentication__hr" />
-        <form onSubmit={this.handleFacebook_}>
-          <Button color="facebook" submittedIf={facebookInProgress}
-              disableIf={loginInProgress || facebookInProgress}>
-            <FontAwesome className="authentication__button-icon" name="facebook-square" />
-            Sign in using Facebook
-          </Button>
-        </form>
-      </Helmet>
-    );
-  },
-
   handleSubmit_(event) {
     event.preventDefault();
 
@@ -102,6 +58,50 @@ export default React.createClass({
       let loginActions = this.flux.getActions('login');
       loginActions.facebookLogin({ accessToken }, this.flux);
     }
+  },
+
+  render() {
+    let loginInProgress = includes(this.state.inProgress, 'login');
+    let facebookInProgress = includes(this.state.inProgress, 'facebookLogin');
+
+    return (
+      <Helmet title="Log in">
+        <Title>Log in to PianoShelf</Title>
+        <ErrorMessage errorCode={this.state.errorCode}
+          dontDisplayIf={this.state.loggedIn ||
+            loginInProgress || facebookInProgress} />
+        <form className="authentication__form" onSubmit={this.handleSubmit_}>
+          <div className="authentication__inputs">
+            <Input placeholder="Username"
+              name="username"
+              errorCode={this.state.errorCode}
+              errorWhen={[errors.NO_USERNAME]}
+              focusOnLoad
+              valueLink={this.linkState('username')} />
+            <Input placeholder="Password"
+              name="password"
+              password
+              errorCode={this.state.errorCode}
+              errorWhen={[errors.NO_PASSWORD]}
+              valueLink={this.linkState('password')} />
+          </div>
+          <Button color="orange" submittedIf={loginInProgress}
+              disableIf={loginInProgress || facebookInProgress}>
+            <FontAwesome className="authentication__button-icon" name="sign-in" />
+            Log in
+          </Button>
+        </form>
+        <Link to="/login/forgot" className="authentication__link">I forgot my password</Link>
+        <hr className="authentication__hr" />
+        <form onSubmit={this.handleFacebook_}>
+          <Button color="facebook" submittedIf={facebookInProgress}
+              disableIf={loginInProgress || facebookInProgress}>
+            <FontAwesome className="authentication__button-icon" name="facebook-square" />
+            Sign in using Facebook
+          </Button>
+        </form>
+      </Helmet>
+    );
   },
 
 });
