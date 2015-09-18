@@ -4,13 +4,13 @@
   "description": "Front-end for pianoshelf.com made using ReactJS",
   "main": "build/server",
   "scripts": {
-    "compile": "gulp compile",
     "clean": "gulp clean",
+    "compile": "gulp compile",
     "lint": "gulp build:lint",
-    "watch": "gulp watch",
     "production": "NODE_ENV=production node build/server",
     "production:proxy": "PROXY_API=true NODE_ENV=production node build/server",
-    "test": "mocha --compilers js:babel/register --recursive"
+    "test": "mocha --compilers js:babel/register --recursive",
+    "watch": "gulp watch"
   },
   "repository": {
     "type": "git",
