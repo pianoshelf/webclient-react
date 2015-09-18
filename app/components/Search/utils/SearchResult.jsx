@@ -40,6 +40,11 @@ export default React.createClass({
     );
   },
 
+  normalizeKey_() {
+    let key = this.props.sheetMusic.musicKey;
+    return key;
+  },
+
   renderViewsTag_(viewCount) {
     if (!viewCount) return null;
     let className = 'search__result-property search__result-property--dark';
@@ -115,11 +120,6 @@ export default React.createClass({
         <FontAwesome name="angle-right" className="search__result-right-arrow" />
       </Link>
     );
-  },
-
-  normalizeKey_() {
-    let key = this.props.sheetMusic.musicKey;
-    return key;
   },
 
 
