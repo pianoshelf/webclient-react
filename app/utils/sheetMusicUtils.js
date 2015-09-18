@@ -88,7 +88,7 @@ export function sheetMusicPropType() {
     })),
     images: React.PropTypes.arrayOf(React.PropTypes.string),
     comments: React.PropTypes.any,
-    fileSize: React.PropTypes.string,
+    fileSize: React.PropTypes.oneOfType(React.PropTypes.string, React.PropTypes.number),
     originalFormat: React.PropTypes.string,
     lilypondFile: React.PropTypes.any,
     midiFile: React.PropTypes.any,
