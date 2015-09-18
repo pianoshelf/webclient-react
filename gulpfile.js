@@ -183,10 +183,12 @@ gulp.task('build:cache', function() {
 });
 
 /**
- * Clean out build folder so we are sure we're not building from some cache
+ * Clean out build folder so we are sure we're not building from some cache.
  */
 gulp.task('clean', function(callback) {
-  del(['build'], callback);
+  del(['build']).then(function() {
+    callback();
+  });
 });
 
 /**
