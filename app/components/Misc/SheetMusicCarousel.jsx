@@ -75,7 +75,7 @@ export default React.createClass({
           </div>
         <Else />
           <div className="sheet-music-carousel__spinner">
-            <FontAwesome name="cog" spin={true} size="2x" />
+            <FontAwesome name="cog" spin size="2x" />
           </div>
         </If>
       </div>

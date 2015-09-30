@@ -17,12 +17,12 @@ $navbar-logo-height-mobile: 67.5px
   top: 0
   left: 0
   z-index: 1
-  height: $navbar-height-mobile + 2px
+  height: $navbar-height-mobile + $button-border-width
   background-color: #fff
-  border-bottom: 2px solid $blue-light
+  border-bottom: $button-border-width solid $blue-light
   transition: background-color 0.3s, border-color 0.3s
   +when-tablet
-    height: $navbar-height + 2px
+    height: $navbar-height + $button-border-width
   &--homepage
     background-color: transparent
     border-color: transparent

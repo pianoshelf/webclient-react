@@ -4,6 +4,7 @@ import base64 from 'base-64';
 import bodyParser from 'body-parser';
 import bunyan from 'bunyan';
 import cookieParser from 'cookie-parser';
+import createLocation from 'history/lib/createLocation';
 import defer from 'lodash/function/defer';
 import express from 'express';
 import FluxComponent from 'flummox/component';
@@ -11,13 +12,11 @@ import fs from 'fs';
 import Helmet from 'react-helmet';
 import http from 'http';
 import httpProxy from 'http-proxy';
-import Location from 'react-router/lib/Location';
 import path from 'path';
 import PrettyStream from 'bunyan-prettystream';
-import queryString from 'query-string';
 import React from 'react';
-import Router from 'react-router';
 import utf8 from 'utf8';
+import { RoutingContext, match } from 'react-router';
 
 // Import internal modules
 import config from '../config';
@@ -104,70 +103,66 @@ app.use((req, res, next) => {
   let flux = new Flux(req);
 
   let routes = getRoutes(flux);
-  let target = new Location(req.path, req.query);
+  let location = createLocation(req.url);
 
-  Router.run(routes, target, (error, initialState, transition) => {
-    // If our transition is cancelled, we redirect the user with a 302.
-    if (transition.isCancelled) {
-      let { redirectInfo } = transition;
-      let { pathname, query } = redirectInfo;
+  match({ routes, location }, (error, redirectLocation, renderProps) => {
+    if (redirectLocation) {
+      res.redirect(301, redirectLocation.pathname + redirectLocation.search);
+    } else if (error) {
+      res.send(500, error.message);
+    } else if (renderProps === null) {
+      res.send(400, 'Not Found');
+    } else {
 
-      let urlParams = queryString.stringify(query);
-      let url = urlParams ? `${pathname}?${urlParams}` : pathname;
-      res.redirect(url);
-      return;
-    }
+      // Function that renders the route.
+      let renderRoute = () => defer(() => {
+        try {
+          // Render our entire app to a string, and make sure we wrap everything
+          // with FluxComponent, which adds the flux context to the entire app.
+          let renderedString = React.renderToString(
+            <FluxComponent flux={flux}>
+              <RoutingContext {...renderProps} />
+            </FluxComponent>
+          );
 
-    // Function that renders the route.
-    let renderRoute = () => defer(() => {
-      try {
-        // Render our entire app to a string, and make sure we wrap everything
-        // with FluxComponent, which adds the flux context to the entire app.
-        let renderedString = React.renderToString(
-          <FluxComponent flux={flux}>
-            <Router {...initialState} />
-          </FluxComponent>
-        );
+          // Base64 encode all the data in our stores.
+          let inlineData = base64.encode(utf8.encode(flux.serialize()));
 
-        // Base64 encode all the data in our stores.
-        let inlineData = base64.encode(utf8.encode(flux.serialize()));
+          // Get title, meta, and link tags.
+          let { title, meta, link } = Helmet.rewind();
 
-        // Get title, meta, and link tags.
-        let { title, meta, link } = Helmet.rewind();
+          // Generate boilerplate output.
+          let output =
+            `<!DOCTYPE html>
+            <html>
+              <head>
+                <meta charset="utf-8" />
+                <meta name="viewport" content="width=device-width,initial-scale=1" />
+                ${meta}
+                <title>${title}</title>
+                <link rel="stylesheet" href="${cssPath}" />
+                ${link}
+              </head>
+              <body>
+                <div id="react-root">${renderedString}</div>
+                <script type="text/inline-data" id="react-data">${inlineData}</script>
+                <script src="${jsPath}"></script>
+              </body>
+            </html>`;
 
-        // Generate boilerplate output.
-        let output =
-          `<!DOCTYPE html>
-          <html>
-            <head>
-              <meta charset="utf-8" />
-              <meta name="viewport" content="width=device-width,initial-scale=1" />
-              ${meta}
-              <title>${title}</title>
-              <link rel="stylesheet" href="${cssPath}" />
-              ${link}
-            </head>
-            <body>
-              <div id="react-root">${renderedString}</div>
-              <script type="text/inline-data" id="react-data">${inlineData}</script>
-              <script src="${jsPath}"></script>
-            </body>
-          </html>`;
+          // Send output to ExpressJS.
+          res.send(output);
+        } catch (err) {
+          log.error('There was a problem renderring the page. Here\'s the error:');
+          log.error(err);
 
-        // Send output to ExpressJS.
-        res.send(output);
-      } catch (err) {
-        log.error('There was a problem renderring the page. Here\'s the error:');
-        log.error(err);
+          // Forward to next request if there's an error.
+          next(err);
+        }
+      });
 
-        // Forward to next request if there's an error.
-        next(err);
-      }
-    });
-
-    // Make sure we render our route even if the promise fails.
-    if (initialState.components) {
-      prefetchRouteData(initialState.components, { flux, state: initialState })
+      // Make sure we render our route even if the promise fails.
+      prefetchRouteData(renderProps.components, { flux, state: renderProps })
         .then(renderRoute, renderRoute);
     }
   });

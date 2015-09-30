@@ -2,16 +2,14 @@
 import React from 'react';
 import { addons } from 'react/addons';
 
-// Import other components
 import NavBar from '../Fixtures/NavBar';
 import Footer from '../Fixtures/Footer';
-import ResponsiveContainer from '../Misc/ResponsiveContainer';
 
 let { PureRenderMixin } = addons;
 
 export default React.createClass({
 
-  displayName: 'Search',
+  displayName: 'SheetMusic',
 
   propTypes: {
     children: React.PropTypes.node,
@@ -21,14 +19,13 @@ export default React.createClass({
 
   render() {
     return (
-      <div className="search">
+      <div className="sheetmusic">
         <NavBar />
-        <ResponsiveContainer className="search__container">
-          {this.props.children}
-        </ResponsiveContainer>
+        {this.props.children}
         <Footer />
       </div>
     );
   },
 
 });
+

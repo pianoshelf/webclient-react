@@ -44,6 +44,41 @@ export default React.createClass({
     }
   },
 
+  handleSubmit_(event) {
+    event.preventDefault();
+
+    // Extract form values
+    let { username, email, password1, password2 } = this.state;
+    let newUser = { username, email, password1, password2 };
+
+    // Trigger action
+    let loginActions = this.flux.getActions('login');
+    loginActions.register(newUser, this.flux);
+  },
+
+  handleFacebook_(event) {
+    event.preventDefault();
+    this.facebookLogin();
+  },
+
+  handlePostRegister_() {
+    let { username, password1 } = this.state;
+
+    // Trigger action
+    let loginActions = this.flux.getActions('login');
+    loginActions.login(username, password1, this.flux);
+  },
+
+  facebookLoginHandler(response) {
+    if (response.status === 'connected') {
+      let { accessToken } = response;
+
+      // Trigger action
+      let loginActions = this.flux.getActions('login');
+      loginActions.facebookLogin({ accessToken }, this.flux);
+    }
+  },
+
   render() {
     let registerInProgress = includes(this.state.inProgress, 'register') ||
                              includes(this.state.inProgress, 'login');
@@ -61,7 +96,7 @@ export default React.createClass({
               name="username"
               errorCode={this.state.errorCode}
               errorWhen={[errors.NO_USERNAME, errors.USERNAME_TAKEN]}
-              focusOnLoad={true}
+              focusOnLoad
               valueLink={this.linkState('username')} />
             <Input placeholder="Email"
               name="email"
@@ -70,13 +105,13 @@ export default React.createClass({
               valueLink={this.linkState('email')} />
             <Input placeholder="Password"
               name="password1"
-              password={true}
+              password
               errorCode={this.state.errorCode}
               errorWhen={[errors.NO_PASSWORD, errors.NOT_STRONG_PASSWORD]}
               valueLink={this.linkState('password1')} />
             <Input placeholder="Confirm Password"
               name="password2"
-              password={true}
+              password
               errorCode={this.state.errorCode}
               errorWhen={[errors.NOT_SAME_PASSWORD]}
               valueLink={this.linkState('password2')} />
@@ -98,41 +133,6 @@ export default React.createClass({
         </form>
       </Helmet>
     );
-  },
-
-  handleSubmit_(event) {
-    event.preventDefault();
-
-    // Extract form values
-    let { username, email, password1, password2 } = this.state;
-    let newUser = { username, email, password1, password2 };
-
-    // Trigger action
-    let loginActions = this.flux.getActions('login');
-    loginActions.register(newUser, this.flux);
-  },
-
-  handleFacebook_(event) {
-    event.preventDefault();
-    this.facebookLogin();
-  },
-
-  facebookLoginHandler(response) {
-    if (response.status === 'connected') {
-      let { accessToken } = response;
-
-      // Trigger action
-      let loginActions = this.flux.getActions('login');
-      loginActions.facebookLogin({ accessToken }, this.flux);
-    }
-  },
-
-  handlePostRegister_() {
-    let { username, password1 } = this.state;
-
-    // Trigger action
-    let loginActions = this.flux.getActions('login');
-    loginActions.login(username, password1, this.flux);
   },
 
 });

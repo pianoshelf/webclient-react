@@ -4,11 +4,11 @@ import 'babel/polyfill';
 
 // Import external modules
 import base64 from 'base-64';
-import BrowserHistory from 'react-router/lib/BrowserHistory';
 import FluxComponent from 'flummox/component';
 import React from 'react';
 import Router from 'react-router';
 import utf8 from 'utf8';
+import { createHistory } from 'history';
 
 // Import internal modules
 import Flux from './Flux';
@@ -25,7 +25,7 @@ let inlineData = document.getElementById('react-data').textContent;
 flux.deserialize(utf8.decode(base64.decode(inlineData)));
 
 // Create history object for the browser
-let browserHistory = new BrowserHistory();
+let browserHistory = createHistory();
 
 // Re-render everything on reactRoot
 React.render(

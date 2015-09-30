@@ -20,14 +20,14 @@ export default React.createClass({
 
   propTypes: {
     /**
-     * Whether we're on the homepage.
+     * Whether the navbar dynamically disappears.
      */
-    homepage: React.PropTypes.bool,
+    disappearing: React.PropTypes.bool,
 
     /**
-     * The maximum YOffset at which we should pretend this.props.homepage is false.
+     * The maximum YOffset at which we should pretend this.props.disappearing is false.
      */
-    yOffsetLimit: React.PropTypes.number,
+    disappearingOffset: React.PropTypes.number,
   },
 
   mixins: [
@@ -42,29 +42,35 @@ export default React.createClass({
 
   getInitialState() {
     return {
-      homepageMode: this.props.homepage,
+      disappearingMode: this.props.disappearing,
     };
   },
 
   componentDidMount() {
-    if (this.props.homepage) {
-      this.handleStickyEvent();
-      window.addEventListener('load', this.handleStickyEvent);
-      window.addEventListener('scroll', this.handleStickyEvent);
-      window.addEventListener('resize', this.handleStickyEvent);
+    if (this.props.disappearing) {
+      this.handleStickyEvent_();
+      window.addEventListener('load', this.handleStickyEvent_);
+      window.addEventListener('scroll', this.handleStickyEvent_);
+      window.addEventListener('resize', this.handleStickyEvent_);
     }
   },
 
   componentWillUnmount() {
-    if (this.props.homepage) {
-      window.removeEventListener('load', this.handleStickyEvent);
-      window.removeEventListener('scroll', this.handleStickyEvent);
-      window.removeEventListener('resize', this.handleStickyEvent);
+    if (this.props.disappearing) {
+      window.removeEventListener('load', this.handleStickyEvent_);
+      window.removeEventListener('scroll', this.handleStickyEvent_);
+      window.removeEventListener('resize', this.handleStickyEvent_);
     }
   },
 
+  handleStickyEvent_() {
+    let disappearingMode = this.props.disappearing &&
+      window.pageYOffset < this.props.disappearingOffset;
+    this.setState({ disappearingMode });
+  },
+
   renderTitle_() {
-    if (this.state.homepageMode) {
+    if (this.state.disappearingMode) {
       return (
         <div>
           <div className="navbar__title navbar__title--homepage">PianoShelf</div>
@@ -83,11 +89,11 @@ export default React.createClass({
 
   render() {
     let navbarClass = classNames('navbar', {
-      'navbar--homepage': this.state.homepageMode,
+      'navbar--homepage': this.state.disappearingMode,
     });
 
     let buttonClass = (important) => classNames('navbar__button', {
-      'navbar__button--homepage': this.state.homepageMode,
+      'navbar__button--homepage': this.state.disappearingMode,
       'navbar__button--important': important,
     });
 
@@ -108,12 +114,6 @@ export default React.createClass({
         </If>
       </ResponsiveContainer>
     );
-  },
-
-  handleStickyEvent() {
-    let homepageMode = this.props.homepage &&
-      window.pageYOffset < this.props.yOffsetLimit;
-    this.setState({ homepageMode });
   },
 
 });

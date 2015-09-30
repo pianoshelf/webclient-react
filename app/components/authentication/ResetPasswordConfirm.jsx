@@ -37,6 +37,18 @@ export default React.createClass({
     };
   },
 
+  handleSubmit_(event) {
+    event.preventDefault();
+
+    let { password1, password2 } = this.state;
+    let { token, uid } = this.props.params;
+    let user = { password1, password2 };
+
+    // Trigger action
+    let loginActions = this.flux.getActions('login');
+    loginActions.resetPasswordConfirm(user, uid, token, this.flux);
+  },
+
   render() {
     let inProgress = includes(this.state.inProgress, 'resetPasswordConfirm');
 
@@ -60,14 +72,14 @@ export default React.createClass({
               <div className="authentication__inputs">
                 <Input placeholder="New Password"
                   name="password1"
-                  password={true}
+                  password
                   errorCode={this.state.errorCode}
                   errorWhen={[errors.NO_PASSWORD, errors.NOT_STRONG_PASSWORD]}
-                  focusOnLoad={true}
+                  focusOnLoad
                   valueLink={this.linkState('password1')} />
                 <Input placeholder="Confirm New Password"
                   name="password2"
-                  password={true}
+                  password
                   errorCode={this.state.errorCode}
                   errorWhen={[errors.NOT_SAME_PASSWORD]}
                   valueLink={this.linkState('password2')} />
@@ -81,18 +93,6 @@ export default React.createClass({
         </If>
       </Helmet>
     );
-  },
-
-  handleSubmit_(event) {
-    event.preventDefault();
-
-    let { password1, password2 } = this.state;
-    let { token, uid } = this.props.params;
-    let user = { password1, password2 };
-
-    // Trigger action
-    let loginActions = this.flux.getActions('login');
-    loginActions.resetPasswordConfirm(user, uid, token, this.flux);
   },
 
 });

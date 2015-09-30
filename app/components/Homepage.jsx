@@ -28,6 +28,9 @@ export default React.createClass({
       sheetmusic: store => ({
         mostPopularSheetMusic: store.state.mostPopularSheetMusic,
       }),
+      login: store => ({
+        loggedIn: store.state.loggedIn,
+      }),
     }),
   ],
 
@@ -54,9 +57,11 @@ export default React.createClass({
           <div className="homepage__main-search">
             <Link to="/browse" className="homepage__main-search-input">Browse Sheet Music</Link>
           </div>
-          <div className="homepage__main-register">
-            or <Link to="/register" className="homepage__main-register-link">sign up now</Link>.
-          </div>
+          <If condition={!this.state.loggedIn}>
+            <div className="homepage__main-register">
+              or <Link to="/register" className="homepage__main-register-link">sign up now</Link>.
+            </div>
+          </If>
         </div>
       </ResponsiveContainer>
     );
@@ -121,7 +126,7 @@ export default React.createClass({
     return (
       <Helmet title="PianoShelf - free piano sheet music" titleTemplate="%s">
         <div className="homepage">
-          <NavBar homepage={true} yOffsetLimit={50} />
+          <NavBar disappearing disappearingOffset={50} />
           {this.renderMainPanel_()}
           {this.renderPopularPanel_()}
           {this.renderInfoPanel_()}

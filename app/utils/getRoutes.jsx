@@ -23,6 +23,10 @@ import VerifyEmail from '../components/Authentication/VerifyEmail';
 import Search from '../components/Search';
 import Browse from '../components/Search/Browse';
 
+// Sheet music components
+import SheetMusic from '../components/SheetMusic';
+import Viewer from '../components/SheetMusic/Viewer';
+
 // Static components
 import Static from '../components/Static';
 import Copyright from '../components/Static/Copyright';
@@ -61,6 +65,11 @@ export default function getRoutes(flux) {
       <Route component={Search}>
         <Route path="/browse" component={Browse} />
         <Redirect path="/sheetmusic" to="/browse" />
+      </Route>
+
+      { /* Sheet music routes */ }
+      <Route component={SheetMusic}>
+        <Route path="/sheetmusic/:id/:slug" component={Viewer} />
       </Route>
 
       { /* Static routes */ }

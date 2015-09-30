@@ -119,11 +119,13 @@ gulp.task('build:client', function(callback) {
   webpackDevCompiler.run(function(err) {
     if (err) throw new gutil.PluginError('build:client', err);
 
-    // Emulate gulp-size
-    let outputConfig = webpackDevConfig.output;
-    let jsFilePath = path.join(outputConfig.path, outputConfig.filename);
-    gutil.log(`${gutil.colors.cyan('Client JS')} ${gutil.colors.green('all files ')}` +
-              `${gutil.colors.magenta(pretty(fs.statSync(jsFilePath).size))}`);
+    // Emulate gulp-size and ignore errors
+    try {
+      let outputConfig = webpackDevConfig.output;
+      let jsFilePath = path.join(outputConfig.path, outputConfig.filename);
+      gutil.log(`${gutil.colors.cyan('Client JS')} ${gutil.colors.green('all files ')}` +
+                `${gutil.colors.magenta(pretty(fs.statSync(jsFilePath).size))}`);
+    } catch (e) {}
 
     // Set boolean to true if we're not running the server.
     if (!isRunningDevServer) {
@@ -181,17 +183,31 @@ gulp.task('build:cache', function() {
 });
 
 /**
- * Clean out build folder so we are sure we're not building from some cache
+ * Clean out build folder so we are sure we're not building from some cache.
  */
 gulp.task('clean', function(callback) {
-  del(['build'], callback);
+  del(['build']).then(function() {
+    callback();
+  });
 });
 
 /**
- * Task to compile our files for production
+ * Task to compile our files for production.
  */
 gulp.task('compile', function(callback) {
   runSequence('clean', 'build:lint:prod', [
+    'build:images',
+    'build:css:prod',
+    'build:client:prod',
+    'build:server',
+  ], 'build:cache', callback);
+});
+
+/**
+ * Task to compile our files for production, ignoring linting.
+ */
+gulp.task('compile:nolint', function(callback) {
+  runSequence('clean', [
     'build:images',
     'build:css:prod',
     'build:client:prod',

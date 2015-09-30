@@ -2,8 +2,9 @@
 import classNames from 'classnames';
 import FontAwesome from 'react-fontawesome';
 import React from 'react';
+import { Link } from 'react-router';
 
-import { sheetMusicPropType } from '../../../utils/sheetMusicUtils';
+import { sheetMusicPropType, getDifficultyText } from '../../../utils/sheetMusicUtils';
 
 export default React.createClass({
   propTypes: {
@@ -32,26 +33,16 @@ export default React.createClass({
   },
 
   getDifficultyText_(difficultyLevel) {
-    switch (difficultyLevel) {
-    case 1: return (
-      <span>Beginner</span>
+    return (
+      <span>
+        {getDifficultyText(difficultyLevel)}
+      </span>
     );
-    case 2: return (
-      <span>Novice</span>
-    );
-    case 3: return (
-      <span>Intermediate</span>
-    );
-    case 4: return (
-      <span>Advanced</span>
-    );
-    case 5: return (
-      <span>Expert</span>
-    );
-    default: return (
-      <span>Not Rated</span>
-    );
-    }
+  },
+
+  normalizeKey_() {
+    let key = this.props.sheetMusic.musicKey;
+    return key;
   },
 
   renderViewsTag_(viewCount) {
@@ -93,9 +84,9 @@ export default React.createClass({
     let normalizedKey = this.normalizeKey_();
     if (normalizedKey) tags.push(normalizedKey);
 
-    // TODO: use <Link>
     return (
-      <a className={className} href="#">
+      <Link className={className}
+          to={`/sheetmusic/${this.props.sheetMusic.id}/${this.props.sheetMusic.uniqueUrl}`}>
         <If condition={this.props.sheetMusic.thumbnailUrl}>
           <img src={this.props.sheetMusic.thumbnailUrl}
             className="search__result-thumbnail" />
@@ -127,13 +118,8 @@ export default React.createClass({
           </ul>
         </div>
         <FontAwesome name="angle-right" className="search__result-right-arrow" />
-      </a>
+      </Link>
     );
-  },
-
-  normalizeKey_() {
-    let key = this.props.sheetMusic.musicKey;
-    return key;
   },
 
 

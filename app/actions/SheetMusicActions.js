@@ -13,7 +13,7 @@ export default class SheetMusicActions extends Actions {
 
   getSheetMusic(sheetId, flux) {
     return get(
-      `/sheetmusic/${sheetId}`,
+      `/sheetmusic/${sheetId}/`,
       {},
       flux
     );
@@ -21,7 +21,7 @@ export default class SheetMusicActions extends Actions {
 
   updateSheetMusic(sheetId, data, flux) {
     return patch(
-      `/sheetmusic/${sheetId}`,
+      `/sheetmusic/${sheetId}/`,
       { sheetmusic: data },
       flux
     );
@@ -104,7 +104,7 @@ export default class SheetMusicActions extends Actions {
 
   deleteSheetMusic(sheetId, flux) {
     return del(
-      `/sheetmusic/${sheetId}`,
+      `/sheetmusic/${sheetId}/`,
       {},
       flux
     );
@@ -186,6 +186,14 @@ export default class SheetMusicActions extends Actions {
     return get(
       '/commentupvote/',
       { commentId, sheetmusicId: sheetId },
+      flux
+    );
+  }
+
+  getSheetMusicDownloadLink(sheetId, flux) {
+    return get(
+      '/sheetmusic/downloads/',
+      { sheetmusic_id: sheetId },
       flux
     );
   }
