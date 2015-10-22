@@ -98,7 +98,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // Capture all requests
-app.use((req, res, next) => {
+app.use((req, res) => {
   // Create Flux object
   let flux = new Flux(req);
 
@@ -116,8 +116,6 @@ app.use((req, res, next) => {
 
       // Function that renders the route.
       let renderRoute = () => defer(() => {
-
-
 
         try {
           // Render our entire app to a string, and make sure we wrap everything
