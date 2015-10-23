@@ -98,7 +98,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // Capture all requests
-app.use((req, res, next) => {
+app.use((req, res) => {
   // Create Flux object
   let flux = new Flux(req);
 
@@ -111,11 +111,12 @@ app.use((req, res, next) => {
     } else if (error) {
       res.send(500, error.message);
     } else if (renderProps === null) {
-      res.send(400, 'Not Found');
+      res.send(404, 'Not Found');
     } else {
 
       // Function that renders the route.
       let renderRoute = () => defer(() => {
+
         try {
           // Render our entire app to a string, and make sure we wrap everything
           // with FluxComponent, which adds the flux context to the entire app.
@@ -156,8 +157,7 @@ app.use((req, res, next) => {
           log.error('There was a problem renderring the page. Here\'s the error:');
           log.error(err);
 
-          // Forward to next request if there's an error.
-          next(err);
+          res.send(500, err);
         }
       });
 

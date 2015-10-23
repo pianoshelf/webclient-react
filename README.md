@@ -2,32 +2,29 @@
 
 [![Circle CI](https://circleci.com/gh/pianoshelf/webclient-react/tree/master.svg?style=svg)](https://circleci.com/gh/Pianoshelf/webclient-react/tree/master)
 
-This repository is the front-end codebase of PianoShelf written with ReactJS.
-
-**This codebase is currently not deployed.**
+This repository is the new front-end for Pianoshelf.com written in React and Flux.
 
 ## Installation
 
-To set up an instance of the front-end for PianoShelf, install `npm` and `node`, and run:
+To set up an instance of the front-end for PianoShelf, install all packages:
 
     $ npm install
 
-To run the instance, run:
+## Running
+
+Note: Access to a local instance of the Pianoshelf API server is necessary. Working with the
+remote API server is currently not supported but hopefully will be!
+
+To run the dev environment:
 
     $ npm run watch
 
-To compile assets for production, run:
-
-    $ npm run compile
-
-To run tests, run:
+To run tests:
 
     $ npm run test
 
-## Contributing
+To compile assets for production and run the production environment:
 
-Before contributing code, please run the linter:
+    $ npm run compile
+    $ npm run production
 
-    $ npm run lint
-
-Then submit a pull request.
