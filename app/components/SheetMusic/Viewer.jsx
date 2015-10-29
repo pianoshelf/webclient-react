@@ -15,6 +15,7 @@ import InfoBox from './utils/InfoBox';
 import LeftButton from './utils/LeftButton';
 import ResponsiveContainer from '../Misc/ResponsiveContainer';
 import RightButton from './utils/RightButton';
+import Comments from './comments/Comments';
 import { getDifficultyText } from '../../utils/sheetMusicUtils';
 
 let { PureRenderMixin } = addons;
@@ -24,6 +25,7 @@ function retrieveInitialData(flux, params) {
 
   return Promise.all([
     sheetMusicActions.getSheetMusic(parseInt(params.id, 10), flux),
+    sheetMusicActions.getComments(parseInt(params.id, 10), flux),
   ]);
 }
 
@@ -71,6 +73,9 @@ export default React.createClass({
       sheetmusic: store => ({
         errorCode: store.state.errorCode,
         sheetMusicResult: store.state.sheetMusicResult,
+      }),
+      comments: store => ({
+        commentResult: store.state.commentResult,
       }),
       progress: store => store.state,
       login: store => ({
@@ -284,7 +289,9 @@ export default React.createClass({
 
   renderComments_() {
     return (
-      <InfoBox title="Comments" icon="comment" />
+      <InfoBox title="Comments" icon="comment">
+        <Comments id={this.state.sheetMusicResult.id} comments={this.state.commentResult.comment}/>
+      </InfoBox>
     );
   },
 

@@ -13,6 +13,7 @@ import ProgressActions from './actions/ProgressActions';
 import LoginStore from './stores/LoginStore';
 import ProgressStore from './stores/ProgressStore';
 import SheetMusicStore from './stores/SheetMusicStore';
+import CommentsStore from './stores/CommentsStore';
 
 // Export Flux class
 export default class Flux extends Flummox {
@@ -35,6 +36,7 @@ export default class Flux extends Flummox {
     this.createStore('login', LoginStore, this);
     this.createStore('progress', ProgressStore, this);
     this.createStore('sheetmusic', SheetMusicStore, this);
+    this.createStore('comments', CommentsStore, this);
   }
 
   /**

@@ -1,0 +1,92 @@
+@import 'variables/colors'
+
+.comment__box
+  border: 1px solid $grey-normal
+  padding: 10px
+  margin-bottom: -1px
+
+.comment__box--even
+  background-color: $white
+
+.comment__box--odd
+  background-color: $grey-reply-box
+
+.comment__reply
+  margin-top: 10px
+  background-color: $grey-reply-box
+
+.comment__name
+  color: $blue
+  cursor: pointer
+
+.comment__name:hover
+  color: $blue-light
+
+.comment__delta
+  font-size: 12px
+  font-style: italic
+
+.comment__style
+  font-size: 15px
+  
+.comment__rating
+  display: inline-block
+  padding-left: 3px
+  padding-right: 10px
+  
+.comment__points
+  font-size: 12px
+  font-weight: 700
+
+.comment__message
+  display: inline-block
+  width: calc(100% - 50px)
+  word-wrap: break-word
+
+.comment__arrows
+  width: 20px
+  margin-right: 5px
+  float: left
+  display: block
+
+.comment__vote-arrow
+  text-align: center
+  color: $grey-text-dark
+  cursor: pointer
+  
+.comment__vote-arrow:hover
+  color: $green
+
+.comment__contents
+  margin-left: 10px
+  
+.comment__upvote-points
+  text-align: center
+  font-weight: 700
+  
+.comment__text-area
+  width: 100%
+  border-color: $grey-dark
+  resize: none
+  overflow: hidden
+
+.comment__send-button
+  display: inline-block
+  position: relative
+  text-decoration: none
+  margin: auto
+  cursor: pointer
+  padding: 2px 8px
+  color: #000
+  font-family: $title-font
+  font-size: 18px
+  +standard-borders
+  +clickable-gradient($grey-dark)
+
+.commment__text-box-prompt
+  margin-top: 10px
+
+.comment__disabled
+  cursor: default
+  pointer-events: none
+  opacity: 0.5
