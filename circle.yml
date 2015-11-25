@@ -1,6 +1,6 @@
 machine:
   node:
-    version: iojs-v2.5.0
+    version: 5.0.0
 
 test:
   override:
