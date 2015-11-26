@@ -119,9 +119,10 @@ below.
 export default React.createClass({
   render() {
     return (
-      <Helmet title="Privacy Policy">
+      <div>
+        <Helmet title="Privacy Policy" />
         <Markdown className="static__markdown" source={input} />
-      </Helmet>
+      </div>
     );
   },
 });

@@ -36,11 +36,12 @@ export default React.createClass({
 
   render() {
     return (
-      <Helmet title="Logging out...">
+      <div>
+        <Helmet title="Logging out..." />
         <InfoText>
           You are now being logged out...
         </InfoText>
-      </Helmet>
+      </div>
     );
   },
 

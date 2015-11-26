@@ -440,7 +440,8 @@ export default React.createClass({
     });
 
     return (
-      <Helmet title="Browse Sheet Music">
+      <div>
+        <Helmet title="Browse Sheet Music" />
         <div className="search__browse-search">
           <input type="text"
             className="search__browse-search-input"
@@ -483,7 +484,7 @@ export default React.createClass({
             {this.renderPagination_()}
           </div>
         </div>
-      </Helmet>
+      </div>
     );
   },
 

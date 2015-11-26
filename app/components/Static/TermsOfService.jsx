@@ -81,9 +81,10 @@ Use.
 export default React.createClass({
   render() {
     return (
-      <Helmet title="Terms of Service">
+      <div>
+        <Helmet title="Terms of Service" />
         <Markdown className="static__markdown" source={input} />
-      </Helmet>
+      </div>
     );
   },
 });

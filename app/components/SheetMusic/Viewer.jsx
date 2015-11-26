@@ -362,14 +362,16 @@ export default React.createClass({
 
     if (inProgress) {
       return (
-        <Helmet title={title}>
+        <div>
+          <Helmet title={title} />
           {this.renderLoadingScreen_()}
-        </Helmet>
+        </div>
       );
     }
 
     return (
-      <Helmet title={title}>
+      <div>
+        <Helmet title={title} />
         <div className="sheetmusic__main" ref="mainViewer">
           {this.renderSheetMusicViewer_()}
           {this.renderSheetMusicControls_()}
@@ -384,7 +386,7 @@ export default React.createClass({
             {this.renderInfo_()}
           </div>
         </ResponsiveContainer>
-      </Helmet>
+      </div>
     );
   },
 

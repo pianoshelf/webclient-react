@@ -53,7 +53,8 @@ export default React.createClass({
     let inProgress = includes(this.state.inProgress, 'resetPasswordConfirm');
 
     return (
-      <Helmet title="Reset Password">
+      <div>
+        <Helmet title="Reset Password" />
         <Title>Reset your password</Title>
         <ErrorMessage errorCode={this.state.errorCode}
           dontDisplayIf={this.state.loggedIn || inProgress} />
@@ -91,7 +92,7 @@ export default React.createClass({
             </form>
           </div>
         </If>
-      </Helmet>
+      </div>
     );
   },
 

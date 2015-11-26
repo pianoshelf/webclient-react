@@ -46,7 +46,8 @@ export default React.createClass({
     let inProgress = includes(this.state.inProgress, 'resetPassword');
 
     return (
-      <Helmet title="Reset Password">
+      <div>
+        <Helmet title="Reset Password" />
         <Title>Reset your password</Title>
         <ErrorMessage errorCode={this.state.errorCode}
           dontDisplayIf={this.state.loggedIn || inProgress} />
@@ -69,7 +70,7 @@ export default React.createClass({
           </Button>
         </form>
         <Link to="/login" className="authentication__link">I want to log in</Link>
-      </Helmet>
+      </div>
     );
   },
 
