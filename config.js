@@ -52,11 +52,20 @@ module.exports = {
     csrf: 'csrftoken',
   },
 
-  babelOptions: {
-    stage: 0,
-    plugins: ['jsx-control-statements/babel'],
-    loose: 'all',
-    blacklist: 'regenerator',
+  build: {
+    babel: {
+      stage: 0,
+      plugins: ['jsx-control-statements/babel'],
+      loose: 'all',
+      blacklist: 'regenerator',
+    },
+    sass: {
+      style: 'compact',
+      includePaths: ['./assets/css', './node_modules'],
+    },
+    autoprefixer: {
+      browsers: ['> 5%'],
+    },
   },
 
 };
