@@ -38,7 +38,7 @@ let isRunningDevServer = false;
 /**
  * Compile our images
  */
-gulp.task('build:images', function() {
+gulp.task('build:images', () => {
   return gulp.src(config.files.images.src)
     .pipe(imagemin())
     .pipe(gulp.dest(`${config.files.staticAssets}${config.files.images.out}`))
@@ -48,14 +48,11 @@ gulp.task('build:images', function() {
 /**
  * Compile our CSS files
  */
-gulp.task('build:css', function() {
+gulp.task('build:css', () => {
   return gulp.src(config.files.css.entry)
     .pipe(plumber())
-    .pipe(sass({
-      style: 'compact',
-      includePaths: ['./assets/css', './node_modules'],
-    }))
-    .pipe(prefix('ie >= 9'))
+    .pipe(sass(config.build.sass))
+    .pipe(prefix(config.build.autoprefixer))
     .pipe(size({ title: 'CSS' }))
     .pipe(gulp.dest(`${config.files.staticAssets}${config.files.css.out}`))
     .pipe(reload({ stream: true }));
@@ -64,13 +61,10 @@ gulp.task('build:css', function() {
 /**
  * Compile our CSS files for production. This minifies our CSS as well.
  */
-gulp.task('build:css:prod', function() {
+gulp.task('build:css:prod', () => {
   return gulp.src(config.files.css.entry)
-    .pipe(sass({
-      style: 'compact',
-      includePaths: ['./assets/css', './node_modules'],
-    }))
-    .pipe(prefix('ie >= 9'))
+    .pipe(sass(config.build.sass))
+    .pipe(prefix(config.build.autoprefixer))
     .pipe(minifyCss())
     .pipe(size({ title: 'CSS' }))
     .pipe(gulp.dest(`${config.files.staticAssets}${config.files.css.out}`));
@@ -79,7 +73,7 @@ gulp.task('build:css:prod', function() {
 /**
  * Lint all our JS files.
  */
-gulp.task('build:lint', function() {
+gulp.task('build:lint', () => {
   return gulp.src(config.files.client.src)
     .pipe(cache('build:lint'))
     .pipe(eslint())
@@ -89,7 +83,7 @@ gulp.task('build:lint', function() {
 /**
  * Lint all our JS files, and fail on error. Useful on CI machines and build scripts.
  */
-gulp.task('build:lint:prod', function() {
+gulp.task('build:lint:prod', () => {
   return gulp.src(config.files.client.src)
     .pipe(eslint())
     .pipe(eslint.format())
@@ -99,12 +93,12 @@ gulp.task('build:lint:prod', function() {
 /**
  * Compile our server files.
  */
-gulp.task('build:server', function() {
+gulp.task('build:server', () => {
   return gulp.src(config.files.server.src)
     .pipe(cache('src:server'))
     .pipe(plumber())
     .pipe(sourcemaps.init())
-    .pipe(babel(config.babelOptions))
+    .pipe(babel(config.build.babel))
     .pipe(sourcemaps.write('.'))
     .pipe(size({ title: 'Server JS' }))
     .pipe(gulp.dest(config.files.server.out));
@@ -113,10 +107,10 @@ gulp.task('build:server', function() {
 /**
  * Compile our JS files for development and launch webpack-dev-server.
  */
-gulp.task('build:client', function(callback) {
+gulp.task('build:client', callback => {
 
   // Run webpack
-  webpackDevCompiler.run(function(err) {
+  webpackDevCompiler.run(err => {
     if (err) throw new gutil.PluginError('build:client', err);
 
     // Emulate gulp-size and ignore errors
@@ -133,7 +127,7 @@ gulp.task('build:client', function(callback) {
 
       // Start the dev server. We have to make sure we send a new instance of the webpack compiler.
       let devServer = new WebpackDevServer(webpack(webpackDevConfig), webpackDevConfig.devServer);
-      devServer.listen(config.ports.webpack, 'localhost', function(serverErr) {
+      devServer.listen(config.ports.webpack, 'localhost', serverErr => {
         if (serverErr) throw new gutil.PluginError('webpack-dev-server', serverErr);
       });
     }
@@ -146,12 +140,12 @@ gulp.task('build:client', function(callback) {
 /**
  * Compile our JS files for production.
  */
-gulp.task('build:client:prod', function(callback) {
+gulp.task('build:client:prod', callback => {
   let webpackProdConfig = require('./webpack.client');
   let webpackProdCompiler = webpack(webpackProdConfig);
 
   // Run webpack
-  webpackProdCompiler.run(function(err) {
+  webpackProdCompiler.run(err => {
     if (err) throw new gutil.PluginError('build:client:prod', err);
 
     // Emulate gulp-size
@@ -168,7 +162,7 @@ gulp.task('build:client:prod', function(callback) {
  * Duplicate our CSS and JS files with hashes append to their names, so we can enable long term
  * caching.
  */
-gulp.task('build:cache', function() {
+gulp.task('build:cache', () => {
   gulp.src(`${config.files.staticAssets}${config.files.css.out}/*.css`)
     .pipe(rev())
     .pipe(gulp.dest(`${config.files.staticAssets}${config.files.css.out}`))
@@ -185,8 +179,8 @@ gulp.task('build:cache', function() {
 /**
  * Clean out build folder so we are sure we're not building from some cache.
  */
-gulp.task('clean', function(callback) {
-  del(['build']).then(function() {
+gulp.task('clean', callback => {
+  del(['build']).then(() => {
     callback();
   });
 });
@@ -194,7 +188,7 @@ gulp.task('clean', function(callback) {
 /**
  * Task to compile our files for production.
  */
-gulp.task('compile', function(callback) {
+gulp.task('compile', callback => {
   runSequence('clean', 'build:lint:prod', [
     'build:images',
     'build:css:prod',
@@ -206,7 +200,7 @@ gulp.task('compile', function(callback) {
 /**
  * Task to compile our files for production, ignoring linting.
  */
-gulp.task('compile:nolint', function(callback) {
+gulp.task('compile:nolint', callback => {
   runSequence('clean', [
     'build:images',
     'build:css:prod',
@@ -218,14 +212,14 @@ gulp.task('compile:nolint', function(callback) {
 /**
  * Watch the necessary directories and launch BrowserSync.
  */
-gulp.task('watch', ['clean'], function(callback) {
+gulp.task('watch', ['clean'], callback => {
   runSequence(
     'build:lint', [
       'build:images',
       'build:css',
       'build:client',
       'build:server',
-    ], function() {
+    ], () => {
 
       // Watch files
       gulp.watch(config.files.client.src, ['build:client']);
@@ -245,14 +239,14 @@ gulp.task('watch', ['clean'], function(callback) {
       let isBrowserSyncStarted = false;
 
       // Perform action right when nodemon starts
-      nodemon.on('start', function() {
+      nodemon.on('start', () => {
 
         // Only perform action when boolean is false
         if (!isBrowserSyncStarted) {
           isBrowserSyncStarted = true;
 
           // Set a timeout of 500 ms so that the server has time to start
-          setTimeout(function() {
+          setTimeout(() => {
 
             // Launch BrowserSync
             browserSync({

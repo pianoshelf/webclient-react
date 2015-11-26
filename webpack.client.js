@@ -38,7 +38,7 @@ module.exports = {
     new webpack.optimize.UglifyJsPlugin(),
   ],
 
-  babel: config.babelOptions,
+  babel: config.build.babel,
 
   module: {
     loaders: [

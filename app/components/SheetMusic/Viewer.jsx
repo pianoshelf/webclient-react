@@ -230,15 +230,17 @@ export default React.createClass({
             </If>
           </a>
         </If>
-        <a className="sheetmusic__controls sheetmusic__controls--download"
-          onClick={this.handleDownload_}
-          href="#">
-          <span>
-            <FontAwesome className="sheetmusic__controls-icon"
-              name="cloud-download" />
-            Download PDF
-          </span>
-        </a>
+        <If condition={!this.state.isFullscreen}>
+          <a className="sheetmusic__controls sheetmusic__controls--download"
+            onClick={this.handleDownload_}
+            href="#">
+            <span>
+              <FontAwesome className="sheetmusic__controls-icon"
+                name="cloud-download" />
+              Download PDF
+            </span>
+          </a>
+        </If>
       </ResponsiveContainer>
     );
   },
