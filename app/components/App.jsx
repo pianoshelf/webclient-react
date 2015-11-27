@@ -18,14 +18,15 @@ export default React.createClass({
 
   render() {
     return (
-      <Helmet
-        title="Welcome"
-        titleTemplate="%s | PianoShelf - free piano sheet music"
-        meta={[
-          { name: 'description', content: 'PianoShelf' },
-        ]}>
+      <div>
+        <Helmet
+          title="Welcome"
+          titleTemplate="%s | PianoShelf - free piano sheet music"
+          meta={[
+            { name: 'description', content: 'PianoShelf' },
+          ]} />
         {this.props.children}
-      </Helmet>
+      </div>
     );
   },
 });

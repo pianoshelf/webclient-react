@@ -42,7 +42,8 @@ export default React.createClass({
 
   render() {
     return (
-      <Helmet title="Verify Email">
+      <div>
+        <Helmet title="Verify Email" />
         <If condition={this.state.errorCode === success.EMAIL_VERIFIED}>
           <InfoText>
             Your email has been verified. Click <Link to="/">here</Link> to go to the homepage.
@@ -58,7 +59,7 @@ export default React.createClass({
             </InfoText>
           </If>
         </If>
-      </Helmet>
+      </div>
     );
   },
 

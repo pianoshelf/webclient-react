@@ -86,9 +86,10 @@ understand the repercussions of submitting a false claim.
 export default React.createClass({
   render() {
     return (
-      <Helmet title="Copyright">
+      <div>
+        <Helmet title="Copyright" />
         <Markdown className="static__markdown" source={input} />
-      </Helmet>
+      </div>
     );
   },
 });

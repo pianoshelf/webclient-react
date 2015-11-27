@@ -124,15 +124,14 @@ export default React.createClass({
 
   render() {
     return (
-      <Helmet title="PianoShelf - free piano sheet music" titleTemplate="%s">
-        <div className="homepage">
-          <NavBar disappearing disappearingOffset={50} />
-          {this.renderMainPanel_()}
-          {this.renderPopularPanel_()}
-          {this.renderInfoPanel_()}
-          <Footer />
-        </div>
-      </Helmet>
+      <div className="homepage">
+        <Helmet title="PianoShelf - free piano sheet music" titleTemplate="%s" />
+        <NavBar disappearing disappearingOffset={50} />
+        {this.renderMainPanel_()}
+        {this.renderPopularPanel_()}
+        {this.renderInfoPanel_()}
+        <Footer />
+      </div>
     );
   },
 

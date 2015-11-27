@@ -65,7 +65,8 @@ export default React.createClass({
     let facebookInProgress = includes(this.state.inProgress, 'facebookLogin');
 
     return (
-      <Helmet title="Log in">
+      <div>
+        <Helmet title="Log in" />
         <Title>Log in to PianoShelf</Title>
         <ErrorMessage errorCode={this.state.errorCode}
           dontDisplayIf={this.state.loggedIn ||
@@ -100,7 +101,7 @@ export default React.createClass({
             Sign in using Facebook
           </Button>
         </form>
-      </Helmet>
+      </div>
     );
   },
 
