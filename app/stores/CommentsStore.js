@@ -17,11 +17,10 @@ export default class CommentsStore extends BaseStore {
   }
 
   getComments(res) {
-    let result = JSON.parse(res.text);
+    const result = JSON.parse(res.text);
     this.setState({
       commentResult: result,
     });
   }
 
 }
-

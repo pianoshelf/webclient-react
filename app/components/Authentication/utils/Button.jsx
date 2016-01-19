@@ -33,12 +33,14 @@ export default React.createClass({
   },
 
   render() {
-    let className = classNames('authentication__button',
-                               `authentication__button--${this.props.color}`);
+    const className = classNames('authentication__button',
+                                 `authentication__button--${this.props.color}`);
+
     return (
       <button className={className}
         type="submit"
-        disabled={this.props.disableIf}>
+        disabled={this.props.disableIf}
+      >
         <If condition={this.props.submittedIf}>
           <FontAwesome name="cog" spin />
         <Else />
@@ -51,5 +53,3 @@ export default React.createClass({
   },
 
 });
-
-

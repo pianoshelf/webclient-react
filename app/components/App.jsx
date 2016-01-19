@@ -24,7 +24,8 @@ export default React.createClass({
           titleTemplate="%s | PianoShelf - free piano sheet music"
           meta={[
             { name: 'description', content: 'PianoShelf' },
-          ]} />
+          ]}
+        />
         {this.props.children}
       </div>
     );

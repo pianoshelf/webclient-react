@@ -3,7 +3,7 @@ import Helmet from 'react-helmet';
 import Markdown from 'react-markdown';
 import React from 'react';
 
-let input = `
+const input = `
 
 # Terms of Service
 

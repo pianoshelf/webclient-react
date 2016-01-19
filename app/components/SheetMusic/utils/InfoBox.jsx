@@ -12,7 +12,7 @@ export default React.createClass({
   },
 
   render() {
-    let className = classNames({
+    const className = classNames({
       'sheetmusic__details-info-box-content': true,
       [this.props.className]: this.props.className,
     });
@@ -32,4 +32,3 @@ export default React.createClass({
     );
   },
 });
-

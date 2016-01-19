@@ -58,14 +58,14 @@ export default class LoginStore extends BaseStore {
   }
 
   logInUser(res) {
-    let data = JSON.parse(res.text);
+    const data = JSON.parse(res.text);
 
     // Set error code to success
-    let errorCode = success.LOGGED_IN;
+    const errorCode = success.LOGGED_IN;
 
     // Extract user information and set it as the state
-    let { auth_token, username, first_name, last_name, email, is_superuser } = data;
-    let user = {
+    const { auth_token, username, first_name, last_name, email, is_superuser } = data;
+    const user = {
       authToken: auth_token,
       firstName: first_name,
       lastName: last_name,
@@ -75,7 +75,7 @@ export default class LoginStore extends BaseStore {
     };
 
     // Set logged in state to true
-    let loggedIn = true;
+    const loggedIn = true;
 
     // Set the state
     this.setState({ errorCode, user, loggedIn });
@@ -83,30 +83,30 @@ export default class LoginStore extends BaseStore {
 
   registerUser() {
     // Set error code to registered
-    let errorCode = success.REGISTERED;
+    const errorCode = success.REGISTERED;
     this.setState({ errorCode });
   }
 
   resetPasswordSuccess() {
     // Set error code to password reset
-    let errorCode = success.PASSWORD_RESET;
+    const errorCode = success.PASSWORD_RESET;
     this.setState({ errorCode });
   }
 
   resetPasswordConfirmSuccess() {
     // Set error code to password reset confirm
-    let errorCode = success.PASSWORD_CONFIRM_RESET;
+    const errorCode = success.PASSWORD_CONFIRM_RESET;
     this.setState({ errorCode });
   }
 
   verifyEmailSuccess() {
     // Set error code to verified email
-    let errorCode = success.EMAIL_VERIFIED;
+    const errorCode = success.EMAIL_VERIFIED;
     this.setState({ errorCode });
   }
 
   loginError(res) {
-    let data = JSON.parse(res.text);
+    const data = JSON.parse(res.text);
     let errorCode = 0;
 
     if (res.failedResponse) {
@@ -120,7 +120,7 @@ export default class LoginStore extends BaseStore {
   }
 
   registerError(res) {
-    let data = JSON.parse(res.text);
+    const data = JSON.parse(res.text);
     let errorCode = 0;
 
     if (res.failedResponse) {
@@ -137,7 +137,7 @@ export default class LoginStore extends BaseStore {
   }
 
   resetPasswordError(res) {
-    let data = JSON.parse(res.text);
+    const data = JSON.parse(res.text);
     let errorCode = 0;
 
     if (res.failedResponse) {
@@ -178,7 +178,7 @@ export default class LoginStore extends BaseStore {
   }
 
   verifyEmailError(res) {
-    let data = JSON.parse(res.text);
+    const data = JSON.parse(res.text);
     let errorCode = 0;
 
     if (data.detail &&

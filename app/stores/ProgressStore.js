@@ -13,7 +13,7 @@ export default class ProgressStore extends BaseStore {
     const progressActions = flux.getActions('progress');
     const sheetMusicActions = flux.getActions('sheetmusic');
 
-    let actions = [
+    const actions = [
 
       // Login actions
       { name: 'facebookLogin', func: loginActions.facebookLogin },
@@ -55,7 +55,7 @@ export default class ProgressStore extends BaseStore {
    * Called when a function has just been called.
    */
   handleStart(param) {
-    let inProgress = clone(this.state.inProgress);
+    const inProgress = clone(this.state.inProgress);
     if (inProgress.indexOf(param) === -1) {
       inProgress.push(param);
       this.setState({ inProgress });
@@ -67,10 +67,9 @@ export default class ProgressStore extends BaseStore {
    * is modified last.
    */
   handleEnd(param) {
-    let inProgress = clone(this.state.inProgress);
+    const inProgress = clone(this.state.inProgress);
     inProgress.splice(inProgress.indexOf(param));
     defer(() => this.setState({ inProgress }));
   }
 
 }
-

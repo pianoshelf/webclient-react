@@ -11,7 +11,7 @@ import React from 'react';
  * @return {Object} An object with all the necessary properties representing a sheet music.
  */
 export function convertSheetMusic(sheetMusic) {
-  let videos = sheetMusic.videos || [];
+  const videos = sheetMusic.videos || [];
   return {
     id: sheetMusic.id,
     title: sheetMusic.title,
@@ -55,7 +55,7 @@ export function convertSheetMusic(sheetMusic) {
  */
 export function mapSheetMusic(sheetMusicArray, iterator) {
   return sheetMusicArray.map(sheetMusicItem => {
-    let sheetMusic = iterator ? iterator(cloneDeep(sheetMusicItem)) : sheetMusicItem;
+    const sheetMusic = iterator ? iterator(cloneDeep(sheetMusicItem)) : sheetMusicItem;
     return convertSheetMusic(sheetMusic);
   });
 }
@@ -109,7 +109,7 @@ export function sheetMusicPropType() {
  */
 export function mapPaidSheetMusic(sheetMusicArray, iterator) {
   return sheetMusicArray.map(sheetMusicItem => {
-    let sheetMusic = iterator ? iterator(cloneDeep(sheetMusicItem)) : sheetMusicItem;
+    const sheetMusic = iterator ? iterator(cloneDeep(sheetMusicItem)) : sheetMusicItem;
     return {
       detailedDescription: sheetMusic.detailed_description,
       instrument: sheetMusic.instrument,
@@ -152,12 +152,11 @@ export function paidSheetMusicPropType() {
  */
 export function getDifficultyText(difficultyLevel) {
   switch (difficultyLevel) {
-  case 1: return 'Beginner';
-  case 2: return 'Novice';
-  case 3: return 'Intermediate';
-  case 4: return 'Advanced';
-  case 5: return 'Expert';
-  default: return 'Not Rated';
+    case 1: return 'Beginner';
+    case 2: return 'Novice';
+    case 3: return 'Intermediate';
+    case 4: return 'Advanced';
+    case 5: return 'Expert';
+    default: return 'Not Rated';
   }
 }
-

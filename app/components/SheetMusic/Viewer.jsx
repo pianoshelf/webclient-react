@@ -19,7 +19,7 @@ import Comments from './comments/Comments';
 import { getDifficultyText } from '../../utils/sheetMusicUtils';
 
 function retrieveInitialData(flux, params) {
-  let sheetMusicActions = flux.getActions('sheetmusic');
+  const sheetMusicActions = flux.getActions('sheetmusic');
 
   return Promise.all([
     sheetMusicActions.getSheetMusic(parseInt(params.id, 10), flux),
@@ -125,7 +125,7 @@ export default React.createClass({
   handleSetCarouselData_() {
     if (this.refs.carousel) {
       // HACK: Get carousel state properties
-      let carouselState = this.refs.carousel.state;
+      const carouselState = this.refs.carousel.state;
 
       this.setState({
         pageNumber: carouselState.currentSlide + 1,
@@ -172,9 +172,9 @@ export default React.createClass({
   },
 
   renderSheetMusicViewer_() {
-    let images = this.state.sheetMusicResult.images || [];
+    const images = this.state.sheetMusicResult.images || [];
 
-    let decorators = [
+    const decorators = [
       { component: LeftButton, position: 'CenterLeft' },
       { component: RightButton, position: 'CenterRight' },
       { component: EmptyComponent }, // The dots at the bottom
@@ -192,13 +192,15 @@ export default React.createClass({
           edgeEasing="easeOutQuad"
           decorators={decorators}
           data={this.handleSetCarouselData_}
-          ref="carousel">
+          ref="carousel"
+        >
           {images.map((image, index) => (
             <div className="sheetmusic__viewer-page" key={index}>
               <img className="sheetmusic__viewer-page-image"
                 src={image}
                 onDragStart={this.handleNullify_}
-                onClick={this.handleNullify_} />
+                onClick={this.handleNullify_}
+              />
             </div>
           ))}
         </Carousel>
@@ -217,17 +219,16 @@ export default React.createClass({
         <If condition={this.state.hasFullscreen}>
           <a className="sheetmusic__controls sheetmusic__controls--full-screen"
             onClick={this.handleFullscreen_}
-            href="#">
+            href="#"
+          >
             <If condition={this.state.isFullscreen}>
               <span>
-                <FontAwesome className="sheetmusic__controls-icon"
-                  name="times" />
+                <FontAwesome className="sheetmusic__controls-icon" name="times" />
                 Exit
               </span>
             <Else />
               <span>
-                <FontAwesome className="sheetmusic__controls-icon"
-                  name="arrows-alt" />
+                <FontAwesome className="sheetmusic__controls-icon" name="arrows-alt" />
                 Full Screen
               </span>
             </If>
@@ -236,10 +237,10 @@ export default React.createClass({
         <If condition={!this.state.isFullscreen}>
           <a className="sheetmusic__controls sheetmusic__controls--download"
             onClick={this.handleDownload_}
-            href="#">
+            href="#"
+          >
             <span>
-              <FontAwesome className="sheetmusic__controls-icon"
-                name="cloud-download" />
+              <FontAwesome className="sheetmusic__controls-icon" name="cloud-download" />
               Download PDF
             </span>
           </a>
@@ -249,7 +250,7 @@ export default React.createClass({
   },
 
   renderDescription_() {
-    let longDescription = this.state.sheetMusicResult.longDescription;
+    const longDescription = this.state.sheetMusicResult.longDescription;
     return (
       <InfoBox className="sheetmusic__description" title="Description">
         <If condition={longDescription}>
@@ -264,7 +265,7 @@ export default React.createClass({
   },
 
   renderVideos_() {
-    let videos = this.state.sheetMusicResult.videos;
+    const videos = this.state.sheetMusicResult.videos;
     if (!videos || !videos.length) return null;
 
     return (
@@ -277,9 +278,9 @@ export default React.createClass({
         <If condition={this.state.showVideos < videos.length}>
           <a className="sheetmusic__video-show-more"
             href="#"
-            onClick={this.handleShowMoreVideos_}>
-            <FontAwesome className="sheetmusic__video-show-more-icon"
-              name="angle-down" />
+            onClick={this.handleShowMoreVideos_}
+          >
+            <FontAwesome className="sheetmusic__video-show-more-icon" name="angle-down" />
             See More Videos
           </a>
         </If>
@@ -295,32 +296,33 @@ export default React.createClass({
     );
   },
 
+  renderDifficultyNode_() {
+    const result = this.state.sheetMusicResult;
+
+    if (!result.difficulty) return null;
+
+    const fullStarCount = result.difficulty;
+    const emptyStarCount = 5 - result.difficulty;
+
+    return (
+      <Detail title="Difficulty">
+        <div className="sheetmusic__difficulty-stars">
+          {times(fullStarCount, index => (
+            <FontAwesome className="sheetmusic__difficulty-star" name="star" key={index} />
+          ))}
+          {times(emptyStarCount, index => (
+            <FontAwesome className="sheetmusic__difficulty-star" name="star-o" key={index + 5} />
+          ))}
+        </div>
+        <div className="sheetmusic__difficulty-text">
+          {getDifficultyText(result.difficulty)}
+        </div>
+      </Detail>
+    );
+  },
+
   renderInfo_() {
-    let result = this.state.sheetMusicResult;
-
-    let difficultyNode = null;
-    if (result.difficulty) {
-      let fullStarCount = result.difficulty;
-      let emptyStarCount = 5 - result.difficulty;
-
-      difficultyNode = (
-        <Detail title="Difficulty">
-          <div className="sheetmusic__difficulty-stars">
-            {times(fullStarCount, index => (
-              <FontAwesome className="sheetmusic__difficulty-star"
-                name="star" key={index} />
-            ))}
-            {times(emptyStarCount, index => (
-              <FontAwesome className="sheetmusic__difficulty-star"
-                name="star-o" key={index + 5} />
-            ))}
-          </div>
-          <div className="sheetmusic__difficulty-text">
-            {getDifficultyText(result.difficulty)}
-          </div>
-        </Detail>
-      );
-    }
+    const result = this.state.sheetMusicResult;
 
     return (
       <InfoBox title="Details">
@@ -349,14 +351,14 @@ export default React.createClass({
             {result.license}
           </Detail>
         </If>
-        {difficultyNode}
+        {this.renderDiffucultyNode_()}
       </InfoBox>
     );
   },
 
   render() {
-    let title = this.state.sheetMusicResult ? this.state.sheetMusicResult.title : 'Loading...';
-    let inProgress = (this.state.inProgress.indexOf('getSheetMusic') !== -1);
+    const title = this.state.sheetMusicResult ? this.state.sheetMusicResult.title : 'Loading...';
+    const inProgress = (this.state.inProgress.indexOf('getSheetMusic') !== -1);
 
     if (inProgress) {
       return (
@@ -389,4 +391,3 @@ export default React.createClass({
   },
 
 });
-

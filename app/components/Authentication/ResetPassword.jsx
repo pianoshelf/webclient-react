@@ -33,22 +33,23 @@ export default React.createClass({
   handleSubmit_(event) {
     event.preventDefault();
 
-    let { email } = this.state;
+    const { email } = this.state;
 
     // Trigger action
-    let loginActions = this.flux.getActions('login');
+    const loginActions = this.flux.getActions('login');
     loginActions.resetPassword(email, this.flux);
   },
 
   render() {
-    let inProgress = includes(this.state.inProgress, 'resetPassword');
+    const inProgress = includes(this.state.inProgress, 'resetPassword');
 
     return (
       <div>
         <Helmet title="Reset Password" />
         <Title>Reset your password</Title>
         <ErrorMessage errorCode={this.state.errorCode}
-          dontDisplayIf={this.state.loggedIn || inProgress} />
+          dontDisplayIf={this.state.loggedIn || inProgress}
+        />
         <InfoText>
           Enter the email address you used to sign up for PianoShelf, and we will email you
           a link to reset your password.
@@ -60,7 +61,8 @@ export default React.createClass({
               errorCode={this.state.errorCode}
               errorWhen={[errors.NO_EMAIL, errors.INVALID_EMAIL]}
               focusOnLoad
-              valueLink={this.linkState('email')} />
+              valueLink={this.linkState('email')}
+            />
           </div>
           <Button color="red" disableIf={inProgress} submittedIf={inProgress}>
             <FontAwesome className="authentication__button-icon" name="paper-plane" />
@@ -73,4 +75,3 @@ export default React.createClass({
   },
 
 });
-

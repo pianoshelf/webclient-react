@@ -33,7 +33,7 @@ const webpackDevConfig = require('./webpack.dev.client');
 const webpackDevCompiler = webpack(webpackDevConfig);
 
 // Boolean for whether we're running webpack-dev-server
-const isRunningDevServer = false;
+let isRunningDevServer = false;
 
 /**
  * Compile our images

@@ -52,7 +52,7 @@ export default class SheetMusicActions extends Actions {
   }
 
   getSheetMusicList(options, flux) {
-    let filters = {
+    const filters = {
       order_by: options.orderBy,
       page: options.page,
       page_size: options.pageSize,

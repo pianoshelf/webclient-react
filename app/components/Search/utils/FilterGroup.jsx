@@ -87,13 +87,13 @@ export default React.createClass({
         <div className="search__filter-group-title">{this.props.groupTitle}</div>
         <div className="search__filter-groups">
           {this.props.filters.map((filter, index) => {
-            let isSelected = this.props.multiSelect ?
+            const isSelected = this.props.multiSelect ?
               includes(this.props.value, filter.value) : (this.props.value === filter.value);
 
-            let bottomBorder = (index < this.props.filters.length -
+            const bottomBorder = (index < this.props.filters.length -
               (this.props.isHalfSpace ? 2 : 1));
 
-            let rightBorder = (this.props.isHalfSpace && index % 2 === 0);
+            const rightBorder = (this.props.isHalfSpace && index % 2 === 0);
 
             return (
               <Filter {...filter}
@@ -102,7 +102,8 @@ export default React.createClass({
                 bottomBorder={bottomBorder}
                 rightBorder={rightBorder}
                 key={filter.value}
-                onChange={this.handleOnChange_} />
+                onChange={this.handleOnChange_}
+              />
             );
           })}
         </div>
@@ -111,5 +112,3 @@ export default React.createClass({
   },
 
 });
-
-

@@ -12,7 +12,8 @@ export default React.createClass({
     if (this.props.currentSlide === 0) return null;
     return (
       <a href="#" onClick={this.props.previousSlide}
-        className="sheetmusic-viewer-arrow">
+        className="sheetmusic-viewer-arrow"
+      >
         <Fa name="angle-left" />
       </a>
     );

@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import FontAwesome from 'react-fontawesome';
 import React from 'react';
 
-let Comment = React.createClass({
+const Comment = React.createClass({
   propTypes: {
     /**
      * An object representing the comment object.
@@ -40,7 +40,7 @@ let Comment = React.createClass({
     level: React.PropTypes.number,
   },
 
-  getDefaultProps: function() {
+  getDefaultProps() {
     return {
       comment: {},
       level: 0,
@@ -48,13 +48,13 @@ let Comment = React.createClass({
   },
 
   renderReplies_() {
-    let { replies } = this.props.comment;
+    const { replies } = this.props.comment;
     return (
       <div>
         <If condition={replies && replies.length}>
           {replies.map((reply) => (
             <div className="comment__reply">
-              <Comment comment={reply} level={this.props.level + 1}/>
+              <Comment comment={reply} level={this.props.level + 1} />
             </div>
           ))}
         </If>
@@ -63,9 +63,9 @@ let Comment = React.createClass({
   },
 
   render() {
-    let { comment } = this.props;
+    const { comment } = this.props;
 
-    let commentBoxClasses = classNames('comment__box', {
+    const commentBoxClasses = classNames('comment__box', {
       'comment__box--even': this.props.level % 2 === 0,
       'comment__box--odd': this.props.level % 2 !== 0,
     });

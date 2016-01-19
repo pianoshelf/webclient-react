@@ -12,7 +12,8 @@ export default React.createClass({
     if (this.props.currentSlide + 1 === this.props.slideCount) return null;
     return (
       <a href="#" onClick={this.props.nextSlide}
-        className="sheetmusic-viewer-arrow">
+        className="sheetmusic-viewer-arrow"
+      >
         <FontAwesome name="angle-right" />
       </a>
     );

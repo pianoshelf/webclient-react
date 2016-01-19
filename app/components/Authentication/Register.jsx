@@ -46,11 +46,11 @@ export default React.createClass({
     event.preventDefault();
 
     // Extract form values
-    let { username, email, password1, password2 } = this.state;
-    let newUser = { username, email, password1, password2 };
+    const { username, email, password1, password2 } = this.state;
+    const newUser = { username, email, password1, password2 };
 
     // Trigger action
-    let loginActions = this.flux.getActions('login');
+    const loginActions = this.flux.getActions('login');
     loginActions.register(newUser, this.flux);
   },
 
@@ -60,35 +60,35 @@ export default React.createClass({
   },
 
   handlePostRegister_() {
-    let { username, password1 } = this.state;
+    const { username, password1 } = this.state;
 
     // Trigger action
-    let loginActions = this.flux.getActions('login');
+    const loginActions = this.flux.getActions('login');
     loginActions.login(username, password1, this.flux);
   },
 
   facebookLoginHandler(response) {
     if (response.status === 'connected') {
-      let { accessToken } = response;
+      const { accessToken } = response;
 
       // Trigger action
-      let loginActions = this.flux.getActions('login');
+      const loginActions = this.flux.getActions('login');
       loginActions.facebookLogin({ accessToken }, this.flux);
     }
   },
 
   render() {
-    let registerInProgress = includes(this.state.inProgress, 'register') ||
+    const registerInProgress = includes(this.state.inProgress, 'register') ||
                              includes(this.state.inProgress, 'login');
-    let facebookInProgress = includes(this.state.inProgress, 'facebookLogin');
+    const facebookInProgress = includes(this.state.inProgress, 'facebookLogin');
 
     return (
       <div>
         <Helmet title="Register" />
         <Title>Sign up for PianoShelf</Title>
         <ErrorMessage errorCode={this.state.errorCode}
-          dontDisplayIf={this.state.loggedIn ||
-            registerInProgress || facebookInProgress} />
+          dontDisplayIf={this.state.loggedIn || registerInProgress || facebookInProgress}
+        />
         <form className="authentication__form" onSubmit={this.handleSubmit_}>
           <div className="authentication__inputs">
             <Input placeholder="Username"
@@ -96,27 +96,32 @@ export default React.createClass({
               errorCode={this.state.errorCode}
               errorWhen={[errors.NO_USERNAME, errors.USERNAME_TAKEN]}
               focusOnLoad
-              valueLink={this.linkState('username')} />
+              valueLink={this.linkState('username')}
+            />
             <Input placeholder="Email"
               name="email"
               errorCode={this.state.errorCode}
               errorWhen={[errors.NO_EMAIL, errors.INVALID_EMAIL, errors.EMAIL_ALREADY_REGISTERED]}
-              valueLink={this.linkState('email')} />
+              valueLink={this.linkState('email')}
+            />
             <Input placeholder="Password"
               name="password1"
               password
               errorCode={this.state.errorCode}
               errorWhen={[errors.NO_PASSWORD, errors.NOT_STRONG_PASSWORD]}
-              valueLink={this.linkState('password1')} />
+              valueLink={this.linkState('password1')}
+            />
             <Input placeholder="Confirm Password"
               name="password2"
               password
               errorCode={this.state.errorCode}
               errorWhen={[errors.NOT_SAME_PASSWORD]}
-              valueLink={this.linkState('password2')} />
+              valueLink={this.linkState('password2')}
+            />
           </div>
           <Button color="blue-light" submittedIf={registerInProgress}
-              disableIf={registerInProgress || facebookInProgress}>
+            disableIf={registerInProgress || facebookInProgress}
+          >
             <FontAwesome className="authentication__button-icon" name="star" />
             Sign up
           </Button>
@@ -125,7 +130,8 @@ export default React.createClass({
         <hr className="authentication__hr" />
         <form onSubmit={this.handleFacebook_}>
           <Button color="facebook" submittedIf={facebookInProgress}
-              disableIf={registerInProgress || facebookInProgress}>
+            disableIf={registerInProgress || facebookInProgress}
+          >
             <FontAwesome className="authentication__button-icon" name="facebook-square" />
             Sign up using Facebook
           </Button>
@@ -135,4 +141,3 @@ export default React.createClass({
   },
 
 });
-

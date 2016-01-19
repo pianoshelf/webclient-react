@@ -31,8 +31,8 @@ export default React.createClass({
   },
 
   render() {
-    let className = classNames({
-      'search__result': true,
+    const className = classNames({
+      search__result: true,
       'search__result--paid': true,
       'search__result--last-item': this.props.lastItem,
       'search__result--first-item': this.props.firstItem,
@@ -43,7 +43,8 @@ export default React.createClass({
       <a className={className} href={this.props.paidSheetMusic.pageUrl}>
         <If condition={this.props.paidSheetMusic.thumbnailUrl}>
           <img src={this.props.paidSheetMusic.thumbnailUrl}
-            className="search__result-thumbnail search__result-thumbnail--paid" />
+            className="search__result-thumbnail search__result-thumbnail--paid"
+          />
         </If>
         <div className="search__result-details search__result-details--paid">
           <div className="search__result-title">
@@ -53,12 +54,12 @@ export default React.createClass({
             {this.props.paidSheetMusic.shortDescription}
           </div>
           <ul className="search__result-properties">
-            <li className="search__result-property search__result-property--orange">{this.props.paidSheetMusic.source}</li>
+            <li className="search__result-property search__result-property--orange">
+              {this.props.paidSheetMusic.source}
+            </li>
           </ul>
         </div>
       </a>
     );
   },
-
 });
-

@@ -68,8 +68,7 @@ export default React.createClass({
           <div className="sheet-music-carousel__slider">
             <Slider {...settings} className="sheet-music-carousel__slick">
               {this.props.sheetMusic.map(sheetMusic => (
-                <SheetMusicThumbnail sheetMusic={sheetMusic}
-                  key={sheetMusic.id} />
+                <SheetMusicThumbnail sheetMusic={sheetMusic} key={sheetMusic.id} />
               ))}
             </Slider>
           </div>
@@ -83,4 +82,3 @@ export default React.createClass({
   },
 
 });
-

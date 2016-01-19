@@ -53,10 +53,10 @@ export default React.createClass({
   },
 
   render() {
-    let isPassword = this.props.password === true;
+    const isPassword = this.props.password === true;
 
-    let className = classNames({
-      'authentication__input': true,
+    const className = classNames({
+      authentication__input: true,
       'authentication__input--error': includes(this.props.errorWhen, this.props.errorCode),
     });
 
@@ -65,10 +65,9 @@ export default React.createClass({
         name={this.props.name}
         className={className}
         placeholder={this.props.placeholder}
-        valueLink={this.props.valueLink} />
+        valueLink={this.props.valueLink}
+      />
     );
   },
 
 });
-
-

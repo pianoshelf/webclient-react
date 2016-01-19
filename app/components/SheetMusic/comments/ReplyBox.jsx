@@ -17,14 +17,16 @@ export default React.createClass({
 
   mixins: [LinkedStateMixin],
 
-  getInitialState: function() {
-    return {text: ''};
+  getInitialState() {
+    return {
+      text: '',
+    };
   },
 
   render() {
-    let commentReplyBoxClasses = classNames({
+    const commentReplyBoxClasses = classNames({
       'comment__send-button': true,
-      'comment__disabled': !this.state.text,
+      comment__disabled: !this.state.text,
     });
 
     return (

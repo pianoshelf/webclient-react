@@ -13,44 +13,42 @@ export default React.createClass({
     /**
      * Array of Comment objects representing the data
      */
-    comments: React.PropTypes.arrayOf(
-      React.PropTypes.shape({
-        /**
-         * Represents how long ago this comment was from. String contains the value and unit of time.
-         */
-        delta: React.PropTypes.string.isRequired,
+    comments: React.PropTypes.arrayOf(React.PropTypes.shape({
+      /**
+       * Represents how long ago this comment was from. String contains the value and unit of time.
+       */
+      delta: React.PropTypes.string.isRequired,
 
-        /**
-         * The message of the comment.
-         */
-        message: React.PropTypes.string.isRequired,
+      /**
+       * The message of the comment.
+       */
+      message: React.PropTypes.string.isRequired,
 
-        /**
-         * The username of the comment writer.
-         */
-        name: React.PropTypes.string.isRequired,
+      /**
+       * The username of the comment writer.
+       */
+      name: React.PropTypes.string.isRequired,
 
-        /**
-         * Represents an array of comments objects which are replies to the current comment.
-         */
-        replies: React.PropTypes.array,
+      /**
+       * Represents an array of comments objects which are replies to the current comment.
+       */
+      replies: React.PropTypes.array,
 
-        /**
-         * Represents how many upvotes this comment has received.
-         */
-        upvotes: React.PropTypes.number.isRequired,
-      }),
-    ),
+      /**
+       * Represents how many upvotes this comment has received.
+       */
+      upvotes: React.PropTypes.number.isRequired,
+    })),
   },
 
-  getDefaultProps: function() {
+  getDefaultProps() {
     return {
       comments: [],
     };
   },
 
   render() {
-    let { comments } = this.props;
+    const { comments } = this.props;
     return (
       <div className="comment__style">
         <If condition={comments.length}>

@@ -37,4 +37,3 @@ export const success = {
   EMAIL_VERIFIED: s++,
 
 };
-

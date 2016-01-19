@@ -49,7 +49,7 @@ export default React.createClass({
   },
 
   render() {
-    let className = classNames({
+    const className = classNames({
       'search__filter-group-filter': true,
       'search__filter-group-filter--selected': this.props.isSelected,
       'search__filter-group-filter--half-space': this.props.isHalfSpace,

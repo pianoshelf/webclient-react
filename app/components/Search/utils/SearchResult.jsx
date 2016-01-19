@@ -41,13 +41,12 @@ export default React.createClass({
   },
 
   normalizeKey_() {
-    let key = this.props.sheetMusic.musicKey;
-    return key;
+    return this.props.sheetMusic.musicKey;
   },
 
   renderViewsTag_(viewCount) {
     if (!viewCount) return null;
-    let className = 'search__result-property search__result-property--dark';
+    const className = classNames('search__result-property', 'search__result-property--dark');
     return (
       <div className={className} key="views">
         <FontAwesome name="eye" className="search__result-property-icon" />
@@ -57,7 +56,7 @@ export default React.createClass({
   },
 
   renderDifficultyTag_(difficultyLevel) {
-    let className = classNames({
+    const className = classNames({
       'search__result-property': true,
       'search__result-property--blue': difficultyLevel === 1,
       'search__result-property--green': difficultyLevel === 2 || difficultyLevel === 3,
@@ -73,23 +72,25 @@ export default React.createClass({
   },
 
   render() {
-    let className = classNames({
-      'search__result': true,
+    const className = classNames({
+      search__result: true,
       'search__result--last-item': this.props.lastItem,
       'search__result--first-item': this.props.firstItem,
     });
 
-    let tags = [];
+    const tags = [];
 
-    let normalizedKey = this.normalizeKey_();
+    const normalizedKey = this.normalizeKey_();
     if (normalizedKey) tags.push(normalizedKey);
 
     return (
       <Link className={className}
-          to={`/sheetmusic/${this.props.sheetMusic.id}/${this.props.sheetMusic.uniqueUrl}`}>
+        to={`/sheetmusic/${this.props.sheetMusic.id}/${this.props.sheetMusic.uniqueUrl}`}
+      >
         <If condition={this.props.sheetMusic.thumbnailUrl}>
           <img src={this.props.sheetMusic.thumbnailUrl}
-            className="search__result-thumbnail" />
+            className="search__result-thumbnail"
+          />
         </If>
         <div className="search__result-details">
           <div className="search__result-title">

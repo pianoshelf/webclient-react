@@ -38,4 +38,3 @@ render(
 
 // Reset our progress bar
 flux.getActions('progress').resetProgress();
-

@@ -61,7 +61,7 @@ export default React.createClass({
   },
 
   handleStickyEvent_() {
-    let disappearingMode = this.props.disappearing &&
+    const disappearingMode = this.props.disappearing &&
       window.pageYOffset < this.props.disappearingOffset;
     this.setState({ disappearingMode });
   },
@@ -85,11 +85,11 @@ export default React.createClass({
   },
 
   render() {
-    let navbarClass = classNames('navbar', {
+    const navbarClass = classNames('navbar', {
       'navbar--homepage': this.state.disappearingMode,
     });
 
-    let buttonClass = (important) => classNames('navbar__button', {
+    const buttonClass = (important) => classNames('navbar__button', {
       'navbar__button--homepage': this.state.disappearingMode,
       'navbar__button--important': important,
     });
