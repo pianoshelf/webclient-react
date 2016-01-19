@@ -29,7 +29,6 @@
   },
   "homepage": "https://github.com/pianoshelf/react-shelf",
   "devDependencies": {
-    "babel": "^6.3.26",
     "babel-core": "^6.4.0",
     "babel-eslint": "5.0.0-beta6",
     "babel-loader": "^6.2.1",
