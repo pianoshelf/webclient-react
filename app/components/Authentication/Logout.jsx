@@ -1,13 +1,11 @@
 
 import fluxMixin from 'flummox/mixin';
 import Helmet from 'react-helmet';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import React from 'react';
-import { addons } from 'react/addons';
 
 import InfoText from './utils/InfoText';
 import { CanLogoutMixin } from '../../utils/authUtils';
-
-let { PureRenderMixin } = addons;
 
 function retrieveInitialData(flux) {
   const loginActions = flux.getActions('login');

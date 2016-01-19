@@ -2,19 +2,17 @@
 import fluxMixin from 'flummox/mixin';
 import FontAwesome from 'react-fontawesome';
 import Helmet from 'react-helmet';
+import LinkedStateMixin from 'react-addons-linked-state-mixin';
 import includes from 'lodash/collection/includes';
 import React from 'react';
-import { addons } from 'react/addons';
 import { Link } from 'react-router';
 
 import Button from './utils/Button';
 import ErrorMessage from './utils/ErrorMessage';
-import Input from './utils/Input';
 import InfoText from './utils/InfoText';
+import Input from './utils/Input';
 import Title from './utils/Title';
 import { errors, success } from '../../utils/constants';
-
-let { LinkedStateMixin } = addons;
 
 export default React.createClass({
 

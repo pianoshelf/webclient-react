@@ -1,39 +1,39 @@
 'use strict'; // eslint-disable-line strict
 
 // Import external modules
-let babel = require('gulp-babel');
-let browserSync = require('browser-sync');
-let cache = require('gulp-cached');
-let del = require('del');
-let eslint = require('gulp-eslint');
-let fs = require('fs');
-let gulp = require('gulp');
-let gutil = require('gulp-util');
-let imagemin = require('gulp-imagemin');
-let minifyCss = require('gulp-minify-css');
-let nodemon = require('nodemon');
-let path = require('path');
-let plumber = require('gulp-plumber');
-let prefix = require('gulp-autoprefixer');
-let pretty = require('prettysize');
-let reload = browserSync.reload;
-let rev = require('gulp-rev');
-let runSequence = require('run-sequence');
-let sass = require('gulp-sass');
-let size = require('gulp-size');
-let sourcemaps = require('gulp-sourcemaps');
-let webpack = require('webpack');
-let WebpackDevServer = require('webpack-dev-server');
+const babel = require('gulp-babel');
+const browserSync = require('browser-sync');
+const cache = require('gulp-cached');
+const del = require('del');
+const eslint = require('gulp-eslint');
+const fs = require('fs');
+const gulp = require('gulp');
+const gutil = require('gulp-util');
+const imagemin = require('gulp-imagemin');
+const minifyCss = require('gulp-minify-css');
+const nodemon = require('nodemon');
+const path = require('path');
+const plumber = require('gulp-plumber');
+const prefix = require('gulp-autoprefixer');
+const pretty = require('prettysize');
+const reload = browserSync.reload;
+const rev = require('gulp-rev');
+const runSequence = require('run-sequence');
+const sass = require('gulp-sass');
+const size = require('gulp-size');
+const sourcemaps = require('gulp-sourcemaps');
+const webpack = require('webpack');
+const WebpackDevServer = require('webpack-dev-server');
 
 // Import internal modules
-let config = require('./config');
+const config = require('./config');
 
 // Create an instance of the client compiler for caching
-let webpackDevConfig = require('./webpack.dev.client');
-let webpackDevCompiler = webpack(webpackDevConfig);
+const webpackDevConfig = require('./webpack.dev.client');
+const webpackDevCompiler = webpack(webpackDevConfig);
 
 // Boolean for whether we're running webpack-dev-server
-let isRunningDevServer = false;
+const isRunningDevServer = false;
 
 /**
  * Compile our images
@@ -98,7 +98,7 @@ gulp.task('build:server', () => {
     .pipe(cache('src:server'))
     .pipe(plumber())
     .pipe(sourcemaps.init())
-    .pipe(babel(config.build.babel))
+    .pipe(babel(config.build.babel.server))
     .pipe(sourcemaps.write('.'))
     .pipe(size({ title: 'Server JS' }))
     .pipe(gulp.dest(config.files.server.out));
@@ -115,8 +115,8 @@ gulp.task('build:client', callback => {
 
     // Emulate gulp-size and ignore errors
     try {
-      let outputConfig = webpackDevConfig.output;
-      let jsFilePath = path.join(outputConfig.path, outputConfig.filename);
+      const outputConfig = webpackDevConfig.output;
+      const jsFilePath = path.join(outputConfig.path, outputConfig.filename);
       gutil.log(`${gutil.colors.cyan('Client JS')} ${gutil.colors.green('all files ')}` +
                 `${gutil.colors.magenta(pretty(fs.statSync(jsFilePath).size))}`);
     } catch (e) {}
@@ -126,7 +126,7 @@ gulp.task('build:client', callback => {
       isRunningDevServer = true;
 
       // Start the dev server. We have to make sure we send a new instance of the webpack compiler.
-      let devServer = new WebpackDevServer(webpack(webpackDevConfig), webpackDevConfig.devServer);
+      const devServer = new WebpackDevServer(webpack(webpackDevConfig), webpackDevConfig.devServer);
       devServer.listen(config.ports.webpack, 'localhost', serverErr => {
         if (serverErr) throw new gutil.PluginError('webpack-dev-server', serverErr);
       });
@@ -141,16 +141,16 @@ gulp.task('build:client', callback => {
  * Compile our JS files for production.
  */
 gulp.task('build:client:prod', callback => {
-  let webpackProdConfig = require('./webpack.client');
-  let webpackProdCompiler = webpack(webpackProdConfig);
+  const webpackProdConfig = require('./webpack.client');
+  const webpackProdCompiler = webpack(webpackProdConfig);
 
   // Run webpack
   webpackProdCompiler.run(err => {
     if (err) throw new gutil.PluginError('build:client:prod', err);
 
     // Emulate gulp-size
-    let outputConfig = webpackProdConfig.output;
-    let jsFilePath = path.join(outputConfig.path, outputConfig.filename);
+    const outputConfig = webpackProdConfig.output;
+    const jsFilePath = path.join(outputConfig.path, outputConfig.filename);
     gutil.log(`'${gutil.colors.cyan('Client Prod JS')}' ${gutil.colors.green('all files ')}` +
               `${gutil.colors.magenta(pretty(fs.statSync(jsFilePath).size))}`);
 
@@ -236,7 +236,7 @@ gulp.task('watch', ['clean'], callback => {
       });
 
       // Boolean to check if BrowserSync has started.
-      let isBrowserSyncStarted = false;
+      const isBrowserSyncStarted = false;
 
       // Perform action right when nodemon starts
       nodemon.on('start', () => {

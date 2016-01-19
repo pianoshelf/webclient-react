@@ -1,8 +1,9 @@
 {
   "extends": "airbnb",
   "env": {
-    "jasmine": true
+    "mocha": true
   },
+  "plugins": ["jsx-control-statements"],
   "globals": {
     "__SERVER__": true,
     "__CLIENT__": true,
@@ -11,12 +12,11 @@
     "For": true
   },
   "rules": {
-    "prefer-const": 0,
     "new-cap": 0,
     "func-names": 0,
     "no-else-return": 0,
     "padded-blocks": 0,
-    "react/jsx-quotes": 0,
-    "jsx-quotes": [2, "prefer-double"]
+    "jsx-quotes": [2, "prefer-double"],
+    "react/prefer-es6-class": 1
   }
 }

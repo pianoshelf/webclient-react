@@ -7,15 +7,14 @@ import Helmet from 'react-helmet';
 import includes from 'lodash/collection/includes';
 import intersection from 'lodash/array/intersection';
 import isEqual from 'lodash/lang/isEqual';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import React from 'react';
-import { addons } from 'react/addons';
+import { findDOMNode } from 'react-dom';
 import { History, Link } from 'react-router';
 
 import FilterGroup from './utils/FilterGroup';
 import PaidSearchResult from './utils/PaidSearchResult';
 import SearchResult from './utils/SearchResult';
-
-let { PureRenderMixin } = addons;
 
 // The number of items per search page
 const PAGE_SIZE = 12;
@@ -279,7 +278,7 @@ export default React.createClass({
 
   handleSearchQueryChange_() {
     this.flux.getActions('progress').removeProgress('searchQuery');
-    let value = React.findDOMNode(this.refs.searchBox).value;
+    let value = findDOMNode(this.refs.searchBox).value;
     if (value === '') {
       this.history.replaceState(null, this.props.location.pathname, {
         show: 'popular',

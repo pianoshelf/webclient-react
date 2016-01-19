@@ -3,8 +3,8 @@
 import fluxMixin from 'flummox/mixin';
 import FontAwesome from 'react-fontawesome';
 import Helmet from 'react-helmet';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import React from 'react';
-import { addons } from 'react/addons';
 import { Link } from 'react-router';
 
 // Import components
@@ -12,8 +12,6 @@ import NavBar from './Fixtures/NavBar';
 import Footer from './Fixtures/Footer';
 import ResponsiveContainer from './Misc/ResponsiveContainer';
 import SheetMusicCarousel from './Misc/SheetMusicCarousel';
-
-let { PureRenderMixin } = addons;
 
 function retrieveInitialData(flux) {
   const sheetMusicActions = flux.getActions('sheetmusic');

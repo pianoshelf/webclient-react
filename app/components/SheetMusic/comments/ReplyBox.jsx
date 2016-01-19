@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import LinkedStateMixin from 'react-addons-linked-state-mixin';
 import React from 'react';
 
 export default React.createClass({
@@ -14,7 +15,7 @@ export default React.createClass({
     recipient: React.PropTypes.number,
   },
 
-  mixins: [React.addons.LinkedStateMixin],
+  mixins: [LinkedStateMixin],
 
   getInitialState: function() {
     return {text: ''};

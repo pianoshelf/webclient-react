@@ -16,7 +16,8 @@ import path from 'path';
 import PrettyStream from 'bunyan-prettystream';
 import React from 'react';
 import utf8 from 'utf8';
-import { RoutingContext, match } from 'react-router';
+import { renderToString } from 'react-dom/server';
+import { RouterContext, match } from 'react-router';
 
 // Import internal modules
 import config from '../config';
@@ -25,13 +26,14 @@ import getRoutes from './utils/getRoutes';
 import { prefetchRouteData } from './utils/routeUtils';
 
 // Launch application
-let app = express();
-let httpServer = http.createServer(app);
+const app = express();
+const httpServer = http.createServer(app);
+
 
 // Create logger
-let prettyStream = new PrettyStream();
+const prettyStream = new PrettyStream();
 prettyStream.pipe(process.stdout);
-let log = bunyan.createLogger({
+const log = bunyan.createLogger({
   name: 'PianoShelf',
   streams: [
     {
@@ -52,7 +54,7 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 // Proxy API requests to the python server if we're on a dev environment or if we specified the
 // override
 if (process.env.PROXY_API === 'true' || process.env.NODE_ENV !== 'production') {
-  let proxy = httpProxy.createProxyServer({});
+  const proxy = httpProxy.createProxyServer({});
   app.use((req, res, next) => {
     if (/^\/api/.test(req.url)) {
       proxy.web(req, res, {
@@ -75,18 +77,18 @@ let cssPath;
 app.use('/assets/', express.static(path.join(__dirname, '../build/static')));
 
 // Store output files and directory for client JS and CSS files.
-let jsOutFile = config.files.client.outFile;
-let jsOutDir = config.files.client.out;
-let cssOutFile = 'main.css';
-let cssOutDir = config.files.css.out;
+const jsOutFile = config.files.client.outFile;
+const jsOutDir = config.files.client.out;
+const cssOutFile = 'main.css';
+const cssOutDir = config.files.css.out;
 
 if (process.env.NODE_ENV === 'production') {
   // In production, our node context will be under the root directory, so we need to include the
   // build folder in our path when getting the manifest file.
 
   // Get the manifest files for our CSS and JS files
-  let jsManifest = JSON.parse(fs.readFileSync('./build/static/js/rev-manifest.json', 'utf-8'));
-  let cssManifest = JSON.parse(fs.readFileSync('./build/static/css/rev-manifest.json', 'utf-8'));
+  const jsManifest = JSON.parse(fs.readFileSync('./build/static/js/rev-manifest.json', 'utf-8'));
+  const cssManifest = JSON.parse(fs.readFileSync('./build/static/css/rev-manifest.json', 'utf-8'));
 
   // If we're in production, we want to make the build directory a static directory in /assets
   jsPath = `/assets/${jsOutDir}/${jsManifest[jsOutFile]}`;
@@ -100,40 +102,40 @@ if (process.env.NODE_ENV === 'production') {
 // Capture all requests
 app.use((req, res) => {
   // Create Flux object
-  let flux = new Flux(req);
+  const flux = new Flux(req);
 
-  let routes = getRoutes(flux);
-  let location = createLocation(req.url);
+  const routes = getRoutes(flux);
+  const location = createLocation(req.url);
 
   match({ routes, location }, (error, redirectLocation, renderProps) => {
     if (redirectLocation) {
       res.redirect(301, redirectLocation.pathname + redirectLocation.search);
     } else if (error) {
-      res.send(500, error.message);
+      res.status(500).send(error.message);
     } else if (renderProps === null) {
-      res.send(404, 'Not Found');
+      res.status(404).send('Not Found');
     } else {
 
       // Function that renders the route.
-      let renderRoute = () => defer(() => {
+      const renderRoute = () => defer(() => {
 
         try {
           // Render our entire app to a string, and make sure we wrap everything
           // with FluxComponent, which adds the flux context to the entire app.
-          let renderedString = React.renderToString(
+          const renderedString = renderToString(
             <FluxComponent flux={flux}>
-              <RoutingContext {...renderProps} />
+              <RouterContext {...renderProps} />
             </FluxComponent>
           );
 
           // Base64 encode all the data in our stores.
-          let inlineData = base64.encode(utf8.encode(flux.serialize()));
+          const inlineData = base64.encode(utf8.encode(flux.serialize()));
 
           // Get title, meta, and link tags.
-          let { title, meta, link } = Helmet.rewind();
+          const { title, meta, link } = Helmet.rewind();
 
           // Generate boilerplate output.
-          let output =
+          const output =
             `<!DOCTYPE html>
             <html>
               <head>
@@ -157,7 +159,7 @@ app.use((req, res) => {
           log.error('There was a problem renderring the page. Here\'s the error:');
           log.error(err);
 
-          res.send(500, err);
+          res.status(500).send(err);
         }
       });
 
@@ -177,4 +179,3 @@ if (!!process.env.TESTING) {
     log.info(`PianoShelf listening on port ${config.ports.express}`);
   });
 }
-

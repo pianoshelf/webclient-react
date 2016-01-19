@@ -2,6 +2,7 @@
 import classNames from 'classnames';
 import includes from 'lodash/collection/includes';
 import React from 'react';
+import { findDOMNode } from 'react-dom';
 
 export default React.createClass({
 
@@ -47,7 +48,7 @@ export default React.createClass({
 
   componentDidMount() {
     if (this.props.focusOnLoad) {
-      React.findDOMNode(this.refs.input).focus();
+      findDOMNode(this.refs.input).focus();
     }
   },
 

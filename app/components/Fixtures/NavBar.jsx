@@ -5,15 +5,12 @@
 // Import external modules
 import classNames from 'classnames';
 import fluxMixin from 'flummox/mixin';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import React from 'react';
-import { addons } from 'react/addons';
 import { Link } from 'react-router';
 
 // Import internal module
 import ResponsiveContainer from '../Misc/ResponsiveContainer';
-
-// Get mixins
-let PureRenderMixin = addons.PureRenderMixin;
 
 // Export class
 export default React.createClass({

@@ -1,10 +1,9 @@
 
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import React from 'react';
-import { addons } from 'react/addons';
 
 // Import other components
 import NavBar from '../Fixtures/NavBar';
-let { PureRenderMixin } = addons;
 
 export default React.createClass({
 

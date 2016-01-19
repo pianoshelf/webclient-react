@@ -2,6 +2,7 @@
 // Import external modules
 import React from 'react';
 import { History } from 'react-router';
+import { findDOMNode } from 'react-dom';
 
 import { sheetMusicPropType } from '../../utils/sheetMusicUtils';
 
@@ -23,7 +24,7 @@ export default React.createClass({
    * on this component versus clicking it.
    */
   componentDidMount() {
-    let link = this.refs.link.getDOMNode();
+    let link = findDOMNode(this.refs.link);
     let currentMousePointX = null;
     let currentMousePointY = null;
 

@@ -1,10 +1,10 @@
 
 import fluxMixin from 'flummox/mixin';
 import FontAwesome from 'react-fontawesome';
+import LinkedStateMixin from 'react-addons-linked-state-mixin';
 import includes from 'lodash/collection/includes';
 import Helmet from 'react-helmet';
 import React from 'react';
-import { addons } from 'react/addons';
 import { Link } from 'react-router';
 
 import Button from './utils/Button';
@@ -13,8 +13,6 @@ import Input from './utils/Input';
 import Title from './utils/Title';
 import { errors } from '../../utils/constants';
 import { CanLoginMixin, FacebookLoginMixin } from '../../utils/authUtils';
-
-let { LinkedStateMixin } = addons;
 
 export default React.createClass({
 

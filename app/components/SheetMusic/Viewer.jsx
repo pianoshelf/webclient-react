@@ -4,10 +4,10 @@ import fluxMixin from 'flummox/mixin';
 import FontAwesome from 'react-fontawesome';
 import FullScreenMixin from 'react-fullscreen-component';
 import Helmet from 'react-helmet';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import React from 'react';
 import Carousel from 'nuka-carousel';
 import times from 'lodash/utility/times';
-import { addons } from 'react/addons';
 
 import Detail from './utils/Detail';
 import EmptyComponent from './utils/EmptyComponent';
@@ -17,8 +17,6 @@ import ResponsiveContainer from '../Misc/ResponsiveContainer';
 import RightButton from './utils/RightButton';
 import Comments from './comments/Comments';
 import { getDifficultyText } from '../../utils/sheetMusicUtils';
-
-let { PureRenderMixin } = addons;
 
 function retrieveInitialData(flux, params) {
   let sheetMusicActions = flux.getActions('sheetmusic');

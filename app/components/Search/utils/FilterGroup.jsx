@@ -1,12 +1,10 @@
 
 import defer from 'lodash/function/defer';
 import includes from 'lodash/collection/includes';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import React from 'react';
-import { addons } from 'react/addons';
 
 import Filter from './Filter';
-
-let { PureRenderMixin } = addons;
 
 export default React.createClass({
 
