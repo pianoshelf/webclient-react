@@ -20,13 +20,10 @@ import SearchResult from './utils/SearchResult';
 const PAGE_SIZE = 12;
 
 function retrieveInitialData(flux, query) {
-  let sheetMusicActions = flux.getActions('sheetmusic');
-  let {
-    show,
-    page,
-    trending,
-    query: searchQuery,
-  } = query || {};
+  const sheetMusicActions = flux.getActions('sheetmusic');
+
+  let { show, page, trending } = query || {};
+  const { query: searchQuery } = query || {};
 
   // Default to the first page
   page = page || 1;
@@ -152,7 +149,7 @@ export default React.createClass({
   },
 
   componentDidMount() {
-    let { query } = this.props.location.query || {};
+    const { query } = this.props.location.query || {};
 
     if ((query && !this.state.searchResults.free.length) ||
        (!query && !this.state.sheetMusicList.list.length)) {
@@ -199,7 +196,7 @@ export default React.createClass({
       '90days',
     ], trending) ? trending : '7days';
 
-    let sortByFilters = {
+    const sortByFilters = {
       groupName: 'sort',
       groupTitle: 'Sort by',
       multiSelect: false,
@@ -225,7 +222,7 @@ export default React.createClass({
       ],
     };
 
-    let trendingFilters = {
+    const trendingFilters = {
       groupName: 'trending',
       groupTitle: 'Trending by',
       multiSelect: false,
@@ -278,7 +275,7 @@ export default React.createClass({
 
   handleSearchQueryChange_() {
     this.flux.getActions('progress').removeProgress('searchQuery');
-    let value = findDOMNode(this.refs.searchBox).value;
+    const value = findDOMNode(this.refs.searchBox).value;
     if (value === '') {
       this.history.replaceState(null, this.props.location.pathname, {
         show: 'popular',
@@ -298,7 +295,8 @@ export default React.createClass({
           .map(filterGroup => (
             <FilterGroup {...filterGroup}
               key={filterGroup.groupName}
-              onChange={this.handleFilterChange_} />
+              onChange={this.handleFilterChange_}
+            />
           ))}
       </div>
     );
@@ -313,7 +311,7 @@ export default React.createClass({
   },
 
   renderSearchResults_() {
-    let { free, paid } = this.state.searchResults;
+    const { free, paid } = this.state.searchResults;
     return (
       <div>
         <div className="search__results-free">
@@ -322,7 +320,8 @@ export default React.createClass({
               <SearchResult sheetMusic={sheetMusic}
                 key={index}
                 firstItem={index === 0}
-                lastItem={index === free.length - 1} />
+                lastItem={index === free.length - 1}
+              />
             ))}
           <Else />
             <div className="search__results-not-found">
@@ -340,7 +339,8 @@ export default React.createClass({
                 <PaidSearchResult paidSheetMusic={sheetMusic}
                   key={index}
                   firstItem={index === 0}
-                  lastItem={index === free.length - 1} />
+                  lastItem={index === free.length - 1}
+                />
               ))}
             </div>
           </div>
@@ -350,14 +350,15 @@ export default React.createClass({
   },
 
   renderBrowsePage_() {
-    let { list } = this.state.sheetMusicList;
+    const { list } = this.state.sheetMusicList;
     return (
       <If condition={list.length > 0}>
         {list.map((sheetMusic, index) => (
           <SearchResult sheetMusic={sheetMusic}
             key={sheetMusic.id}
             firstItem={index === 0}
-            lastItem={index === list.length - 1} />
+            lastItem={index === list.length - 1}
+          />
         ))}
       <Else />
         <div className="search__results-not-found">
@@ -368,15 +369,15 @@ export default React.createClass({
   },
 
   renderPagination_() {
-    let { count } = this.state.sheetMusicList;
-    let { page, query } = this.props.location.query || {};
+    const { count } = this.state.sheetMusicList;
+    const { page, query } = this.props.location.query || {};
 
     // Don't display pagination if we have a search query.
     // TODO(ankit): Remove this once pagination is implemented on search page.
     if (count === 0 || query) return null;
 
-    let numberOfPages = Math.ceil(count / PAGE_SIZE);
-    let currentPage = parseInt(page || 1, 10);
+    const numberOfPages = Math.ceil(count / PAGE_SIZE);
+    const currentPage = parseInt(page || 1, 10);
 
     // Don't display pagination buttons if we have less than 2 pages
     if (numberOfPages < 2) return null;
@@ -386,7 +387,8 @@ export default React.createClass({
         <If condition={currentPage > 1}>
           <Link to={this.props.location.pathname}
             query={{ ...this.props.location.query, page: currentPage - 1 }}
-            className="search__pagination-button">
+            className="search__pagination-button"
+          >
             <FontAwesome name="angle-left" />
           </Link>
         <Else />
@@ -398,7 +400,8 @@ export default React.createClass({
         <If condition={currentPage < numberOfPages}>
           <Link to={this.props.location.pathname}
             query={{ ...this.props.location.query, page: currentPage + 1 }}
-            className="search__pagination-button">
+            className="search__pagination-button"
+          >
             <FontAwesome name="angle-right" />
           </Link>
         <Else />
@@ -410,9 +413,9 @@ export default React.createClass({
   },
 
   render() {
-    let { query } = this.props.location.query || {};
+    const { query } = this.props.location.query || {};
 
-    let inProgress = intersection(this.state.inProgress, [
+    const inProgress = intersection(this.state.inProgress, [
       'search',
       'searchQuery',
       'sheetMusicList',
@@ -420,15 +423,13 @@ export default React.createClass({
     ]).length > 0;
 
     // Condition to display filters
-    let displayFilters = !query;
+    const displayFilters = !query;
 
-    let resultWrapperClassName = classNames({
-      'search__result-wrapper': true,
+    const resultWrapperClassName = classNames('search__result-wrapper', {
       'search__result-wrapper--with-filters': displayFilters,
     });
 
-    let resultsClassName = classNames({
-      'search__results': true,
+    const resultsClassName = classNames('search__results', {
       'search__results--in-progress': inProgress,
     });
 
@@ -441,7 +442,8 @@ export default React.createClass({
             placeholder="Search for sheet music..."
             defaultValue={query || ''}
             onChange={this.handleSearchTextChange_}
-            ref="searchBox" />
+            ref="searchBox"
+          />
           {/*
             Add this back once the API returns a proper search result count.
             <If condition={query}>
@@ -482,4 +484,3 @@ export default React.createClass({
   },
 
 });
-
