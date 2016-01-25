@@ -236,7 +236,7 @@ gulp.task('watch', ['clean'], callback => {
       });
 
       // Boolean to check if BrowserSync has started.
-      const isBrowserSyncStarted = false;
+      let isBrowserSyncStarted = false;
 
       // Perform action right when nodemon starts
       nodemon.on('start', () => {

@@ -13,6 +13,7 @@ import Detail from './utils/Detail';
 import EmptyComponent from './utils/EmptyComponent';
 import InfoBox from './utils/InfoBox';
 import LeftButton from './utils/LeftButton';
+import LoadingScreen from './utils/LoadingScreen';
 import ResponsiveContainer from '../Misc/ResponsiveContainer';
 import RightButton from './utils/RightButton';
 import Comments from './comments/Comments';
@@ -122,6 +123,10 @@ export default React.createClass({
     retrieveInitialData(this.flux, this.props.params);
   },
 
+  handleDownload_() {
+
+  },
+
   handleSetCarouselData_() {
     if (this.refs.carousel) {
       // HACK: Get carousel state properties
@@ -163,14 +168,6 @@ export default React.createClass({
     }
   },
 
-  renderLoadingScreen_() {
-    return (
-      <div className="sheetmusic__spinner">
-        <FontAwesome name="cog" spin />
-      </div>
-    );
-  },
-
   renderSheetMusicViewer_() {
     const images = this.state.sheetMusicResult.images || [];
 
@@ -180,9 +177,20 @@ export default React.createClass({
       { component: EmptyComponent }, // The dots at the bottom
     ];
 
+    const imageElements = images.map((image, index) => (
+      <div className="sheetmusic__viewer-page" key={index}>
+        <img className="sheetmusic__viewer-page-image"
+          src={image}
+          onDragStart={this.handleNullify_}
+          onClick={this.handleNullify_}
+        />
+      </div>
+    ));
+
     return (
       <div className="sheetmusic__viewer-container">
-        <Carousel className="sheetmusic__viewer"
+        <Carousel
+          className="sheetmusic__viewer"
           cellAlign="center"
           dragging
           slidesToShow={1}
@@ -194,15 +202,7 @@ export default React.createClass({
           data={this.handleSetCarouselData_}
           ref="carousel"
         >
-          {images.map((image, index) => (
-            <div className="sheetmusic__viewer-page" key={index}>
-              <img className="sheetmusic__viewer-page-image"
-                src={image}
-                onDragStart={this.handleNullify_}
-                onClick={this.handleNullify_}
-              />
-            </div>
-          ))}
+          {imageElements}
         </Carousel>
       </div>
     );
@@ -268,13 +268,15 @@ export default React.createClass({
     const videos = this.state.sheetMusicResult.videos;
     if (!videos || !videos.length) return null;
 
+    const videoElements = videos.slice(0, this.state.showVideos).map((video, index) => (
+      <div className="sheetmusic__video" key={index}>
+        {/* <Video videoId={video.youtubeId} /> */}
+      </div>
+    ));
+
     return (
       <InfoBox title="Videos" icon="video-camera">
-        {videos.slice(0, this.state.showVideos).map((video, index) => (
-          <div className="sheetmusic__video" key={index}>
-            {/* <Video videoId={video.youtubeId} /> */}
-          </div>
-        ))}
+        {videoElements}
         <If condition={this.state.showVideos < videos.length}>
           <a className="sheetmusic__video-show-more"
             href="#"
@@ -351,7 +353,7 @@ export default React.createClass({
             {result.license}
           </Detail>
         </If>
-        {this.renderDiffucultyNode_()}
+        {this.renderDifficultyNode_()}
       </InfoBox>
     );
   },
@@ -364,7 +366,7 @@ export default React.createClass({
       return (
         <div>
           <Helmet title={title} />
-          {this.renderLoadingScreen_()}
+          <LoadingScreen />
         </div>
       );
     }

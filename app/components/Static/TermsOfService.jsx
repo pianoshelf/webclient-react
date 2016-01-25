@@ -78,13 +78,11 @@ Use.
 
 `;
 
-export default React.createClass({
-  render() {
-    return (
-      <div>
-        <Helmet title="Terms of Service" />
-        <Markdown className="static__markdown" source={input} />
-      </div>
-    );
-  },
-});
+export default function TermsOfService() {
+  return (
+    <div>
+      <Helmet title="Terms of Service" />
+      <Markdown className="static__markdown" source={input} />
+    </div>
+  );
+}

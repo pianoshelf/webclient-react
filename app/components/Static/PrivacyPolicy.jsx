@@ -116,13 +116,11 @@ below.
 
 `;
 
-export default React.createClass({
-  render() {
-    return (
-      <div>
-        <Helmet title="Privacy Policy" />
-        <Markdown className="static__markdown" source={input} />
-      </div>
-    );
-  },
-});
+export default function PrivacyPolicy() {
+  return (
+    <div>
+      <Helmet title="Privacy Policy" />
+      <Markdown className="static__markdown" source={input} />
+    </div>
+  );
+}

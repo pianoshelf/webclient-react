@@ -1,28 +1,19 @@
 
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import React from 'react';
 
 import NavBar from '../Fixtures/NavBar';
 import Footer from '../Fixtures/Footer';
 
-export default React.createClass({
+export default function SheetMusic({ children }) {
+  return (
+    <div className="sheetmusic">
+      <NavBar />
+      {children}
+      <Footer />
+    </div>
+  );
+}
 
-  displayName: 'SheetMusic',
-
-  propTypes: {
-    children: React.PropTypes.node,
-  },
-
-  mixins: [PureRenderMixin],
-
-  render() {
-    return (
-      <div className="sheetmusic">
-        <NavBar />
-        {this.props.children}
-        <Footer />
-      </div>
-    );
-  },
-
-});
+SheetMusic.propTypes = {
+  children: React.PropTypes.node,
+};

@@ -24,8 +24,7 @@ export default React.createClass({
   },
 
   render() {
-    const commentReplyBoxClasses = classNames({
-      'comment__send-button': true,
+    const commentReplyBoxClasses = classNames('comment__send-button', {
       comment__disabled: !this.state.text,
     });
 

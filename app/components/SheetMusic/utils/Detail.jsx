@@ -1,18 +1,16 @@
 
 import React from 'react';
 
-export default React.createClass({
-  propTypes: {
-    title: React.PropTypes.string,
-    children: React.PropTypes.node,
-  },
+export default function Detail({ title, children }) {
+  return (
+    <div className="sheetmusic__detail">
+      <div className="sheetmusic__detail-title">{title}</div>
+      <div className="sheetmusic__detail-content">{children}</div>
+    </div>
+  );
+}
 
-  render() {
-    return (
-      <div className="sheetmusic__detail">
-        <div className="sheetmusic__detail-title">{this.props.title}</div>
-        <div className="sheetmusic__detail-content">{this.props.children}</div>
-      </div>
-    );
-  },
-});
+Detail.propTypes = {
+  title: React.PropTypes.string,
+  children: React.PropTypes.node,
+};

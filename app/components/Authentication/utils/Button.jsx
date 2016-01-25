@@ -3,53 +3,45 @@ import classNames from 'classnames';
 import FontAwesome from 'react-fontawesome';
 import React from 'react';
 
-export default React.createClass({
+export default function Button({ submittedIf, disableIf, children, color }) {
+  const className = classNames('authentication__button', `authentication__button--${color}`);
 
-  propTypes: {
-    /**
-     * Condition in which to display the cog instead of the text.
-     */
-    submittedIf: React.PropTypes.bool.isRequired,
+  return (
+    <button className={className} type="submit" disabled={disableIf}>
+      <If condition={submittedIf}>
+        <FontAwesome name="cog" spin />
+      <Else />
+        <span>
+          {children}
+        </span>
+      </If>
+    </button>
+  );
+}
 
-    /**
-     * Condition in which to disable the button.
-     */
-    disableIf: React.PropTypes.bool.isRequired,
+Button.propTypes = {
+  /**
+   * Condition in which to display the cog instead of the text.
+   */
+  submittedIf: React.PropTypes.bool.isRequired,
 
-    /**
-     * Children of the element
-     */
-    children: React.PropTypes.node,
+  /**
+   * Condition in which to disable the button.
+   */
+  disableIf: React.PropTypes.bool.isRequired,
 
-    /**
-     * Color of the button
-     */
-    color: React.PropTypes.oneOf([
-      'orange',
-      'blue-light',
-      'red',
-      'facebook',
-    ]).isRequired,
-  },
+  /**
+   * Children of the element
+   */
+  children: React.PropTypes.node,
 
-  render() {
-    const className = classNames('authentication__button',
-                                 `authentication__button--${this.props.color}`);
-
-    return (
-      <button className={className}
-        type="submit"
-        disabled={this.props.disableIf}
-      >
-        <If condition={this.props.submittedIf}>
-          <FontAwesome name="cog" spin />
-        <Else />
-          <span>
-            {this.props.children}
-          </span>
-        </If>
-      </button>
-    );
-  },
-
-});
+  /**
+   * Color of the button
+   */
+  color: React.PropTypes.oneOf([
+    'orange',
+    'blue-light',
+    'red',
+    'facebook',
+  ]).isRequired,
+};

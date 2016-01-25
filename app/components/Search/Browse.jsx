@@ -385,10 +385,7 @@ export default React.createClass({
       <div className="search__pagination">
         <If condition={currentPage > 1}>
           <Link to={this.props.location.pathname}
-            query={{
-              ...this.props.location.query,
-              page: currentPage - 1,
-            }}
+            query={{ ...this.props.location.query, page: currentPage - 1 }}
             className="search__pagination-button">
             <FontAwesome name="angle-left" />
           </Link>
@@ -400,10 +397,7 @@ export default React.createClass({
         </div>
         <If condition={currentPage < numberOfPages}>
           <Link to={this.props.location.pathname}
-            query={{
-              ...this.props.location.query,
-              page: currentPage + 1,
-            }}
+            query={{ ...this.props.location.query, page: currentPage + 1 }}
             className="search__pagination-button">
             <FontAwesome name="angle-right" />
           </Link>
