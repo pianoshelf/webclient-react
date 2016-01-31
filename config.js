@@ -54,10 +54,14 @@ module.exports = {
 
   build: {
     babel: {
-      stage: 0,
-      plugins: ['jsx-control-statements/babel'],
-      loose: 'all',
-      blacklist: 'regenerator',
+      client: {
+        presets: ['es2015', 'react', 'stage-0'],
+        plugins: ['jsx-control-statements'],
+      },
+      server: {
+        presets: ['node5', 'react', 'stage-0'],
+        plugins: ['jsx-control-statements'],
+      }
     },
     sass: {
       style: 'compact',

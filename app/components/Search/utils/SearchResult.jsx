@@ -4,123 +4,73 @@ import FontAwesome from 'react-fontawesome';
 import React from 'react';
 import { Link } from 'react-router';
 
-import { sheetMusicPropType, getDifficultyText } from '../../../utils/sheetMusicUtils';
+import ViewsTag from './ViewsTag';
+import DifficultyLevelTag from './DifficultyLevelTag';
+import SheetMusicTags from './SheetMusicTags';
+import { sheetMusicPropType } from '../../../utils/sheetMusicUtils';
 
-export default React.createClass({
-  propTypes: {
-    /**
-     * Make sure a valid sheet music was inputted.
-     */
-    sheetMusic: sheetMusicPropType().isRequired,
+export default function SearchResult({ sheetMusic, isFirstItem = false, isLastItem = false }) {
+  const className = classNames('search__result', {
+    'search__result--last-item': isLastItem,
+    'search__result--first-item': isFirstItem,
+  });
 
-    /**
-     * Whether this search result is the first one in the list.
-     */
-    firstItem: React.PropTypes.bool,
+  // TODO(ankit): Eventually link this with new tags API
+  const tags = [];
 
-    /**
-     * Whether this search result is the last one in the list.
-     */
-    lastItem: React.PropTypes.bool,
-  },
+  // TODO(ankit): Eventually turn this into a function that normalizes the music key.
+  const normalizedKey = sheetMusic.musicKey;
+  if (normalizedKey) tags.push(normalizedKey);
 
-  getDefaultProps() {
-    return {
-      sheetMusic: {},
-      firstItem: false,
-      lastItem: false,
-    };
-  },
-
-  getDifficultyText_(difficultyLevel) {
-    return (
-      <span>
-        {getDifficultyText(difficultyLevel)}
-      </span>
-    );
-  },
-
-  normalizeKey_() {
-    let key = this.props.sheetMusic.musicKey;
-    return key;
-  },
-
-  renderViewsTag_(viewCount) {
-    if (!viewCount) return null;
-    let className = 'search__result-property search__result-property--dark';
-    return (
-      <div className={className} key="views">
-        <FontAwesome name="eye" className="search__result-property-icon" />
-        {viewCount}
-      </div>
-    );
-  },
-
-  renderDifficultyTag_(difficultyLevel) {
-    let className = classNames({
-      'search__result-property': true,
-      'search__result-property--blue': difficultyLevel === 1,
-      'search__result-property--green': difficultyLevel === 2 || difficultyLevel === 3,
-      'search__result-property--orange': difficultyLevel === 4,
-      'search__result-property--red': difficultyLevel === 5,
-    });
-
-    return (
-      <div className={className} key="difficulty">
-        {this.getDifficultyText_(difficultyLevel)}
-      </div>
-    );
-  },
-
-  render() {
-    let className = classNames({
-      'search__result': true,
-      'search__result--last-item': this.props.lastItem,
-      'search__result--first-item': this.props.firstItem,
-    });
-
-    let tags = [];
-
-    let normalizedKey = this.normalizeKey_();
-    if (normalizedKey) tags.push(normalizedKey);
-
-    return (
-      <Link className={className}
-          to={`/sheetmusic/${this.props.sheetMusic.id}/${this.props.sheetMusic.uniqueUrl}`}>
-        <If condition={this.props.sheetMusic.thumbnailUrl}>
-          <img src={this.props.sheetMusic.thumbnailUrl}
-            className="search__result-thumbnail" />
-        </If>
-        <div className="search__result-details">
-          <div className="search__result-title">
-            {this.props.sheetMusic.title}
-          </div>
-          <div className="search__result-info">
-            <If condition={this.props.sheetMusic.musicStyle}>
-              <span>
-                <strong>{this.props.sheetMusic.musicStyle}</strong>
-                &nbsp;by&nbsp;
-                <strong>{this.props.sheetMusic.composer}</strong>
-              </span>
-            <Else />
-              <span>
-                By&nbsp;
-                <strong>{this.props.sheetMusic.composer}</strong>
-              </span>
-            </If>
-          </div>
-          <ul className="search__result-properties">
-            {this.renderViewsTag_(this.props.sheetMusic.viewCount)}
-            {this.renderDifficultyTag_(this.props.sheetMusic.difficulty)}
-            {tags.map((tag, index) => (
-              <li className="search__result-property" key={index}>{tag}</li>
-            ))}
-          </ul>
+  return (
+    <Link className={className} to={`/sheetmusic/${sheetMusic.id}/${sheetMusic.uniqueUrl}`}>
+      <If condition={sheetMusic.thumbnailUrl}>
+        <img src={sheetMusic.thumbnailUrl}
+          className="search__result-thumbnail"
+        />
+      </If>
+      <div className="search__result-details">
+        <div className="search__result-title">
+          {sheetMusic.title}
         </div>
-        <FontAwesome name="angle-right" className="search__result-right-arrow" />
-      </Link>
-    );
-  },
+        <div className="search__result-info">
+          <If condition={sheetMusic.musicStyle}>
+            <span>
+              <strong>{sheetMusic.musicStyle}</strong>
+              &nbsp;by&nbsp;
+              <strong>{sheetMusic.composer}</strong>
+            </span>
+          <Else />
+            <span>
+              By&nbsp;
+              <strong>{sheetMusic.composer}</strong>
+            </span>
+          </If>
+        </div>
+        <ul className="search__result-properties">
+          <ViewsTag viewCount={sheetMusic.viewCount} />
+          <DifficultyLevelTag difficultyLevel={sheetMusic.difficultyLevel} />
+          <SheetMusicTags tags={tags} />
+        </ul>
+      </div>
+      <FontAwesome name="angle-right" className="search__result-right-arrow" />
+    </Link>
+  );
+}
 
+SearchResult.propTypes = {
+  /**
+   * Make sure a valid sheet music was inputted.
+   */
+  sheetMusic: sheetMusicPropType().isRequired,
 
-});
+  /**
+   * Whether this search result is the first one in the list.
+   */
+  isFirstItem: React.PropTypes.bool,
+
+  /**
+   * Whether this search result is the last one in the list.
+   */
+  isLastItem: React.PropTypes.bool,
+};

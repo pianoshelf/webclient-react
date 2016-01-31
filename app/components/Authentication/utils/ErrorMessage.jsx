@@ -5,22 +5,8 @@ import FontAwesome from 'react-fontawesome';
 
 import { errors, success } from '../../../utils/constants';
 
-export default React.createClass({
-
-  propTypes: {
-    /**
-     * The error number to display.
-     */
-    errorCode: React.PropTypes.number,
-
-    /**
-     * A condition where the error will never display.
-     */
-    dontDisplayIf: React.PropTypes.bool.isRequired,
-  },
-
-  getErrorMessage_(errorCode) {
-    switch (errorCode) {
+function getErrorMessage(errorCode) {
+  switch (errorCode) {
     case errors.INVALID_EMAIL:
       return [true, 'The email you provided is invalid.'];
     case errors.NO_EMAIL:
@@ -53,31 +39,41 @@ export default React.createClass({
       return [false, 'Your password has been reset.'];
     default:
       return [true, 'An unknown error occurred!'];
-    }
-  },
+  }
+}
 
-  render() {
-    if (this.props.errorCode && !this.props.dontDisplayIf) {
-      let [ isError, errorMessage ] = this.getErrorMessage_(this.props.errorCode);
+export default function ErrorMessage({ errorCode, dontDisplayIf }) {
+  if (errorCode && !dontDisplayIf) {
+    const [isError, errorMessage] = getErrorMessage(errorCode);
 
-      let className = classNames({
-        'authentication__message': true,
-        'authentication__message--info': !isError,
-        'authentication__message--error': isError,
-      });
+    const className = classNames({
+      authentication__message: true,
+      'authentication__message--info': !isError,
+      'authentication__message--error': isError,
+    });
 
-      return (
-        <div className={className}>
-          <FontAwesome className="authentication__message-icon"
-            name={isError ? 'exclamation-circle' : 'info-circle'}
-            size="lg" />
-          {errorMessage}
-        </div>
-      );
-    } else {
-      return null;
-    }
-  },
+    return (
+      <div className={className}>
+        <FontAwesome className="authentication__message-icon"
+          name={isError ? 'exclamation-circle' : 'info-circle'}
+          size="lg"
+        />
+        {errorMessage}
+      </div>
+    );
+  } else {
+    return '';
+  }
+}
 
-});
+ErrorMessage.propTypes = {
+  /**
+   * The error number to display.
+   */
+  errorCode: React.PropTypes.number,
 
+  /**
+   * A condition where the error will never display.
+   */
+  dontDisplayIf: React.PropTypes.bool.isRequired,
+};

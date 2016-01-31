@@ -53,7 +53,8 @@ export default function getRoutes(flux) {
         <Route path="/login" component={Login} onEnter={requireNoAuth(flux)} />
         <Route path="/login/forgot" component={ResetPassword} onEnter={requireNoAuth(flux)} />
         <Route path="/login/reset/:uid/:token" component={ResetPasswordConfirm}
-          onEnter={requireNoAuth(flux)} />
+          onEnter={requireNoAuth(flux)}
+        />
         <Route path="/login/verify/:key" component={VerifyEmail} />
         <Route path="/logout" component={Logout} />
         <Route path="/register" component={Register} onEnter={requireNoAuth(flux)} />

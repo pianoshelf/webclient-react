@@ -26,7 +26,7 @@ import flattenDeep from 'lodash/array/flattenDeep';
  *     updated with the correct information, and call functions like React.renderToString.
  */
 export function prefetchRouteData(components, params) {
-  let matchedPromises = components
+  const matchedPromises = components
     .map(component => component.routeWillRun)
     .filter(routeWillRun => typeof routeWillRun === 'function')
     .map(routeWillRun => routeWillRun(params));

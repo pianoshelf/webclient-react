@@ -1,10 +1,10 @@
 
 import fluxMixin from 'flummox/mixin';
 import FontAwesome from 'react-fontawesome';
+import LinkedStateMixin from 'react-addons-linked-state-mixin';
 import includes from 'lodash/collection/includes';
 import Helmet from 'react-helmet';
 import React from 'react';
-import { addons } from 'react/addons';
 import { Link } from 'react-router';
 
 import Button from './utils/Button';
@@ -13,8 +13,6 @@ import Input from './utils/Input';
 import Title from './utils/Title';
 import { errors } from '../../utils/constants';
 import { CanLoginMixin, FacebookLoginMixin } from '../../utils/authUtils';
-
-let { LinkedStateMixin } = addons;
 
 export default React.createClass({
 
@@ -38,10 +36,10 @@ export default React.createClass({
   handleSubmit_(event) {
     event.preventDefault();
 
-    let { username, password } = this.state;
+    const { username, password } = this.state;
 
     // Trigger action
-    let loginActions = this.flux.getActions('login');
+    const loginActions = this.flux.getActions('login');
     loginActions.login(username, password, this.flux);
   },
 
@@ -52,25 +50,25 @@ export default React.createClass({
 
   facebookLoginHandler(response) {
     if (response.status === 'connected') {
-      let { accessToken } = response;
+      const { accessToken } = response;
 
       // Trigger action
-      let loginActions = this.flux.getActions('login');
+      const loginActions = this.flux.getActions('login');
       loginActions.facebookLogin({ accessToken }, this.flux);
     }
   },
 
   render() {
-    let loginInProgress = includes(this.state.inProgress, 'login');
-    let facebookInProgress = includes(this.state.inProgress, 'facebookLogin');
+    const loginInProgress = includes(this.state.inProgress, 'login');
+    const facebookInProgress = includes(this.state.inProgress, 'facebookLogin');
 
     return (
       <div>
         <Helmet title="Log in" />
         <Title>Log in to PianoShelf</Title>
         <ErrorMessage errorCode={this.state.errorCode}
-          dontDisplayIf={this.state.loggedIn ||
-            loginInProgress || facebookInProgress} />
+          dontDisplayIf={this.state.loggedIn || loginInProgress || facebookInProgress}
+        />
         <form className="authentication__form" onSubmit={this.handleSubmit_}>
           <div className="authentication__inputs">
             <Input placeholder="Username"
@@ -78,16 +76,19 @@ export default React.createClass({
               errorCode={this.state.errorCode}
               errorWhen={[errors.NO_USERNAME]}
               focusOnLoad
-              valueLink={this.linkState('username')} />
+              valueLink={this.linkState('username')}
+            />
             <Input placeholder="Password"
               name="password"
               password
               errorCode={this.state.errorCode}
               errorWhen={[errors.NO_PASSWORD]}
-              valueLink={this.linkState('password')} />
+              valueLink={this.linkState('password')}
+            />
           </div>
           <Button color="orange" submittedIf={loginInProgress}
-              disableIf={loginInProgress || facebookInProgress}>
+            disableIf={loginInProgress || facebookInProgress}
+          >
             <FontAwesome className="authentication__button-icon" name="sign-in" />
             Log in
           </Button>
@@ -96,7 +97,8 @@ export default React.createClass({
         <hr className="authentication__hr" />
         <form onSubmit={this.handleFacebook_}>
           <Button color="facebook" submittedIf={facebookInProgress}
-              disableIf={loginInProgress || facebookInProgress}>
+            disableIf={loginInProgress || facebookInProgress}
+          >
             <FontAwesome className="authentication__button-icon" name="facebook-square" />
             Sign in using Facebook
           </Button>
@@ -106,4 +108,3 @@ export default React.createClass({
   },
 
 });
-

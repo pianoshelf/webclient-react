@@ -2,6 +2,7 @@
 import classNames from 'classnames';
 import includes from 'lodash/collection/includes';
 import React from 'react';
+import { findDOMNode } from 'react-dom';
 
 export default React.createClass({
 
@@ -47,15 +48,15 @@ export default React.createClass({
 
   componentDidMount() {
     if (this.props.focusOnLoad) {
-      React.findDOMNode(this.refs.input).focus();
+      findDOMNode(this.refs.input).focus();
     }
   },
 
   render() {
-    let isPassword = this.props.password === true;
+    const isPassword = this.props.password === true;
 
-    let className = classNames({
-      'authentication__input': true,
+    const className = classNames({
+      authentication__input: true,
       'authentication__input--error': includes(this.props.errorWhen, this.props.errorCode),
     });
 
@@ -64,10 +65,9 @@ export default React.createClass({
         name={this.props.name}
         className={className}
         placeholder={this.props.placeholder}
-        valueLink={this.props.valueLink} />
+        valueLink={this.props.valueLink}
+      />
     );
   },
 
 });
-
-

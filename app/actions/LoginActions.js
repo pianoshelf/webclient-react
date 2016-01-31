@@ -91,7 +91,7 @@ export default class LoginActions extends Actions {
     }
 
     // Make sure email field has a valid email
-    let emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+/;
+    const emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+/;
     if (!emailRegex.test(user.email)) {
       return fail(errors.INVALID_EMAIL);
     }
@@ -131,7 +131,7 @@ export default class LoginActions extends Actions {
     }
 
     // Make sure email field has a valid email
-    let emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+/;
+    const emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+/;
     if (!emailRegex.test(email)) {
       return fail(errors.INVALID_EMAIL);
     }

@@ -1,20 +1,18 @@
 
-import Fa from 'react-fontawesome';
+import FontAwesome from 'react-fontawesome';
 import React from 'react';
 
-export default React.createClass({
-  propTypes: {
-    currentSlide: React.PropTypes.number,
-    slideCount: React.PropTypes.number,
-    previousSlide: React.PropTypes.func,
-  },
-  render() {
-    if (this.props.currentSlide === 0) return null;
-    return (
-      <a href="#" onClick={this.props.previousSlide}
-        className="sheetmusic-viewer-arrow">
-        <Fa name="angle-left" />
-      </a>
-    );
-  },
-});
+export default function LeftButton({ currentSlide, previousSlide }) {
+  return (
+    <a href="#" onClick={previousSlide} className="sheetmusic-viewer-arrow">
+      <If condition={currentSlide !== 0}>
+        <FontAwesome name="angle-left" />
+      </If>
+    </a>
+  );
+}
+
+LeftButton.propTypes = {
+  currentSlide: React.PropTypes.number,
+  previousSlide: React.PropTypes.func,
+};

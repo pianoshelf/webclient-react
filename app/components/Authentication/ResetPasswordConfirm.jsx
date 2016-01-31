@@ -2,19 +2,17 @@
 import fluxMixin from 'flummox/mixin';
 import FontAwesome from 'react-fontawesome';
 import Helmet from 'react-helmet';
+import LinkedStateMixin from 'react-addons-linked-state-mixin';
 import includes from 'lodash/collection/includes';
 import React from 'react';
-import { addons } from 'react/addons';
 import { Link } from 'react-router';
 
 import Button from './utils/Button';
 import ErrorMessage from './utils/ErrorMessage';
-import Input from './utils/Input';
 import InfoText from './utils/InfoText';
+import Input from './utils/Input';
 import Title from './utils/Title';
 import { errors, success } from '../../utils/constants';
-
-let { LinkedStateMixin } = addons;
 
 export default React.createClass({
 
@@ -40,24 +38,25 @@ export default React.createClass({
   handleSubmit_(event) {
     event.preventDefault();
 
-    let { password1, password2 } = this.state;
-    let { token, uid } = this.props.params;
-    let user = { password1, password2 };
+    const { password1, password2 } = this.state;
+    const { token, uid } = this.props.params;
+    const user = { password1, password2 };
 
     // Trigger action
-    let loginActions = this.flux.getActions('login');
+    const loginActions = this.flux.getActions('login');
     loginActions.resetPasswordConfirm(user, uid, token, this.flux);
   },
 
   render() {
-    let inProgress = includes(this.state.inProgress, 'resetPasswordConfirm');
+    const inProgress = includes(this.state.inProgress, 'resetPasswordConfirm');
 
     return (
       <div>
         <Helmet title="Reset Password" />
         <Title>Reset your password</Title>
         <ErrorMessage errorCode={this.state.errorCode}
-          dontDisplayIf={this.state.loggedIn || inProgress} />
+          dontDisplayIf={this.state.loggedIn || inProgress}
+        />
         <If condition={this.state.errorCode === success.PASSWORD_CONFIRM_RESET}>
           <div>
             <InfoText>
@@ -77,13 +76,15 @@ export default React.createClass({
                   errorCode={this.state.errorCode}
                   errorWhen={[errors.NO_PASSWORD, errors.NOT_STRONG_PASSWORD]}
                   focusOnLoad
-                  valueLink={this.linkState('password1')} />
+                  valueLink={this.linkState('password1')}
+                />
                 <Input placeholder="Confirm New Password"
                   name="password2"
                   password
                   errorCode={this.state.errorCode}
                   errorWhen={[errors.NOT_SAME_PASSWORD]}
-                  valueLink={this.linkState('password2')} />
+                  valueLink={this.linkState('password2')}
+                />
               </div>
               <Button color="red" disableIf={inProgress} submittedIf={inProgress}>
                 <FontAwesome className="authentication__button-icon" name="paper-plane" />
@@ -97,4 +98,3 @@ export default React.createClass({
   },
 
 });
-

@@ -49,4 +49,3 @@ export default class Flux extends Flummox {
   }
 
 }
-

@@ -1,15 +1,13 @@
 
 import fluxMixin from 'flummox/mixin';
 import Helmet from 'react-helmet';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import React from 'react';
-import { addons } from 'react/addons';
 import { Link } from 'react-router';
 
 import InfoText from './utils/InfoText';
 
 import { errors, success } from '../../utils/constants';
-
-let { PureRenderMixin } = addons;
 
 function retrieveInitialData(flux, params) {
   const loginActions = flux.getActions('login');

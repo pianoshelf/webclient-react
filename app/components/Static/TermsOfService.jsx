@@ -3,7 +3,7 @@ import Helmet from 'react-helmet';
 import Markdown from 'react-markdown';
 import React from 'react';
 
-let input = `
+const input = `
 
 # Terms of Service
 
@@ -78,13 +78,11 @@ Use.
 
 `;
 
-export default React.createClass({
-  render() {
-    return (
-      <div>
-        <Helmet title="Terms of Service" />
-        <Markdown className="static__markdown" source={input} />
-      </div>
-    );
-  },
-});
+export default function TermsOfService() {
+  return (
+    <div>
+      <Helmet title="Terms of Service" />
+      <Markdown className="static__markdown" source={input} />
+    </div>
+  );
+}

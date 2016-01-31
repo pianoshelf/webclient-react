@@ -2,19 +2,18 @@
 import FontAwesome from 'react-fontawesome';
 import React from 'react';
 
-export default React.createClass({
-  propTypes: {
-    currentSlide: React.PropTypes.number,
-    slideCount: React.PropTypes.number,
-    nextSlide: React.PropTypes.func,
-  },
-  render() {
-    if (this.props.currentSlide + 1 === this.props.slideCount) return null;
-    return (
-      <a href="#" onClick={this.props.nextSlide}
-        className="sheetmusic-viewer-arrow">
+export default function RightButton({ currentSlide, nextSlide, slideCount }) {
+  return (
+    <a href="#" onClick={nextSlide} className="sheetmusic-viewer-arrow">
+      <If condition={currentSlide + 1 !== slideCount}>
         <FontAwesome name="angle-right" />
-      </a>
-    );
-  },
-});
+      </If>
+    </a>
+  );
+}
+
+RightButton.propTypes = {
+  currentSlide: React.PropTypes.number,
+  previousSlide: React.PropTypes.func,
+  slideCount: React.PropTypes.number,
+};

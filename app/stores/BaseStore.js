@@ -35,4 +35,3 @@ export default class BaseStore extends Store {
   }
 
 }
-

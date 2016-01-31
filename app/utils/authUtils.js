@@ -16,7 +16,7 @@ import { setAuthToken, deleteAuthToken } from './api';
  * @return {Function} Callback to feed into react-router
  */
 export function requireAuth(flux) {
-  return function(nextState, transition, callback) {
+  return function (nextState, transition, callback) {
     flux.getActions('login').getUser(flux).then(() => {
       callback();
     }).catch(() => {
@@ -37,7 +37,7 @@ export function requireAuth(flux) {
  * @return {Function} Callback to feed into react-router
  */
 export function requireNoAuth(flux) {
-  return function(nextState, transition, callback) {
+  return function (nextState, transition, callback) {
     flux.getActions('login').getUser(flux).then(() => {
       transition.to('/');
       callback();
@@ -51,7 +51,7 @@ export function requireNoAuth(flux) {
  * A mixin that adds a login listener to the component. The component this is
  * connected to MUST BE connected to the LoginStore.
  */
-export let CanLoginMixin = {
+export const CanLoginMixin = {
   mixins: [History],
   componentDidMount() { this.loginUser_(); },
   componentDidUpdate() { this.loginUser_(); },
@@ -59,7 +59,7 @@ export let CanLoginMixin = {
   loginUser_() {
     if (this.state.loggedIn) {
       // Set authorization token
-      let { user } = this.state;
+      const { user } = this.state;
       setAuthToken(user.authToken, this.flux);
 
       if (this.props.location.query && this.props.location.query.redirect) {
@@ -75,7 +75,7 @@ export let CanLoginMixin = {
  * A mixin that adds a logout listener to the component. The component this is
  * connected to MUST BE connected to the LoginStore.
  */
-export let CanLogoutMixin = {
+export const CanLogoutMixin = {
   mixins: [History],
   componentDidMount() { this.logoutUser_(); },
   componentDidUpdate() { this.logoutUser_(); },
@@ -98,7 +98,7 @@ export let CanLogoutMixin = {
  * A mixin that adds the ability to log in to Facebook by asynchronously loading
  * the Facebook Javascript SDK.
  */
-export let FacebookLoginMixin = {
+export const FacebookLoginMixin = {
   componentDidMount() {
     // Function that will run after Facebook is done initializing
     window.fbAsyncInit = () => {
@@ -111,9 +111,9 @@ export let FacebookLoginMixin = {
     };
 
     // Asynchronously load Facebook
-    (function(d, s, id) {
+    (function (d, s, id) {
       let js;
-      let fjs = d.getElementsByTagName(s)[0];
+      const fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) { return; }
       js = d.createElement(s); js.id = id;
       js.src = '//connect.facebook.net/en_US/sdk.js';
@@ -122,7 +122,7 @@ export let FacebookLoginMixin = {
 
     // Inject fb-root div if it doesn't exist
     if (!document.getElementById('fb-root')) {
-      let fbRoot = document.createElement('div');
+      const fbRoot = document.createElement('div');
       fbRoot.setAttribute('id', 'fb-root');
       document.querySelector('body').appendChild(fbRoot);
     }
@@ -131,7 +131,7 @@ export let FacebookLoginMixin = {
   componentDidUnmount() {
     // Remove fb-root div
     if (document.getElementById('fb-root')) {
-      let fbRoot = document.getElementById('fb-root');
+      const fbRoot = document.getElementById('fb-root');
       fbRoot.parentElement.removeChild(fbRoot);
     }
   },

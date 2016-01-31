@@ -5,15 +5,12 @@
 // Import external modules
 import classNames from 'classnames';
 import fluxMixin from 'flummox/mixin';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import React from 'react';
-import { addons } from 'react/addons';
 import { Link } from 'react-router';
 
 // Import internal module
 import ResponsiveContainer from '../Misc/ResponsiveContainer';
-
-// Get mixins
-let PureRenderMixin = addons.PureRenderMixin;
 
 // Export class
 export default React.createClass({
@@ -64,7 +61,7 @@ export default React.createClass({
   },
 
   handleStickyEvent_() {
-    let disappearingMode = this.props.disappearing &&
+    const disappearingMode = this.props.disappearing &&
       window.pageYOffset < this.props.disappearingOffset;
     this.setState({ disappearingMode });
   },
@@ -88,11 +85,11 @@ export default React.createClass({
   },
 
   render() {
-    let navbarClass = classNames('navbar', {
+    const navbarClass = classNames('navbar', {
       'navbar--homepage': this.state.disappearingMode,
     });
 
-    let buttonClass = (important) => classNames('navbar__button', {
+    const buttonClass = (important) => classNames('navbar__button', {
       'navbar__button--homepage': this.state.disappearingMode,
       'navbar__button--important': important,
     });

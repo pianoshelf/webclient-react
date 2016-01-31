@@ -33,7 +33,7 @@ export default class SheetMusicStore extends BaseStore {
   }
 
   getSheetMusic(res) {
-    let result = JSON.parse(res.text);
+    const result = JSON.parse(res.text);
 
     this.setState({
       sheetMusicResult: convertSheetMusic(result),
@@ -42,7 +42,7 @@ export default class SheetMusicStore extends BaseStore {
 
   // Process search results
   search(res) {
-    let { count, free, paid } = JSON.parse(res.text);
+    const { count, free, paid } = JSON.parse(res.text);
 
     this.setState({
       searchResults: {
@@ -83,4 +83,3 @@ export default class SheetMusicStore extends BaseStore {
   }
 
 }
-

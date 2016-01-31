@@ -40,17 +40,17 @@ function getCookie_(flux, name) {
  */
 function getHeaders_(flux) {
   // Initial set of headers.
-  let headers = {};
+  const headers = {};
 
   // Mirror cookies if we're on the server.
   if (__SERVER__) headers.Cookie = flux.request.get('Cookie');
 
   // Set authorization token header if it exists.
-  let auth = getCookie_(flux, config.cookie.authtoken);
+  const auth = getCookie_(flux, config.cookie.authtoken);
   if (auth) headers.Authorization = auth;
 
   // Set CSRF header if it exists.
-  let csrf = getCookie_(flux, config.cookie.csrf);
+  const csrf = getCookie_(flux, config.cookie.csrf);
   if (csrf) headers['X-CSRFToken'] = csrf;
 
   return headers;
@@ -61,7 +61,7 @@ function getHeaders_(flux) {
  */
 function finishRequest_(flux, resolve, reject) {
   // Return anonymous function
-  return function(err, res) {
+  return function (err, res) {
     // If we're on the server and the 'Set-Cookie' header is in the response, propogate
     // that to the client by appending it to the response header.
     if (!err && __SERVER__ && res.headers['set-cookie']) {
@@ -87,7 +87,7 @@ function finishRequest_(flux, resolve, reject) {
  * @return {Promise} A promise that resolves when the request is complete.
  */
 export function get(endpoint, params, flux, auth) {
-  let baseUrl = __SERVER__ ? `http://localhost:${config.ports.django}` : '';
+  const baseUrl = __SERVER__ ? `http://localhost:${config.ports.django}` : '';
   return new Promise((resolve, reject) => {
     request.get(`${baseUrl}${auth ? authUrl : apiUrl}${endpoint}`)
       .query(params)
@@ -107,7 +107,7 @@ export function get(endpoint, params, flux, auth) {
  * @return {Promise} A promise that resolves when the request is complete.
  */
 export function post(endpoint, params, flux, auth) {
-  let baseUrl = __SERVER__ ? `http://localhost:${config.ports.django}` : '';
+  const baseUrl = __SERVER__ ? `http://localhost:${config.ports.django}` : '';
   return new Promise((resolve, reject) => {
     request.post(`${baseUrl}${auth ? authUrl : apiUrl}${endpoint}`)
       .send(params)
@@ -127,7 +127,7 @@ export function post(endpoint, params, flux, auth) {
  * @return {Promise} A promise that resolves when the request is complete.
  */
 export function patch(endpoint, params, flux, auth) {
-  let baseUrl = __SERVER__ ? `http://localhost:${config.ports.django}` : '';
+  const baseUrl = __SERVER__ ? `http://localhost:${config.ports.django}` : '';
   return new Promise((resolve, reject) => {
     request('PATCH',
             `${baseUrl}${auth ? authUrl : apiUrl}${endpoint}`)
@@ -147,7 +147,7 @@ export function patch(endpoint, params, flux, auth) {
  * @return {Promise} A promise that resolves when the request is complete.
  */
 export function del(endpoint, params, flux) {
-  let baseUrl = __SERVER__ ? `http://localhost:${config.ports.django}` : '';
+  const baseUrl = __SERVER__ ? `http://localhost:${config.ports.django}` : '';
   return new Promise((resolve, reject) => {
     request.del(`${baseUrl}${apiUrl}${endpoint}`)
       .send(params)
