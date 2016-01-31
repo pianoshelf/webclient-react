@@ -105,7 +105,6 @@ app.use((req, res) => {
   const routes = getRoutes(flux);
 
   match({ routes, location: req.url }, (error, redirectLocation, renderProps) => {
-    console.log(renderProps);
     if (redirectLocation) {
       res.redirect(301, redirectLocation.pathname + redirectLocation.search);
     } else if (error) {
