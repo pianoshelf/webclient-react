@@ -108,7 +108,6 @@ gulp.task('build:server', () => {
  * Compile our JS files for development and launch webpack-dev-server.
  */
 gulp.task('build:client', callback => {
-
   // Run webpack
   webpackDevCompiler.run(err => {
     if (err) throw new gutil.PluginError('build:client', err);
@@ -220,7 +219,6 @@ gulp.task('watch', ['clean'], callback => {
       'build:client',
       'build:server',
     ], () => {
-
       // Watch files
       gulp.watch(config.files.client.src, ['build:client']);
       gulp.watch(config.files.server.src, ['build:server']);
@@ -231,8 +229,8 @@ gulp.task('watch', ['clean'], callback => {
       // Launch Nodemon
       nodemon({
         env: { NODE_ENV: 'development' },
-        watch: [ config.files.server.out ],
-        ignore: [ config.files.staticAssets ],
+        watch: [config.files.server.out],
+        ignore: [config.files.staticAssets],
       });
 
       // Boolean to check if BrowserSync has started.
@@ -240,14 +238,12 @@ gulp.task('watch', ['clean'], callback => {
 
       // Perform action right when nodemon starts
       nodemon.on('start', () => {
-
         // Only perform action when boolean is false
         if (!isBrowserSyncStarted) {
           isBrowserSyncStarted = true;
 
           // Set a timeout of 500 ms so that the server has time to start
           setTimeout(() => {
-
             // Launch BrowserSync
             browserSync({
               proxy: `localhost:${config.ports.express}`,
@@ -256,7 +252,6 @@ gulp.task('watch', ['clean'], callback => {
 
             // Call callback function to end gulp task
             callback();
-
           }, 500);
         }
       });
