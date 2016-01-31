@@ -10,7 +10,7 @@
     "lint": "gulp build:lint",
     "production": "NODE_ENV=production node build/server",
     "production:proxy": "PROXY_API=true NODE_ENV=production node build/server",
-    "test": "mocha --compilers js:babel/register --recursive",
+    "test": "mocha --compilers js:babel-register --recursive test",
     "watch": "gulp watch"
   },
   "repository": {
@@ -36,6 +36,7 @@
     "babel-preset-node5": "^10.3.0",
     "babel-preset-react": "^6.3.13",
     "babel-preset-stage-0": "^6.3.13",
+    "babel-register": "^6.4.3",
     "browser-sync": "^2.8.2",
     "chai": "^3.2.0",
     "chai-as-promised": "^5.1.0",
