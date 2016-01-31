@@ -7,10 +7,9 @@ import Helmet from 'react-helmet';
 import includes from 'lodash/collection/includes';
 import intersection from 'lodash/array/intersection';
 import isEqual from 'lodash/lang/isEqual';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import React from 'react';
 import { findDOMNode } from 'react-dom';
-import { History, Link } from 'react-router';
+import { Link } from 'react-router';
 
 import FilterGroup from './utils/FilterGroup';
 import PaidSearchResult from './utils/PaidSearchResult';
@@ -129,9 +128,11 @@ export default React.createClass({
     }),
   },
 
+  contextTypes: {
+    router: React.PropTypes.object.isRequired,
+  },
+
   mixins: [
-    History,
-    PureRenderMixin,
     fluxMixin({
       sheetmusic: store => ({
         sheetMusicList: store.state.sheetMusicList,
@@ -259,7 +260,10 @@ export default React.createClass({
     } else if (groupName === 'trending') {
       nextParams = { show: 'trending', trending: nextValue };
     }
-    this.history.pushState(null, this.props.location.pathname, nextParams);
+    this.context.router.push({
+      pathname: this.props.location.pathname,
+      query: nextParams,
+    });
   },
 
   handleSearchTextChange_() {
@@ -277,12 +281,14 @@ export default React.createClass({
     this.flux.getActions('progress').removeProgress('searchQuery');
     const value = findDOMNode(this.refs.searchBox).value;
     if (value === '') {
-      this.history.replaceState(null, this.props.location.pathname, {
-        show: 'popular',
+      this.context.router.replace({
+        pathname: this.props.location.pathname,
+        query: { show: 'popular' },
       });
     } else {
-      this.history.replaceState(null, this.props.location.pathname, {
-        query: value,
+      this.context.router.replace({
+        pathname: this.props.location.pathname,
+        query: { query: value },
       });
     }
   },
@@ -312,17 +318,28 @@ export default React.createClass({
 
   renderSearchResults_() {
     const { free, paid } = this.state.searchResults;
+
+    const freeResultsElements = free.map((sheetMusic, index) => (
+      <SearchResult sheetMusic={sheetMusic}
+        key={index}
+        firstItem={index === 0}
+        lastItem={index === free.length - 1}
+      />
+    ));
+
+    const paidResultsElements = paid.map((sheetMusic, index) => (
+      <PaidSearchResult paidSheetMusic={sheetMusic}
+        key={index}
+        firstItem={index === 0}
+        lastItem={index === free.length - 1}
+      />
+    ));
+
     return (
       <div>
         <div className="search__results-free">
           <If condition={free.length > 0}>
-            {free.map((sheetMusic, index) => (
-              <SearchResult sheetMusic={sheetMusic}
-                key={index}
-                firstItem={index === 0}
-                lastItem={index === free.length - 1}
-              />
-            ))}
+            {freeResultsElements}
           <Else />
             <div className="search__results-not-found">
               Could not find anything.
@@ -335,13 +352,7 @@ export default React.createClass({
               Other Sources
             </div>
             <div className="search__results-paid">
-              {paid.map((sheetMusic, index) => (
-                <PaidSearchResult paidSheetMusic={sheetMusic}
-                  key={index}
-                  firstItem={index === 0}
-                  lastItem={index === free.length - 1}
-                />
-              ))}
+              {paidResultsElements}
             </div>
           </div>
         </If>
@@ -351,15 +362,18 @@ export default React.createClass({
 
   renderBrowsePage_() {
     const { list } = this.state.sheetMusicList;
+
+    const listElements = list.map((sheetMusic, index) => (
+      <SearchResult sheetMusic={sheetMusic}
+        key={sheetMusic.id}
+        firstItem={index === 0}
+        lastItem={index === list.length - 1}
+      />
+    ));
+
     return (
       <If condition={list.length > 0}>
-        {list.map((sheetMusic, index) => (
-          <SearchResult sheetMusic={sheetMusic}
-            key={sheetMusic.id}
-            firstItem={index === 0}
-            lastItem={index === list.length - 1}
-          />
-        ))}
+        {listElements}
       <Else />
         <div className="search__results-not-found">
           Nothing to display!
@@ -385,8 +399,11 @@ export default React.createClass({
     return (
       <div className="search__pagination">
         <If condition={currentPage > 1}>
-          <Link to={this.props.location.pathname}
-            query={{ ...this.props.location.query, page: currentPage - 1 }}
+          <Link
+            to={{
+              pathname: this.props.location.pathname,
+              query: { ...this.props.location.query, page: currentPage - 1 },
+            }}
             className="search__pagination-button"
           >
             <FontAwesome name="angle-left" />
@@ -398,8 +415,11 @@ export default React.createClass({
           {`Page ${currentPage}`}
         </div>
         <If condition={currentPage < numberOfPages}>
-          <Link to={this.props.location.pathname}
-            query={{ ...this.props.location.query, page: currentPage + 1 }}
+          <Link
+            to={{
+              pathname: this.props.location.pathname,
+              query: { ...this.props.location.query, page: currentPage + 1 },
+            }}
             className="search__pagination-button"
           >
             <FontAwesome name="angle-right" />

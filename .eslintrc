@@ -16,7 +16,6 @@
     "new-cap": 0,
     "func-names": 0,
     "no-else-return": 0,
-    "padded-blocks": 0,
     "jsx-quotes": [2, "prefer-double"],
     "react/prefer-es6-class": 0
   }

@@ -6,7 +6,6 @@ import { paidSheetMusicPropType } from '../../../utils/sheetMusicUtils';
 
 export default function PaidSearchResult({ paidSheetMusic, isFirstItem = false,
                                          isLastItem = false }) {
-
   const className = classNames('search__result', 'search__result--paid', {
     'search__result--last-item': isLastItem,
     'search__result--first-item': isFirstItem,

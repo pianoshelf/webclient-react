@@ -50,7 +50,6 @@ function getFilters(options) {
 }
 
 export default function FilterGroup(options) {
-
   return (
     <div className="search__filter-group">
       <div className="search__filter-group-title">{options.groupTitle}</div>

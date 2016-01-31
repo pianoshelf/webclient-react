@@ -10,7 +10,6 @@ import SheetMusicTags from './SheetMusicTags';
 import { sheetMusicPropType } from '../../../utils/sheetMusicUtils';
 
 export default function SearchResult({ sheetMusic, isFirstItem = false, isLastItem = false }) {
-
   const className = classNames('search__result', {
     'search__result--last-item': isLastItem,
     'search__result--first-item': isFirstItem,

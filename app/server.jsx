@@ -115,10 +115,8 @@ app.use((req, res) => {
     } else if (renderProps === null) {
       res.status(404).send('Not Found');
     } else {
-
       // Function that renders the route.
       const renderRoute = () => defer(() => {
-
         try {
           // Render our entire app to a string, and make sure we wrap everything
           // with FluxComponent, which adds the flux context to the entire app.
