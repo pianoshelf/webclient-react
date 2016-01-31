@@ -4,7 +4,6 @@ import base64 from 'base-64';
 import bodyParser from 'body-parser';
 import bunyan from 'bunyan';
 import cookieParser from 'cookie-parser';
-import createLocation from 'history/lib/createLocation';
 import defer from 'lodash/function/defer';
 import express from 'express';
 import FluxComponent from 'flummox/component';
@@ -28,7 +27,6 @@ import { prefetchRouteData } from './utils/routeUtils';
 // Launch application
 const app = express();
 const httpServer = http.createServer(app);
-
 
 // Create logger
 const prettyStream = new PrettyStream();
@@ -105,9 +103,9 @@ app.use((req, res) => {
   const flux = new Flux(req);
 
   const routes = getRoutes(flux);
-  const location = createLocation(req.url);
 
-  match({ routes, location }, (error, redirectLocation, renderProps) => {
+  match({ routes, location: req.url }, (error, redirectLocation, renderProps) => {
+    console.log(renderProps);
     if (redirectLocation) {
       res.redirect(301, redirectLocation.pathname + redirectLocation.search);
     } else if (error) {
