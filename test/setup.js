@@ -10,8 +10,6 @@ import { jsdom } from 'jsdom';
 chai.use(chaiAsPromised);
 chai.use(sinonChai);
 
-console.log('ayy lmao');
-
 // Set up global.document variable
 global.document = jsdom('<!doctype html><html><body></body></html>');
 

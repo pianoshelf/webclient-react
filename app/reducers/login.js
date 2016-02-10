@@ -1,5 +1,5 @@
 
-import { handleActions } from 'redux-actions';
+import { createReducer } from '../utils/createReducer';
 
 import {
   LOGIN_CLEAR_ERRORS,
@@ -15,42 +15,53 @@ import {
   LOGIN_TWITTER,
 } from '../constants/login';
 
-export default handleActions({
+export default createReducer({
+
+}, {
   [LOGIN_CLEAR_ERRORS]: state => ({
+    ...state,
     errorCode: 0,
     user: {},
     loggedIn: false,
   }),
-  [LOGIN_GET]: (state, action) => ({
+  [LOGIN_GET]: (state, payload) => ({
+    ...state,
 
   }),
-  [LOGIN_LOGIN]: (state, action) => ({
+  [LOGIN_LOGIN]: (state, payload) => ({
+    ...state,
 
   }),
-  [LOGIN_LOGOUT]: (state, action) => ({
+  [LOGIN_LOGOUT]: (state, payload) => ({
+    ...state,
 
   }),
-  [LOGIN_VERIFY_EMAIL]: (state, action) => ({
+  [LOGIN_VERIFY_EMAIL]: (state, payload) => ({
+    ...state,
 
   }),
-  [LOGIN_REGISTER]: (state, action) => ({
+  [LOGIN_REGISTER]: (state, payload) => ({
+    ...state,
 
   }),
-  [LOGIN_RESET_PASSWORD]: (state, action) => ({
+  [LOGIN_RESET_PASSWORD]: (state, payload) => ({
+    ...state,
 
   }),
-  [LOGIN_RESET_PASSWORD_CONFIRM]: (state, action) => ({
+  [LOGIN_RESET_PASSWORD_CONFIRM]: (state, payload) => ({
+    ...state,
 
   }),
-  [LOGIN_CHANGE_PASSWORD]: (state, action) => ({
+  [LOGIN_CHANGE_PASSWORD]: (state, payload) => ({
+    ...state,
 
   }),
-  [LOGIN_FACEBOOK]: (state, action) => ({
+  [LOGIN_FACEBOOK]: (state, payload) => ({
+    ...state,
 
   }),
-  [LOGIN_TWITTER]: (state, action) => ({
+  [LOGIN_TWITTER]: (state, payload) => ({
+    ...state,
 
   }),
-}, {
-
 });

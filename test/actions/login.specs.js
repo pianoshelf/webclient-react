@@ -7,13 +7,13 @@ import * as login from '../../app/actions/login';
 import { mockApiCall, getFailedResponseError } from '../shared/mocks';
 import { errors } from '../../app/utils/constants';
 
-// Fake dispatch function
-function dispatch(value) { return value; }
+// Mock passthrough dispatch function
+const dispatch = value => value;
 
 describe('actions/login', () => {
   it('can call #getUser', () => {
     mockApiCall('get', '/api-auth/user/', {});
-    login.getUser().then(res => {
+    login.getUser()(dispatch).then(res => {
       expect(res.text).to.equal('success');
     });
   });
@@ -23,33 +23,33 @@ describe('actions/login', () => {
       username: 'user',
       password: 'pass',
     });
-    login.login('user', 'pass').then(res => {
+    login.login('user', 'pass')(dispatch).then(res => {
       expect(res.text).to.equal('success');
     });
   });
 
   it('can call #login and throw error when username is empty', () => {
-    login.login('', 'pass').catch(res => {
+    login.login('', 'pass')(dispatch).catch(res => {
       expect(getFailedResponseError(res)).to.equal(errors.NO_USERNAME);
     });
   });
 
   it('can call #login and throw error when the password is empty', () => {
-    login.login('user', '').catch(res => {
+    login.login('user', '')(dispatch).catch(res => {
       expect(getFailedResponseError(res)).to.equal(errors.NO_PASSWORD);
     });
   });
 
   it('can call #logout', () => {
     mockApiCall('post', '/api-auth/logout/', {});
-    login.logout().then(res => {
+    login.logout()(dispatch).then(res => {
       expect(res.text).to.equal('success');
     });
   });
 
   it('can call #verifyEmail', () => {
     mockApiCall('post', '/api-auth/register/account-confirm-email/verification1234/', {});
-    login.verifyEmail('verification1234').then(res => {
+    login.verifyEmail('verification1234')(dispatch).then(res => {
       expect(res.text).to.equal('success');
     });
   });
@@ -64,7 +64,7 @@ describe('actions/login', () => {
 
     mockApiCall('post', '/api-auth/register/', user);
 
-    login.register(user).then(res => {
+    login.register(user)(dispatch).then(res => {
       expect(res.text).to.equal('success');
     });
   });
@@ -77,7 +77,7 @@ describe('actions/login', () => {
       email: '',
     };
 
-    login.register(user).catch(res => {
+    login.register(user)(dispatch).catch(res => {
       expect(getFailedResponseError(res)).to.equal(errors.NO_EMAIL);
     });
   });
@@ -90,7 +90,7 @@ describe('actions/login', () => {
       email: 'hello',
     };
 
-    login.register(user).catch(res => {
+    login.register(user)(dispatch).catch(res => {
       expect(getFailedResponseError(res)).to.equal(errors.INVALID_EMAIL);
     });
   });
@@ -103,7 +103,7 @@ describe('actions/login', () => {
       email: 'hello',
     };
 
-    login.register(user).catch(res => {
+    login.register(user)(dispatch).catch(res => {
       expect(getFailedResponseError(res)).to.equal(errors.INVALID_EMAIL);
     });
   });
@@ -116,7 +116,7 @@ describe('actions/login', () => {
       email: 'hello',
     };
 
-    login.register(user).catch(res => {
+    login.register(user)(dispatch).catch(res => {
       expect(getFailedResponseError(res)).to.equal(errors.INVALID_EMAIL);
     });
   });
@@ -126,7 +126,7 @@ describe('actions/login', () => {
       email: 'email@email.com',
     });
 
-    login.resetPassword('email@email.com').then(res => {
+    login.resetPassword('email@email.com')(dispatch).then(res => {
       expect(res.text).to.equal('success');
     });
   });
@@ -142,7 +142,7 @@ describe('actions/login', () => {
     login.resetPasswordConfirm({
       password1: 'password',
       password2: 'password',
-    }, 'uid', 'token').then(res => {
+    }, 'uid', 'token')(dispatch).then(res => {
       expect(res.text).to.equal('success');
     });
   });
@@ -157,7 +157,7 @@ describe('actions/login', () => {
     login.changePassword({
       password1: 'password',
       password2: 'password',
-    }).then(res => {
+    })(dispatch).then(res => {
       expect(res.text).to.equal('success');
     });
   });
@@ -170,7 +170,7 @@ describe('actions/login', () => {
 
     login.facebookLogin({
       accessToken: 'fb-token',
-    }).then(res => {
+    })(dispatch).then(res => {
       expect(res.text).to.equal('success');
     });
   });
@@ -185,7 +185,7 @@ describe('actions/login', () => {
     login.twitterLogin({
       oauth_token: 'twitter-token',
       oauth_token_secret: 'twitter-token-secret',
-    }).then(res => {
+    })(dispatch).then(res => {
       expect(res.text).to.equal('success');
     });
   });

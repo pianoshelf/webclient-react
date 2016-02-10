@@ -1,5 +1,5 @@
 
-import { handleActions } from 'redux-actions';
+import { createReducer } from '../utils/createReducer';
 
 import {
   PROGRESS_RESET,
@@ -7,7 +7,9 @@ import {
   PROGRESS_REMOVE,
 } from '../constants/profile';
 
-export default handleActions({
+export default createReducer({
+  inProgress: [],
+}, {
   [PROGRESS_RESET]: () => ({
     inProgress: [],
   }),
@@ -23,6 +25,4 @@ export default handleActions({
       return state;
     }
   },
-}, {
-  inProgress: [],
 });

@@ -6,11 +6,14 @@ import { expect } from 'chai';
 import * as sheetmusic from '../../app/actions/sheetmusic';
 import { mockApiCall } from '../shared/mocks';
 
+// Mock passthrough dispatch function
+const dispatch = value => value;
+
 describe('actions/sheetmusic', () => {
   it('can call #getSheetMusic', () => {
     mockApiCall('get', '/api/sheetmusic/1234');
 
-    sheetmusic.getSheetMusic(1234).then(response => {
+    sheetmusic.getSheetMusic(1234)(dispatch).then(response => {
       expect(response.text).to.equal('success');
     });
   });
@@ -20,7 +23,7 @@ describe('actions/sheetmusic', () => {
       sheetmusic: 'data',
     });
 
-    sheetmusic.updateSheetMusic(1234, 'data').then(response => {
+    sheetmusic.updateSheetMusic(1234, 'data')(dispatch).then(response => {
       expect(response.text).to.equal('success');
     });
   });
@@ -28,7 +31,7 @@ describe('actions/sheetmusic', () => {
   it('can call #getComposers', () => {
     mockApiCall('get', '/api/composers/');
 
-    sheetmusic.getComposers().then(response => {
+    sheetmusic.getComposers()(dispatch).then(response => {
       expect(response.text).to.equal('success');
     });
   });
@@ -36,7 +39,7 @@ describe('actions/sheetmusic', () => {
   it('can call #getTopSheetMusic', () => {
     mockApiCall('get', '/api/sheetmusic/top');
 
-    sheetmusic.getTopSheetMusic(1234).then(response => {
+    sheetmusic.getTopSheetMusic(1234)(dispatch).then(response => {
       expect(response.text).to.equal('success');
     });
   });
@@ -44,7 +47,7 @@ describe('actions/sheetmusic', () => {
   it('can call #getTrendingSheetMusic', () => {
     mockApiCall('get', '/api/sheetmusic/trending?days=1234&results=5678');
 
-    sheetmusic.getTrendingSheetMusic(1234, 5678).then(response => {
+    sheetmusic.getTrendingSheetMusic(1234, 5678)(dispatch).then(response => {
       expect(response.text).to.equal('success');
     });
   });
@@ -56,7 +59,7 @@ describe('actions/sheetmusic', () => {
       optionBool: true,
       optionInt: 5,
       optionString: 'string',
-    }).then(response => {
+    })(dispatch).then(response => {
       expect(response.text).to.equal('success');
     });
   });
@@ -64,7 +67,7 @@ describe('actions/sheetmusic', () => {
   it('can call #getRating', () => {
     mockApiCall('get', '/api/sheetmusic/getrating?sheet_id=1234');
 
-    sheetmusic.getRating(1234).then(response => {
+    sheetmusic.getRating(1234)(dispatch).then(response => {
       expect(response.text).to.equal('success');
     });
   });
@@ -75,7 +78,7 @@ describe('actions/sheetmusic', () => {
       value: 5,
     });
 
-    sheetmusic.postRating(1234, 5).then(response => {
+    sheetmusic.postRating(1234, 5)(dispatch).then(response => {
       expect(response.text).to.equal('success');
     });
   });
@@ -83,7 +86,7 @@ describe('actions/sheetmusic', () => {
   it('can call #getUploads', () => {
     mockApiCall('get', '/api/sheetmusic/uploads/');
 
-    sheetmusic.getUploads().then(response => {
+    sheetmusic.getUploads()(dispatch).then(response => {
       expect(response.text).to.equal('success');
     });
   });
@@ -91,7 +94,7 @@ describe('actions/sheetmusic', () => {
   it('can call #deleteSheetMusic', () => {
     mockApiCall('delete', '/api/sheetmusic/1234');
 
-    sheetmusic.deleteSheetMusic(1234).then(response => {
+    sheetmusic.deleteSheetMusic(1234)(dispatch).then(response => {
       expect(response.text).to.equal('success');
     });
   });
@@ -103,7 +106,7 @@ describe('actions/sheetmusic', () => {
       grade: 'grade',
     });
 
-    sheetmusic.postVideo('link', 'title', 'grade').then(response => {
+    sheetmusic.postVideo('link', 'title', 'grade')(dispatch).then(response => {
       expect(response.text).to.equal('success');
     });
   });
@@ -116,7 +119,7 @@ describe('actions/sheetmusic', () => {
       sheetmusicId: 1234,
     });
 
-    sheetmusic.postVideo('link', 'title', 'grade', 1234).then(response => {
+    sheetmusic.postVideo('link', 'title', 'grade', 1234)(dispatch).then(response => {
       expect(response.text).to.equal('success');
     });
   });
@@ -126,7 +129,7 @@ describe('actions/sheetmusic', () => {
       sheetmusic_id: 1234,
     });
 
-    sheetmusic.increaseViewCount(1234).then(response => {
+    sheetmusic.increaseViewCount(1234)(dispatch).then(response => {
       expect(response.text).to.equal('success');
     });
   });
@@ -134,7 +137,7 @@ describe('actions/sheetmusic', () => {
   it('can call #search', () => {
     mockApiCall('get', '/api/search?query=myQuery');
 
-    sheetmusic.search('myQuery').then(response => {
+    sheetmusic.search('myQuery')(dispatch).then(response => {
       expect(response.text).to.equal('success');
     });
   });
@@ -142,7 +145,7 @@ describe('actions/sheetmusic', () => {
   it('can call #getComments', () => {
     mockApiCall('get', '/api/comment/?sheetmusicId=1234');
 
-    sheetmusic.getComments(1234).then(response => {
+    sheetmusic.getComments(1234)(dispatch).then(response => {
       expect(response.text).to.equal('success');
     });
   });
@@ -150,7 +153,7 @@ describe('actions/sheetmusic', () => {
   it('can call #removeComment', () => {
     mockApiCall('delete', '/api/comment/1234/');
 
-    sheetmusic.removeComment(1234).then(response => {
+    sheetmusic.removeComment(1234)(dispatch).then(response => {
       expect(response.text).to.equal('success');
     });
   });
@@ -160,7 +163,7 @@ describe('actions/sheetmusic', () => {
       commentText: 'commentText',
     });
 
-    sheetmusic.editComment(1234, 'commentText').then(response => {
+    sheetmusic.editComment(1234, 'commentText')(dispatch).then(response => {
       expect(response.text).to.equal('success');
     });
   });
@@ -168,7 +171,7 @@ describe('actions/sheetmusic', () => {
   it('can call #undoRemoveComment', () => {
     mockApiCall('post', '/api/comment/1234/undodelete/');
 
-    sheetmusic.undoRemoveComment(1234).then(response => {
+    sheetmusic.undoRemoveComment(1234)(dispatch).then(response => {
       expect(response.text).to.equal('success');
     });
   });
@@ -176,9 +179,8 @@ describe('actions/sheetmusic', () => {
   it('can call #upvoteComment', () => {
     mockApiCall('get', '/api/commentupvote/?commentId=1234&sheetmusicId=5678');
 
-    sheetmusic.upvoteComment(1234, 5678).then(response => {
+    sheetmusic.upvoteComment(1234, 5678)(dispatch).then(response => {
       expect(response.text).to.equal('success');
     });
   });
-
 });

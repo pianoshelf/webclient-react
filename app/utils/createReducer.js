@@ -1,4 +1,6 @@
 /**
+ * @function createReducer
+ *
  * This utility function will mirror the functionality of the handleActions function provided by
  * the redux-actions package, but will be adapted to our action format. Actions dispatched by the
  * createAction utility can be parsed, so we can control what happens at the start, done, and error
@@ -7,7 +9,6 @@
  * @param {Object} initialState The initial state of this part of the store.
  * @param {Object<String,Function>} reducerObject A mapping from action types to functions, or
  *   action types to objects that describe each level of the function.
- *
  * @return {Function} A reducer.
  */
 export default function createReducer(initialState = {}, reducerObject) {
@@ -24,22 +25,27 @@ export default function createReducer(initialState = {}, reducerObject) {
 
       // If a function was passed in, execute only if it's a `done` task, else return state
       if (typeof reducer === 'function') {
-        if (action.type === 'done') {
-          return reducer(state, action);
+        if (action.progress === 'done') {
+          return reducer(state, action.payload);
         } else {
           return state;
         }
       }
 
       // If it is a mapping, execute the relevant methods
-      switch (action.type) {
-        case 'start': return reducer.start(state, action);
-        case 'done': return reducer.done(state, action);
-        case 'error': return reducer.error(state, action);
-        default:
+      if (typeof reducer === 'object') {
+        if (reducer.start && action.progress === 'start') {
+          return reducer.start(state);
+        } else if (reducer.progress && action.progress === 'progress') {
+          return reducer.progress(state, action.payload);
+        } else if (reducer.done && action.progress === 'done') {
+          return reducer.done(state, action.payload);
+        } else if (reducer.error && action.progress === 'error') {
+          return reducer.error(state, action.payload, action.code);
+        }
       }
 
-      // We shouldn't get this far, but if we do then throw an error
+      // If we get this far, the action was in an invalid format
       throw Error('Invariant violation: action was a weird format.');
     };
   });
