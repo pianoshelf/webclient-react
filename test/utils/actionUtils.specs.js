@@ -2,7 +2,12 @@
 
 import { expect } from 'chai';
 
-import { actionDone, actionError, isActionError } from '../../app/utils/actionUtils';
+import {
+  actionDone,
+  actionError,
+  isActionError,
+  isDispatchedActionError,
+} from '../../app/utils/actionUtils';
 
 describe('utils/actionUtils', () => {
   describe('#actionDone', () => {
@@ -76,12 +81,16 @@ describe('utils/actionUtils', () => {
   });
 
   describe('#isActionError', () => {
-    it('returns true when an action is an error', () => {
-      expect(isActionError({ type: 'ACTION', progress: 'error' })).to.be.true;
+    it('returns the correct value', () => {
+      expect(isActionError(actionDone())).to.be.false;
+      expect(isActionError(actionError(123))).to.be.true;
     });
+  });
 
-    it('returns false when an action is not an error', () => {
-      expect(isActionError({ type: 'ACTION', progress: 'done' })).to.be.false;
+  describe('#isDispatchedActionError', () => {
+    it('returns the correct value', () => {
+      expect(isDispatchedActionError({ type: 'ACTION', progress: 'done' })).to.be.false;
+      expect(isDispatchedActionError({ type: 'ACTION', progress: 'error' })).to.be.true;
     });
   });
 });

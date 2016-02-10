@@ -1,4 +1,5 @@
 
+import { isDispatchedActionError } from './actionUtils';
 import { getUser } from '../actions/login';
 
 /**
@@ -13,11 +14,12 @@ import { getUser } from '../actions/login';
 export function requireAuth(store) {
   return function (nextState, transition, callback) {
     store.dispatch(getUser(store))
-    .then(callback)
-    .catch(() => {
-      transition.to('/login/', { redirect: nextState.location.pathname });
-      callback();
-    });
+    .then(response => {
+      if (isDispatchedActionError(response)) {
+        transition.to('/login/', { redirect: nextState.location.pathname });
+      }
+    })
+    .then(callback);
   };
 }
 
@@ -34,10 +36,11 @@ export function requireAuth(store) {
 export function requireNoAuth(store) {
   return function (nextState, transition, callback) {
     store.dispatch(getUser(store))
-    .then(() => {
-      transition.to('/');
-      callback();
+    .then(response => {
+      if (!isDispatchedActionError(response)) {
+        transition.to('/', { redirect: nextState.location.pathname });
+      }
     })
-    .catch(callback);
+    .then(callback);
   };
 }

@@ -18,29 +18,50 @@ import {
 } from '../constants/login';
 
 /**
+ * UTILITIES
+ */
+
+function sanitizeUserInfo(user) {
+  const { auth_token, name, first_name, last_name, email, is_superuser } = user;
+  return {
+    authToken: auth_token,
+    firstName: first_name,
+    lastName: last_name,
+    isSuperuser: is_superuser,
+    username: name,
+    email,
+  };
+}
+
+/**
+ * ACTIONS
+ */
+
+/**
  * Action creator that resets the error code.
  */
 export const clearErrors = createAction(LOGIN_CLEAR_ERRORS);
 
 /**
  * Gets the current logged in user
- *
  * @param {Store} store The Redux store object.
  */
 export const getUser = createAction(
   LOGIN_GET,
   async store => {
-    return await get({
+    const response = await get({
       endpoint: '/user/',
       auth: true,
       store,
     });
+
+    if (isActionError(response)) return response;
+    return actionDone(sanitizeUserInfo(response.payload));
   }
 );
 
 /**
  * Logs in the user.
- *
  * @param {string} username User's username.
  * @param {string} password User's password.
  * @param {Store} store The Redux store object.
@@ -66,16 +87,19 @@ export const login = createAction(
       store,
     });
 
-    if (isActionError(response)) return response;
-    const { auth_token, name, first_name, last_name, email, is_superuser } = response.payload;
-    return actionDone({
-      authToken: auth_token,
-      firstName: first_name,
-      lastName: last_name,
-      isSuperuser: is_superuser,
-      username: name,
-      email,
-    });
+    if (isActionError(response)) {
+      const { payload } = response;
+
+      // Make sure user actually logged in
+      if (payload.non_field_errors &&
+          payload.non_field_errors[0] === 'Unable to log in with provided credentials.') {
+        return actionError(errors.UNABLE_TO_LOG_IN);
+      }
+
+      return payload;
+    }
+
+    return actionDone(sanitizeUserInfo(response.payload));
   }
 );
 
@@ -101,11 +125,22 @@ export const logout = createAction(
 export const verifyEmail = createAction(
   LOGIN_VERIFY_EMAIL,
   async (verificationKey, store) => {
-    return await post({
+    const response = await post({
       endpoint: `/register/account-confirm-email/${verificationKey}/`,
       auth: true,
       store,
     });
+
+    if (isActionError(response)) {
+      const { payload } = response;
+
+      // Check if verification actually happened
+      if (payload.detail && payload.detail === 'Not found') {
+        return actionError(errors.EMAIL_UNVERIFIED);
+      }
+    }
+
+    return response;
   }
 );
 
@@ -146,8 +181,8 @@ export const register = createAction(
       return actionError(errors.NOT_SAME_PASSWORD);
     }
 
-    // Call the API
-    return await post({
+    // Register the user
+    const registerResponse = await post({
       endpoint: '/register/',
       params: {
         username: user.username,
@@ -158,6 +193,49 @@ export const register = createAction(
       auth: true,
       store,
     });
+
+    if (isActionError(registerResponse)) {
+      const { payload } = registerResponse;
+
+      // Make sure username is not taken
+      if (payload.username &&
+          payload.username[0] === 'This username is already taken. Please choose another.') {
+        return actionError(errors.USERNAME_TAKEN);
+      }
+
+      // Make sure email address is not taken
+      if (payload.email &&
+          payload.email[0] === 'A user is already registered with this e-mail address.') {
+        return actionError(errors.EMAIL_ALREADY_REGISTERED);
+      }
+
+      return registerResponse;
+    }
+
+    // Login on the server
+    const loginResponse = await post({
+      endpoint: '/login/',
+      params: {
+        username: registerResponse.username,
+        password: registerResponse.password,
+      },
+      auth: true,
+      store,
+    });
+
+    if (isActionError(loginResponse)) {
+      const { payload } = loginResponse;
+
+      // Make sure user actually logged in
+      if (payload.non_field_errors &&
+          payload.non_field_errors[0] === 'Unable to log in with provided credentials.') {
+        return actionError(errors.UNABLE_TO_LOG_IN);
+      }
+
+      return loginResponse;
+    }
+
+    return actionDone(sanitizeUserInfo(loginResponse.payload));
   }
 );
 
@@ -176,11 +254,23 @@ export const resetPassword = createAction(
     }
 
     // Call the API
-    return await post(
+    const response = await post(
       '/password/reset/',
       { email },
       store, true /* authUrl */
     );
+
+    if (isActionError(response)) {
+      const { payload } = response;
+
+      // Check if the email is registered
+      if (payload.email &&
+          payload.email[0] === 'Invalid Email') {
+        return actionError(errors.EMAIL_NOT_REGISTERED);
+      }
+    }
+
+    return response;
   }
 );
 
@@ -202,18 +292,43 @@ export const resetPasswordConfirm = createAction(
       return actionError(errors.NOT_SAME_PASSWORD);
     }
 
-    // Call the API
-    return await post({
-      endpoint: '/password/reset/confirm/',
-      params: {
-        new_password1: user.password1,
-        new_password2: user.password2,
-        uid,
-        token,
-      },
-      auth: true,
-      store,
-    });
+    let response;
+    // When submitting a completely invalid token and uid, the backend spits out errors that aren't
+    // JSON. This else statement exists so we can take care of that specific situation.
+    // TODO(ankit): When the backend bug is fixed, remove this hack.
+    try {
+      response = await post({
+        endpoint: '/password/reset/confirm/',
+        params: {
+          new_password1: user.password1,
+          new_password2: user.password2,
+          uid,
+          token,
+        },
+        auth: true,
+        store,
+      });
+    } catch (e) {
+      return actionError(errors.EXPIRED_LINK);
+    }
+
+    if (isActionError(response)) {
+      const { payload } = response;
+
+      // Check if token is invalid
+      if (payload.token &&
+          payload.token[0] === 'Invalid value') {
+        return actionError(errors.EXPIRED_LINK);
+      }
+
+      // Check if uid is invalid
+      if (payload.uid &&
+          payload.uid[0] === 'Invalid value') {
+        return actionError(errors.EXPIRED_LINK);
+      }
+    }
+
+    return response;
   }
 );
 

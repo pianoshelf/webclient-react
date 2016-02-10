@@ -36,5 +36,15 @@ export function actionError(errorCode, payload) {
  * @return {Boolean} Whether or not the provided action is an error.
  */
 export function isActionError(action) {
+  return action.error;
+}
+
+/**
+ * Returns true or false depending on if the provided action is an error.
+ * This function is meant for the action format fed into the dispatcher.
+ * @param {Object} action The action to check.
+ * @return {Boolean} Whether or not the provided action is an error.
+ */
+export function isDispatchedActionError(action) {
   return action.progress === 'error';
 }

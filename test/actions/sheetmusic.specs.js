@@ -10,7 +10,6 @@ import { mockApiCall } from '../shared/mocks';
 const dispatch = value => value;
 
 describe('actions/sheetmusic', () => {
-
   describe('#getSheetMusic', () => {
     it('calls the correct API', () => {
       mockApiCall('get', '/api/sheetmusic/1234');
@@ -192,7 +191,6 @@ describe('actions/sheetmusic', () => {
       ).to.eventually.equal('success');
     });
   });
-
 
   describe('#upvoteComment', () => {
     it('calls the correct API', () => {
