@@ -1,32 +1,16 @@
 
 // Import external modules
 import { expect } from 'chai';
-import { Flummox } from 'flummox';
 
 // Import module to test
-import ProfileActions from '../../app/actions/ProfileActions';
+import * as profile from '../../app/actions/profile';
 import { mockApiCall } from '../shared/mocks';
 
-// Declare Flux object
-class Flux extends Flummox {
-  constructor() {
-    super();
-    this.createActions('profile', ProfileActions);
-  }
-}
-
-describe('ProfileActions', () => {
-  let actions;
-
-  beforeEach(() => {
-    let flux = new Flux();
-    actions = flux.getActions('profile');
-  });
-
+describe('actions/profile', () => {
   it('can call #getProfile', () => {
     mockApiCall('get', '/api/profile/?username=someUsername');
 
-    actions.getProfile('someUsername').then(response => {
+    profile.getProfile('someUsername').then(response => {
       expect(response.text).to.equal('success');
     });
   });
@@ -36,7 +20,7 @@ describe('ProfileActions', () => {
       description: 'someDescription',
     });
 
-    actions.updateProfileDescription('someDescription').then(response => {
+    profile.updateProfileDescription('someDescription').then(response => {
       expect(response.text).to.equal('success');
     });
   });
@@ -44,7 +28,7 @@ describe('ProfileActions', () => {
   it('can call #getCommentsForUser', () => {
     mockApiCall('get', '/api/comment/?username=someUsername');
 
-    actions.getCommentsForUser('someUsername').then(response => {
+    profile.getCommentsForUser('someUsername').then(response => {
       expect(response.text).to.equal('success');
     });
   });
@@ -52,7 +36,7 @@ describe('ProfileActions', () => {
   it('can call #getUploadsForUser', () => {
     mockApiCall('get', '/api/sheetmusic/uploads/?username=someUsername&page=5');
 
-    actions.getUploadsForUser('someUsername', 5).then(response => {
+    profile.getUploadsForUser('someUsername', 5).then(response => {
       expect(response.text).to.equal('success');
     });
   });
@@ -60,7 +44,7 @@ describe('ProfileActions', () => {
   it('can call #getVideosForUser', () => {
     mockApiCall('get', '/api/video/?username=someUsername');
 
-    actions.getVideosForUser('someUsername').then(response => {
+    profile.getVideosForUser('someUsername').then(response => {
       expect(response.text).to.equal('success');
     });
   });

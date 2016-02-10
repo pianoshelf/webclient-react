@@ -4,37 +4,44 @@ import 'babel-polyfill';
 
 // Import external modules
 import base64 from 'base-64';
-import FluxComponent from 'flummox/component';
 import React from 'react';
-import Router from 'react-router';
 import utf8 from 'utf8';
+import { Provider } from 'react-redux';
 import { render } from 'react-dom';
-import { createHistory } from 'history';
+import { Router, browserHistory } from 'react-router';
+import { syncReduxAndRouter } from 'react-router-redux';
 
 // Import internal modules
-import Flux from './Flux';
+import configureStore from './utils/configureStore';
 import getRoutes from './utils/getRoutes';
 
-// Create the Flux object
-const flux = new Flux();
+// Add our isomorphic constants
+window.__SERVER__ = false;
+window.__CLIENT__ = true;
 
 // Get react-root object
 const reactRoot = document.getElementById('react-root');
 
 // Import inline flux data
-const inlineData = document.getElementById('react-data').textContent;
-flux.deserialize(utf8.decode(base64.decode(inlineData)));
+const inlineData = window.__INITIAL_STATE__;
+const initialState = JSON.parse(utf8.decode(base64.decode(inlineData)));
 
-// Create history object for the browser
-const browserHistory = createHistory();
+// Create reducer, store, and history
+const store = configureStore(initialState);
+
+// Link history and redux store
+syncReduxAndRouter(browserHistory, store);
+
+// Get all of the site's routes
+const routes = getRoutes(store);
 
 // Re-render everything on reactRoot
 render(
-  <FluxComponent flux={flux}>
-    <Router history={browserHistory} routes={getRoutes(flux)} />
-  </FluxComponent>,
+  <Provider store={store}>
+    { <Router history={browserHistory} routes={routes} /> }
+  </Provider>,
   reactRoot
 );
 
 // Reset our progress bar
-flux.getActions('progress').resetProgress();
+// flux.getActions('progress').resetProgress();

@@ -15,11 +15,13 @@ import path from 'path';
 import PrettyStream from 'bunyan-prettystream';
 import React from 'react';
 import utf8 from 'utf8';
+import { Provider } from 'react-redux';
 import { renderToString } from 'react-dom/server';
 import { RouterContext, match } from 'react-router';
 
 // Import internal modules
 import config from '../config';
+import configureStore from './utils/configureStore';
 import Flux from './Flux';
 import getRoutes from './utils/getRoutes';
 import { prefetchRouteData } from './utils/routeUtils';
@@ -99,12 +101,18 @@ if (process.env.NODE_ENV === 'production') {
 
 // Capture all requests
 app.use((req, res) => {
-  // Create Flux object
-  const flux = new Flux(req);
+  // Get the initial state of our app
+  const store = configureStore();
 
-  const routes = getRoutes(flux);
+  // Attach request object to store
+  // TODO: Find a better way to do this
+  store.request = req;
 
-  match({ routes, location: req.url }, (error, redirectLocation, renderProps) => {
+  // Perform route matching and verification
+  match({
+    routes: getRoutes(store),
+    location: req.url,
+  }, (error, redirectLocation, renderProps) => {
     if (redirectLocation) {
       res.redirect(301, redirectLocation.pathname + redirectLocation.search);
     } else if (error) {
@@ -113,18 +121,18 @@ app.use((req, res) => {
       res.status(404).send('Not Found');
     } else {
       // Function that renders the route.
-      const renderRoute = () => defer(() => {
+      const renderRoute = () => {
         try {
           // Render our entire app to a string, and make sure we wrap everything
-          // with FluxComponent, which adds the flux context to the entire app.
+          // with Provider, which adds the flux context to the entire app.
           const renderedString = renderToString(
-            <FluxComponent flux={flux}>
-              <RouterContext {...renderProps} />
-            </FluxComponent>
+            <Provider store={store}>
+              { <RouterContext {...renderProps} /> }
+            </Provider>
           );
 
           // Base64 encode all the data in our stores.
-          const inlineData = base64.encode(utf8.encode(flux.serialize()));
+          const inlineData = base64.encode(utf8.encode(JSON.stringify(store.getState())));
 
           // Get title, meta, and link tags.
           const { title, meta, link } = Helmet.rewind();
@@ -137,13 +145,13 @@ app.use((req, res) => {
                 <meta charset="utf-8" />
                 <meta name="viewport" content="width=device-width,initial-scale=1" />
                 ${meta}
-                <title>${title}</title>
+                ${title}
                 <link rel="stylesheet" href="${cssPath}" />
                 ${link}
               </head>
               <body>
                 <div id="react-root">${renderedString}</div>
-                <script type="text/inline-data" id="react-data">${inlineData}</script>
+                <script>window.__INITIAL_STATE__ = "${inlineData}";</script>
                 <script src="${jsPath}"></script>
               </body>
             </html>`;
@@ -156,10 +164,10 @@ app.use((req, res) => {
 
           res.status(500).send(err);
         }
-      });
+      };
 
       // Make sure we render our route even if the promise fails.
-      prefetchRouteData(renderProps.components, { flux, state: renderProps })
+      prefetchRouteData(renderProps.components, { state: renderProps })
         .then(renderRoute, renderRoute);
     }
   });

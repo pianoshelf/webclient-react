@@ -9,6 +9,7 @@ let s = 1; // Starting point
 export const errors = {
 
   // Client side errors
+  NETWORK_ERROR: s++,
   INVALID_EMAIL: s++,
   NO_EMAIL: s++,
   NO_PASSWORD: s++,

@@ -3,10 +3,14 @@
 // Import external modules
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
+import sinonChai from 'sinon-chai';
 import { jsdom } from 'jsdom';
 
-// Set up chai as promised
+// Set up chai addons
 chai.use(chaiAsPromised);
+chai.use(sinonChai);
+
+console.log('ayy lmao');
 
 // Set up global.document variable
 global.document = jsdom('<!doctype html><html><body></body></html>');

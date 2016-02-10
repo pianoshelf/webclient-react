@@ -1,32 +1,16 @@
 
 // Import external modules
 import { expect } from 'chai';
-import { Flummox } from 'flummox';
 
 // Import module to test
-import ShelfActions from '../../app/actions/ShelfActions';
+import * as shelf from '../../app/actions/shelf';
 import { mockApiCall } from '../shared/mocks';
 
-// Declare Flux object
-class Flux extends Flummox {
-  constructor() {
-    super();
-    this.createActions('shelf', ShelfActions);
-  }
-}
-
-describe('ShelfActions', () => {
-  let actions;
-
-  beforeEach(() => {
-    let flux = new Flux();
-    actions = flux.getActions('shelf');
-  });
-
+describe('actions/shelf', () => {
   it('can call #getShelf', () => {
     mockApiCall('get', '/api/shelf/?username=someUsername');
 
-    actions.getShelf('someUsername').then(response => {
+    shelf.getShelf('someUsername').then(response => {
       expect(response.text).to.equal('success');
     });
   });
@@ -36,7 +20,7 @@ describe('ShelfActions', () => {
       sheetmusic: 1234,
     });
 
-    actions.addToShelf(1234).then(response => {
+    shelf.addToShelf(1234).then(response => {
       expect(response.text).to.equal('success');
     });
   });
@@ -46,9 +30,8 @@ describe('ShelfActions', () => {
       sheetmusic: 1234,
     });
 
-    actions.removeFromShelf(1234).then(response => {
+    shelf.removeFromShelf(1234).then(response => {
       expect(response.text).to.equal('success');
     });
   });
-
 });

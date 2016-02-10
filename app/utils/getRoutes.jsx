@@ -37,11 +37,11 @@ import TermsOfService from '../components/Static/TermsOfService';
  * A function that retrieves the route configuration for both
  * the server and client.
  *
- * @param {Flux} flux The flux object.
+ * @param {Flux} store The redux store.
  *
  * @return {React.Component} The set of routes objects.
  */
-export default function getRoutes(flux) {
+export default function getRoutes(store) {
   return (
     <Route component={App}>
 
@@ -50,14 +50,14 @@ export default function getRoutes(flux) {
 
       { /* Authentication routes */ }
       <Route component={Authentication}>
-        <Route path="/login" component={Login} onEnter={requireNoAuth(flux)} />
-        <Route path="/login/forgot" component={ResetPassword} onEnter={requireNoAuth(flux)} />
+        <Route path="/login" component={Login} onEnter={requireNoAuth(store)} />
+        <Route path="/login/forgot" component={ResetPassword} onEnter={requireNoAuth(store)} />
         <Route path="/login/reset/:uid/:token" component={ResetPasswordConfirm}
-          onEnter={requireNoAuth(flux)}
+          onEnter={requireNoAuth(store)}
         />
         <Route path="/login/verify/:key" component={VerifyEmail} />
         <Route path="/logout" component={Logout} />
-        <Route path="/register" component={Register} onEnter={requireNoAuth(flux)} />
+        <Route path="/register" component={Register} onEnter={requireNoAuth(store)} />
         <Redirect from="/password-reset-confirm/:uid/:token" to="/login/reset/:uid/:token" />
         <Redirect from="/verify-email/:key" to="/login/verify/:key" />
       </Route>

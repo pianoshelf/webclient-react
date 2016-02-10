@@ -1,25 +1,20 @@
 
-import defer from 'lodash/function/defer';
-import extend from 'lodash/object/extend';
-import { History } from 'react-router';
-
-import config from '../../config';
-import { setAuthToken, deleteAuthToken } from './api';
+import { getUser } from '../actions/login';
 
 /**
  * This function returns a react-router transition callback that makes sure
  * a user is authenticated before proceeding. It makes an async call to the
  * getUsers API.
  *
- * @param {Flux} flux The flux object
+ * @param {Store} store The redux store
  *
  * @return {Function} Callback to feed into react-router
  */
-export function requireAuth(flux) {
+export function requireAuth(store) {
   return function (nextState, transition, callback) {
-    flux.getActions('login').getUser(flux).then(() => {
-      callback();
-    }).catch(() => {
+    store.dispatch(getUser(store))
+    .then(callback)
+    .catch(() => {
       transition.to('/login/', { redirect: nextState.location.pathname });
       callback();
     });
@@ -32,131 +27,17 @@ export function requireAuth(flux) {
  * getUsers API. It also returns the user back to the homepage if they are
  * authenticated.
  *
- * @param {Flux} flux The flux object
+ * @param {Store} store The redux store
  *
  * @return {Function} Callback to feed into react-router
  */
-export function requireNoAuth(flux) {
+export function requireNoAuth(store) {
   return function (nextState, transition, callback) {
-    flux.getActions('login').getUser(flux).then(() => {
+    store.dispatch(getUser(store))
+    .then(() => {
       transition.to('/');
       callback();
-    }).catch(() => {
-      callback();
-    });
+    })
+    .catch(callback);
   };
 }
-
-/**
- * A mixin that adds a login listener to the component. The component this is
- * connected to MUST BE connected to the LoginStore.
- */
-export const CanLoginMixin = {
-  mixins: [History],
-  componentDidMount() { this.loginUser_(); },
-  componentDidUpdate() { this.loginUser_(); },
-
-  loginUser_() {
-    if (this.state.loggedIn) {
-      // Set authorization token
-      const { user } = this.state;
-      setAuthToken(user.authToken, this.flux);
-
-      if (this.props.location.query && this.props.location.query.redirect) {
-        defer(() => this.history.pushState(null, this.props.location.query.redirect));
-      } else {
-        defer(() => this.history.pushState(null, '/'));
-      }
-    }
-  },
-};
-
-/**
- * A mixin that adds a logout listener to the component. The component this is
- * connected to MUST BE connected to the LoginStore.
- */
-export const CanLogoutMixin = {
-  mixins: [History],
-  componentDidMount() { this.logoutUser_(); },
-  componentDidUpdate() { this.logoutUser_(); },
-
-  logoutUser_() {
-    if (!this.state.loggedIn) {
-      // Delete authorization token
-      deleteAuthToken(this.flux);
-
-      if (this.props.location.query && this.props.location.query.redirect) {
-        defer(() => this.history.pushState(null, this.props.location.query.redirect));
-      } else {
-        defer(() => this.history.pushState(null, '/'));
-      }
-    }
-  },
-};
-
-/**
- * A mixin that adds the ability to log in to Facebook by asynchronously loading
- * the Facebook Javascript SDK.
- */
-export const FacebookLoginMixin = {
-  componentDidMount() {
-    // Function that will run after Facebook is done initializing
-    window.fbAsyncInit = () => {
-      /* global FB */
-      FB.init({
-        appId: config.facebook.appId,
-        xfbml: false,
-        version: 'v2.3',
-      });
-    };
-
-    // Asynchronously load Facebook
-    (function (d, s, id) {
-      let js;
-      const fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) { return; }
-      js = d.createElement(s); js.id = id;
-      js.src = '//connect.facebook.net/en_US/sdk.js';
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-
-    // Inject fb-root div if it doesn't exist
-    if (!document.getElementById('fb-root')) {
-      const fbRoot = document.createElement('div');
-      fbRoot.setAttribute('id', 'fb-root');
-      document.querySelector('body').appendChild(fbRoot);
-    }
-  },
-
-  componentDidUnmount() {
-    // Remove fb-root div
-    if (document.getElementById('fb-root')) {
-      const fbRoot = document.getElementById('fb-root');
-      fbRoot.parentElement.removeChild(fbRoot);
-    }
-  },
-
-  facebookLogin() {
-    /* global FB */
-    FB.login(response => {
-      if (response.authResponse) {
-        FB.api('/me', loginResponse => {
-          extend(loginResponse, {
-            status: 'connected',
-            accessToken: response.authResponse.accessToken,
-            expiresIn: response.authResponse.expiresIn,
-            signedRequest: response.authResponse.signedRequest,
-          });
-
-          if (this.facebookLoginHandler) this.facebookLoginHandler(loginResponse);
-        });
-      } else {
-        if (this.facebookLoginHandler) {
-          this.facebookLoginHandler({ status: response.status });
-        }
-      }
-    }, {
-      scope: 'public_profile, email, user_birthday',
-    });
-  },
-};
