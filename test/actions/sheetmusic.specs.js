@@ -10,177 +10,196 @@ import { mockApiCall } from '../shared/mocks';
 const dispatch = value => value;
 
 describe('actions/sheetmusic', () => {
-  it('can call #getSheetMusic', () => {
-    mockApiCall('get', '/api/sheetmusic/1234');
 
-    sheetmusic.getSheetMusic(1234)(dispatch).then(response => {
-      expect(response.text).to.equal('success');
+  describe('#getSheetMusic', () => {
+    it('calls the correct API', () => {
+      mockApiCall('get', '/api/sheetmusic/1234');
+      expect(
+        sheetmusic.getSheetMusic(1234)(dispatch)
+      ).to.eventually.equal('success');
     });
   });
 
-  it('can call #updateSheetMusic', () => {
-    mockApiCall('patch', '/api/sheetmusic/1234', {
-      sheetmusic: 'data',
-    });
-
-    sheetmusic.updateSheetMusic(1234, 'data')(dispatch).then(response => {
-      expect(response.text).to.equal('success');
-    });
-  });
-
-  it('can call #getComposers', () => {
-    mockApiCall('get', '/api/composers/');
-
-    sheetmusic.getComposers()(dispatch).then(response => {
-      expect(response.text).to.equal('success');
+  describe('#updateSheetMusic', () => {
+    it('calls the correct API', () => {
+      mockApiCall('patch', '/api/sheetmusic/1234', {
+        sheetmusic: 'data',
+      });
+      expect(
+        sheetmusic.updateSheetMusic(1234, 'data')(dispatch)
+      ).to.eventually.equal('success');
     });
   });
 
-  it('can call #getTopSheetMusic', () => {
-    mockApiCall('get', '/api/sheetmusic/top');
-
-    sheetmusic.getTopSheetMusic(1234)(dispatch).then(response => {
-      expect(response.text).to.equal('success');
+  describe('#getComposers', () => {
+    it('calls the correct API', () => {
+      mockApiCall('get', '/api/composers/');
+      expect(
+        sheetmusic.getComposers()(dispatch)
+      ).to.eventually.equal('success');
     });
   });
 
-  it('can call #getTrendingSheetMusic', () => {
-    mockApiCall('get', '/api/sheetmusic/trending?days=1234&results=5678');
-
-    sheetmusic.getTrendingSheetMusic(1234, 5678)(dispatch).then(response => {
-      expect(response.text).to.equal('success');
+  describe('#getTopSheetMusic', () => {
+    it('calls the correct API', () => {
+      mockApiCall('get', '/api/sheetmusic/top');
+      expect(
+        sheetmusic.getTopSheetMusic(1234)(dispatch)
+      ).to.eventually.equal('success');
     });
   });
 
-  it('can call #getSheetMusicList', () => {
-    mockApiCall('get', '/api/sheetmusic/?optionBool=true&optionInt=5&optionString=string');
-
-    sheetmusic.getSheetMusicList({
-      optionBool: true,
-      optionInt: 5,
-      optionString: 'string',
-    })(dispatch).then(response => {
-      expect(response.text).to.equal('success');
+  describe('#getTrendingSheetMusic', () => {
+    it('calls the correct API', () => {
+      mockApiCall('get', '/api/sheetmusic/trending?days=1234&results=5678');
+      expect(
+        sheetmusic.getTrendingSheetMusic(1234, 5678)(dispatch)
+      ).to.eventually.equal('success');
     });
   });
 
-  it('can call #getRating', () => {
-    mockApiCall('get', '/api/sheetmusic/getrating?sheet_id=1234');
-
-    sheetmusic.getRating(1234)(dispatch).then(response => {
-      expect(response.text).to.equal('success');
+  describe('#getSheetMusicList', () => {
+    it('calls the correct API', () => {
+      mockApiCall('get', '/api/sheetmusic/?optionBool=true&optionInt=5&optionString=string');
+      expect(
+        sheetmusic.getSheetMusicList({
+          optionBool: true,
+          optionInt: 5,
+          optionString: 'string',
+        })(dispatch)
+      ).to.eventually.equal('success');
     });
   });
 
-  it('can call #postRating', () => {
-    mockApiCall('post', '/api/sheetmusic/rate/', {
-      sheetmusic: 1234,
-      value: 5,
-    });
-
-    sheetmusic.postRating(1234, 5)(dispatch).then(response => {
-      expect(response.text).to.equal('success');
+  describe('#getRating', () => {
+    it('calls the correct API', () => {
+      mockApiCall('get', '/api/sheetmusic/getrating?sheet_id=1234');
+      expect(
+        sheetmusic.getRating(1234)(dispatch)
+      ).to.eventually.equal('success');
     });
   });
 
-  it('can call #getUploads', () => {
-    mockApiCall('get', '/api/sheetmusic/uploads/');
-
-    sheetmusic.getUploads()(dispatch).then(response => {
-      expect(response.text).to.equal('success');
+  describe('#postRating', () => {
+    it('calls the correct API', () => {
+      mockApiCall('post', '/api/sheetmusic/rate/', {
+        sheetmusic: 1234,
+        value: 5,
+      });
+      expect(
+        sheetmusic.postRating(1234, 5)(dispatch)
+      ).to.eventually.equal('success');
     });
   });
 
-  it('can call #deleteSheetMusic', () => {
-    mockApiCall('delete', '/api/sheetmusic/1234');
-
-    sheetmusic.deleteSheetMusic(1234)(dispatch).then(response => {
-      expect(response.text).to.equal('success');
+  describe('#getUploads', () => {
+    it('calls the correct API', () => {
+      mockApiCall('get', '/api/sheetmusic/uploads/');
+      expect(
+        sheetmusic.getUploads()(dispatch)
+      ).to.eventually.equal('success');
     });
   });
 
-  it('can call #postVideo', () => {
-    mockApiCall('post', '/api/video/', {
-      link: 'link',
-      title: 'title',
-      grade: 'grade',
-    });
-
-    sheetmusic.postVideo('link', 'title', 'grade')(dispatch).then(response => {
-      expect(response.text).to.equal('success');
+  describe('#deleteSheetMusic', () => {
+    it('calls the correct API', () => {
+      mockApiCall('delete', '/api/sheetmusic/1234');
+      expect(
+        sheetmusic.deleteSheetMusic(1234)(dispatch)
+      ).to.eventually.equal('success');
     });
   });
 
-  it('can call #postVideo with the sheet music ID', () => {
-    mockApiCall('post', '/api/video/', {
-      link: 'link',
-      title: 'title',
-      grade: 'grade',
-      sheetmusicId: 1234,
+  describe('#postVideo', () => {
+    it('calls the correct API', () => {
+      mockApiCall('post', '/api/video/', {
+        link: 'link',
+        title: 'title',
+        grade: 'grade',
+      });
+      expect(
+        sheetmusic.postVideo('link', 'title', 'grade')(dispatch)
+      ).to.eventually.equal('success');
     });
 
-    sheetmusic.postVideo('link', 'title', 'grade', 1234)(dispatch).then(response => {
-      expect(response.text).to.equal('success');
-    });
-  });
-
-  it('can call #increaseViewCount', () => {
-    mockApiCall('post', '/api/sheetmusic/viewCount/', {
-      sheetmusic_id: 1234,
-    });
-
-    sheetmusic.increaseViewCount(1234)(dispatch).then(response => {
-      expect(response.text).to.equal('success');
-    });
-  });
-
-  it('can call #search', () => {
-    mockApiCall('get', '/api/search?query=myQuery');
-
-    sheetmusic.search('myQuery')(dispatch).then(response => {
-      expect(response.text).to.equal('success');
+    it('calls the correct API with the sheet music ID', () => {
+      mockApiCall('post', '/api/video/', {
+        link: 'link',
+        title: 'title',
+        grade: 'grade',
+        sheetmusicId: 1234,
+      });
+      expect(
+        sheetmusic.postVideo('link', 'title', 'grade', 1234)(dispatch)
+      ).to.eventually.equal('success');
     });
   });
 
-  it('can call #getComments', () => {
-    mockApiCall('get', '/api/comment/?sheetmusicId=1234');
-
-    sheetmusic.getComments(1234)(dispatch).then(response => {
-      expect(response.text).to.equal('success');
+  describe('#increaseViewCount', () => {
+    it('calls the correct API', () => {
+      mockApiCall('post', '/api/sheetmusic/viewCount/', {
+        sheetmusic_id: 1234,
+      });
+      expect(
+        sheetmusic.increaseViewCount(1234)(dispatch)
+      ).to.eventually.equal('success');
     });
   });
 
-  it('can call #removeComment', () => {
-    mockApiCall('delete', '/api/comment/1234/');
-
-    sheetmusic.removeComment(1234)(dispatch).then(response => {
-      expect(response.text).to.equal('success');
+  describe('#search', () => {
+    it('calls the correct API', () => {
+      mockApiCall('get', '/api/search?query=myQuery');
+      expect(
+        sheetmusic.search('myQuery')(dispatch)
+      ).to.eventually.equal('success');
     });
   });
 
-  it('can call #editComment', () => {
-    mockApiCall('patch', '/api/comment/1234/', {
-      commentText: 'commentText',
-    });
-
-    sheetmusic.editComment(1234, 'commentText')(dispatch).then(response => {
-      expect(response.text).to.equal('success');
-    });
-  });
-
-  it('can call #undoRemoveComment', () => {
-    mockApiCall('post', '/api/comment/1234/undodelete/');
-
-    sheetmusic.undoRemoveComment(1234)(dispatch).then(response => {
-      expect(response.text).to.equal('success');
+  describe('#getComments', () => {
+    it('calls the correct API', () => {
+      mockApiCall('get', '/api/comment/?sheetmusicId=1234');
+      expect(
+        sheetmusic.getComments(1234)(dispatch)
+      ).to.eventually.equal('success');
     });
   });
 
-  it('can call #upvoteComment', () => {
-    mockApiCall('get', '/api/commentupvote/?commentId=1234&sheetmusicId=5678');
+  describe('#removeComment', () => {
+    it('calls the correct API', () => {
+      mockApiCall('delete', '/api/comment/1234/');
+      expect(
+        sheetmusic.removeComment(1234)(dispatch)
+      ).to.eventually.equal('success');
+    });
+  });
 
-    sheetmusic.upvoteComment(1234, 5678)(dispatch).then(response => {
-      expect(response.text).to.equal('success');
+  describe('#editComment', () => {
+    it('calls the correct API', () => {
+      mockApiCall('patch', '/api/comment/1234/', {
+        commentText: 'commentText',
+      });
+      expect(
+        sheetmusic.editComment(1234, 'commentText')(dispatch)
+      ).to.eventually.equal('success');
+    });
+  });
+
+  describe('#undoRemoveComment', () => {
+    it('calls the correct API', () => {
+      mockApiCall('post', '/api/comment/1234/undodelete/');
+      expect(
+        sheetmusic.undoRemoveComment(1234)(dispatch)
+      ).to.eventually.equal('success');
+    });
+  });
+
+
+  describe('#upvoteComment', () => {
+    it('calls the correct API', () => {
+      mockApiCall('get', '/api/commentupvote/?commentId=1234&sheetmusicId=5678');
+      expect(
+        sheetmusic.upvoteComment(1234, 5678)(dispatch)
+      ).to.eventually.equal('success');
     });
   });
 });

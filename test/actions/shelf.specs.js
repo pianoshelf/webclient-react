@@ -10,31 +10,34 @@ import { mockApiCall } from '../shared/mocks';
 const dispatch = value => value;
 
 describe('actions/shelf', () => {
-  it('can call #getShelf', () => {
-    mockApiCall('get', '/api/shelf/?username=someUsername');
-
-    shelf.getShelf('someUsername')(dispatch).then(response => {
-      expect(response.text).to.equal('success');
+  describe('#getShelf', () => {
+    it('calls the correct API', () => {
+      mockApiCall('get', '/api/shelf/?username=someUsername');
+      expect(
+        shelf.getShelf('someUsername')(dispatch)
+      ).to.eventually.equal('success');
     });
   });
 
-  it('can call #addToShelf', () => {
-    mockApiCall('post', '/api/shelf/', {
-      sheetmusic: 1234,
-    });
-
-    shelf.addToShelf(1234)(dispatch).then(response => {
-      expect(response.text).to.equal('success');
+  describe('#addToShelf', () => {
+    it('calls the correct API', () => {
+      mockApiCall('post', '/api/shelf/', {
+        sheetmusic: 1234,
+      });
+      expect(
+        shelf.addToShelf(1234)(dispatch)
+      ).to.eventually.equal('success');
     });
   });
 
-  it('can call #removeFromShelf', () => {
-    mockApiCall('delete', '/api/shelf/', {
-      sheetmusic: 1234,
-    });
-
-    shelf.removeFromShelf(1234)(dispatch).then(response => {
-      expect(response.text).to.equal('success');
+  describe('#removeFromShelf', () => {
+    it('calls the correct API', () => {
+      mockApiCall('delete', '/api/shelf/', {
+        sheetmusic: 1234,
+      });
+      expect(
+        shelf.removeFromShelf(1234)(dispatch)
+      ).to.eventually.equal('success');
     });
   });
 });

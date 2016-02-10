@@ -11,182 +11,188 @@ import { errors } from '../../app/utils/constants';
 const dispatch = value => value;
 
 describe('actions/login', () => {
-  it('can call #getUser', () => {
-    mockApiCall('get', '/api-auth/user/', {});
-    login.getUser()(dispatch).then(res => {
-      expect(res.text).to.equal('success');
+  describe('#getUser', () => {
+    it('calls the correct API', () => {
+      mockApiCall('get', '/api-auth/user/', {});
+      expect(
+        login.getUser()(dispatch)
+      ).to.eventually.equal('success');
     });
   });
 
-  it('can call #login', () => {
-    mockApiCall('post', '/api-auth/login/', {
-      username: 'user',
-      password: 'pass',
+  describe('#login', () => {
+    it('calls the correct API', () => {
+      mockApiCall('post', '/api-auth/login/', {
+        username: 'user',
+        password: 'pass',
+      });
+      expect(
+        login.login('user', 'pass')(dispatch)
+      ).to.eventually.equal('success');
     });
-    login.login('user', 'pass')(dispatch).then(res => {
-      expect(res.text).to.equal('success');
-    });
-  });
 
-  it('can call #login and throw error when username is empty', () => {
-    login.login('', 'pass')(dispatch).catch(res => {
-      expect(getFailedResponseError(res)).to.equal(errors.NO_USERNAME);
+    it('throws error when username is empty', () => {
+      return login.login('', 'pass')(dispatch).then(res => {
+        expect(getFailedResponseError(res)).to.equal(errors.NO_USERNAME);
+      });
     });
-  });
 
-  it('can call #login and throw error when the password is empty', () => {
-    login.login('user', '')(dispatch).catch(res => {
-      expect(getFailedResponseError(res)).to.equal(errors.NO_PASSWORD);
-    });
-  });
-
-  it('can call #logout', () => {
-    mockApiCall('post', '/api-auth/logout/', {});
-    login.logout()(dispatch).then(res => {
-      expect(res.text).to.equal('success');
+    it('throws error when the password is empty', () => {
+      return login.login('user', '')(dispatch).then(res => {
+        expect(getFailedResponseError(res)).to.equal(errors.NO_PASSWORD);
+      });
     });
   });
 
-  it('can call #verifyEmail', () => {
-    mockApiCall('post', '/api-auth/register/account-confirm-email/verification1234/', {});
-    login.verifyEmail('verification1234')(dispatch).then(res => {
-      expect(res.text).to.equal('success');
+  describe('#logout', () => {
+    it('calls the correct API', () => {
+      mockApiCall('post', '/api-auth/logout/', {});
+      expect(
+        login.logout()(dispatch)
+      ).to.eventually.equal('success');
     });
   });
 
-  it('can call #register', () => {
-    const user = {
-      username: 'user',
-      password1: 'password',
-      password2: 'password',
-      email: 'email@email.com',
-    };
-
-    mockApiCall('post', '/api-auth/register/', user);
-
-    login.register(user)(dispatch).then(res => {
-      expect(res.text).to.equal('success');
+  describe('#verifyEmail', () => {
+    it('calls the correct API', () => {
+      mockApiCall('post', '/api-auth/register/account-confirm-email/verification1234/', {});
+      expect(
+        login.verifyEmail('verification1234')(dispatch)
+      ).to.eventually.equal('success');
     });
   });
 
-  it('can call #register and throw error when email is empty', () => {
-    const user = {
-      username: 'user',
-      password1: 'password',
-      password2: 'password',
-      email: '',
-    };
+  describe('#register', () => {
+    it('calls the correct API', () => {
+      const user = {
+        username: 'user',
+        password1: 'password',
+        password2: 'password',
+        email: 'email@email.com',
+      };
+      mockApiCall('post', '/api-auth/register/', user);
+      expect(
+        login.register(user)(dispatch)
+      ).to.eventually.equal('success');
+    });
 
-    login.register(user)(dispatch).catch(res => {
-      expect(getFailedResponseError(res)).to.equal(errors.NO_EMAIL);
+    it('throws error when email is empty', () => {
+      const user = {
+        username: 'user',
+        password1: 'password',
+        password2: 'password',
+        email: '',
+      };
+      return login.register(user)(dispatch).then(res => {
+        expect(getFailedResponseError(res)).to.equal(errors.NO_EMAIL);
+      });
+    });
+
+    it('throws error when the email is invalid', () => {
+      const user = {
+        username: 'user',
+        password1: 'password',
+        password2: 'password',
+        email: 'hello',
+      };
+      return login.register(user)(dispatch).then(res => {
+        expect(getFailedResponseError(res)).to.equal(errors.INVALID_EMAIL);
+      });
+    });
+
+    it('throws error when the password is less than 6 characters', () => {
+      const user = {
+        username: 'user',
+        password1: 'pass',
+        password2: 'pass',
+        email: 'hello',
+      };
+      return login.register(user)(dispatch).then(res => {
+        expect(getFailedResponseError(res)).to.equal(errors.INVALID_EMAIL);
+      });
+    });
+
+    it('throws error when the passwords is not the same', () => {
+      const user = {
+        username: 'user',
+        password1: 'password1',
+        password2: 'password2',
+        email: 'hello',
+      };
+      return login.register(user)(dispatch).then(res => {
+        expect(getFailedResponseError(res)).to.equal(errors.INVALID_EMAIL);
+      });
     });
   });
 
-  it('can call #register and throw error when the email is invalid', () => {
-    const user = {
-      username: 'user',
-      password1: 'password',
-      password2: 'password',
-      email: 'hello',
-    };
-
-    login.register(user)(dispatch).catch(res => {
-      expect(getFailedResponseError(res)).to.equal(errors.INVALID_EMAIL);
+  describe('#resetPassword', () => {
+    it('calls the correct API', () => {
+      mockApiCall('post', '/api-auth/password/reset/', {
+        email: 'email@email.com',
+      });
+      expect(
+        login.resetPassword('email@email.com')(dispatch)
+      ).to.eventually.equal('success');
     });
   });
 
-  it('can call #register and throw error when the password is less than 6 characters', () => {
-    const user = {
-      username: 'user',
-      password1: 'pass',
-      password2: 'pass',
-      email: 'hello',
-    };
-
-    login.register(user)(dispatch).catch(res => {
-      expect(getFailedResponseError(res)).to.equal(errors.INVALID_EMAIL);
+  describe('#resetPasswordConfirm', () => {
+    it('calls the correct API', () => {
+      mockApiCall('post', '/api-auth/password/reset/confirm/', {
+        new_password1: 'password',
+        new_password2: 'password',
+        uid: 'uid',
+        token: 'token',
+      });
+      expect(
+        login.resetPasswordConfirm({
+          password1: 'password',
+          password2: 'password',
+        }, 'uid', 'token')(dispatch)
+      ).to.eventually.equal('success');
     });
   });
 
-  it('can call #register and throw error when the passwords is not the same', () => {
-    const user = {
-      username: 'user',
-      password1: 'password1',
-      password2: 'password2',
-      email: 'hello',
-    };
-
-    login.register(user)(dispatch).catch(res => {
-      expect(getFailedResponseError(res)).to.equal(errors.INVALID_EMAIL);
+  describe('#changePassword', () => {
+    it('calls the correct API', () => {
+      mockApiCall('post', '/api-auth/password/change/', {
+        new_password1: 'password',
+        new_password2: 'password',
+      });
+      expect(
+        login.changePassword({
+          password1: 'password',
+          password2: 'password',
+        })(dispatch)
+      ).to.eventually.equal('success');
     });
   });
 
-  it('can call #resetPassword', () => {
-    mockApiCall('post', '/api-auth/password/reset/', {
-      email: 'email@email.com',
-    });
-
-    login.resetPassword('email@email.com')(dispatch).then(res => {
-      expect(res.text).to.equal('success');
-    });
-  });
-
-  it('can call #resetPasswordConfirm', () => {
-    mockApiCall('post', '/api-auth/password/reset/confirm/', {
-      new_password1: 'password',
-      new_password2: 'password',
-      uid: 'uid',
-      token: 'token',
-    });
-
-    login.resetPasswordConfirm({
-      password1: 'password',
-      password2: 'password',
-    }, 'uid', 'token')(dispatch).then(res => {
-      expect(res.text).to.equal('success');
+  describe('#facebookLogin', () => {
+    it('calls the correct API', () => {
+      mockApiCall('post', '/api-auth/social-login/facebook/', {
+        access_token: 'fb-token',
+      });
+      expect(
+        login.facebookLogin({
+          accessToken: 'fb-token',
+        })(dispatch)
+      ).to.eventually.equal('success');
     });
   });
 
-
-  it('can call #changePassword', () => {
-    mockApiCall('post', '/api-auth/password/change/', {
-      new_password1: 'password',
-      new_password2: 'password',
-    });
-
-    login.changePassword({
-      password1: 'password',
-      password2: 'password',
-    })(dispatch).then(res => {
-      expect(res.text).to.equal('success');
-    });
-  });
-
-
-  it('can call #facebookLogin', () => {
-    mockApiCall('post', '/api-auth/social-login/facebook/', {
-      access_token: 'fb-token',
-    });
-
-    login.facebookLogin({
-      accessToken: 'fb-token',
-    })(dispatch).then(res => {
-      expect(res.text).to.equal('success');
-    });
-  });
-
-
-  it('can call #twitterLogin', () => {
-    mockApiCall('post', '/api-auth/social-login/twitter/', {
-      access_token: 'twitter-token',
-      access_token_secret: 'twitter-token-secret',
-    });
-
-    login.twitterLogin({
-      oauth_token: 'twitter-token',
-      oauth_token_secret: 'twitter-token-secret',
-    })(dispatch).then(res => {
-      expect(res.text).to.equal('success');
+  describe('#twitterLogin', () => {
+    it('calls the correct API', () => {
+      mockApiCall('post', '/api-auth/social-login/twitter/', {
+        access_token: 'twitter-token',
+        access_token_secret: 'twitter-token-secret',
+      });
+      expect(
+        login.twitterLogin({
+          oauth_token: 'twitter-token',
+          oauth_token_secret: 'twitter-token-secret',
+        })(dispatch)
+      ).to.eventually.equal('success');
     });
   });
 });

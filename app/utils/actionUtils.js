@@ -4,7 +4,7 @@
  */
 
 /**
- * Returns a start action given an action type.
+ * Returns a start action given an action payload.
  * @param {Object} payload The payload of the action.
  * @return {Object} Object representing a 'done' action.
  */
@@ -17,7 +17,7 @@ export function actionDone(payload) {
 }
 
 /**
- * Returns an error action given an action type.
+ * Returns an error action given an action error code and payload.
  * @param {Number} errorCode The error code of the action.
  * @param {Object} payload The payload of the action.
  * @return {Object} Object representing a 'error' action.
@@ -28,4 +28,13 @@ export function actionError(errorCode, payload) {
   } else {
     return { error: true, code: errorCode };
   }
+}
+
+/**
+ * Returns true or false depending on if the provided action is an error.
+ * @param {Object} action The action to check.
+ * @return {Boolean} Whether or not the provided action is an error.
+ */
+export function isActionError(action) {
+  return action.progress === 'error';
 }

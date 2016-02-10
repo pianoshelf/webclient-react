@@ -1,7 +1,7 @@
 
-import { handleActions } from 'redux-actions';
+import { createReducer } from '../utils/createReducer';
 
-export default handleActions({
+export default createReducer({
 
 });
 

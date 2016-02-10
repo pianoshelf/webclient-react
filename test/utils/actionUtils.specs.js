@@ -1,7 +1,8 @@
+/* eslint no-unused-expressions: 0 */
 
 import { expect } from 'chai';
 
-import { actionDone, actionError } from '../../app/utils/actionUtils';
+import { actionDone, actionError, isActionError } from '../../app/utils/actionUtils';
 
 describe('utils/actionUtils', () => {
   describe('#actionDone', () => {
@@ -71,6 +72,16 @@ describe('utils/actionUtils', () => {
         error: true,
         code: 100,
       });
+    });
+  });
+
+  describe('#isActionError', () => {
+    it('returns true when an action is an error', () => {
+      expect(isActionError({ type: 'ACTION', progress: 'error' })).to.be.true;
+    });
+
+    it('returns false when an action is not an error', () => {
+      expect(isActionError({ type: 'ACTION', progress: 'done' })).to.be.false;
     });
   });
 });

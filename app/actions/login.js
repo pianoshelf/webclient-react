@@ -1,7 +1,8 @@
 
 import createAction from '../utils/createAction';
+import { actionDone, actionError, isActionError } from '../utils/actionUtils';
 import { errors } from '../utils/constants';
-import { get, post, fail } from '../utils/api';
+import { get, post } from '../utils/api';
 import {
   LOGIN_CLEAR_ERRORS,
   LOGIN_GET,
@@ -49,12 +50,12 @@ export const login = createAction(
   async (username, password, store) => {
     // Make sure the username field is not empty
     if (username === '') {
-      return fail(errors.NO_USERNAME);
+      return actionError(errors.NO_USERNAME);
     }
 
     // Make sure the password field is not empty
     if (password === '') {
-      return fail(errors.NO_PASSWORD);
+      return actionError(errors.NO_PASSWORD);
     }
 
     // Call the server
@@ -65,15 +66,16 @@ export const login = createAction(
       store,
     });
 
-    const { auth_token, name, first_name, last_name, email, is_superuser } = response.response;
-    return {
+    if (isActionError(response)) return response;
+    const { auth_token, name, first_name, last_name, email, is_superuser } = response.payload;
+    return actionDone({
       authToken: auth_token,
       firstName: first_name,
       lastName: last_name,
       isSuperuser: is_superuser,
       username: name,
       email,
-    };
+    });
   }
 );
 
@@ -115,33 +117,33 @@ export const register = createAction(
   async (user, store) => {
     // Make sure username field is not empty
     if (user.username === '') {
-      return fail(errors.NO_USERNAME);
+      return actionError(errors.NO_USERNAME);
     }
 
     // Make sure email field is not empty
     if (user.email === '') {
-      return fail(errors.NO_EMAIL);
+      return actionError(errors.NO_EMAIL);
     }
 
     // Make sure email field has a valid email
     const emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+/;
     if (!emailRegex.test(user.email)) {
-      return fail(errors.INVALID_EMAIL);
+      return actionError(errors.INVALID_EMAIL);
     }
 
     // Make sure password field is not empty
     if (user.password1 === '') {
-      return fail(errors.NO_PASSWORD);
+      return actionError(errors.NO_PASSWORD);
     }
 
     // Make sure password is strong
     if (user.password1.length < 6) {
-      return fail(errors.NOT_STRONG_PASSWORD);
+      return actionError(errors.NOT_STRONG_PASSWORD);
     }
 
     // Make sure password and confirm password fields have the same value
     if (user.password2 !== user.password1) {
-      return fail(errors.NOT_SAME_PASSWORD);
+      return actionError(errors.NOT_SAME_PASSWORD);
     }
 
     // Call the API
@@ -164,13 +166,13 @@ export const resetPassword = createAction(
   async (email, store) => {
     // Make sure email field is not empty
     if (email === '') {
-      return fail(errors.NO_EMAIL);
+      return actionError(errors.NO_EMAIL);
     }
 
     // Make sure email field has a valid email
     const emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+/;
     if (!emailRegex.test(email)) {
-      return fail(errors.INVALID_EMAIL);
+      return actionError(errors.INVALID_EMAIL);
     }
 
     // Call the API
@@ -187,17 +189,17 @@ export const resetPasswordConfirm = createAction(
   async (user, uid, token, store) => {
     // Make sure password field is not empty
     if (user.password1 === '') {
-      return fail(errors.NO_PASSWORD);
+      return actionError(errors.NO_PASSWORD);
     }
 
     // Make sure password is strong
     if (user.password1.length < 6) {
-      return fail(errors.NOT_STRONG_PASSWORD);
+      return actionError(errors.NOT_STRONG_PASSWORD);
     }
 
     // Make sure password and confirm password fields have the same value
     if (user.password2 !== user.password1) {
-      return fail(errors.NOT_SAME_PASSWORD);
+      return actionError(errors.NOT_SAME_PASSWORD);
     }
 
     // Call the API
@@ -220,12 +222,12 @@ export const changePassword = createAction(
   async (user, store) => {
     // Make sure password field is not empty
     if (user.password1 === '') {
-      return fail(errors.NO_PASSWORD);
+      return actionError(errors.NO_PASSWORD);
     }
 
     // Make sure password and confirm password fields have the same value
     if (user.password2 !== user.password1) {
-      return fail(errors.NOT_SAME_PASSWORD);
+      return actionError(errors.NOT_SAME_PASSWORD);
     }
 
     return await post({

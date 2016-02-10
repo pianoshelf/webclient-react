@@ -8,7 +8,8 @@ import request from 'superagent';
 
 // Import internal modules
 import config from '../../config';
-import { errors } from './constants'
+import { errors } from './constants';
+import { actionDone, actionError } from './actionUtils';
 
 // Select the correct URL prefix based on environment variables.
 let apiUrl;
@@ -62,7 +63,7 @@ function getHeaders(store) {
  */
 function finishRequest(store, resolve) {
   // Return anonymous function
-  return function (err, res) {
+  return (err, res) => {
     // If we're on the server and the 'Set-Cookie' header is in the response, propogate
     // that to the client by appending it to the response header.
     if (!err && __SERVER__ && res.headers['set-cookie']) {
@@ -73,16 +74,13 @@ function finishRequest(store, resolve) {
 
     // Reject if there's an error, otherwise resolve.
     if (err) {
-      resolve({
-        error: true,
-        code: errors.NETWORK_ERROR,
-        payload: JSON.parse(res.text),
-      });
+      resolve(
+        actionError(errors.NETWORK_ERROR, JSON.parse(res.text))
+      );
     } else {
-      resolve({
-        error: false,
-        payload: JSON.parse(res.text),
-      });
+      resolve(
+        actionDone(JSON.parse(res.text))
+      );
     }
   };
 }
@@ -94,12 +92,12 @@ function finishRequest(store, resolve) {
  *   @param {string} options.endpoint The API endpoint.
  *   @param {Object} options.params The query parameters to send in the URL.
  *   @param {Store} options.store The Redux store object.
- *   @param {boolean=} options.auth Whether we should send it to the auth endpoints.
+ *   @param {Boolean=} options.auth Whether we should send it to the auth endpoints.
  *
  * @return {Promise} A promise that resolves when the request is complete.
  */
 export function get({ endpoint, params = {}, store, auth }) {
-  const baseUrl = __SERVER__ ? `http://localhost:${config.ports.django}` : '';
+  const baseUrl = __CLIENT__ ? '' : `http://localhost:${config.ports.django}`;
   return new Promise(resolve => {
     request.get(`${baseUrl}${auth ? authUrl : apiUrl}${endpoint}`)
       .query(params)
@@ -115,12 +113,12 @@ export function get({ endpoint, params = {}, store, auth }) {
  *   @param {string} options.endpoint The API endpoint.
  *   @param {Object} options.params The query parameters to send in the request.
  *   @param {Store} options.store The Redux store object.
- *   @param {boolean=} options.auth Whether we should send it to the auth endpoints.
+ *   @param {Boolean=} options.auth Whether we should send it to the auth endpoints.
  *
  * @return {Promise} A promise that resolves when the request is complete.
  */
 export function post({ endpoint, params = {}, store, auth }) {
-  const baseUrl = __SERVER__ ? `http://localhost:${config.ports.django}` : '';
+  const baseUrl = __CLIENT__ ? '' : `http://localhost:${config.ports.django}`;
   return new Promise(resolve => {
     request.post(`${baseUrl}${auth ? authUrl : apiUrl}${endpoint}`)
       .send(params)
@@ -136,12 +134,12 @@ export function post({ endpoint, params = {}, store, auth }) {
  *   @param {string} options.endpoint The API endpoint.
  *   @param {Object} options.params The query parameters to send in the request.
  *   @param {Store} options.store The Redux store object.
- *   @param {boolean=} options.auth Whether we should send it to the auth endpoints.
+ *   @param {Boolean=} options.auth Whether we should send it to the auth endpoints.
  *
  * @return {Promise} A promise that resolves when the request is complete.
  */
 export function patch({ endpoint, params = {}, store, auth }) {
-  const baseUrl = __SERVER__ ? `http://localhost:${config.ports.django}` : '';
+  const baseUrl = __CLIENT__ ? '' : `http://localhost:${config.ports.django}`;
   return new Promise(resolve => {
     request('PATCH',
             `${baseUrl}${auth ? authUrl : apiUrl}${endpoint}`)
@@ -162,7 +160,7 @@ export function patch({ endpoint, params = {}, store, auth }) {
  * @return {Promise} A promise that resolves when the request is complete.
  */
 export function del({ endpoint, params = {}, store }) {
-  const baseUrl = __SERVER__ ? `http://localhost:${config.ports.django}` : '';
+  const baseUrl = __CLIENT__ ? '' : `http://localhost:${config.ports.django}`;
   return new Promise(resolve => {
     request.del(`${baseUrl}${apiUrl}${endpoint}`)
       .send(params)
@@ -206,20 +204,4 @@ export function deleteAuthToken({ store }) {
   if (__SERVER__) {
     (new Cookie(store.request)).remove(config.cookie.authtoken);
   }
-}
-
-/**
- * Returns a failed promise with the correct error format. This is
- * useful when we want to failed promise without making an API call,
- * due to a clearly invalid value or something.
- *
- * @param {Object} dataToReturn The error code
- *
- * @return {Object} An object with the correct error format.
- */
-export function fail(errorCode) {
-  return Promise.resolve({
-    error: true,
-    code: errorCode,
-  });
 }
