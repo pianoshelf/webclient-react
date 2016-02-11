@@ -1,119 +1,101 @@
 
 import nock from 'nock';
-import { expect } from 'chai';
 
 import { get, post, patch, del } from '../../app/utils/api';
 
 describe('utils/api', () => {
   describe('#get', () => {
     it('calls the correct endpoint', () => {
-      nock('http://localhost:5000')
-        .intercept('/api/some/random/url/', 'GET')
+      const scope = nock('http://localhost:5000')
+        .get('/api/some/random/url/')
         .reply(200, '"success"');
-      expect(
-        get({
-          endpoint: '/api/some/random/url/',
-        })
-      ).to.eventually.equal('success');
+      return get({
+        endpoint: '/some/random/url/',
+      }).then(() => scope.done());
     });
 
     it('calls the correct auth endpoint', () => {
-      nock('http://localhost:5000')
-        .intercept('/api-auth/some/random/url/', 'GET', {})
+      const scope = nock('http://localhost:5000')
+        .get('/api-auth/some/random/url/')
         .reply(200, '"success"');
-      expect(
-        get({
-          endpoint: '/some/random/url/',
-          auth: true,
-        })
-      ).to.eventually.equal('success');
+      return get({
+        endpoint: '/some/random/url/',
+        auth: true,
+      }).then(() => scope.done());
     });
 
     it('calls with correct params', () => {
-      nock('http://localhost:5000')
-        .intercept('/some/random/url/', 'GET', { hi: 'hi' })
+      const scope = nock('http://localhost:5000')
+        .get('/api/some/random/url/')
+        .query({ hi: 'hi' })
         .reply(200, '"success"');
-      expect(
-        get({
-          endpoint: '/some/random/url/',
-          params: { hi: 'hi' },
-        })
-      ).to.eventually.equal('success');
+      return get({
+        endpoint: '/some/random/url/',
+        params: { hi: 'hi' },
+      }).then(() => scope.done());
     });
   });
 
   describe('#post', () => {
     it('calls the correct endpoint', () => {
-      nock('http://localhost:5000')
-        .intercept('/some/random/url/', 'POST', {})
+      const scope = nock('http://localhost:5000')
+        .post('/api/some/random/url/', {})
         .reply(200, '"success"');
-      expect(
-        post({
-          endpoint: '/some/random/url/',
-        })
-      ).to.eventually.equal('success');
+      return post({
+        endpoint: '/some/random/url/',
+      }).then(() => scope.done());
     });
 
     it('calls with correct params', () => {
-      nock('http://localhost:5000')
-        .intercept('/some/random/url/', 'POST', { hi: 'hi' })
+      const scope = nock('http://localhost:5000')
+        .post('/api/some/random/url/', { hi: 'hi' })
         .reply(200, '"success"');
-      expect(
-        post({
-          endpoint: '/some/random/url/',
-          params: { hi: 'hi' },
-        })
-      ).to.eventually.equal('success');
+      return post({
+        endpoint: '/some/random/url/',
+        params: { hi: 'hi' },
+      }).then(() => scope.done());
     });
   });
 
   describe('#patch', () => {
     it('calls the correct endpoint', () => {
-      nock('http://localhost:5000')
-        .intercept('/some/random/url/', 'PATCH', {})
+      const scope = nock('http://localhost:5000')
+        .patch('/api/some/random/url/', {})
         .reply(200, '"success"');
-      expect(
-        patch({
-          endpoint: '/some/random/url/',
-        })
-      ).to.eventually.equal('success');
+      return patch({
+        endpoint: '/some/random/url/',
+      }).then(() => scope.done());
     });
 
     it('calls with correct params', () => {
-      nock('http://localhost:5000')
-        .intercept('/some/random/url/', 'PATCH', { hi: 'hi' })
+      const scope = nock('http://localhost:5000')
+        .patch('/api/some/random/url/', { hi: 'hi' })
         .reply(200, '"success"');
-      expect(
-        patch({
-          endpoint: '/some/random/url/',
-          params: { hi: 'hi' },
-        })
-      ).to.eventually.equal('success');
+      return patch({
+        endpoint: '/some/random/url/',
+        params: { hi: 'hi' },
+      }).then(() => scope.done());
     });
   });
 
   describe('#del', () => {
     it('calls the correct endpoint', () => {
-      nock('http://localhost:5000')
-        .intercept('/some/random/url/', 'DELETE', {})
+      const scope = nock('http://localhost:5000')
+        .delete('/api/some/random/url/', {})
         .reply(200, '"success"');
-      expect(
-        del({
-          endpoint: '/some/random/url/',
-        })
-      ).to.eventually.equal('success');
+      return del({
+        endpoint: '/some/random/url/',
+      }).then(() => scope.done());
     });
 
     it('calls with correct params', () => {
-      nock('http://localhost:5000')
-        .intercept('/some/random/url/', 'DELETE', { hi: 'hi' })
+      const scope = nock('http://localhost:5000')
+        .delete('/api/some/random/url/', { hi: 'hi' })
         .reply(200, '"success"');
-      expect(
-        del({
-          endpoint: '/some/random/url/',
-          params: { hi: 'hi' },
-        })
-      ).to.eventually.equal('success');
+      return del({
+        endpoint: '/some/random/url/',
+        params: { hi: 'hi' },
+      }).then(() => scope.done());
     });
   });
 });

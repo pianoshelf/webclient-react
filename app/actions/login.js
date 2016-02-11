@@ -22,13 +22,13 @@ import {
  */
 
 function sanitizeUserInfo(user) {
-  const { auth_token, name, first_name, last_name, email, is_superuser } = user;
+  const { auth_token, username, first_name, last_name, email, is_superuser } = user;
   return {
     authToken: auth_token,
     firstName: first_name,
     lastName: last_name,
     isSuperuser: is_superuser,
-    username: name,
+    username,
     email,
   };
 }
@@ -216,8 +216,8 @@ export const register = createAction(
     const loginResponse = await post({
       endpoint: '/login/',
       params: {
-        username: registerResponse.username,
-        password: registerResponse.password,
+        username: registerResponse.payload.username,
+        password: registerResponse.payload.password1,
       },
       auth: true,
       store,
@@ -254,11 +254,12 @@ export const resetPassword = createAction(
     }
 
     // Call the API
-    const response = await post(
-      '/password/reset/',
-      { email },
-      store, true /* authUrl */
-    );
+    const response = await post({
+      endpoint: '/password/reset/',
+      params: { email },
+      auth: true,
+      store,
+    });
 
     if (isActionError(response)) {
       const { payload } = response;

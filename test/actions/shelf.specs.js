@@ -1,10 +1,7 @@
 
-// Import external modules
-import { expect } from 'chai';
-
 // Import module to test
 import * as shelf from '../../app/actions/shelf';
-import { mockApiCall } from '../shared/mocks';
+import mockApiCall from '../shared/mockApiCall';
 
 // Mock passthrough dispatch function
 const dispatch = value => value;
@@ -12,32 +9,43 @@ const dispatch = value => value;
 describe('actions/shelf', () => {
   describe('#getShelf', () => {
     it('calls the correct API', () => {
-      mockApiCall('get', '/api/shelf/?username=someUsername');
-      expect(
-        shelf.getShelf('someUsername')(dispatch)
-      ).to.eventually.equal('success');
+      const scope = mockApiCall({
+        method: 'get',
+        path: '/api/shelf/',
+        params: {
+          username: 'someUsername',
+        },
+      });
+      return shelf.getShelf('someUsername')(dispatch)
+        .then(() => scope.done());
     });
   });
 
   describe('#addToShelf', () => {
     it('calls the correct API', () => {
-      mockApiCall('post', '/api/shelf/', {
-        sheetmusic: 1234,
+      const scope = mockApiCall({
+        method: 'post',
+        path: '/api/shelf/',
+        params: {
+          sheetmusic: 1234,
+        },
       });
-      expect(
-        shelf.addToShelf(1234)(dispatch)
-      ).to.eventually.equal('success');
+      return shelf.addToShelf(1234)(dispatch)
+        .then(() => scope.done());
     });
   });
 
   describe('#removeFromShelf', () => {
     it('calls the correct API', () => {
-      mockApiCall('delete', '/api/shelf/', {
-        sheetmusic: 1234,
+      const scope = mockApiCall({
+        method: 'delete',
+        path: '/api/shelf/',
+        params: {
+          sheetmusic: 1234,
+        },
       });
-      expect(
-        shelf.removeFromShelf(1234)(dispatch)
-      ).to.eventually.equal('success');
+      return shelf.removeFromShelf(1234)(dispatch)
+        .then(() => scope.done());
     });
   });
 });

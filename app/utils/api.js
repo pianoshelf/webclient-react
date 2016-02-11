@@ -96,7 +96,7 @@ function finishRequest(store, resolve) {
  *
  * @return {Promise} A promise that resolves when the request is complete.
  */
-export function get({ endpoint, params = {}, store, auth }) {
+export function get({ endpoint, params = {}, store, auth = false }) {
   const baseUrl = __CLIENT__ ? '' : `http://localhost:${config.ports.django}`;
   return new Promise(resolve => {
     request.get(`${baseUrl}${auth ? authUrl : apiUrl}${endpoint}`)
@@ -117,7 +117,7 @@ export function get({ endpoint, params = {}, store, auth }) {
  *
  * @return {Promise} A promise that resolves when the request is complete.
  */
-export function post({ endpoint, params = {}, store, auth }) {
+export function post({ endpoint, params = {}, store, auth = false }) {
   const baseUrl = __CLIENT__ ? '' : `http://localhost:${config.ports.django}`;
   return new Promise(resolve => {
     request.post(`${baseUrl}${auth ? authUrl : apiUrl}${endpoint}`)
@@ -138,11 +138,10 @@ export function post({ endpoint, params = {}, store, auth }) {
  *
  * @return {Promise} A promise that resolves when the request is complete.
  */
-export function patch({ endpoint, params = {}, store, auth }) {
+export function patch({ endpoint, params = {}, store, auth = false }) {
   const baseUrl = __CLIENT__ ? '' : `http://localhost:${config.ports.django}`;
   return new Promise(resolve => {
-    request('PATCH',
-            `${baseUrl}${auth ? authUrl : apiUrl}${endpoint}`)
+    request('PATCH', `${baseUrl}${auth ? authUrl : apiUrl}${endpoint}`)
       .send(params)
       .set(getHeaders(store))
       .end(finishRequest(store, resolve));

@@ -27,6 +27,9 @@ module.exports = {
       src: ['./app/**/**/**/*.js', './app/**/**/**/*.jsx'],
       out: 'build',
     },
+    tests: {
+      src: ['./test/**/**/**/*.js', './test/**/**/**/*.jsx'],
+    },
     staticAssets: 'build/static/',
   },
 

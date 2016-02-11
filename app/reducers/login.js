@@ -123,9 +123,7 @@ export default createReducer(initialState, {
 
   [LOGIN_CHANGE_PASSWORD]: {
     done(state) {
-      return {
-        ...state,
-      };
+      return state;
     },
     error(state, code) {
       return {

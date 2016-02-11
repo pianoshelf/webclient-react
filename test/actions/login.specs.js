@@ -1,10 +1,12 @@
+/* eslint no-unused-expressions: 0 */
 
 // Import external modules
 import { expect } from 'chai';
 
 // Import module to test
 import * as login from '../../app/actions/login';
-import { mockApiCall, getFailedResponseError } from '../shared/mocks';
+import mockApiCall from '../shared/mockApiCall';
+import { getFailedResponseError, getSuccessResponsePayload } from '../shared/response';
 import { errors } from '../../app/utils/constants';
 
 // Mock passthrough dispatch function
@@ -13,22 +15,52 @@ const dispatch = value => value;
 describe('actions/login', () => {
   describe('#getUser', () => {
     it('calls the correct API', () => {
-      mockApiCall('get', '/api-auth/user/', {});
-      expect(
-        login.getUser()(dispatch)
-      ).to.eventually.equal('success');
+      const scope = mockApiCall({
+        method: 'get',
+        path: '/api-auth/user/',
+      });
+      return login.getUser()(dispatch)
+        .then(() => scope.done());
+    });
+
+    it('returns user info properly', () => {
+      mockApiCall({
+        method: 'get',
+        path: '/api-auth/user/',
+        returnValue: {
+          username: 'user',
+          email: 'email@email.com',
+          first_name: '',
+          last_name: '',
+          auth_token: '1111111111111111111111111111111111111111',
+          is_superuser: false,
+        },
+      });
+      return login.getUser()(dispatch).then(res => {
+        expect(getSuccessResponsePayload(res)).to.deep.equal({
+          username: 'user',
+          email: 'email@email.com',
+          firstName: '',
+          lastName: '',
+          authToken: '1111111111111111111111111111111111111111',
+          isSuperuser: false,
+        });
+      });
     });
   });
 
   describe('#login', () => {
     it('calls the correct API', () => {
-      mockApiCall('post', '/api-auth/login/', {
-        username: 'user',
-        password: 'pass',
+      const scope = mockApiCall({
+        method: 'post',
+        path: '/api-auth/login/',
+        params: {
+          username: 'user',
+          password: 'pass',
+        },
       });
-      expect(
-        login.login('user', 'pass')(dispatch)
-      ).to.eventually.equal('success');
+      return login.login('user', 'pass')(dispatch)
+        .then(() => scope.done());
     });
 
     it('throws error when username is empty', () => {
@@ -42,23 +74,88 @@ describe('actions/login', () => {
         expect(getFailedResponseError(res)).to.equal(errors.NO_PASSWORD);
       });
     });
+
+    it('throws error when server says you cannot log in', () => {
+      mockApiCall({
+        method: 'post',
+        path: '/api-auth/login/',
+        params: {
+          username: 'user',
+          password: 'pass',
+        },
+        returnCode: 500,
+        returnValue: {
+          non_field_errors: ['Unable to log in with provided credentials.'],
+        },
+      });
+      return login.login('user', 'pass')(dispatch).then(res => {
+        expect(getFailedResponseError(res)).to.equal(errors.UNABLE_TO_LOG_IN);
+      });
+    });
+
+    it('logs user in properly', () => {
+      mockApiCall({
+        method: 'post',
+        path: '/api-auth/login/',
+        params: {
+          username: 'user',
+          password: 'pass',
+        },
+        returnValue: {
+          username: 'user',
+          email: 'email@email.com',
+          first_name: '',
+          last_name: '',
+          auth_token: '1111111111111111111111111111111111111111',
+          is_superuser: false,
+        },
+      });
+      return login.login('user', 'pass')(dispatch).then(res => {
+        expect(getSuccessResponsePayload(res)).to.deep.equal({
+          username: 'user',
+          email: 'email@email.com',
+          firstName: '',
+          lastName: '',
+          authToken: '1111111111111111111111111111111111111111',
+          isSuperuser: false,
+        });
+      });
+    });
   });
 
   describe('#logout', () => {
     it('calls the correct API', () => {
-      mockApiCall('post', '/api-auth/logout/', {});
-      expect(
-        login.logout()(dispatch)
-      ).to.eventually.equal('success');
+      const scope = mockApiCall({
+        method: 'post',
+        path: '/api-auth/logout/',
+      });
+      return login.logout()(dispatch)
+        .then(() => scope.done());
     });
   });
 
   describe('#verifyEmail', () => {
     it('calls the correct API', () => {
-      mockApiCall('post', '/api-auth/register/account-confirm-email/verification1234/', {});
-      expect(
-        login.verifyEmail('verification1234')(dispatch)
-      ).to.eventually.equal('success');
+      const scope = mockApiCall({
+        method: 'post',
+        path: '/api-auth/register/account-confirm-email/verification1234/',
+      });
+      return login.verifyEmail('verification1234')(dispatch)
+        .then(() => scope.done());
+    });
+
+    it('throws error when server says verification has failed', () => {
+      mockApiCall({
+        method: 'post',
+        path: '/api-auth/register/account-confirm-email/verification1234/',
+        returnCode: 500,
+        returnValue: {
+          detail: 'Not found',
+        },
+      });
+      return login.verifyEmail('verification1234')(dispatch).then(res => {
+        expect(getFailedResponseError(res)).to.equal(errors.EMAIL_UNVERIFIED);
+      });
     });
   });
 
@@ -70,10 +167,17 @@ describe('actions/login', () => {
         password2: 'password',
         email: 'email@email.com',
       };
-      mockApiCall('post', '/api-auth/register/', user);
-      expect(
-        login.register(user)(dispatch)
-      ).to.eventually.equal('success');
+      const registerScope = mockApiCall({
+        method: 'post',
+        path: '/api-auth/register/',
+        returnValue: user,
+      });
+      const loginScope = mockApiCall({
+        method: 'post',
+        path: '/api-auth/login/',
+      });
+      return login.register(user)(dispatch)
+        .then(() => registerScope.done() && loginScope.done());
     });
 
     it('throws error when email is empty', () => {
@@ -123,76 +227,199 @@ describe('actions/login', () => {
         expect(getFailedResponseError(res)).to.equal(errors.INVALID_EMAIL);
       });
     });
+
+    it('throws error when server says username is taken', () => {
+      const user = {
+        username: 'user',
+        password1: 'password',
+        password2: 'password',
+        email: 'email@email.com',
+      };
+      mockApiCall({
+        method: 'post',
+        path: '/api-auth/register/',
+        params: user,
+        returnCode: 500,
+        returnValue: {
+          username: ['This username is already taken. Please choose another.'],
+        },
+      });
+      return login.register(user)(dispatch).then(res => {
+        expect(getFailedResponseError(res)).to.equal(errors.USERNAME_TAKEN);
+      });
+    });
+
+    it('throws error when server says email is taken', () => {
+      const user = {
+        username: 'user',
+        password1: 'password',
+        password2: 'password',
+        email: 'email@email.com',
+      };
+      mockApiCall({
+        method: 'post',
+        path: '/api-auth/register/',
+        params: user,
+        returnCode: 500,
+        returnValue: {
+          email: ['A user is already registered with this e-mail address.'],
+        },
+      });
+      return login.register(user)(dispatch).then(res => {
+        expect(getFailedResponseError(res)).to.equal(errors.EMAIL_ALREADY_REGISTERED);
+      });
+    });
+
+    it('throws error when server says you cannot log in', () => {
+      const user = {
+        username: 'user',
+        password1: 'password',
+        password2: 'password',
+        email: 'email@email.com',
+      };
+      mockApiCall({
+        method: 'post',
+        path: '/api-auth/register/',
+        params: user,
+        returnValue: {
+          username: 'user',
+          email: 'email@email.com',
+          first_name: '',
+          last_name: '',
+          auth_token: '1111111111111111111111111111111111111111',
+          is_superuser: false,
+        },
+      });
+      mockApiCall({
+        method: 'post',
+        path: '/api-auth/login/',
+        params: {
+          username: 'user',
+          password: 'password',
+        },
+        returnCode: 500,
+        returnValue: {
+          non_field_errors: ['Unable to log in with provided credentials.'],
+        },
+      });
+      return login.login('user', 'password')(dispatch).then(res => {
+        expect(getFailedResponseError(res)).to.equal(errors.UNABLE_TO_LOG_IN);
+      });
+    });
   });
 
   describe('#resetPassword', () => {
     it('calls the correct API', () => {
-      mockApiCall('post', '/api-auth/password/reset/', {
-        email: 'email@email.com',
+      const scope = mockApiCall({
+        method: 'post',
+        path: '/api-auth/password/reset/',
+        params: {
+          email: 'email@email.com',
+        },
       });
-      expect(
-        login.resetPassword('email@email.com')(dispatch)
-      ).to.eventually.equal('success');
+      return login.resetPassword('email@email.com')(dispatch)
+        .then(() => scope.done());
+    });
+
+    it('throws error when email field is empty', () => {
+      return login.resetPassword('')(dispatch).then(res => {
+        expect(getFailedResponseError(res)).to.equal(errors.NO_EMAIL);
+      });
+    });
+
+    it('throws error when email field is not an email', () => {
+      return login.resetPassword('hello')(dispatch).then(res => {
+        expect(getFailedResponseError(res)).to.equal(errors.INVALID_EMAIL);
+      });
+    });
+
+    it('throws error when server says email is not registered', () => {
+      mockApiCall({
+        method: 'post',
+        path: '/api-auth/password/reset/',
+        params: {
+          email: 'email@email.com',
+        },
+        returnCode: 500,
+        returnValue: {
+          email: ['Invalid Email'],
+        },
+      });
+      return login.resetPassword('email@email.com')(dispatch).then(res => {
+        expect(getFailedResponseError(res)).to.equal(errors.EMAIL_NOT_REGISTERED);
+      });
     });
   });
 
   describe('#resetPasswordConfirm', () => {
     it('calls the correct API', () => {
-      mockApiCall('post', '/api-auth/password/reset/confirm/', {
-        new_password1: 'password',
-        new_password2: 'password',
-        uid: 'uid',
-        token: 'token',
+      const scope = mockApiCall({
+        method: 'post',
+        path: '/api-auth/password/reset/confirm/',
+        params: {
+          new_password1: 'password',
+          new_password2: 'password',
+          uid: 'uid',
+          token: 'token',
+        },
       });
-      expect(
-        login.resetPasswordConfirm({
-          password1: 'password',
-          password2: 'password',
-        }, 'uid', 'token')(dispatch)
-      ).to.eventually.equal('success');
+      return login.resetPasswordConfirm({
+        password1: 'password',
+        password2: 'password',
+      }, 'uid', 'token')(dispatch)
+        .then(() => scope.done());
     });
   });
 
   describe('#changePassword', () => {
     it('calls the correct API', () => {
-      mockApiCall('post', '/api-auth/password/change/', {
-        new_password1: 'password',
-        new_password2: 'password',
+      const scope = mockApiCall({
+        method: 'post',
+        path: '/api-auth/password/change/',
+        params: {
+          new_password1: 'password',
+          new_password2: 'password',
+        },
       });
-      expect(
-        login.changePassword({
-          password1: 'password',
-          password2: 'password',
-        })(dispatch)
-      ).to.eventually.equal('success');
+      return login.changePassword({
+        password1: 'password',
+        password2: 'password',
+      })(dispatch)
+        .then(() => scope.done());
     });
   });
 
   describe('#facebookLogin', () => {
     it('calls the correct API', () => {
-      mockApiCall('post', '/api-auth/social-login/facebook/', {
-        access_token: 'fb-token',
+      const scope = mockApiCall({
+        method: 'post',
+        path: '/api-auth/social-login/facebook/',
+        params: {
+          access_token: 'fb-token',
+        },
       });
-      expect(
-        login.facebookLogin({
-          accessToken: 'fb-token',
-        })(dispatch)
-      ).to.eventually.equal('success');
+      return login.facebookLogin({
+        accessToken: 'fb-token',
+      })(dispatch)
+        .then(() => scope.done());
     });
   });
 
   describe('#twitterLogin', () => {
     it('calls the correct API', () => {
-      mockApiCall('post', '/api-auth/social-login/twitter/', {
-        access_token: 'twitter-token',
-        access_token_secret: 'twitter-token-secret',
+      const scope = mockApiCall({
+        method: 'post',
+        path: '/api-auth/social-login/twitter/',
+        params: {
+          access_token: 'twitter-token',
+          access_token_secret: 'twitter-token-secret',
+        },
       });
-      expect(
-        login.twitterLogin({
-          oauth_token: 'twitter-token',
-          oauth_token_secret: 'twitter-token-secret',
-        })(dispatch)
-      ).to.eventually.equal('success');
+      return login.twitterLogin({
+        oauth_token: 'twitter-token',
+        oauth_token_secret: 'twitter-token-secret',
+      })(dispatch)
+        .then(() => scope.done());
     });
   });
 });
