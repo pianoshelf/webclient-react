@@ -47,6 +47,17 @@ describe('actions/login', () => {
         });
       });
     });
+
+    it('returns error when user is not logged in', () => {
+      mockApiCall({
+        method: 'get',
+        path: '/api-auth/user/',
+        returnCode: 500,
+      });
+      return login.getUser()(dispatch).then(res => {
+        expect(getFailedResponseError(res)).to.equal(errors.NETWORK_ERROR);
+      });
+    });
   });
 
   describe('#login', () => {

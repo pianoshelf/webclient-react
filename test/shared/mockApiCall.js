@@ -1,6 +1,9 @@
-
 import nock from 'nock';
 
+/**
+ * Test utility function that mocks a specific API call, and allows returning a status code and
+ * value.
+ */
 export default function mockApiCall({
   method,
   path,
