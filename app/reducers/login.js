@@ -1,5 +1,5 @@
 
-import { createReducer } from '../utils/createReducer';
+import createReducer from '../utils/createReducer';
 import { success } from '../utils/constants';
 
 import {
@@ -17,7 +17,7 @@ import {
 } from '../constants/login';
 
 const initialState = {
-  errorCode: 0,
+  code: 0,
   user: {},
   loggedIn: false,
 };
@@ -26,15 +26,15 @@ export default createReducer(initialState, {
 
   [LOGIN_CLEAR_ERRORS]: state => ({
     ...state,
-    errorCode: 0,
+    code: 0,
   }),
 
   [LOGIN_GET]: {
     done(state, payload) {
       return {
-        errorCode: success.LOGGED_IN,
         user: payload,
         loggedIn: true,
+        code: success.LOGGED_IN,
       };
     },
     error() {
@@ -45,16 +45,13 @@ export default createReducer(initialState, {
   [LOGIN_LOGIN]: {
     done(state, payload) {
       return {
-        errorCode: success.LOGGED_IN,
         user: payload,
         loggedIn: true,
+        code: success.LOGGED_IN,
       };
     },
     error(state, code) {
-      return {
-        ...state,
-        errorCode: code,
-      };
+      return { ...state, code };
     },
   },
 
@@ -62,62 +59,41 @@ export default createReducer(initialState, {
 
   [LOGIN_VERIFY_EMAIL]: {
     done(state) {
-      return {
-        ...state,
-        errorCode: success.EMAIL_VERIFIED,
-      };
+      return { ...state, code: success.EMAIL_VERIFIED };
     },
     error(state, code) {
-      return {
-        ...state,
-        errorCode: code,
-      };
+      return { ...state, code };
     },
   },
 
   [LOGIN_REGISTER]: {
     done(state, payload) {
       return {
-        errorCode: success.REGISTERED,
         user: payload,
         loggedIn: true,
+        code: success.LOGGED_IN,
       };
     },
     error(state, code) {
-      return {
-        ...state,
-        errorCode: code,
-      };
+      return { ...state, code };
     },
   },
 
   [LOGIN_RESET_PASSWORD]: {
     done(state) {
-      return {
-        ...state,
-        errorCode: success.PASSWORD_RESET,
-      };
+      return { ...state, code: success.PASSWORD_RESET };
     },
     error(state, code) {
-      return {
-        ...state,
-        errorCode: code,
-      };
+      return { ...state, code };
     },
   },
 
   [LOGIN_RESET_PASSWORD_CONFIRM]: {
     done(state) {
-      return {
-        ...state,
-        errorCode: success.PASSWORD_CONFIRM_RESET,
-      };
+      return { ...state, code: success.PASSWORD_CONFIRM_RESET };
     },
     error(state, code) {
-      return {
-        ...state,
-        errorCode: code,
-      };
+      return { ...state, code };
     },
   },
 
@@ -126,42 +102,33 @@ export default createReducer(initialState, {
       return state;
     },
     error(state, code) {
-      return {
-        ...state,
-        errorCode: code,
-      };
+      return { ...state, code };
     },
   },
 
   [LOGIN_FACEBOOK]: {
     done(state, payload) {
       return {
-        errorCode: success.LOGGED_IN,
         user: payload,
         loggedIn: true,
+        code: success.LOGGED_IN,
       };
     },
     error(state, code) {
-      return {
-        ...state,
-        errorCode: code,
-      };
+      return { ...state, code };
     },
   },
 
   [LOGIN_TWITTER]: {
     done(state, payload) {
       return {
-        errorCode: success.LOGGED_IN,
         user: payload,
         loggedIn: true,
+        code: success.LOGGED_IN,
       };
     },
     error(state, code) {
-      return {
-        ...state,
-        errorCode: code,
-      };
+      return { ...state, code };
     },
   },
 

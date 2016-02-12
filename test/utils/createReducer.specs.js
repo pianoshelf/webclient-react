@@ -112,7 +112,7 @@ describe('utils/createReducer', () => {
       code: 123,
       payload: { hello: 'hello' },
     });
-    expect(innerReducer).to.have.been.calledWithExactly({ hi: 'hi' }, { hello: 'hello' }, 123);
+    expect(innerReducer).to.have.been.calledWithExactly({ hi: 'hi' }, 123, { hello: 'hello' });
   });
 
   it('throws an error when there is an invalid progress state', () => {

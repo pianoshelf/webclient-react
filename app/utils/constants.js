@@ -35,6 +35,7 @@ export const success = {
   REGISTERED: s++,
   PASSWORD_RESET: s++,
   PASSWORD_CONFIRM_RESET: s++,
+  PASSWORD_CHANGED: s++,
   EMAIL_VERIFIED: s++,
 
 };
