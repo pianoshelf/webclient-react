@@ -380,6 +380,79 @@ describe('actions/login', () => {
       }, 'uid', 'token')(dispatch)
         .then(() => scope.done());
     });
+
+    it('throws error when password is empty', () => {
+      return login.resetPasswordConfirm({
+        password1: '',
+        password2: '',
+      })(dispatch).then(res => {
+        expect(getFailedResponseError(res)).to.equal(errors.NO_PASSWORD);
+      });
+    });
+
+    it('throws error when password is too short', () => {
+      return login.resetPasswordConfirm({
+        password1: 'pass',
+        password2: 'pass',
+      })(dispatch).then(res => {
+        expect(getFailedResponseError(res)).to.equal(errors.NOT_STRONG_PASSWORD);
+      });
+    });
+
+    it('throws error when passwords do not match', () => {
+      return login.resetPasswordConfirm({
+        password1: 'password1',
+        password2: 'password2',
+      })(dispatch).then(res => {
+        expect(getFailedResponseError(res)).to.equal(errors.NOT_SAME_PASSWORD);
+      });
+    });
+
+    it('throws error when server says token is invalid', () => {
+      mockApiCall({
+        method: 'post',
+        path: '/api-auth/password/reset/confirm/',
+        params: {
+          new_password1: 'password',
+          new_password2: 'password',
+          uid: 'uid',
+          token: 'token',
+        },
+        returnCode: 500,
+        returnValue: {
+          token: ['Invalid value'],
+        },
+      });
+      return login.resetPasswordConfirm({
+        password1: 'password',
+        password2: 'password',
+      }, 'uid', 'token')(dispatch).then(res => {
+        expect(getFailedResponseError(res)).to.equal(errors.EXPIRED_LINK);
+      });
+    });
+
+    it('throws error when server says uid is invalid', () => {
+      mockApiCall({
+        method: 'post',
+        path: '/api-auth/password/reset/confirm/',
+        params: {
+          new_password1: 'password',
+          new_password2: 'password',
+          uid: 'uid',
+          token: 'token',
+        },
+        returnCode: 500,
+        returnValue: {
+          uid: ['Invalid value'],
+        },
+      });
+      return login.resetPasswordConfirm({
+        password1: 'password',
+        password2: 'password',
+      }, 'uid', 'token')(dispatch).then(res => {
+        expect(getFailedResponseError(res)).to.equal(errors.EXPIRED_LINK);
+      });
+    });
   });
 
   describe('#changePassword', () => {
