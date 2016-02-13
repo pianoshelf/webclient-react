@@ -15,7 +15,7 @@ import {
   SHEETMUSIC_DELETE,
   SHEETMUSIC_POST_VIDEO,
   SHEETMUSIC_INCR_VIEW_COUNT,
-  SHEETMUSIC_DECR_VIEW_COUNT,
+  SHEETMUSIC_SEARCH,
   SHEETMUSIC_COMMENT_GET,
   SHEETMUSIC_COMMENT_ADD,
   SHEETMUSIC_COMMENT_DELETE,
@@ -183,7 +183,7 @@ export const increaseViewCount = createAction(
 );
 
 export const search = createAction(
-  SHEETMUSIC_DECR_VIEW_COUNT,
+  SHEETMUSIC_SEARCH,
   async (query, store) => {
     return await get({
       endpoint: '/search/',

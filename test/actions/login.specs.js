@@ -471,6 +471,35 @@ describe('actions/login', () => {
       })(dispatch)
         .then(() => scope.done());
     });
+
+    it('throws error when password is empty', () => {
+      return login.changePassword({
+        password1: '',
+        password2: '',
+      })(dispatch).then(res => {
+        expect(getFailedResponseError(res)).to.equal(errors.NO_PASSWORD);
+      });
+    });
+
+    it('throws error when password is too short', () => {
+      return login.changePassword({
+        password1: 'pass',
+        password2: 'pass',
+      })(dispatch).then(res => {
+        expect(getFailedResponseError(res)).to.equal(errors.NOT_STRONG_PASSWORD);
+      });
+    });
+
+    it('throws error when passwords do not match', () => {
+      return login.changePassword({
+        password1: 'password1',
+        password2: 'password2',
+      })(dispatch).then(res => {
+        expect(getFailedResponseError(res)).to.equal(errors.NOT_SAME_PASSWORD);
+      });
+    });
+
+    it('changes the users password');
   });
 
   describe('#facebookLogin', () => {
@@ -487,6 +516,36 @@ describe('actions/login', () => {
       })(dispatch)
         .then(() => scope.done());
     });
+
+    it('logs user in properly', () => {
+      mockApiCall({
+        method: 'post',
+        path: '/api-auth/social-login/facebook/',
+        params: {
+          access_token: 'fb-token',
+        },
+        returnValue: {
+          username: 'user',
+          email: 'email@email.com',
+          first_name: '',
+          last_name: '',
+          auth_token: '1111111111111111111111111111111111111111',
+          is_superuser: false,
+        },
+      });
+      return login.facebookLogin({
+        accessToken: 'fb-token',
+      })(dispatch).then(res => {
+        expect(getSuccessResponsePayload(res)).to.deep.equal({
+          username: 'user',
+          email: 'email@email.com',
+          firstName: '',
+          lastName: '',
+          authToken: '1111111111111111111111111111111111111111',
+          isSuperuser: false,
+        });
+      });
+    });
   });
 
   describe('#twitterLogin', () => {
@@ -500,10 +559,42 @@ describe('actions/login', () => {
         },
       });
       return login.twitterLogin({
-        oauth_token: 'twitter-token',
-        oauth_token_secret: 'twitter-token-secret',
+        oauthToken: 'twitter-token',
+        oauthTokenSecret: 'twitter-token-secret',
       })(dispatch)
         .then(() => scope.done());
+    });
+
+    it('logs user in properly', () => {
+      mockApiCall({
+        method: 'post',
+        path: '/api-auth/social-login/twitter/',
+        params: {
+          access_token: 'twitter-token',
+          access_token_secret: 'twitter-token-secret',
+        },
+        returnValue: {
+          username: 'user',
+          email: 'email@email.com',
+          first_name: '',
+          last_name: '',
+          auth_token: '1111111111111111111111111111111111111111',
+          is_superuser: false,
+        },
+      });
+      return login.twitterLogin({
+        oauthToken: 'twitter-token',
+        oauthTokenSecret: 'twitter-token-secret',
+      })(dispatch).then(res => {
+        expect(getSuccessResponsePayload(res)).to.deep.equal({
+          username: 'user',
+          email: 'email@email.com',
+          firstName: '',
+          lastName: '',
+          authToken: '1111111111111111111111111111111111111111',
+          isSuperuser: false,
+        });
+      });
     });
   });
 });

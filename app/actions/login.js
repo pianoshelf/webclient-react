@@ -341,6 +341,11 @@ export const changePassword = createAction(
       return actionError(errors.NO_PASSWORD);
     }
 
+    // Make sure password is strong
+    if (user.password1.length < 6) {
+      return actionError(errors.NOT_STRONG_PASSWORD);
+    }
+
     // Make sure password and confirm password fields have the same value
     if (user.password2 !== user.password1) {
       return actionError(errors.NOT_SAME_PASSWORD);
@@ -361,7 +366,7 @@ export const changePassword = createAction(
 export const facebookLogin = createAction(
   LOGIN_FACEBOOK,
   async (token, store) => {
-    return await post({
+    const response = await post({
       endpoint: '/social-login/facebook/',
       params: {
         access_token: token.accessToken,
@@ -369,20 +374,24 @@ export const facebookLogin = createAction(
       auth: true,
       store,
     });
+
+    return actionDone(sanitizeUserInfo(response.payload));
   }
 );
 
 export const twitterLogin = createAction(
   LOGIN_TWITTER,
   async (token, store) => {
-    return await post({
+    const response = await post({
       endpoint: '/social-login/twitter/',
       params: {
-        access_token: token.oauth_token,
-        access_token_secret: token.oauth_token_secret,
+        access_token: token.oauthToken,
+        access_token_secret: token.oauthTokenSecret,
       },
       auth: true,
       store,
     });
+
+    return actionDone(sanitizeUserInfo(response.payload));
   }
 );
