@@ -104,8 +104,8 @@ app.use((req, res) => {
   // Get the initial state of our app
   const store = configureStore();
 
-  // Attach request object to store
-  // TODO: Find a better way to do this
+  // HACK: Attach request object to store
+  // TODO: PLEASE PLEASE PLEASE Find a better way to do this
   store.request = req;
 
   // Perform route matching and verification

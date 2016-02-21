@@ -7,35 +7,34 @@ import config from '../../config';
 
 /**
  * This decorator adds a function, `facebookLogin` that calls the Facebook API to log into the
- * site. The target can also define `facebookLoginHandler`, which would be called after an auth
- * token is received from Facebook.
+ * site and returns a promise that resolves to a response given by Facebook.
  */
 export default function canFacebookLogin(target) {
   const parentDidMount = target.prototype.componentDidMount || (() => {});
   const parentWillUnmount = target.prototype.componentWillUnmount || (() => {});
 
   target.prototype.facebookLogin = function facebookLogin() {
-    // Login in the global FB object
-    /* global FB */
-    FB.login(response => {
-      if (response.authResponse) {
-        FB.api('/me', loginResponse => {
-          extend(loginResponse, {
-            status: 'connected',
-            accessToken: response.authResponse.accessToken,
-            expiresIn: response.authResponse.expiresIn,
-            signedRequest: response.authResponse.signedRequest,
-          });
+    return new Promise(resolve => {
+      // Login in the global FB object
+      /* global FB */
+      FB.login(response => {
+        if (response.authResponse) {
+          FB.api('/me', loginResponse => {
+            extend(loginResponse, {
+              status: 'connected',
+              accessToken: response.authResponse.accessToken,
+              expiresIn: response.authResponse.expiresIn,
+              signedRequest: response.authResponse.signedRequest,
+            });
 
-          if (this.facebookLoginHandler) this.facebookLoginHandler(loginResponse);
-        });
-      } else {
-        if (this.facebookLoginHandler) {
-          this.facebookLoginHandler({ status: response.status });
+            resolve(loginResponse);
+          });
+        } else {
+          resolve({ status: response.status });
         }
-      }
-    }, {
-      scope: 'public_profile, email, user_birthday',
+      }, {
+        scope: 'public_profile, email, user_birthday',
+      });
     });
   };
 

@@ -1,122 +1,118 @@
 
-import defer from 'lodash/function/defer';
-import fluxMixin from 'flummox/mixin';
 import FontAwesome from 'react-fontawesome';
 import Helmet from 'react-helmet';
-import LinkedStateMixin from 'react-addons-linked-state-mixin';
 import includes from 'lodash/collection/includes';
 import React from 'react';
 import { Link } from 'react-router';
+import { reduxForm } from 'redux-form';
 
 import Button from './utils/Button';
+import canLogin from '../../decorators/canLogin';
+import canFacebookLogin from '../../decorators/canFacebookLogin';
 import ErrorMessage from './utils/ErrorMessage';
 import Input from './utils/Input';
 import Title from './utils/Title';
-import { errors, success } from '../../utils/constants';
-import { CanLoginMixin, FacebookLoginMixin } from '../../utils/authUtils';
+import { dispatchAndPromise } from '../../utils/reduxUtils';
+import { errors } from '../../utils/constants';
+import { register, facebookLogin } from '../../actions/login';
 
-export default React.createClass({
+export const fieldNames = [
+  'username',
+  'email',
+  'password1',
+  'password2',
+];
 
-  mixins: [
-    LinkedStateMixin,
-    CanLoginMixin,
-    FacebookLoginMixin,
-    fluxMixin({
-      login: store => store.state,
-      progress: store => store.state,
-    }),
-  ],
+@reduxForm(
+  { form: 'register', fields: fieldNames },
+  state => ({
+    errorCode: state.login.code,
+    inProgress: state.progress.inProgress,
+  })
+)
+@canFacebookLogin
+@canLogin
+export default class Register extends React.Component {
+  static propTypes = {
+    errorCode: React.PropTypes.number.isRequired,
+    inProgress: React.PropTypes.array.isRequired,
+    fields: React.PropTypes.object.isRequired,
+    handleSubmit: React.PropTypes.func.isRequired,
+  };
 
-  getInitialState() {
-    return {
-      username: '',
-      email: '',
-      password1: '',
-      password2: '',
-    };
-  },
+  static contextTypes = {
+    router: React.PropTypes.object.isRequired,
+  };
 
-  componentDidUpdate() {
-    if (this.state.errorCode === success.REGISTERED) {
-      defer(this.handlePostRegister_);
-    }
-  },
-
-  handleSubmit_(event) {
-    event.preventDefault();
-
-    // Extract form values
-    const { username, email, password1, password2 } = this.state;
+  /**
+   * Handlers
+   */
+  handleRegister = (values, dispatch) => {
+    const { username, email, password1, password2 } = values;
     const newUser = { username, email, password1, password2 };
+    return dispatchAndPromise(dispatch, [
+      register(newUser),
+    ]);
+  };
 
-    // Trigger action
-    const loginActions = this.flux.getActions('login');
-    loginActions.register(newUser, this.flux);
-  },
+  handleFacebookRegister = (values, dispatch) => {
+    return this.facebookLogin().then(response => {
+      if (response.status === 'connected') {
+        const { accessToken } = response;
+        return dispatchAndPromise(dispatch, [
+          facebookLogin({ accessToken }),
+        ]);
+      }
+    });
+  };
 
-  handleFacebook_(event) {
-    event.preventDefault();
-    this.facebookLogin();
-  },
-
-  handlePostRegister_() {
-    const { username, password1 } = this.state;
-
-    // Trigger action
-    const loginActions = this.flux.getActions('login');
-    loginActions.login(username, password1, this.flux);
-  },
-
-  facebookLoginHandler(response) {
-    if (response.status === 'connected') {
-      const { accessToken } = response;
-
-      // Trigger action
-      const loginActions = this.flux.getActions('login');
-      loginActions.facebookLogin({ accessToken }, this.flux);
-    }
-  },
-
+  /**
+   * Render method
+   */
   render() {
-    const registerInProgress = includes(this.state.inProgress, 'register') ||
-                             includes(this.state.inProgress, 'login');
-    const facebookInProgress = includes(this.state.inProgress, 'facebookLogin');
+    const { fields, inProgress, errorCode, handleSubmit } = this.props;
+    const registerInProgress = includes(inProgress, 'register') ||
+                               includes(inProgress, 'login');
+    const facebookInProgress = includes(inProgress, 'facebookLogin');
 
     return (
       <div>
         <Helmet title="Register" />
         <Title>Sign up for PianoShelf</Title>
-        <ErrorMessage errorCode={this.state.errorCode}
-          dontDisplayIf={this.state.loggedIn || registerInProgress || facebookInProgress}
+        <ErrorMessage errorCode={errorCode}
+          dontDisplayIf={registerInProgress || facebookInProgress}
         />
-        <form className="authentication__form" onSubmit={this.handleSubmit_}>
+        <form
+          className="authentication__form"
+          onSubmit={handleSubmit(this.handleRegister)}
+        >
           <div className="authentication__inputs">
             <Input placeholder="Username"
               name="username"
-              errorCode={this.state.errorCode}
+              errorCode={errorCode}
               errorWhen={[errors.NO_USERNAME, errors.USERNAME_TAKEN]}
               focusOnLoad
-              valueLink={this.linkState('username')}
+              field={fields.username}
             />
             <Input placeholder="Email"
               name="email"
-              errorCode={this.state.errorCode}
+              errorCode={errorCode}
               errorWhen={[errors.NO_EMAIL, errors.INVALID_EMAIL, errors.EMAIL_ALREADY_REGISTERED]}
-              valueLink={this.linkState('email')}
+              field={fields.email}
             />
             <Input placeholder="Password"
               name="password1"
               password
-              errorCode={this.state.errorCode}
+              errorCode={errorCode}
               errorWhen={[errors.NO_PASSWORD, errors.NOT_STRONG_PASSWORD]}
-              valueLink={this.linkState('password1')}
+              field={fields.password1}
             />
             <Input placeholder="Confirm Password"
               name="password2"
               password
-              errorCode={this.state.errorCode}
+              errorCode={errorCode}
               errorWhen={[errors.NOT_SAME_PASSWORD]}
-              valueLink={this.linkState('password2')}
+              field={fields.password2}
             />
           </div>
           <Button color="blue-light" submittedIf={registerInProgress}
@@ -128,7 +124,9 @@ export default React.createClass({
         </form>
         <Link to="/login" className="authentication__link">I have an account</Link>
         <hr className="authentication__hr" />
-        <form onSubmit={this.handleFacebook_}>
+        <form
+          onSubmit={handleSubmit(this.handleFacebook)}
+        >
           <Button color="facebook" submittedIf={facebookInProgress}
             disableIf={registerInProgress || facebookInProgress}
           >
@@ -138,6 +136,5 @@ export default React.createClass({
         </form>
       </div>
     );
-  },
-
-});
+  }
+}

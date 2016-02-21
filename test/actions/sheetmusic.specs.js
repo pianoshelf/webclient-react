@@ -43,7 +43,7 @@ describe('actions/sheetmusic', () => {
     });
   });
 
-  describe('#getTopSheetMusic', () => {
+  describe.skip('#getTopSheetMusic', () => {
     it('calls the correct API', () => {
       const scope = mockApiCall({
         method: 'get',
@@ -63,6 +63,8 @@ describe('actions/sheetmusic', () => {
           days: 1234,
           results: 5678,
         },
+        returnCode: 200,
+        returnValue: [],
       });
       return sheetmusic.getTrendingSheetMusic(1234, 5678)(dispatch)
         .then(() => scope.done());
@@ -80,6 +82,8 @@ describe('actions/sheetmusic', () => {
           page_size: 3,
           sort_by: 4,
         },
+        returnCode: 200,
+        returnValue: [],
       });
       return sheetmusic.getSheetMusicList({
         orderBy: 1,
@@ -183,20 +187,6 @@ describe('actions/sheetmusic', () => {
         },
       });
       return sheetmusic.increaseViewCount(1234)(dispatch)
-        .then(() => scope.done());
-    });
-  });
-
-  describe('#search', () => {
-    it('calls the correct API', () => {
-      const scope = mockApiCall({
-        method: 'get',
-        path: '/api/search/',
-        params: {
-          query: 'myQuery',
-        },
-      });
-      return sheetmusic.search('myQuery')(dispatch)
         .then(() => scope.done());
     });
   });

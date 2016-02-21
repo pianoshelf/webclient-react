@@ -23,7 +23,6 @@ const initialState = {
 };
 
 export default createReducer(initialState, {
-
   [LOGIN_CLEAR_ERRORS]: state => ({
     ...state,
     code: 0,
@@ -131,5 +130,4 @@ export default createReducer(initialState, {
       return { ...state, code };
     },
   },
-
 });

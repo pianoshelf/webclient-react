@@ -11,7 +11,7 @@
  *   action types to objects that describe each level of the function.
  * @return {Function} A reducer.
  */
-export default function createReducer(initialState = {}, reducerObject) {
+export default function createReducer(initialState = {}, reducerObject = {}) {
   const reducers = Object.keys(reducerObject).map(type => {
     // Get the function
     const reducer = reducerObject[type];

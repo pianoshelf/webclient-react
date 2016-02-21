@@ -1,6 +1,7 @@
 
+import testReducer from 'redux-test-reducer';
+
 import progressReducer from '../../app/reducers/progress';
-import testReducer from '../shared/testReducer';
 import { createDoneAction } from '../shared/actions';
 
 import {

@@ -1,6 +1,7 @@
 
+import testReducer from 'redux-test-reducer';
+
 import loginReducer from '../../app/reducers/login';
-import testReducer from '../shared/testReducer';
 import { createDoneAction, createErrorAction } from '../shared/actions';
 import { success } from '../../app/utils/constants';
 

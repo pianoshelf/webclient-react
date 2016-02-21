@@ -1,36 +1,27 @@
 
-import fluxMixin from 'flummox/mixin';
 import Helmet from 'react-helmet';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import React from 'react';
+import { connect } from 'react-redux';
 
 import InfoText from './utils/InfoText';
-import { CanLogoutMixin } from '../../utils/authUtils';
+import canLogout from '../../decorators/canLogout';
+import { logout } from '../../actions/login';
 
-function retrieveInitialData(flux) {
-  const loginActions = flux.getActions('login');
-  return loginActions.logout(flux);
-}
-
-export default React.createClass({
-
-  mixins: [
-    PureRenderMixin,
-    CanLogoutMixin,
-    fluxMixin({
-      login: store => store.state,
-    }),
-  ],
-
-  statics: {
-    routeWillRun({ flux }) {
-      return retrieveInitialData(flux);
-    },
-  },
+@connect(
+  state => ({
+    loggedIn: state.login.loggedIn,
+  }),
+)
+@canLogout
+export default class Logout extends React.Component {
+  static propTypes = {
+    loggedIn: React.PropTypes.bool.isRequired,
+    store: React.PropTypes.object.isRequired,
+  };
 
   componentDidMount() {
-    if (this.state.loggedIn) retrieveInitialData(this.flux);
-  },
+    if (this.props.loggedIn) this.props.store.dispatch(logout());
+  }
 
   render() {
     return (
@@ -41,6 +32,5 @@ export default React.createClass({
         </InfoText>
       </div>
     );
-  },
-
-});
+  }
+}

@@ -1,20 +1,20 @@
 
-import fluxMixin from 'flummox/mixin';
 import Helmet from 'react-helmet';
 import React from 'react';
+import { asyncConnect } from 'redux-async-connect';
 
-export default React.createClass({
-  propTypes: {
+import { dispatchAndPromise } from '../utils/reduxUtils';
+import { getUser } from '../actions/login';
+
+@asyncConnect({
+  promise: (params, { store }) => dispatchAndPromise(store.dispatch, [
+    getUser(store),
+  ]),
+})
+export default class App extends React.Component {
+  static propTypes = {
     children: React.PropTypes.node,
-  },
-
-  mixins: [fluxMixin()],
-
-  statics: {
-    routeWillRun({ flux }) {
-      return flux.getActions('login').getUser(flux);
-    },
-  },
+  };
 
   render() {
     return (
@@ -29,5 +29,5 @@ export default React.createClass({
         {this.props.children}
       </div>
     );
-  },
-});
+  }
+}

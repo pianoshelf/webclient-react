@@ -1,51 +1,39 @@
 
 // Import external modules
-import fluxMixin from 'flummox/mixin';
 import FontAwesome from 'react-fontawesome';
 import Helmet from 'react-helmet';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import React from 'react';
+import { asyncConnect } from 'redux-async-connect';
+import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
-// Import components
+// Import internal modules
 import NavBar from './Fixtures/NavBar';
 import Footer from './Fixtures/Footer';
 import ResponsiveContainer from './Misc/ResponsiveContainer';
 import SheetMusicCarousel from './Misc/SheetMusicCarousel';
+import { dispatchAndPromiseAll } from '../utils/reduxUtils';
+import { getMostPopularSheetMusic } from '../actions/sheetmusic';
 
-function retrieveInitialData(flux) {
-  const sheetMusicActions = flux.getActions('sheetmusic');
-  return sheetMusicActions.getMostPopularSheetMusic(flux);
-}
+@asyncConnect({
+  promise: (params, { store }) => dispatchAndPromiseAll(store.dispatch, [
+    getMostPopularSheetMusic(store),
+  ]),
+})
+@connect(
+  state => ({
+    loggedIn: state.login.loggedIn,
+    popularSheetMusic: state.sheetmusic.lists.popular,
+  }),
+)
+export default class Homepage extends React.Component {
+  static propTypes = {
+    loggedIn: React.PropTypes.bool.isRequired,
+    popularSheetMusic: React.PropTypes.array.isRequired,
+  };
 
-export default React.createClass({
-
-  mixins: [
-    PureRenderMixin,
-    fluxMixin({
-      sheetmusic: store => ({
-        mostPopularSheetMusic: store.state.mostPopularSheetMusic,
-      }),
-      login: store => ({
-        loggedIn: store.state.loggedIn,
-      }),
-    }),
-  ],
-
-  // Define what should be fetched before route is renderred.
-  statics: {
-    routeWillRun({ flux }) {
-      return retrieveInitialData(flux);
-    },
-  },
-
-  componentDidMount() {
-    if (this.state.mostPopularSheetMusic.length === 0) {
-      retrieveInitialData(this.flux);
-    }
-  },
-
-  renderMainPanel_() {
+  renderMainPanel() {
+    const { loggedIn } = this.props;
     return (
       <ResponsiveContainer className="homepage__main-panel">
         <div ref="main" className="homepage__main">
@@ -55,7 +43,7 @@ export default React.createClass({
           <div className="homepage__main-search">
             <Link to="/browse" className="homepage__main-search-input">Browse Sheet Music</Link>
           </div>
-          <If condition={!this.state.loggedIn}>
+          <If condition={!loggedIn}>
             <div className="homepage__main-register">
               or <Link to="/register" className="homepage__main-register-link">sign up now</Link>.
             </div>
@@ -63,9 +51,9 @@ export default React.createClass({
         </div>
       </ResponsiveContainer>
     );
-  },
+  }
 
-  renderInfoPanel_() {
+  renderInfoPanel() {
     return (
       <ResponsiveContainer className="homepage__panel-information">
         <div>
@@ -113,29 +101,29 @@ export default React.createClass({
         <div className="homepage__info-box-clear"></div>
       </ResponsiveContainer>
     );
-  },
+  }
 
-  renderPopularPanel_() {
+  renderPopularPanel() {
+    const { popularSheetMusic } = this.props;
     return (
       <SheetMusicCarousel
         title="Our most popular sheet music"
         className="homepage__popular-panel"
-        sheetMusic={this.state.mostPopularSheetMusic}
+        sheetMusic={popularSheetMusic}
       />
     );
-  },
+  }
 
   render() {
     return (
       <div className="homepage">
         <Helmet title="PianoShelf - free piano sheet music" titleTemplate="%s" />
         <NavBar disappearing disappearingOffset={50} />
-        {this.renderMainPanel_()}
-        {this.renderPopularPanel_()}
-        {this.renderInfoPanel_()}
+        {this.renderMainPanel.call(this)}
+        {this.renderPopularPanel.call(this)}
+        {this.renderInfoPanel.call(this)}
         <Footer />
       </div>
     );
-  },
-
-});
+  }
+}

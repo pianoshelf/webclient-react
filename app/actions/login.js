@@ -68,7 +68,7 @@ export const getUser = createAction(
  */
 export const login = createAction(
   LOGIN_LOGIN,
-  async (username, password, store) => {
+  async (username, password) => {
     // Make sure the username field is not empty
     if (username === '') {
       return actionError(errors.NO_USERNAME);
@@ -84,7 +84,6 @@ export const login = createAction(
       endpoint: '/login/',
       params: { username, password },
       auth: true,
-      store,
     });
 
     if (isActionError(response)) {
@@ -124,11 +123,10 @@ export const logout = createAction(
  */
 export const verifyEmail = createAction(
   LOGIN_VERIFY_EMAIL,
-  async (verificationKey, store) => {
+  async (verificationKey) => {
     const response = await post({
       endpoint: `/register/account-confirm-email/${verificationKey}/`,
       auth: true,
-      store,
     });
 
     if (isActionError(response)) {
@@ -149,7 +147,7 @@ export const verifyEmail = createAction(
  */
 export const register = createAction(
   LOGIN_REGISTER,
-  async (user, store) => {
+  async user => {
     // Make sure username field is not empty
     if (user.username === '') {
       return actionError(errors.NO_USERNAME);
@@ -191,7 +189,6 @@ export const register = createAction(
         email: user.email,
       },
       auth: true,
-      store,
     });
 
     if (isActionError(registerResponse)) {
@@ -220,7 +217,6 @@ export const register = createAction(
         password: registerResponse.payload.password1,
       },
       auth: true,
-      store,
     });
 
     if (isActionError(loginResponse)) {
@@ -241,7 +237,7 @@ export const register = createAction(
 
 export const resetPassword = createAction(
   LOGIN_RESET_PASSWORD,
-  async (email, store) => {
+  async email => {
     // Make sure email field is not empty
     if (email === '') {
       return actionError(errors.NO_EMAIL);
@@ -258,7 +254,6 @@ export const resetPassword = createAction(
       endpoint: '/password/reset/',
       params: { email },
       auth: true,
-      store,
     });
 
     if (isActionError(response)) {
@@ -277,7 +272,7 @@ export const resetPassword = createAction(
 
 export const resetPasswordConfirm = createAction(
   LOGIN_RESET_PASSWORD_CONFIRM,
-  async (user, uid, token, store) => {
+  async (user, uid, token) => {
     // Make sure password field is not empty
     if (user.password1 === '') {
       return actionError(errors.NO_PASSWORD);
@@ -307,7 +302,6 @@ export const resetPasswordConfirm = createAction(
           token,
         },
         auth: true,
-        store,
       });
     } catch (e) {
       return actionError(errors.EXPIRED_LINK);
@@ -335,7 +329,7 @@ export const resetPasswordConfirm = createAction(
 
 export const changePassword = createAction(
   LOGIN_CHANGE_PASSWORD,
-  async (user, store) => {
+  async user => {
     // Make sure password field is not empty
     if (user.password1 === '') {
       return actionError(errors.NO_PASSWORD);
@@ -358,21 +352,19 @@ export const changePassword = createAction(
         new_password2: user.password2,
       },
       auth: true,
-      store,
     });
   }
 );
 
 export const facebookLogin = createAction(
   LOGIN_FACEBOOK,
-  async (token, store) => {
+  async token => {
     const response = await post({
       endpoint: '/social-login/facebook/',
       params: {
         access_token: token.accessToken,
       },
       auth: true,
-      store,
     });
 
     return actionDone(sanitizeUserInfo(response.payload));
@@ -381,7 +373,7 @@ export const facebookLogin = createAction(
 
 export const twitterLogin = createAction(
   LOGIN_TWITTER,
-  async (token, store) => {
+  async token => {
     const response = await post({
       endpoint: '/social-login/twitter/',
       params: {
@@ -389,7 +381,6 @@ export const twitterLogin = createAction(
         access_token_secret: token.oauthTokenSecret,
       },
       auth: true,
-      store,
     });
 
     return actionDone(sanitizeUserInfo(response.payload));

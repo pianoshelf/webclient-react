@@ -22,11 +22,10 @@ export const getProfile = createAction(
 
 export const updateProfileDescription = createAction(
   PROFILE_UPDATE_DESCRIPTION,
-  async (description, store) => {
+  async description => {
     return await post({
       endpoint: '/profile/',
       params: { description },
-      store,
     });
   }
 );

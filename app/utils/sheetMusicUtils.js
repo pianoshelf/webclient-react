@@ -38,7 +38,7 @@ export function convertSheetMusic(sheetMusic) {
     originalFormat: sheetMusic.original_format,
     lilypondFile: sheetMusic.lilypond_file,
     midiFile: sheetMusic.midi_file,
-    shortDescription: sheetMusic.short_description,
+    shortDescription: sheetMusic.short_description || sheetMusic.description,
     longDescription: sheetMusic.long_description,
     inShelf: sheetMusic.in_shelf,
   };
@@ -49,14 +49,14 @@ export function convertSheetMusic(sheetMusic) {
  * client side.
  *
  * @param {Array} sheetMusicArray Array of objects representing the sheet music.
- * @param {Function} iterator Can be used to extract sheet music from a specific property in object.
+ * @param {Function=} iterator Can be used to extract sheet music from a specific property in
+ *     object.
  *
  * @return {Object} An object with all the necessary properties representing a sheet music.
  */
-export function mapSheetMusic(sheetMusicArray, iterator) {
+export function mapSheetMusic(sheetMusicArray, iterator = value => value) {
   return sheetMusicArray.map(sheetMusicItem => {
-    const sheetMusic = iterator ? iterator(cloneDeep(sheetMusicItem)) : sheetMusicItem;
-    return convertSheetMusic(sheetMusic);
+    return convertSheetMusic(iterator(cloneDeep(sheetMusicItem)));
   });
 }
 
@@ -103,13 +103,14 @@ export function sheetMusicPropType() {
  * the client side.
  *
  * @param {Array} sheetMusicArray Array of objects representing the sheet music.
- * @param {Function} iterator Can be used to extract sheet music from a specific property in object.
+ * @param {Function=} iterator Can be used to extract sheet music from a specific property in
+ *     object.
  *
  * @return {Object} An object with all the necessary properties representing a sheet music.
  */
-export function mapPaidSheetMusic(sheetMusicArray, iterator) {
+export function mapPaidSheetMusic(sheetMusicArray, iterator = value => value) {
   return sheetMusicArray.map(sheetMusicItem => {
-    const sheetMusic = iterator ? iterator(cloneDeep(sheetMusicItem)) : sheetMusicItem;
+    const sheetMusic = iterator(cloneDeep(sheetMusicItem));
     return {
       detailedDescription: sheetMusic.detailed_description,
       instrument: sheetMusic.instrument,

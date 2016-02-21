@@ -44,9 +44,6 @@ function getHeaders(store) {
   // Initial set of headers.
   const headers = {};
 
-  // Mirror cookies if we're on the server.
-  if (__SERVER__) headers.Cookie = store.request.get('Cookie');
-
   // Set authorization token header if it exists.
   const auth = getCookie(store, config.cookie.authtoken);
   if (auth) headers.Authorization = auth;
@@ -61,17 +58,9 @@ function getHeaders(store) {
 /**
  * Create a callback that does post-processing on the response.
  */
-function finishRequest(store, resolve) {
+function finishRequest(resolve) {
   // Return anonymous function
   return (err, res) => {
-    // If we're on the server and the 'Set-Cookie' header is in the response, propogate
-    // that to the client by appending it to the response header.
-    if (!err && __SERVER__ && res.headers['set-cookie']) {
-      res.headers['set-cookie'].forEach(header => {
-        store.request.res.append('Set-Cookie', header);
-      });
-    }
-
     // Reject if there's an error, otherwise resolve.
     if (err) {
       resolve(
@@ -99,10 +88,25 @@ function finishRequest(store, resolve) {
 export function get({ endpoint, params = {}, store, auth = false }) {
   const baseUrl = __CLIENT__ ? '' : `http://localhost:${config.ports.django}`;
   return new Promise(resolve => {
+    let headers = getHeaders(store);
+
+    // Mirror cookies if we're on the server.
+    if (__SERVER__) headers.Cookie = store.request.get('Cookie');
+
     request.get(`${baseUrl}${auth ? authUrl : apiUrl}${endpoint}`)
       .query(params)
-      .set(getHeaders(store))
-      .end(finishRequest(store, resolve));
+      .set(headers)
+      .end((err, res) => {
+        // If we're on the server and the 'Set-Cookie' header is in the response, propogate
+        // that to the client by appending it to the response header.
+        if (!err && __SERVER__ && res.headers['set-cookie']) {
+          res.headers['set-cookie'].forEach(header => {
+            store.request.res.append('Set-Cookie', header);
+          });
+        }
+
+        finishRequest(resolve)(err, res);
+      });
   });
 }
 
@@ -112,18 +116,17 @@ export function get({ endpoint, params = {}, store, auth = false }) {
  * @param {Object} options
  *   @param {string} options.endpoint The API endpoint.
  *   @param {Object} options.params The query parameters to send in the request.
- *   @param {Store} options.store The Redux store object.
  *   @param {Boolean=} options.auth Whether we should send it to the auth endpoints.
  *
  * @return {Promise} A promise that resolves when the request is complete.
  */
-export function post({ endpoint, params = {}, store, auth = false }) {
+export function post({ endpoint, params = {}, auth = false }) {
   const baseUrl = __CLIENT__ ? '' : `http://localhost:${config.ports.django}`;
   return new Promise(resolve => {
     request.post(`${baseUrl}${auth ? authUrl : apiUrl}${endpoint}`)
       .send(params)
-      .set(getHeaders(store))
-      .end(finishRequest(store, resolve));
+      .set(getHeaders())
+      .end(finishRequest(resolve));
   });
 }
 
@@ -133,18 +136,17 @@ export function post({ endpoint, params = {}, store, auth = false }) {
  * @param {Object} options
  *   @param {string} options.endpoint The API endpoint.
  *   @param {Object} options.params The query parameters to send in the request.
- *   @param {Store} options.store The Redux store object.
  *   @param {Boolean=} options.auth Whether we should send it to the auth endpoints.
  *
  * @return {Promise} A promise that resolves when the request is complete.
  */
-export function patch({ endpoint, params = {}, store, auth = false }) {
+export function patch({ endpoint, params = {}, auth = false }) {
   const baseUrl = __CLIENT__ ? '' : `http://localhost:${config.ports.django}`;
   return new Promise(resolve => {
     request('PATCH', `${baseUrl}${auth ? authUrl : apiUrl}${endpoint}`)
       .send(params)
-      .set(getHeaders(store))
-      .end(finishRequest(store, resolve));
+      .set(getHeaders())
+      .end(finishRequest(resolve));
   });
 }
 
@@ -154,17 +156,16 @@ export function patch({ endpoint, params = {}, store, auth = false }) {
  * @param {Object} options
  *   @param {string} options.endpoint The API endpoint.
  *   @param {Object} options.params The query parameters to send in the request.
- *   @param {Store} options.store The Redux store object.
  *
  * @return {Promise} A promise that resolves when the request is complete.
  */
-export function del({ endpoint, params = {}, store }) {
+export function del({ endpoint, params = {} }) {
   const baseUrl = __CLIENT__ ? '' : `http://localhost:${config.ports.django}`;
   return new Promise(resolve => {
     request.del(`${baseUrl}${apiUrl}${endpoint}`)
       .send(params)
-      .set(getHeaders(store))
-      .end(finishRequest(store, resolve));
+      .set(getHeaders())
+      .end(finishRequest(resolve));
   });
 }
 

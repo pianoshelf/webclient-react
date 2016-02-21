@@ -1,22 +1,18 @@
 
 // Import external modules
 import React from 'react';
-import { History } from 'react-router';
 import { findDOMNode } from 'react-dom';
 
 import { sheetMusicPropType } from '../../utils/sheetMusicUtils';
 
-// Export component
-export default React.createClass({
-
-  propTypes: {
-    /**
-     * Make sure a valid sheet music was inputted.
-     */
+export default class SheetMusicThumbnail extends React.Component {
+  static propTypes = {
     sheetMusic: sheetMusicPropType().isRequired,
-  },
+  };
 
-  mixins: [History],
+  static contextTypes = {
+    router: React.PropTypes.object.isRequired,
+  };
 
   /**
    * The reason we are doing this is because sheet music thumbnails can be part of
@@ -41,13 +37,14 @@ export default React.createClass({
     link.addEventListener('mouseup', event => {
       if (event.clientX === currentMousePointX &&
           event.clientY === currentMousePointY) {
-        this.history.pushState(null,
-          `/sheetmusic/${this.props.sheetMusic.id}/${this.props.sheetMusic.uniqueUrl}`);
+        this.context.router.push({
+          pathname: `/sheetmusic/${this.props.sheetMusic.id}/${this.props.sheetMusic.uniqueUrl}`,
+        });
       }
     });
-  },
+  }
 
-  renderMusicStyle_() {
+  renderMusicStyle() {
     if (!this.props.sheetMusic.musicStyle) return null;
 
     return (
@@ -58,7 +55,7 @@ export default React.createClass({
         &nbsp;by&nbsp;
       </span>
     );
-  },
+  }
 
   render() {
     const href = `/sheetmusic/${this.props.sheetMusic.id}/${this.props.sheetMusic.uniqueUrl}`;
@@ -78,7 +75,7 @@ export default React.createClass({
             {this.props.sheetMusic.title}
           </div>
           <div className="sheet-music-thumbnail__description">
-            {this.renderMusicStyle_()}
+            {this.renderMusicStyle()}
             <strong className="sheet-music-thumbnail__description--bold">
               {this.props.sheetMusic.composer}
             </strong>
@@ -86,6 +83,5 @@ export default React.createClass({
         </div>
       </a>
     );
-  },
-
-});
+  }
+}

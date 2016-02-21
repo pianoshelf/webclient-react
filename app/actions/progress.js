@@ -21,4 +21,4 @@ export const addProgress = createAction(PROGRESS_ADD, name => name);
  * Removes the custom item.
  * @param {String} progressName The name of the item we want to track.
  */
-export const updateProfileDescription = createAction(PROGRESS_REMOVE, name => name);
+export const removeProgress = createAction(PROGRESS_REMOVE, name => name);

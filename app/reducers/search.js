@@ -1,33 +1,47 @@
 
-import { createReducer } from '../utils/createReducer';
+import createReducer from '../utils/createReducer';
+import { mapSheetMusic, mapPaidSheetMusic } from '../utils/sheetMusicUtils';
 
-import { SHEETMUSIC_SEARCH } from '../constants/sheetmusic';
+import { SEARCH_SHEETMUSIC } from '../constants/search';
+
+const initialResults = {
+  errorCode: 0,
+  count: 0,
+  free: [],
+  paid: [],
+  progress: false,
+};
 
 export default createReducer({
-  results: {
-    count: 0,
-    free: [],
-    paid: [],
-    progress: false,
-  },
+  results: initialResults,
 }, {
-  [SHEETMUSIC_SEARCH]: {
+  [SEARCH_SHEETMUSIC]: {
     start() {
       return {
-        count: 0,
-        free: [],
-        paid: [],
-        progress: true,
+        results: {
+          ...initialResults,
+          progress: true,
+        },
       };
     },
-    done(state) {
+    done(state, { count, free, paid }) {
       return {
-        ...state,
+        results: {
+          errorCode: 0,
+          free: mapSheetMusic(free),
+          paid: mapPaidSheetMusic(paid),
+          progress: false,
+          count,
+        },
       };
     },
-    error(state) {
+    error(state, errorCode) {
       return {
-        ...state,
+        results: {
+          ...initialResults,
+          progress: false,
+          errorCode,
+        },
       };
     },
   },

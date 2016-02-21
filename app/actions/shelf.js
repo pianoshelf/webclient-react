@@ -20,22 +20,20 @@ export const getShelf = createAction(
 
 export const addToShelf = createAction(
   SHELF_ADD,
-  async (sheetId, store) => {
+  async sheetId => {
     return await post({
       endpoint: '/shelf/',
       params: { sheetmusic: sheetId },
-      store,
     });
   }
 );
 
 export const removeFromShelf = createAction(
   SHELF_REMOVE,
-  async (sheetId, store) => {
+  async sheetId => {
     return await del({
       endpoint: '/shelf/',
       params: { sheetmusic: sheetId },
-      store,
     });
   }
 );
