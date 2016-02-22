@@ -1,8 +1,7 @@
 
 import defer from 'lodash/function/defer';
-import fluxMixin from 'flummox/mixin';
 import FontAwesome from 'react-fontawesome';
-import FullScreenMixin from 'react-fullscreen-component';
+// import FullScreenMixin from 'react-fullscreen-component';
 import Helmet from 'react-helmet';
 import React from 'react';
 import Carousel from 'nuka-carousel';
@@ -31,11 +30,12 @@ import { getSheetMusic, getComments } from '../../actions/sheetmusic';
 @connect(
   state => ({
     errorCode: state.sheetmusic.results.errorCode,
-    result: state.sheetmusic.results.result,
+    result: state.sheetmusic.results,
+    commentResult: state.sheetmusic.comments,
     inProgress: state.progress.inProgress,
-
-
-  })
+    loggedIn: state.login.loggedIn,
+    user: state.login.user,
+  }),
 )
 export default class Viewer extends React.Component {
   static propTypes = {
@@ -47,26 +47,83 @@ export default class Viewer extends React.Component {
       pathname: React.PropTypes.string,
       query: React.PropTypes.object,
     }),
+    errorCode: React.PropTypes.number.isRequired,
+    result: React.PropTypes.object.isRequired,
+    commentResult: React.PropTypes.object.isRequired,
+    inProgress: React.PropTypes.bool.isRequired,
+    loggedIn: React.PropTypes.bool.isRequired,
+    user: React.PropTypes.object.isRequired,
+    hasFullscreen: React.PropTypes.bool,
+    isFullscreen: React.PropTypes.bool,
+  };
+
+  // TODO: Don't use state for these values
+  state = {
+    showVideos: 1,
+    pageNumber: null,
+    pageCount: null,
   };
 
   componentDidMount() {
     // Add window listeners for left or right keys
-    window.addEventListener('keydown', this.handleRightOrLeftKeyPress_);
+    window.addEventListener('keydown', this.handleRightOrLeftKeyPress);
 
     // Update carousel data, such as page state.
-    defer(() => this.handleSetCarouselData_());
+    defer(() => this.handleSetCarouselData());
   }
 
   componentDidUpdate() {
-    defer(() => this.handleSetCarouselData_());
+    defer(() => this.handleSetCarouselData());
   }
 
   componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleRightOrLeftKeyPress_);
+    window.removeEventListener('keydown', this.handleRightOrLeftKeyPress);
   }
 
+  handleSetCarouselData = () => {
+    if (this.refs.carousel) {
+      // HACK: Get carousel state properties
+      // TODO: Find a better way to do this
+      const carouselState = this.refs.carousel.state;
+
+      this.setState({
+        pageNumber: carouselState.currentSlide + 1,
+        pageCount: carouselState.slideCount,
+      });
+    }
+  };
+
+  handleShowMoreVideos = event => {
+    event.preventDefault();
+    this.setState({
+      showVideos: this.state.showVideos + 5,
+    });
+  };
+
+  handleNullify = event => {
+    event.preventDefault();
+  };
+
+  handleRightOrLeftKeyPress = event => {
+    if (!this.refs.carousel) return;
+    if (event.keyCode === 39) { // Right key press
+      this.refs.carousel.nextSlide();
+    } else if (event.keyCode === 37) { // Left key press
+      this.refs.carousel.previousSlide();
+    }
+  };
+
+  // handleFullscreen = event => {
+    // event.preventDefault();
+    // if (this.state.isFullscreen) {
+      // this.exitFullscreen();
+    // } else {
+      // this.requestFullscreen(this.refs.mainViewer);
+    // }
+  // };
+
   renderSheetMusicViewer() {
-    const images = this.props.sheetMusicResult.images || [];
+    const images = this.props.result.images || [];
 
     const decorators = [
       { component: LeftButton, position: 'CenterLeft' },
@@ -78,8 +135,8 @@ export default class Viewer extends React.Component {
       <div className="sheetmusic__viewer-page" key={index}>
         <img className="sheetmusic__viewer-page-image"
           src={image}
-          onDragStart={this.handleNullify_}
-          onClick={this.handleNullify_}
+          onDragStart={this.handleNullify}
+          onClick={this.handleNullify}
         />
       </div>
     ));
@@ -96,7 +153,7 @@ export default class Viewer extends React.Component {
           easing="easeOutQuad"
           edgeEasing="easeOutQuad"
           decorators={decorators}
-          data={this.handleSetCarouselData_}
+          data={this.handleSetCarouselData}
           ref="carousel"
         >
           {imageElements}
@@ -108,14 +165,14 @@ export default class Viewer extends React.Component {
   renderSheetMusicControls() {
     return (
       <ResponsiveContainer className="sheetmusic__controls-container">
-        <If condition={this.props.pageCount}>
+        <If condition={this.state.pageCount}>
           <div className="sheetmusic__controls-page-number">
-            Page {this.props.pageNumber} / {this.props.pageCount}
+            Page {this.state.pageNumber} / {this.state.pageCount}
           </div>
         </If>
         <If condition={this.props.hasFullscreen}>
           <a className="sheetmusic__controls sheetmusic__controls--full-screen"
-            onClick={this.handleFullscreen_}
+            onClick={this.handleFullscreen}
             href="#"
           >
             <If condition={this.props.isFullscreen}>
@@ -147,7 +204,7 @@ export default class Viewer extends React.Component {
   }
 
   renderDescription() {
-    const longDescription = this.props.sheetMusicResult.longDescription;
+    const longDescription = this.props.result.longDescription;
     return (
       <InfoBox className="sheetmusic__description" title="Description">
         <If condition={longDescription}>
@@ -162,10 +219,10 @@ export default class Viewer extends React.Component {
   }
 
   renderVideos() {
-    const videos = this.props.sheetMusicResult.videos;
+    const videos = this.props.result.videos;
     if (!videos || !videos.length) return null;
 
-    const videoElements = videos.slice(0, this.props.showVideos).map((video, index) => (
+    const videoElements = videos.slice(0, this.state.showVideos).map((video, index) => (
       <div className="sheetmusic__video" key={index}>
         {/* <Video videoId={video.youtubeId} /> */}
       </div>
@@ -174,10 +231,10 @@ export default class Viewer extends React.Component {
     return (
       <InfoBox title="Videos" icon="video-camera">
         {videoElements}
-        <If condition={this.props.showVideos < videos.length}>
+        <If condition={this.state.showVideos < videos.length}>
           <a className="sheetmusic__video-show-more"
             href="#"
-            onClick={this.handleShowMoreVideos_}
+            onClick={this.handleShowMoreVideos}
           >
             <FontAwesome className="sheetmusic__video-show-more-icon" name="angle-down" />
             See More Videos
@@ -190,13 +247,13 @@ export default class Viewer extends React.Component {
   renderComments() {
     return (
       <InfoBox title="Comments" icon="comment">
-        <Comments id={this.props.sheetMusicResult.id} comments={this.props.commentResult.comment}/>
+        <Comments id={this.props.result.id} comments={this.props.commentResult.comment}/>
       </InfoBox>
     );
   }
 
   renderDifficultyNode() {
-    const result = this.props.sheetMusicResult;
+    const result = this.props.result;
 
     if (!result.difficulty) return null;
 
@@ -221,7 +278,7 @@ export default class Viewer extends React.Component {
   }
 
   renderInfo() {
-    const result = this.props.sheetMusicResult;
+    const result = this.props.result;
 
     return (
       <InfoBox title="Details">
@@ -256,7 +313,7 @@ export default class Viewer extends React.Component {
   }
 
   render() {
-    const title = this.props.sheetMusicResult ? this.props.sheetMusicResult.title : 'Loading...';
+    const title = this.props.result ? this.props.result.title : 'Loading...';
     const inProgress = (this.props.inProgress.indexOf('getSheetMusic') !== -1);
 
     if (inProgress) {
@@ -290,85 +347,3 @@ export default class Viewer extends React.Component {
   }
 
 }
-
-export default React.createClass({
-
-  mixins: [
-    FullScreenMixin,
-    fluxMixin({
-      sheetmusic: store => ({
-        errorCode: store.state.errorCode,
-        sheetMusicResult: store.state.sheetMusicResult,
-      }),
-      comments: store => ({
-        commentResult: store.state.commentResult,
-      }),
-      progress: store => store.state,
-      login: store => ({
-        loggedIn: store.state.loggedIn,
-        user: store.state.user,
-      }),
-    }),
-  ],
-
-  statics: {
-    routeWillRun({ flux, state }) {
-      return retrieveInitialData(flux, state.params);
-    },
-  },
-
-  getInitialState() {
-    return {
-      showVideos: 1,
-      pageNumber: null,
-      pageCount: null,
-    };
-  },
-
-
-  componentWillReceiveNewProps() {
-    retrieveInitialData(this.flux, this.props.params);
-  },
-
-  handleSetCarouselData_() {
-    if (this.refs.carousel) {
-      // HACK: Get carousel state properties
-      const carouselState = this.refs.carousel.state;
-
-      this.setState({
-        pageNumber: carouselState.currentSlide + 1,
-        pageCount: carouselState.slideCount,
-      });
-    }
-  },
-
-  handleShowMoreVideos_(event) {
-    event.preventDefault();
-    this.setState({
-      showVideos: this.state.showVideos + 5,
-    });
-  },
-
-  handleNullify_(event) {
-    event.preventDefault();
-  },
-
-  handleRightOrLeftKeyPress_(event) {
-    if (!this.refs.carousel) return;
-    if (event.keyCode === 39) { // Right key press
-      this.refs.carousel.nextSlide();
-    } else if (event.keyCode === 37) { // Left key press
-      this.refs.carousel.previousSlide();
-    }
-  },
-
-  handleFullscreen_(event) {
-    event.preventDefault();
-    if (this.state.isFullscreen) {
-      this.exitFullscreen();
-    } else {
-      this.requestFullscreen(this.refs.mainViewer);
-    }
-  },
-
-});

@@ -41,27 +41,3 @@ export default function canLogout(target) {
 
   return target;
 }
-
-/**
- * A mixin that adds a logout listener to the component. The component this is
- * connected to MUST BE connected to the LoginStore.
- */
-// export const CanLogoutMixin = {
-  // mixins: [History],
-  // componentDidMount() { this.logoutUser_(); },
-  // componentDidUpdate() { this.logoutUser_(); },
-
-  // logoutUser_() {
-    // if (!this.state.loggedIn) {
-      // // Delete authorization token
-      // deleteAuthToken(this.flux);
-
-      // if (this.props.location.query && this.props.location.query.redirect) {
-        // defer(() => this.history.pushState(null, this.props.location.query.redirect));
-      // } else {
-        // defer(() => this.history.pushState(null, '/'));
-      // }
-    // }
-  // },
-// };
-

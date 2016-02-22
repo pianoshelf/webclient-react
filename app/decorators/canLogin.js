@@ -41,28 +41,3 @@ export default function canLogin(target) {
 
   return target;
 }
-
-/**
- * A mixin that adds a login listener to the component. The component this is
- * connected to MUST BE connected to the LoginStore.
- */
-// export const CanLoginMixin = {
-  // mixins: [History],
-  // componentDidMount() { this.loginUser_(); },
-  // componentDidUpdate() { this.loginUser_(); },
-
-  // loginUser_() {
-    // if (this.state.loggedIn) {
-      // // Set authorization token
-      // const { user } = this.state;
-      // setAuthToken(user.authToken, this.flux);
-
-      // if (this.props.location.query && this.props.location.query.redirect) {
-        // defer(() => this.history.pushState(null, this.props.location.query.redirect));
-      // } else {
-        // defer(() => this.history.pushState(null, '/'));
-      // }
-    // }
-  // },
-// };
-

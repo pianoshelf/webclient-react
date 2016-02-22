@@ -4,9 +4,7 @@ import base64 from 'base-64';
 import bodyParser from 'body-parser';
 import bunyan from 'bunyan';
 import cookieParser from 'cookie-parser';
-import defer from 'lodash/function/defer';
 import express from 'express';
-import FluxComponent from 'flummox/component';
 import fs from 'fs';
 import Helmet from 'react-helmet';
 import http from 'http';
@@ -17,14 +15,13 @@ import React from 'react';
 import utf8 from 'utf8';
 import { Provider } from 'react-redux';
 import { renderToString } from 'react-dom/server';
-import { RouterContext, match } from 'react-router';
+import { match } from 'react-router';
+import { ReduxAsyncConnect, loadOnServer } from 'redux-async-connect';
 
 // Import internal modules
 import config from '../config';
 import configureStore from './utils/configureStore';
-import Flux from './Flux';
 import getRoutes from './utils/getRoutes';
-import { prefetchRouteData } from './utils/routeUtils';
 
 // Launch application
 const app = express();
@@ -120,14 +117,13 @@ app.use((req, res) => {
     } else if (renderProps === null) {
       res.status(404).send('Not Found');
     } else {
-      // Function that renders the route.
-      const renderRoute = () => {
+      loadOnServer(renderProps, store).then(() => {
         try {
           // Render our entire app to a string, and make sure we wrap everything
           // with Provider, which adds the flux context to the entire app.
           const renderedString = renderToString(
             <Provider store={store}>
-              { <RouterContext {...renderProps} /> }
+              { <ReduxAsyncConnect {...renderProps} /> }
             </Provider>
           );
 
@@ -161,14 +157,13 @@ app.use((req, res) => {
         } catch (err) {
           log.error('There was a problem renderring the page. Here\'s the error:');
           log.error(err);
-
           res.status(500).send(err);
         }
-      };
-
-      // Make sure we render our route even if the promise fails.
-      prefetchRouteData(renderProps.components, { state: renderProps })
-        .then(renderRoute, renderRoute);
+      }).catch(err => {
+        log.error('There was a problem renderring the page. Here\'s the error:');
+        log.error(err);
+        res.status(500).send(err);
+      });
     }
   });
 });

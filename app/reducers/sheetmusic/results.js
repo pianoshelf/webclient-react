@@ -2,6 +2,14 @@
 import createReducer from '../../utils/createReducer';
 import { mapSheetMusic } from '../../utils/sheetMusicUtils';
 
+// SHEETMUSIC_UPDATE,
+// SHEETMUSIC_GET_COMPOSERS,
+// SHEETMUSIC_GET_RATING,
+// SHEETMUSIC_POST_RATING,
+// SHEETMUSIC_GET_UPLOADS,
+// SHEETMUSIC_DELETE,
+// SHEETMUSIC_DOWNLOAD,
+
 import {
   SHEETMUSIC_GET,
 } from '../../constants/sheetmusic';
@@ -19,7 +27,7 @@ export default createReducer(initialState, {
         result: mapSheetMusic(payload),
       };
     },
-    error(error, code) {
+    error(state, code) {
       return {
         ...state,
         result: {},

@@ -5,7 +5,7 @@ import { createStore, applyMiddleware } from 'redux';
 import reducers from '../reducers';
 
 const createStoreWithMiddleware = applyMiddleware(
-  thunk
+  thunkMiddleware
 )(createStore);
 
 export default function configureStore() {

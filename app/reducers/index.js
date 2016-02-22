@@ -1,6 +1,7 @@
 
 import { combineReducers } from 'redux';
 import { routeReducer } from 'redux-simple-router';
+import { reducer as reduxAsyncConnect } from 'redux-async-connect';
 
 import login from './login';
 import progress from './progress';
@@ -13,4 +14,5 @@ export default combineReducers({
   search,
   sheetmusic,
   routing: routeReducer,
+  reduxAsyncConnect,
 });

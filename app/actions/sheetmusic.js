@@ -1,7 +1,7 @@
 
 import createAction from '../utils/createAction';
-import { convertSheetMusic, mapSheetMusic, mapPaidSheetMusic } from '../utils/sheetMusicUtils';
-import { isActionError, actionError, actionDone } from '../utils/actionUtils';
+import { convertSheetMusic, mapSheetMusic } from '../utils/sheetMusicUtils';
+import { isActionError, actionDone } from '../utils/actionUtils';
 import { get, post, patch, del } from '../utils/api';
 import {
   SHEETMUSIC_GET,

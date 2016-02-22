@@ -88,7 +88,7 @@ function finishRequest(resolve) {
 export function get({ endpoint, params = {}, store, auth = false }) {
   const baseUrl = __CLIENT__ ? '' : `http://localhost:${config.ports.django}`;
   return new Promise(resolve => {
-    let headers = getHeaders(store);
+    const headers = getHeaders(store);
 
     // Mirror cookies if we're on the server.
     if (__SERVER__) headers.Cookie = store.request.get('Cookie');
