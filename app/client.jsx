@@ -13,6 +13,7 @@ import { syncHistoryWithStore } from 'react-router-redux';
 
 // Import internal modules
 import configureStore from './utils/configureStore';
+import DevTools from './components/DevTools';
 import getRoutes from './utils/getRoutes';
 
 // Add our isomorphic constants
@@ -38,7 +39,10 @@ const routes = getRoutes(store);
 // Re-render everything on reactRoot
 render(
   <Provider store={store}>
-    { <Router history={history} routes={routes} /> }
+    <div>
+      <DevTools />
+      <Router history={history} routes={routes} />
+    </div>
   </Provider>,
   reactRoot
 );

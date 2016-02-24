@@ -101,6 +101,7 @@ export default class Homepage extends React.Component {
   }
 
   renderPopularPanel() {
+    // TODO: Send inProgress state into carousel
     const { popularSheetMusic } = this.props;
     return (
       <SheetMusicCarousel

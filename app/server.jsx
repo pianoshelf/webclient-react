@@ -21,6 +21,7 @@ import { ReduxAsyncConnect, loadOnServer } from 'redux-async-connect';
 // Import internal modules
 import config from '../config';
 import configureStore from './utils/configureStore';
+import DevTools from './components/DevTools';
 import getRoutes from './utils/getRoutes';
 
 // Launch application
@@ -120,10 +121,13 @@ app.use((req, res) => {
       loadOnServer(renderProps, store).then(() => {
         try {
           // Render our entire app to a string, and make sure we wrap everything
-          // with Provider, which adds the flux context to the entire app.
+          // with Provider, which adds the redux store to the entire app.
           const renderedString = renderToString(
             <Provider store={store}>
-              { <ReduxAsyncConnect {...renderProps} /> }
+              <div>
+                <DevTools />
+                <ReduxAsyncConnect {...renderProps} />
+              </div>
             </Provider>
           );
 
