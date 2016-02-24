@@ -3,7 +3,7 @@
 
 import defer from 'lodash/function/defer';
 
-import { setAuthToken } from './api';
+import { setAuthToken } from '../utils/api';
 
 /**
  * This decorator adds login functionality to a React component. If the component is connected to

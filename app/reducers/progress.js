@@ -27,7 +27,7 @@ import {
   SHEETMUSIC_GET_TRENDING,
   SHEETMUSIC_GET_LIST,
   SHEETMUSIC_GET_POPULAR,
-} from '../../constants/sheetmusic';
+} from '../constants/sheetmusic';
 
 /**
  * Define mappings from actions to items in the progress array

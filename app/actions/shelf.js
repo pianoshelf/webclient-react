@@ -5,7 +5,7 @@ import {
   SHELF_GET,
   SHELF_ADD,
   SHELF_REMOVE,
-} from '../constants/sheetmusic';
+} from '../constants/shelf';
 
 export const getShelf = createAction(
   SHELF_GET,

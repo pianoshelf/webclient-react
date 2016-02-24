@@ -9,7 +9,7 @@ import utf8 from 'utf8';
 import { Provider } from 'react-redux';
 import { render } from 'react-dom';
 import { Router, browserHistory } from 'react-router';
-import { syncReduxAndRouter } from 'react-router-redux';
+import { syncHistoryWithStore } from 'react-router-redux';
 
 // Import internal modules
 import configureStore from './utils/configureStore';
@@ -30,7 +30,7 @@ const initialState = JSON.parse(utf8.decode(base64.decode(inlineData)));
 const store = configureStore(initialState);
 
 // Link history and redux store
-syncReduxAndRouter(browserHistory, store);
+const history = syncHistoryWithStore(browserHistory, store);
 
 // Get all of the site's routes
 const routes = getRoutes(store);
@@ -38,10 +38,7 @@ const routes = getRoutes(store);
 // Re-render everything on reactRoot
 render(
   <Provider store={store}>
-    { <Router history={browserHistory} routes={routes} /> }
+    { <Router history={history} routes={routes} /> }
   </Provider>,
   reactRoot
 );
-
-// Reset our progress bar
-// flux.getActions('progress').resetProgress();

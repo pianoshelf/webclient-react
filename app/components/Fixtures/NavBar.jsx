@@ -4,69 +4,54 @@
 
 // Import external modules
 import classNames from 'classnames';
-import fluxMixin from 'flummox/mixin';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import React from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
 // Import internal module
 import ResponsiveContainer from '../Misc/ResponsiveContainer';
 
-// Export class
-export default React.createClass({
-
-  propTypes: {
-    /**
-     * Whether the navbar dynamically disappears.
-     */
+@connect(
+  state => ({
+    loggedIn: state.login.loggedIn,
+    user: state.login.user,
+  }),
+)
+export default class NavBar extends React.Component {
+  static propTypes = {
     disappearing: React.PropTypes.bool,
-
-    /**
-     * The maximum YOffset at which we should pretend this.props.disappearing is false.
-     */
     disappearingOffset: React.PropTypes.number,
-  },
+    loggedIn: React.PropTypes.bool.isRequired,
+  };
 
-  mixins: [
-    PureRenderMixin,
-    fluxMixin({
-      login: store => ({
-        loggedIn: store.state.loggedIn,
-        user: store.state.user,
-      }),
-    }),
-  ],
-
-  getInitialState() {
-    return {
-      disappearingMode: this.props.disappearing,
-    };
-  },
+  state = {
+    disappearingMode: this.props.disappearing,
+  };
 
   componentDidMount() {
     if (this.props.disappearing) {
-      this.handleStickyEvent_();
-      window.addEventListener('load', this.handleStickyEvent_);
-      window.addEventListener('scroll', this.handleStickyEvent_);
-      window.addEventListener('resize', this.handleStickyEvent_);
+      this.handleStickyEvent();
+      window.addEventListener('load', this.handleStickyEvent);
+      window.addEventListener('scroll', this.handleStickyEvent);
+      window.addEventListener('resize', this.handleStickyEvent);
     }
-  },
+  }
 
   componentWillUnmount() {
     if (this.props.disappearing) {
-      window.removeEventListener('load', this.handleStickyEvent_);
-      window.removeEventListener('scroll', this.handleStickyEvent_);
-      window.removeEventListener('resize', this.handleStickyEvent_);
+      window.removeEventListener('load', this.handleStickyEvent);
+      window.removeEventListener('scroll', this.handleStickyEvent);
+      window.removeEventListener('resize', this.handleStickyEvent);
     }
-  },
+  }
 
-  handleStickyEvent_() {
+  handleStickyEvent = () => {
     const disappearingMode = this.props.disappearing &&
       window.pageYOffset < this.props.disappearingOffset;
     this.setState({ disappearingMode });
-  },
+  };
 
-  renderTitle_() {
+  renderTitle() {
     if (this.state.disappearingMode) {
       return (
         <div>
@@ -82,7 +67,7 @@ export default React.createClass({
         </div>
       );
     }
-  },
+  }
 
   render() {
     const navbarClass = classNames('navbar', {
@@ -98,8 +83,8 @@ export default React.createClass({
       <ResponsiveContainer className={navbarClass}>
         <Link to="/" className="navbar__logo" />
         <div className="navbar__logo-buffer" />
-        {this.renderTitle_()}
-        <If condition={this.state.loggedIn}>
+        {this.renderTitle()}
+        <If condition={this.props.loggedIn}>
           <div>
             <Link to="/logout" className={buttonClass(false /* important */)}>Logout</Link>
           </div>
@@ -111,6 +96,5 @@ export default React.createClass({
         </If>
       </ResponsiveContainer>
     );
-  },
-
-});
+  }
+}

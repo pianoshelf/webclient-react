@@ -11,7 +11,6 @@ import ErrorMessage from './utils/ErrorMessage';
 import InfoText from './utils/InfoText';
 import Input from './utils/Input';
 import Title from './utils/Title';
-import { dispatchAndPromise } from '../../utils/reduxUtils';
 import { errors, success } from '../../utils/constants';
 import { resetPasswordConfirm } from '../../actions/login';
 
@@ -40,9 +39,7 @@ export default class ResetPasswordConfirm extends React.Component {
     const { password1, password2 } = values;
     const { token, uid } = this.props.params;
     const user = { password1, password2 };
-    return dispatchAndPromise(dispatch, [
-      resetPasswordConfirm(user, uid, token),
-    ]);
+    dispatch(resetPasswordConfirm(user, uid, token));
   };
 
   render() {

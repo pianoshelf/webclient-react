@@ -3,7 +3,7 @@
 
 import defer from 'lodash/function/defer';
 
-import { deleteAuthToken } from './api';
+import { deleteAuthToken } from '../utils/api';
 
 /**
  * This decorator adds logout functionality to a React component. If the component is connected to

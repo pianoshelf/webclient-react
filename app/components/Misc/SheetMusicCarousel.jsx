@@ -10,24 +10,12 @@ import Slider from 'react-slick';
 import ResponsiveContainer from './ResponsiveContainer';
 import SheetMusicThumbnail from './SheetMusicThumbnail';
 
-export default React.createClass({
-
-  propTypes: {
-    /**
-     * The class name we want to attach to the object.
-     */
+export default class SheetMusicCarousel extends React.Component {
+  static propTypes = {
     className: React.PropTypes.string,
-
-    /**
-     * The text to put above the panel.
-     */
     title: React.PropTypes.string,
-
-    /**
-     * The sheet music objects to display.
-     */
     sheetMusic: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-  },
+  };
 
   render() {
     const responsive = [
@@ -79,6 +67,5 @@ export default React.createClass({
         </If>
       </div>
     );
-  },
-
-});
+  }
+}

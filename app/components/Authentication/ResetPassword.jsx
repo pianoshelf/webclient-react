@@ -11,7 +11,6 @@ import ErrorMessage from './utils/ErrorMessage';
 import InfoText from './utils/InfoText';
 import Input from './utils/Input';
 import Title from './utils/Title';
-import { dispatchAndPromise } from '../../utils/reduxUtils';
 import { errors } from '../../utils/constants';
 import { resetPassword } from '../../actions/login';
 
@@ -36,9 +35,7 @@ export default class ResetPassword extends React.Component {
 
   handleResetPassword = (values, dispatch) => {
     const { email } = values;
-    return dispatchAndPromise(dispatch, [
-      resetPassword(email),
-    ]);
+    dispatch(resetPassword(email));
   };
 
   render() {

@@ -45,8 +45,7 @@ export default function createReducer(initialState = {}, reducerObject = {}) {
         }
       }
 
-      // If we get this far, the action was in an invalid format
-      throw Error('Invariant violation: action was a weird format.');
+      return state;
     };
   });
 

@@ -4,7 +4,7 @@ import {
   PROGRESS_RESET,
   PROGRESS_ADD,
   PROGRESS_REMOVE,
-} from '../constants/profile';
+} from '../constants/progress';
 
 /**
  * Resets progress state.

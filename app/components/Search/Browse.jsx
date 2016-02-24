@@ -15,8 +15,8 @@ import SearchFilters from './utils/SearchFilters';
 import SearchResults from './utils/SearchResults';
 import Spinner from './utils/Spinner';
 
-import { dispatchAndPromise } from '../utils/reduxUtils';
-import { search, getTrendingSheetMusic, getSheetMusicList } from '../../actions/sheetmusic';
+import { getTrendingSheetMusic, getSheetMusicList } from '../../actions/sheetmusic';
+import { search } from '../../actions/search';
 import { addProgress, removeProgress } from '../../actions/progress';
 
 // The number of items per search page
@@ -30,52 +30,39 @@ const PAGE_SIZE = 12;
     query: searchQuery,
   }, { store }) => {
     if (searchQuery) {
-      return dispatchAndPromise(store.dispatch, search(searchQuery, store));
+      return store.dispatch(search(searchQuery, store));
     } else {
       switch (show) {
         case 'trending':
           if (trending === '90days') {
-            return dispatchAndPromise(
-              store.dispatch,
-              getTrendingSheetMusic(90, PAGE_SIZE, store)
-            );
+            return store.dispatch(getTrendingSheetMusic(90, PAGE_SIZE, store));
           } else if (trending === '30days') {
-            return dispatchAndPromise(
-              store.dispatch,
-              getTrendingSheetMusic(30, PAGE_SIZE, store)
-            );
+            return store.dispatch(getTrendingSheetMusic(30, PAGE_SIZE, store));
           }
-          return dispatchAndPromise(
-            store.dispatch,
-            getTrendingSheetMusic(7, PAGE_SIZE, store)
-          );
+          return store.dispatch(getTrendingSheetMusic(7, PAGE_SIZE, store));
         case 'new':
-          return dispatchAndPromise(
-            store.dispatch,
+          return store.dispatch(
             getSheetMusicList(
               { page, orderBy: 'new', sortBy: 'desc', pageSize: PAGE_SIZE },
               store
             )
           );
         case 'most_difficult':
-          return dispatchAndPromise(
-            store.dispatch,
+          return store.dispatch(
             getSheetMusicList(
               { page, orderBy: 'difficulty', sortBy: 'desc', pageSize: PAGE_SIZE },
               store
             )
           );
         case 'least_difficult':
-          return dispatchAndPromise(
-            store.dispatch,
+          return store.dispatch(
             getSheetMusicList(
               { page, orderBy: 'difficulty', sortBy: 'asc', pageSize: PAGE_SIZE },
               store
             )
           );
         default:
-          return dispatchAndPromise(
-            store.dispatch,
+          return store.dispatch(
             getSheetMusicList(
               { page, orderBy: 'popular', sortBy: 'desc', pageSize: PAGE_SIZE },
               store
@@ -88,8 +75,9 @@ const PAGE_SIZE = 12;
 
 @connect(
   state => ({
-    sheetMusicList: state.sheetmusic.lists.list,
+    sheetMusicList: state.sheetmusic.lists.list.list,
     searchResults: state.search,
+    trendingResults: state.sheetmusic.lists.trending.list,
     inProgress: state.progress.inProgress,
   })
 )
@@ -139,15 +127,6 @@ export default class Browse extends React.Component {
   /**
    * Component lifecycle methods
    */
-
-  componentDidMount() {
-    const { query } = this.props.location.query || {};
-
-    if ((query && !this.props.searchResults.free.length) ||
-       (!query && !this.props.sheetMusicList.list.length)) {
-      // retrieveInitialData(this.flux, this.props.location.query || {});
-    }
-  }
 
   componentDidUpdate(prevProps) {
     // If query params change, scroll to the top of the page

@@ -115,7 +115,7 @@ describe('utils/createReducer', () => {
     expect(innerReducer).to.have.been.calledWithExactly({ hi: 'hi' }, 123, { hello: 'hello' });
   });
 
-  it('throws an error when there is an invalid progress state', () => {
+  it('returns original state when there is an invalid state', () => {
     const reducer = createReducer({}, {
       [ACTION_NAME_1]: {
         start() {},
@@ -123,11 +123,15 @@ describe('utils/createReducer', () => {
         error() {},
       },
     });
-    expect(() => {
-      reducer({}, {
-        type: ACTION_NAME_1,
-        progress: 'progress',
-      });
-    }).to.throw('Invariant violation: action was a weird format.');
+    expect(reducer({
+      hi: 'hi',
+      hello: 'hello',
+    }, {
+      type: ACTION_NAME_1,
+      progress: 'progress',
+    })).to.deep.equal({
+      hi: 'hi',
+      hello: 'hello',
+    });
   });
 });

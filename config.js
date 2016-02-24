@@ -58,13 +58,13 @@ module.exports = {
   build: {
     babel: {
       client: {
-        presets: ['es2015', 'react', 'stage-0'],
-        plugins: ['jsx-control-statements'],
+        presets: ['react', 'es2015', 'stage-0'],
+        plugins: ['transform-decorators-legacy', 'jsx-control-statements'],
       },
       server: {
-        presets: ['node5', 'react', 'stage-0'],
-        plugins: ['jsx-control-statements'],
-      }
+        presets: ['react', 'node5', 'stage-0'],
+        plugins: ['transform-decorators-legacy', 'jsx-control-statements'],
+      },
     },
     sass: {
       style: 'compact',

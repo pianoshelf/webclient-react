@@ -148,7 +148,7 @@ export const getMostPopularSheetMusic = createAction(
       return response;
     }
 
-    return actionDone(mapSheetMusic(response.payload, result => result.sheetmusic));
+    return actionDone(mapSheetMusic(response.payload.results));
   }
 );
 

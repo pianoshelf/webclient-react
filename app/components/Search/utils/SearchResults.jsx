@@ -1,8 +1,8 @@
 
 import React from 'react';
 
-import PaidSearchResult from './utils/PaidSearchResult';
-import SearchResult from './utils/SearchResult';
+import PaidSearchResult from './PaidSearchResult';
+import SearchResult from './SearchResult';
 
 export default function SearchResults({ searchResults }) {
   const { free, paid } = searchResults;

@@ -54,7 +54,7 @@ export function convertSheetMusic(sheetMusic) {
  *
  * @return {Object} An object with all the necessary properties representing a sheet music.
  */
-export function mapSheetMusic(sheetMusicArray, iterator = value => value) {
+export function mapSheetMusic(sheetMusicArray = [], iterator = value => value) {
   return sheetMusicArray.map(sheetMusicItem => {
     return convertSheetMusic(iterator(cloneDeep(sheetMusicItem)));
   });

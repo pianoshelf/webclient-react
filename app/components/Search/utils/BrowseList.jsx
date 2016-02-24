@@ -1,21 +1,19 @@
 
 import React from 'react';
 
-import SearchResult from './utils/SearchResult';
+import SearchResult from './SearchResult';
 
 export default function BrowseList({ sheetMusicList }) {
-  const { list } = sheetMusicList;
-
-  const listElements = list.map((sheetMusic, index) => (
+  const listElements = sheetMusicList.map((sheetMusic, index) => (
     <SearchResult sheetMusic={sheetMusic}
       key={sheetMusic.id}
       firstItem={index === 0}
-      lastItem={index === list.length - 1}
+      lastItem={index === sheetMusicList.length - 1}
     />
   ));
 
   return (
-    <If condition={list.length > 0}>
+    <If condition={sheetMusicList.length > 0}>
       {listElements}
     <Else />
       <div className="search__results-not-found">

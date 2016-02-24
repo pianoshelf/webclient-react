@@ -12,18 +12,15 @@ import NavBar from './Fixtures/NavBar';
 import Footer from './Fixtures/Footer';
 import ResponsiveContainer from './Misc/ResponsiveContainer';
 import SheetMusicCarousel from './Misc/SheetMusicCarousel';
-import { dispatchAndPromiseAll } from '../utils/reduxUtils';
 import { getMostPopularSheetMusic } from '../actions/sheetmusic';
 
 @asyncConnect({
-  promise: (params, { store }) => dispatchAndPromiseAll(store.dispatch, [
-    getMostPopularSheetMusic(store),
-  ]),
+  promise: (params, { store }) => store.dispatch(getMostPopularSheetMusic(store)),
 })
 @connect(
   state => ({
     loggedIn: state.login.loggedIn,
-    popularSheetMusic: state.sheetmusic.lists.popular,
+    popularSheetMusic: state.sheetmusic.lists.popular.list,
   }),
 )
 export default class Homepage extends React.Component {

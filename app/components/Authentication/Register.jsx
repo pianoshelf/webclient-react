@@ -12,7 +12,6 @@ import canFacebookLogin from '../../decorators/canFacebookLogin';
 import ErrorMessage from './utils/ErrorMessage';
 import Input from './utils/Input';
 import Title from './utils/Title';
-import { dispatchAndPromise } from '../../utils/reduxUtils';
 import { errors } from '../../utils/constants';
 import { register, facebookLogin } from '../../actions/login';
 
@@ -50,18 +49,14 @@ export default class Register extends React.Component {
   handleRegister = (values, dispatch) => {
     const { username, email, password1, password2 } = values;
     const newUser = { username, email, password1, password2 };
-    return dispatchAndPromise(dispatch, [
-      register(newUser),
-    ]);
+    return dispatch(register(newUser));
   };
 
   handleFacebookRegister = (values, dispatch) => {
     return this.facebookLogin().then(response => {
       if (response.status === 'connected') {
         const { accessToken } = response;
-        return dispatchAndPromise(dispatch, [
-          facebookLogin({ accessToken }),
-        ]);
+        dispatch(facebookLogin({ accessToken }));
       }
     });
   };

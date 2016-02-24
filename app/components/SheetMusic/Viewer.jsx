@@ -17,14 +17,13 @@ import LoadingScreen from './utils/LoadingScreen';
 import ResponsiveContainer from '../Misc/ResponsiveContainer';
 import RightButton from './utils/RightButton';
 import Comments from './comments/Comments';
-import { dispatchAndPromiseAll } from '../../utils/reduxUtils';
 import { getDifficultyText } from '../../utils/sheetMusicUtils';
 import { getSheetMusic, getComments } from '../../actions/sheetmusic';
 
 @asyncConnect({
-  promise: ({ id }, { store }) => dispatchAndPromiseAll(store.dispatch, [
-    getSheetMusic(parseInt(id, 10), store),
-    getComments(parseInt(id, 10), store),
+  promise: ({ id }, { store }) => Promise.all([
+    store.dispatch(getSheetMusic(parseInt(id, 10), store)),
+    store.dispatch(getComments(parseInt(id, 10), store)),
   ]),
 })
 @connect(
