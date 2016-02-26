@@ -13,5 +13,5 @@ export default function ViewsTag({ viewCount }) {
 }
 
 ViewsTag.propTypes = {
-  viewCount: React.PropTypes.string.isRequired,
+  viewCount: React.PropTypes.number.isRequired,
 };

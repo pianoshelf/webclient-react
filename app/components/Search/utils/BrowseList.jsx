@@ -14,7 +14,9 @@ export default function BrowseList({ sheetMusicList }) {
 
   return (
     <If condition={sheetMusicList.length > 0}>
-      {listElements}
+      <div>
+        {listElements}
+      </div>
     <Else />
       <div className="search__results-not-found">
         Nothing to display!

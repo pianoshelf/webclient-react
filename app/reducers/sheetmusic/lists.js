@@ -29,6 +29,7 @@ export default createReducer({
 
   [SHEETMUSIC_GET_LIST]: {
     done(state, payload) {
+      console.log('i got the list yay');
       return {
         ...state,
         list: createList(payload),

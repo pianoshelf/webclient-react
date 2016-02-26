@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 
 // Import polyfills first
 import 'babel-polyfill';
@@ -10,6 +11,7 @@ import { Provider } from 'react-redux';
 import { render } from 'react-dom';
 import { Router, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
+import { ReduxAsyncConnect } from 'redux-async-connect';
 
 // Import internal modules
 import configureStore from './utils/configureStore';
@@ -36,12 +38,21 @@ const history = syncHistoryWithStore(browserHistory, store);
 // Get all of the site's routes
 const routes = getRoutes(store);
 
+// Load asynchronous loading function
+const loadAsync = props => (
+  <ReduxAsyncConnect {...props} helpers={{ location: props.location }} />
+);
+
 // Re-render everything on reactRoot
 render(
-  <Provider store={store}>
+  <Provider store={store} key="provider">
     <div>
       <DevTools />
-      <Router history={history} routes={routes} />
+      <Router
+        render={loadAsync}
+        history={history}
+        routes={routes}
+      />
     </div>
   </Provider>,
   reactRoot

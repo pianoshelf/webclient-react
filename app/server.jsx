@@ -118,12 +118,14 @@ app.use((req, res) => {
     } else if (renderProps === null) {
       res.status(404).send('Not Found');
     } else {
-      loadOnServer(renderProps, store).then(() => {
+      loadOnServer(renderProps, store, {
+        location: renderProps.location,
+      }).then(() => {
         try {
           // Render our entire app to a string, and make sure we wrap everything
           // with Provider, which adds the redux store to the entire app.
           const renderedString = renderToString(
-            <Provider store={store}>
+            <Provider store={store} key="provider">
               <div>
                 <DevTools />
                 <ReduxAsyncConnect {...renderProps} />

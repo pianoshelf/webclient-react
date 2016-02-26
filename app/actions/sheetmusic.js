@@ -121,12 +121,14 @@ export const getSheetMusicList = createAction(
       store,
     });
 
+    console.log(response.payload);
+
     if (isActionError(response)) {
       // TODO: Find any errors to put here
       return response;
     }
 
-    return actionDone(mapSheetMusic(response.payload, result => result.sheetmusic));
+    return actionDone(mapSheetMusic(response.payload.results));
   }
 );
 

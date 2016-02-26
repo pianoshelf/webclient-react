@@ -23,12 +23,14 @@ import { addProgress, removeProgress } from '../../actions/progress';
 const PAGE_SIZE = 12;
 
 @asyncConnect({
-  promise: ({
-    page = 1,
-    show = 'popular',
-    trending = '7days',
-    query: searchQuery,
-  }, { store }) => {
+  promise: (params, { location, store }) => {
+    const {
+      page = 1,
+      show = 'popular',
+      trending = '7days',
+      query: searchQuery,
+    } = location.query;
+
     if (searchQuery) {
       return store.dispatch(search(searchQuery, store));
     } else {
@@ -111,13 +113,13 @@ export default class Browse extends React.Component {
       ]),
     }),
     // List of sheet music obtained from filters
-    sheetMusicList: React.PropTypes.object.isRequired,
+    sheetMusicList: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
     // List of search results
     searchResults: React.PropTypes.object.isRequired,
     // Progress array
     inProgress: React.PropTypes.array.isRequired,
     // Redux store
-    store: React.PropTypes.object.isRequired,
+    store: React.PropTypes.object,
   };
 
   static contextTypes = {

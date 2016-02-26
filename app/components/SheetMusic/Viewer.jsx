@@ -132,7 +132,8 @@ export default class Viewer extends React.Component {
 
     const imageElements = images.map((image, index) => (
       <div className="sheetmusic__viewer-page" key={index}>
-        <img className="sheetmusic__viewer-page-image"
+        <img
+          className="sheetmusic__viewer-page-image"
           src={image}
           onDragStart={this.handleNullify}
           onClick={this.handleNullify}
