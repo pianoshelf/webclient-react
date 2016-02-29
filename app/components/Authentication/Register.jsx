@@ -121,7 +121,7 @@ export default class Register extends React.Component {
     return (
       <div>
         <Helmet title="Register" />
-        <Title>Sign up for PianoShelf</Title>
+        <Title>Sign up for Pianoshelf</Title>
         <ErrorMessage
           errorCode={errorCode}
           dontDisplayIf={registerInProgress || facebookInProgress ||
@@ -135,33 +135,31 @@ export default class Register extends React.Component {
             <Input
               placeholder="Username"
               name="username"
-              errorCode={errorCode}
-              errorWhen={[errors.NO_USERNAME, errors.USERNAME_TAKEN]}
+              errorWhen={errorCode === errors.NO_USERNAME || errorCode === errors.USERNAME_TAKEN}
               focusOnLoad
-              field={fields.username}
+              {...fields.username}
             />
             <Input
               placeholder="Email"
               name="email"
-              errorCode={errorCode}
-              errorWhen={[errors.NO_EMAIL, errors.INVALID_EMAIL, errors.EMAIL_ALREADY_REGISTERED]}
-              field={fields.email}
+              errorWhen={errorCode === errors.NO_EMAIL || errorCode === errors.INVALID_EMAIL ||
+                errorCode === errors.EMAIL_ALREADY_REGISTERED}
+              {...fields.email}
             />
             <Input
               placeholder="Password"
               name="password1"
-              password
-              errorCode={errorCode}
-              errorWhen={[errors.NO_PASSWORD, errors.NOT_STRONG_PASSWORD]}
-              field={fields.password1}
+              type="password"
+              errorWhen={errorCode === errors.NO_PASSWORD ||
+                errorCode === errors.NOT_STRONG_PASSWORD}
+              {...fields.password1}
             />
             <Input
               placeholder="Confirm Password"
               name="password2"
-              password
-              errorCode={errorCode}
-              errorWhen={[errors.NOT_SAME_PASSWORD]}
-              field={fields.password2}
+              type="password"
+              errorWhen={errorCode === errors.NOT_SAME_PASSWORD}
+              {...fields.password2}
             />
           </div>
           <Button

@@ -74,20 +74,21 @@ export default class ResetPasswordConfirm extends React.Component {
               onSubmit={handleSubmit(this.handleResetPasswordConfirm)}
             >
               <div className="authentication__inputs">
-                <Input placeholder="New Password"
+                <Input
+                  placeholder="New Password"
                   name="password1"
-                  password
-                  errorCode={errorCode}
-                  errorWhen={[errors.NO_PASSWORD, errors.NOT_STRONG_PASSWORD]}
+                  type="password"
+                  errorWhen={errorCode === errors.NO_PASSWORD ||
+                    errorCode === errors.NOT_STRONG_PASSWORD}
                   focusOnLoad
-                  field={fields.password1}
+                  {...fields.password1}
                 />
-                <Input placeholder="Confirm New Password"
+                <Input
+                  placeholder="Confirm New Password"
                   name="password2"
-                  password
-                  errorCode={errorCode}
-                  errorWhen={[errors.NOT_SAME_PASSWORD]}
-                  field={fields.password2}
+                  type="password"
+                  errorWhen={errorCode === errors.NOT_SAME_PASSWORD}
+                  {...fields.password2}
                 />
               </div>
               <Button color="red" disableIf={resetInProgress} submittedIf={resetInProgress}>

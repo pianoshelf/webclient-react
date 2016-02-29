@@ -3,6 +3,7 @@
 @import 'variables/fonts'
 @import 'variables/globals'
 @import 'variables/responsive'
+@import 'variables/colors'
 
 .authentication__box
   +when-tablet
@@ -34,6 +35,7 @@
   font-size: 15px
   margin: 5px 0 5px 0
   padding: 0 5px
+  line-height: 1.5
 
 .authentication__title
   font-family: $title-font
@@ -44,17 +46,16 @@
 .authentication__message
   font-size: 15px
   padding: 5px 10px 5px 35px
-  margin-bottom: 5px
+  margin-bottom: 20px
   position: relative
-  +standard-borders
   &--info
-    +color-area-gradient(lighten($blue-light, 10%))
+    +color-area(lighten($blue-light, 10%))
   &--error
-    +color-area-gradient(lighten($red, 10%))
+    +color-area($red)
 
 .authentication__message-icon
   position: absolute
-  top: 10px
+  top: 7px
   left: 10px
 
 .authentication__inputs
@@ -62,20 +63,57 @@
   margin-bottom: 5px
 
 .authentication__input
-  padding: 3px 8px
-  margin: 2px 0
+  padding: 1em 1em 0.3em 0.5em
+  display: block
   width: 100%
-  +standard-borders
-  border-color: $grey-light;
-  &--error
-    border-color: lighten($red, 10%)
+  border: none
+  border-bottom: 1px solid $grey-light
+  &:focus
+    outline: none
+  &:focus ~ .authentication__input-label,
+  &:valid ~ .authentication__input-label
+    top: -0.5em
+    left: 0.6em
+    font-size: 12px
+    color: $grey-text-dark
+  &:focus ~ .authentication__input-bar:after
+    width: 100%
+
+.authentication__input-group
+  font-size: 15px
+  position: relative
+  margin-top: 0.8em
+  margin-bottom: 0.8em
+
+.authentication__input-bar
+  position: relative
+  display: block
+  width: 100%
+  &:after
+    content: ''
+    height: 1px
+    width: 0
+    position: absolute
+    left: 0
+    bottom: 0
+    background-color: $blue-light
+    transition: 0.2s ease all
+
+.authentication__input-label
+  color: $grey-text-normal
+  font-size: 1em
+  font-weight: 200
+  position: absolute
+  pointer-events: none
+  left: 0.5em
+  top: 1em
+  transition: 0.2s ease all
 
 .authentication__button
   border: 0
-  padding: 5px 10px
+  padding: 6px 10px 4px 10px
   width: 100%
-  margin: 5px 0
-  +standard-borders
+  margin-top: 5px
   &--orange
     +clickable($orange)
   &--blue-light
@@ -89,7 +127,7 @@
   margin-right: 5px
 
 .authentication__link
-  margin-top: 5px
+  margin-top: 10px
   font-size: 14px
   display: block
   text-decoration: none
@@ -98,7 +136,7 @@
 
 .authentication__hr
   border: 0
-  border-bottom: 2px solid $grey-light
-  margin: 10px
+  border-bottom: 1px solid $grey-light
+  margin: 10px 0
 
 

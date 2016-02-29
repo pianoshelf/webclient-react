@@ -63,13 +63,13 @@ function finishRequest(resolve) {
   return (err, res) => {
     // Reject if there's an error, otherwise resolve.
     if (err) {
-      resolve(
-        actionError(errors.NETWORK_ERROR, JSON.parse(res.text))
-      );
+      if (res) {
+        resolve(actionError(errors.NETWORK_ERROR, JSON.parse(res.text)));
+      } else {
+        resolve(actionError(errors.NETWORK_ERROR));
+      }
     } else {
-      resolve(
-        actionDone(JSON.parse(res.text))
-      );
+      resolve(actionDone(JSON.parse(res.text)));
     }
   };
 }

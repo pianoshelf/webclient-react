@@ -3,6 +3,7 @@ import FontAwesome from 'react-fontawesome';
 import Helmet from 'react-helmet';
 import includes from 'lodash/collection/includes';
 import React from 'react';
+import { asyncConnect } from 'redux-async-connect';
 import { Link } from 'react-router';
 import { reduxForm } from 'redux-form';
 
@@ -12,12 +13,15 @@ import InfoText from './utils/InfoText';
 import Input from './utils/Input';
 import Title from './utils/Title';
 import { errors } from '../../utils/constants';
-import { resetPassword } from '../../actions/login';
+import { clearErrors, resetPassword } from '../../actions/login';
 
 export const fieldNames = [
   'email',
 ];
 
+@asyncConnect({
+  promise: (params, { store }) => store.dispatch(clearErrors()),
+})
 @reduxForm(
   {
     form: 'resetPassword',
@@ -52,17 +56,17 @@ export default class ResetPassword extends React.Component {
         <Title>Reset your password</Title>
         <ErrorMessage errorCode={errorCode} dontDisplayIf={resetInProgress} />
         <InfoText>
-          Enter the email address you used to sign up for PianoShelf, and we will email you
+          Enter the email address you used to sign up for Pianoshelf, and we will email you
           a link to reset your password.
         </InfoText>
         <form className="authentication__form" onSubmit={handleSubmit(this.handleResetPassword)}>
           <div className="authentication__inputs">
-            <Input placeholder="Email"
+            <Input
+              placeholder="Email"
               name="email"
-              errorCode={errorCode}
-              errorWhen={[errors.NO_EMAIL, errors.INVALID_EMAIL]}
+              errorWhen={errorCode === errors.NO_EMAIL || errorCode === errors.INVALID_EMAIL}
               focusOnLoad
-              field={fields.email}
+              {...fields.email}
             />
           </div>
           <Button color="red" disableIf={resetInProgress} submittedIf={resetInProgress}>

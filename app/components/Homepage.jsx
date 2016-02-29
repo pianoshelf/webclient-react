@@ -70,7 +70,7 @@ export default class Homepage extends React.Component {
             />
             <h4 className="homepage__info-box-heading">Upload Sheet Music</h4>
             <p className="homepage__info-box-description">
-              PianoShelf makes it quick and easy to publish and share your sheet music. Sign up to
+              Pianoshelf makes it quick and easy to publish and share your sheet music. Sign up to
               upload sheet music within minutes.
             </p>
           </div>
@@ -80,7 +80,7 @@ export default class Homepage extends React.Component {
             />
             <h4 className="homepage__info-box-heading">Save Your Collection</h4>
             <p className="homepage__info-box-description">
-              Have a repertoire or favourite sheetmusic? Add a score to your &rdquo;shelf&ldquo; to
+              Have a repertoire or favourite sheetmusic? Add a score to your &ldquo;shelf&rdquo; to
               save it for later.
             </p>
           </div>
@@ -90,7 +90,7 @@ export default class Homepage extends React.Component {
             />
             <h4 className="homepage__info-box-heading">Create A Profile</h4>
             <p className="homepage__info-box-description">
-              On PianoShelf, you can create a public personal profile, rate sheetmusic for
+              On Pianoshelf, you can create a public personal profile, rate sheetmusic for
               difficulty and add video intepretations to a composition.
             </p>
           </div>
@@ -115,7 +115,8 @@ export default class Homepage extends React.Component {
   render() {
     return (
       <div className="homepage">
-        <Helmet title="PianoShelf - free piano sheet music" titleTemplate="%s" />
+
+        <Helmet title="Pianoshelf - free piano sheet music" titleTemplate="%s" />
         <NavBar disappearing disappearingOffset={50} />
         {this.renderMainPanel()}
         {this.renderPopularPanel()}

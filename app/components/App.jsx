@@ -12,9 +12,9 @@ export default class App extends React.Component {
       <div>
         <Helmet
           title="Welcome"
-          titleTemplate="%s | PianoShelf - free piano sheet music"
+          titleTemplate="%s | Pianoshelf - free piano sheet music"
           meta={[
-            { name: 'description', content: 'PianoShelf' },
+            { name: 'description', content: 'Pianoshelf' },
           ]}
         />
         {this.props.children}

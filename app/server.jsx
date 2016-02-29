@@ -33,7 +33,7 @@ const httpServer = http.createServer(app);
 const prettyStream = new PrettyStream();
 prettyStream.pipe(process.stdout);
 const log = bunyan.createLogger({
-  name: 'PianoShelf',
+  name: 'Pianoshelf',
   streams: [
     {
       level: 'debug',
@@ -188,6 +188,6 @@ if (!!process.env.TESTING) {
 } else {
   // Launch application
   httpServer.listen(config.ports.express, () => {
-    log.info(`PianoShelf listening on port ${config.ports.express}`);
+    log.info(`Pianoshelf listening on port ${config.ports.express}`);
   });
 }

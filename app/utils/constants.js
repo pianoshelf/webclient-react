@@ -1,5 +1,5 @@
 /**
- * This file contains constants used throughout the PianoShelf code base,
+ * This file contains constants used throughout the Pianoshelf code base,
  * such as error numbers.
  */
 

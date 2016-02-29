@@ -18,11 +18,11 @@ sample notice below.
 
   If you are a copyright owner, authorized to act on behalf of one or authorized to act under any
 exclusive right under copyright, please report alleged copyright infringements taking place on or
-through the PianoShelf services (the "Services") by completing the following DMCA Notice of Alleged
-Infringement and delivering it to the PianoShelf Designated Copyright Agent. Upon receipt of Notice
-as described below, PianoShelf will take whatever action, in its sole discretion, it deems
+through the Pianoshelf services (the "Services") by completing the following DMCA Notice of Alleged
+Infringement and delivering it to the Pianoshelf Designated Copyright Agent. Upon receipt of Notice
+as described below, Pianoshelf will take whatever action, in its sole discretion, it deems
 appropriate, including removal of the challenged use from the Services and/or termination of the
-PianoShelf user's account.
+Pianoshelf user's account.
 
 ### DMCA Notice of Alleged Infringement ("Notice")
 
@@ -41,19 +41,19 @@ PianoShelf user's account.
     exclusive right under the copyright that is allegedly infringed."
 * Provide your full legal name and your electronic or physical signature.
 
-Deliver this Notice, with all items completed, to PianoShelf's Designated Copyright Agent:
+Deliver this Notice, with all items completed, to Pianoshelf's Designated Copyright Agent:
 
-PianoShelf Copyright Agent<br />
+Pianoshelf Copyright Agent<br />
 [admin@pianoshelf.com](mailto:admin@pianoshelf.com)
 
 ### What if, as a user of the Service, I receive a Copyright Complaint (DMCA) notification?
 
 If you receive a notification that a sheetmusic has been removed due a copyright complaint, it means
-that the sheetmusic's content has been deleted from PianoShelf at the request of the content's
+that the sheetmusic's content has been deleted from Pianoshelf at the request of the content's
 owner. If you want us to forward the information from the Copyright Complaint notification, just
 reply to the notification to let us know. We'll be happy to send it along (without any personal
 contact information). If your account receives too many copyright complaints, you may lose the
-ability to add sheetmusic on PianoShelf, and your account may be disabled completely. If you believe
+ability to add sheetmusic on Pianoshelf, and your account may be disabled completely. If you believe
 a sheetmusic was removed in error, you have the option to file a counter-notice by following the
 steps below. When we receive a valid counter-notice, we will forward a copy to the person who filed
 the original complaint. If we do not receive notice within 10 business days that the submitter of

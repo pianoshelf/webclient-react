@@ -116,7 +116,7 @@ export default class Login extends React.Component {
     return (
       <div>
         <Helmet title="Log in" />
-        <Title>Log in to PianoShelf</Title>
+        <Title>Log in to Pianoshelf</Title>
         <ErrorMessage
           errorCode={errorCode}
           dontDisplayIf={loginInProgress || facebookInProgress ||
@@ -125,20 +125,18 @@ export default class Login extends React.Component {
         <form className="authentication__form" onSubmit={handleSubmit(this.logUserIn)}>
           <div className="authentication__inputs">
             <Input
+              errorWhen={errorCode === errors.NO_USERNAME}
               placeholder="Username"
               name="username"
-              errorCode={errorCode}
-              errorWhen={[errors.NO_USERNAME]}
               focusOnLoad
-              field={fields.username}
+              {...fields.username}
             />
             <Input
+              errorWhen={errorCode === errors.NO_PASSWORD}
               placeholder="Password"
               name="password"
-              password
-              errorCode={errorCode}
-              errorWhen={[errors.NO_PASSWORD]}
-              field={fields.password}
+              type="password"
+              {...fields.password}
             />
           </div>
           <Button
