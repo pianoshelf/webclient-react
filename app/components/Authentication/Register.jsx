@@ -10,10 +10,10 @@ import { reduxForm } from 'redux-form';
 import Button from './utils/Button';
 import loadFacebook from '../../decorators/loadFacebook';
 import ErrorMessage from './utils/ErrorMessage';
-import Input from './utils/Input';
+import Input from '../Misc/Input';
 import Title from './utils/Title';
-import { errors, success } from '../../utils/constants';
 import { clearErrors, register, facebookLogin } from '../../actions/login';
+import { errors, success } from '../../utils/constants';
 import { setAuthToken } from '../../utils/api';
 
 export const fieldNames = [

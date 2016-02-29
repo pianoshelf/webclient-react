@@ -90,6 +90,7 @@ export default class NavBar extends React.Component {
           <div>
             <Link to="/register" className={buttonClass(true /* important */)}>Sign Up</Link>
             <Link to="/login" className={buttonClass(false /* important */)}>Log In</Link>
+            <Link to="/browse" className={buttonClass(false /* important */)}>Browse</Link>
           </div>
         </If>
       </ResponsiveContainer>

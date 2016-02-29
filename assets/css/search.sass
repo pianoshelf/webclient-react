@@ -5,6 +5,7 @@
 @import 'variables/buttons'
 
 @import 'responsivecontainer'
+@import 'miscinput'
 
 .search
   min-height: 100vh
@@ -14,35 +15,35 @@
   min-height: calc(100vh - #{$footer-height})
 
 .search__browse-search
-  position: relative
-  padding: 20px 5px 10px 5px
-  font-size: 15px
-  height: 75px
+  // position: relative
+  padding: 10px 5px
+  // font-size: 15px
+  // height: 75px
   +when-tablet
-    padding: 40px 10px 20px 10px
-    font-size: 18px
-    height: 110px
+    padding: 30px 10px 10px 10px
+    // font-size: 18px
+    // height: 110px
 
-.search__browse-search-input
-  +standard-borders
-  border-color: $grey-light
-  margin: 0
-  width: 100%
-  padding: 10px
-  +when-tablet
-    padding: 10px
+// .search__browse-search-input
+  // +standard-borders
+  // border-color: $grey-light
+  // margin: 0
+  // width: 100%
+  // padding: 10px
+  // +when-tablet
+    // padding: 10px
 
-.search__browse-search-count
-  position: absolute
-  color: $grey-text-dark
-  font-weight: $weight-light
-  right: 10px
-  top: 20px
-  line-height: 45px
-  +when-tablet
-    right: 20px
-    top: 40px
-    line-height: 50px
+// .search__browse-search-count
+  // position: absolute
+  // color: $grey-text-dark
+  // font-weight: $weight-light
+  // right: 10px
+  // top: 20px
+  // line-height: 45px
+  // +when-tablet
+    // right: 20px
+    // top: 40px
+    // line-height: 50px
 
 .search__results-panel
   display: table
@@ -81,23 +82,11 @@
   +when-tablet
     font-size: 16px
 
-.search__filter-groups
-  +standard-borders
-  border-color: $grey-normal
-
 .search__filter-group-filter
   display: inline-block
   width: 100%
   color: $grey-text-dark
-  padding: 3px 10px
-  +when-tablet
-    padding: 5px 10px
-
-.search__filter-group-filter--bottom-border
-  border-bottom: $button-border-width solid $grey-normal
-
-.search__filter-group-filter--right-border
-  border-right: $button-border-width solid $grey-normal
+  padding: 5px 10px
 
 .search__filter-group-filter--half-space
   width: 50%
@@ -151,7 +140,8 @@
   text-align: center
   color: $grey-text-dark
   font-size: 18px
-  font-family: $title-font
+  text-transform: uppercase
+  // font-family: $title-font
 
 .search__result
   position: relative

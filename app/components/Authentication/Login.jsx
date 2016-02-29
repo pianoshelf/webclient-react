@@ -1,7 +1,7 @@
 
 import FontAwesome from 'react-fontawesome';
-import includes from 'lodash/collection/includes';
 import Helmet from 'react-helmet';
+import includes from 'lodash/collection/includes';
 import React from 'react';
 import { asyncConnect } from 'redux-async-connect';
 import { Link } from 'react-router';
@@ -10,7 +10,7 @@ import { reduxForm } from 'redux-form';
 import Button from './utils/Button';
 import loadFacebook from '../../decorators/loadFacebook';
 import ErrorMessage from './utils/ErrorMessage';
-import Input from './utils/Input';
+import Input from '../Misc/Input';
 import Title from './utils/Title';
 import { clearErrors, login, facebookLogin } from '../../actions/login';
 import { errors, success } from '../../utils/constants';

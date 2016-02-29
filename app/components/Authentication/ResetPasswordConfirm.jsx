@@ -3,22 +3,26 @@ import FontAwesome from 'react-fontawesome';
 import Helmet from 'react-helmet';
 import includes from 'lodash/collection/includes';
 import React from 'react';
+import { asyncConnect } from 'redux-async-connect';
 import { Link } from 'react-router';
 import { reduxForm } from 'redux-form';
 
 import Button from './utils/Button';
 import ErrorMessage from './utils/ErrorMessage';
 import InfoText from './utils/InfoText';
-import Input from './utils/Input';
+import Input from '../Misc/Input';
 import Title from './utils/Title';
+import { clearErrors, resetPasswordConfirm } from '../../actions/login';
 import { errors, success } from '../../utils/constants';
-import { resetPasswordConfirm } from '../../actions/login';
 
 export const fieldNames = [
   'password1',
   'password2',
 ];
 
+@asyncConnect({
+  promise: (params, { store }) => store.dispatch(clearErrors()),
+})
 @reduxForm(
   {
     form: 'resetPasswordConfirm',

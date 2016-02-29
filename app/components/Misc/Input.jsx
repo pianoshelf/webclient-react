@@ -30,22 +30,27 @@ export default class Input extends React.Component {
 
   render() {
     const { errorWhen, placeholder, className } = this.props;
-    const props = omit(this.props, ['errorWhen', 'focusOnLoad', 'placeholder']);
+    const props = omit(this.props, ['errorWhen', 'focusOnLoad', 'placeholder', 'className']);
 
-    const groupClassName = classNames('authentication__input-group', className, {
-      'authentication__input-group--error': errorWhen,
+    const groupClassName = classNames('misc-input__group', className);
+
+    const inputClassName = classNames('misc-input__input', {
+      'misc-input__input--error': errorWhen,
+    });
+
+    const barClassName = classNames('misc-input__bar', {
+      'misc-input__bar--error': errorWhen,
+    });
+
+    const labelClassName = classNames('misc-input__label', {
+      'misc-input__label--error': errorWhen,
     });
 
     return (
       <div className={groupClassName}>
-        <input
-          className="authentication__input"
-          ref="input"
-          required
-          {...props}
-        />
-        <span className="authentication__input-bar" />
-        <label className="authentication__input-label">{placeholder}</label>
+        <input className={inputClassName} ref="input" required {...props} />
+        <span className={barClassName} />
+        <label className={labelClassName}>{placeholder.toUpperCase()}</label>
       </div>
     );
   }

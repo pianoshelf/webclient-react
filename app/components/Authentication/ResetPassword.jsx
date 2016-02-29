@@ -10,10 +10,10 @@ import { reduxForm } from 'redux-form';
 import Button from './utils/Button';
 import ErrorMessage from './utils/ErrorMessage';
 import InfoText from './utils/InfoText';
-import Input from './utils/Input';
+import Input from '../Misc/Input';
 import Title from './utils/Title';
-import { errors } from '../../utils/constants';
 import { clearErrors, resetPassword } from '../../actions/login';
+import { errors } from '../../utils/constants';
 
 export const fieldNames = [
   'email',

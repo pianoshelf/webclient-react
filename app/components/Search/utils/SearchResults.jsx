@@ -32,7 +32,7 @@ export default function SearchResults({ searchResults }) {
           {freeResultsElements}
         <Else />
           <div className="search__results-not-found">
-            Could not find anything.
+            No results
           </div>
         </If>
       </div>

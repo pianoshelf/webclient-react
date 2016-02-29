@@ -19,7 +19,7 @@ export default function BrowseList({ sheetMusicList }) {
       </div>
     <Else />
       <div className="search__results-not-found">
-        Nothing to display!
+        No results
       </div>
     </If>
   );

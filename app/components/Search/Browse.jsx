@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
 
 import BrowseList from './utils/BrowseList';
+import Input from '../Misc/Input';
 import Pagination from './utils/Pagination';
 import SearchFilters from './utils/SearchFilters';
 import SearchResults from './utils/SearchResults';
@@ -228,9 +229,9 @@ export default class Browse extends React.Component {
       <div>
         <Helmet title="Browse Sheet Music" />
         <form className="search__browse-search" onChange={this.handleSearchQueryChange}>
-          <input type="text"
+          <Input
             className="search__browse-search-input"
-            placeholder="Search for sheet music..."
+            placeholder="Search for sheet music"
             ref="searchBox"
             {...fields.search}
           />
