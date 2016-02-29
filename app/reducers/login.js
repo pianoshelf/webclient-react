@@ -31,26 +31,34 @@ export default createReducer(initialState, {
   [LOGIN_GET]: {
     done(state, payload) {
       return {
+        code: success.LOGGED_IN,
         user: payload,
         loggedIn: true,
-        code: success.LOGGED_IN,
       };
     },
     error() {
-      return initialState;
+      return {
+        code: 0,
+        user: {},
+        loggedIn: false,
+      };
     },
   },
 
   [LOGIN_LOGIN]: {
     done(state, payload) {
       return {
+        code: success.LOGGED_IN,
         user: payload,
         loggedIn: true,
-        code: success.LOGGED_IN,
       };
     },
     error(state, code) {
-      return { ...state, code };
+      return {
+        code,
+        user: {},
+        loggedIn: false,
+      };
     },
   },
 
@@ -68,13 +76,17 @@ export default createReducer(initialState, {
   [LOGIN_REGISTER]: {
     done(state, payload) {
       return {
+        code: success.LOGGED_IN,
         user: payload,
         loggedIn: true,
-        code: success.LOGGED_IN,
       };
     },
     error(state, code) {
-      return { ...state, code };
+      return {
+        code,
+        user: {},
+        loggedIn: false,
+      };
     },
   },
 
@@ -108,26 +120,34 @@ export default createReducer(initialState, {
   [LOGIN_FACEBOOK]: {
     done(state, payload) {
       return {
+        code: success.LOGGED_IN,
         user: payload,
         loggedIn: true,
-        code: success.LOGGED_IN,
       };
     },
     error(state, code) {
-      return { ...state, code };
+      return {
+        code,
+        user: {},
+        loggedIn: false,
+      };
     },
   },
 
   [LOGIN_TWITTER]: {
     done(state, payload) {
       return {
+        code: success.LOGGED_IN,
         user: payload,
         loggedIn: true,
-        code: success.LOGGED_IN,
       };
     },
     error(state, code) {
-      return { ...state, code };
+      return {
+        code,
+        user: {},
+        loggedIn: false,
+      };
     },
   },
 });

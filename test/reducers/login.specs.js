@@ -76,7 +76,7 @@ describe('reducers/login', () => {
   it('can show login errors', () => {
     assertReducer({
       from: { loggedIn: true, user: mockUser(), code: 0 },
-      to: { loggedIn: true, user: mockUser(), code: 123 },
+      to: { loggedIn: false, user: {}, code: 123 },
       action: createErrorAction(LOGIN_LOGIN, 123),
     });
   });
@@ -101,7 +101,7 @@ describe('reducers/login', () => {
     assertReducer({
       from: { loggedIn: true, user: mockUser(), code: 0 },
       to: { loggedIn: true, user: mockUser(), code: 123 },
-      action: createErrorAction(LOGIN_LOGIN, 123),
+      action: createErrorAction(LOGIN_VERIFY_EMAIL, 123),
     });
   });
 
@@ -117,7 +117,7 @@ describe('reducers/login', () => {
     assertReducer({
       from: { loggedIn: false, user: {}, code: 0 },
       to: { loggedIn: false, user: {}, code: 123 },
-      action: createErrorAction(LOGIN_LOGIN, 123),
+      action: createErrorAction(LOGIN_REGISTER, 123),
     });
   });
 

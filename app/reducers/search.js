@@ -12,36 +12,28 @@ const initialResults = {
   progress: false,
 };
 
-export default createReducer({
-  results: initialResults,
-}, {
+export default createReducer(initialResults, {
   [SEARCH_SHEETMUSIC]: {
     start() {
       return {
-        results: {
-          ...initialResults,
-          progress: true,
-        },
+        ...initialResults,
+        progress: true,
       };
     },
     done(state, { count, free, paid }) {
       return {
-        results: {
-          errorCode: 0,
-          free: mapSheetMusic(free),
-          paid: mapPaidSheetMusic(paid),
-          progress: false,
-          count,
-        },
+        errorCode: 0,
+        free: mapSheetMusic(free),
+        paid: mapPaidSheetMusic(paid),
+        progress: false,
+        count,
       };
     },
     error(state, errorCode) {
       return {
-        results: {
-          ...initialResults,
-          progress: false,
-          errorCode,
-        },
+        ...initialResults,
+        progress: false,
+        errorCode,
       };
     },
   },

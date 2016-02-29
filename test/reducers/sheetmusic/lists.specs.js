@@ -12,8 +12,6 @@ describe('reducers/sheetmusic/lists', () => {
   it('can error when retrieving a list of sheet music');
   it('can retrieve popular sheet music');
   it('can error when retrieving popular sheet music');
-  it.skip('can retrieve top sheet music');
-  it.skip('can error when retrieving top sheet music');
   it('can retrieve trending sheet music');
   it('can error when retrieving trending sheet music');
 });

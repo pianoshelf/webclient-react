@@ -55,7 +55,10 @@ export const getUser = createAction(
       store,
     });
 
-    if (isActionError(response)) return response;
+    if (isActionError(response)) {
+      return response;
+    }
+
     return actionDone(sanitizeUserInfo(response.payload));
   }
 );
@@ -64,7 +67,6 @@ export const getUser = createAction(
  * Logs in the user.
  * @param {string} username User's username.
  * @param {string} password User's password.
- * @param {Store} store The Redux store object.
  */
 export const login = createAction(
   LOGIN_LOGIN,
@@ -95,7 +97,7 @@ export const login = createAction(
         return actionError(errors.UNABLE_TO_LOG_IN);
       }
 
-      return payload;
+      return response;
     }
 
     return actionDone(sanitizeUserInfo(response.payload));
@@ -104,16 +106,13 @@ export const login = createAction(
 
 /**
  * Logs out the user.
- *
- * @param {Store} store The Redux store object.
  */
 export const logout = createAction(
   LOGIN_LOGOUT,
-  async store => {
+  async () => {
     return await post({
       endpoint: '/logout/',
       auth: true,
-      store,
     });
   }
 );
@@ -213,8 +212,8 @@ export const register = createAction(
     const loginResponse = await post({
       endpoint: '/login/',
       params: {
-        username: registerResponse.payload.username,
-        password: registerResponse.payload.password1,
+        username: user.username,
+        password: user.password1,
       },
       auth: true,
     });

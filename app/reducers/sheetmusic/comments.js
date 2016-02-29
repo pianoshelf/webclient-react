@@ -14,7 +14,6 @@ import {
 const initialState = {
   list: [],
   errorCode: 0,
-  actionPerformed: 'preloaded',
 };
 
 /**
@@ -33,21 +32,18 @@ export default createReducer(initialState, {
       return {
         list: [],
         errorCode: 0,
-        actionPerformed: 'getting',
       };
     },
     done(state, payload) {
       return {
         list: payload,
         errorCode: 0,
-        actionPerformed: 'getting',
       };
     },
     error(state, code) {
       return {
         list: [],
         errorCode: code,
-        actionPerformed: 'getting',
       };
     },
   },

@@ -12,7 +12,7 @@ export default class Input extends React.Component {
     // The error codes that cause this component to have the error class
     errorWhen: React.PropTypes.array.isRequired,
 
-    // Whether to focus this textbox on load
+    // Whether to focus this textbox when the component mounts
     focusOnLoad: React.PropTypes.bool,
 
     // The name of the element. Useful for autofilling forms
@@ -43,7 +43,9 @@ export default class Input extends React.Component {
     });
 
     return (
-      <input type={isPassword ? 'password' : 'text'} ref="input"
+      <input
+        type={isPassword ? 'password' : 'text'}
+        ref="input"
         name={this.props.name}
         className={className}
         placeholder={this.props.placeholder}

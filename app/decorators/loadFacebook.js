@@ -68,7 +68,7 @@ export default function canFacebookLogin(target) {
     }
 
     // Call original componentDidMount function
-    parentDidMount();
+    parentDidMount.apply(this, arguments);
   };
 
   target.prototype.componentWillUnmount = function componentWillUnmount() {
@@ -77,7 +77,7 @@ export default function canFacebookLogin(target) {
       const fbRoot = document.getElementById('fb-root');
       fbRoot.parentElement.removeChild(fbRoot);
     }
-    parentWillUnmount();
+    parentWillUnmount.apply(this, arguments);
   };
 
   return target;

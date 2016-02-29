@@ -86,7 +86,6 @@ function finishRequest(resolve) {
  * @return {Promise} A promise that resolves when the request is complete.
  */
 export function get({ endpoint, params = {}, store, auth = false }) {
-  console.log('GET', endpoint, params);
   const baseUrl = __CLIENT__ ? '' : `http://localhost:${config.ports.django}`;
   return new Promise(resolve => {
     const headers = getHeaders(store);
@@ -122,7 +121,6 @@ export function get({ endpoint, params = {}, store, auth = false }) {
  * @return {Promise} A promise that resolves when the request is complete.
  */
 export function post({ endpoint, params = {}, auth = false }) {
-  console.log('POST', endpoint, params);
   const baseUrl = __CLIENT__ ? '' : `http://localhost:${config.ports.django}`;
   return new Promise(resolve => {
     request.post(`${baseUrl}${auth ? authUrl : apiUrl}${endpoint}`)
@@ -143,7 +141,6 @@ export function post({ endpoint, params = {}, auth = false }) {
  * @return {Promise} A promise that resolves when the request is complete.
  */
 export function patch({ endpoint, params = {}, auth = false }) {
-  console.log('PATCH', endpoint, params);
   const baseUrl = __CLIENT__ ? '' : `http://localhost:${config.ports.django}`;
   return new Promise(resolve => {
     request('PATCH', `${baseUrl}${auth ? authUrl : apiUrl}${endpoint}`)
@@ -163,7 +160,6 @@ export function patch({ endpoint, params = {}, auth = false }) {
  * @return {Promise} A promise that resolves when the request is complete.
  */
 export function del({ endpoint, params = {} }) {
-  console.log('DELETE', endpoint, params);
   const baseUrl = __CLIENT__ ? '' : `http://localhost:${config.ports.django}`;
   return new Promise(resolve => {
     request.del(`${baseUrl}${apiUrl}${endpoint}`)

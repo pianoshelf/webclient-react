@@ -8,7 +8,8 @@ export default function SearchResults({ searchResults }) {
   const { free, paid } = searchResults;
 
   const freeResultsElements = free.map((sheetMusic, index) => (
-    <SearchResult sheetMusic={sheetMusic}
+    <SearchResult
+      sheetMusic={sheetMusic}
       key={index}
       firstItem={index === 0}
       lastItem={index === free.length - 1}
@@ -16,7 +17,8 @@ export default function SearchResults({ searchResults }) {
   ));
 
   const paidResultsElements = paid.map((sheetMusic, index) => (
-    <PaidSearchResult paidSheetMusic={sheetMusic}
+    <PaidSearchResult
+      paidSheetMusic={sheetMusic}
       key={index}
       firstItem={index === 0}
       lastItem={index === free.length - 1}

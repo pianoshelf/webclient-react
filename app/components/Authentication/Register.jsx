@@ -3,17 +3,18 @@ import FontAwesome from 'react-fontawesome';
 import Helmet from 'react-helmet';
 import includes from 'lodash/collection/includes';
 import React from 'react';
+import { asyncConnect } from 'redux-async-connect';
 import { Link } from 'react-router';
 import { reduxForm } from 'redux-form';
 
 import Button from './utils/Button';
-import canLogin from '../../decorators/canLogin';
-import canFacebookLogin from '../../decorators/canFacebookLogin';
+import loadFacebook from '../../decorators/loadFacebook';
 import ErrorMessage from './utils/ErrorMessage';
 import Input from './utils/Input';
 import Title from './utils/Title';
-import { errors } from '../../utils/constants';
-import { register, facebookLogin } from '../../actions/login';
+import { errors, success } from '../../utils/constants';
+import { clearErrors, register, facebookLogin } from '../../actions/login';
+import { setAuthToken } from '../../utils/api';
 
 export const fieldNames = [
   'username',
@@ -22,38 +23,86 @@ export const fieldNames = [
   'password2',
 ];
 
+@asyncConnect({
+  promise: (params, { store }) => store.dispatch(clearErrors()),
+})
 @reduxForm(
-  { form: 'register', fields: fieldNames },
+  {
+    form: 'register',
+    fields: fieldNames,
+    initialValues: {
+      username: '',
+      email: '',
+      password1: '',
+      password2: '',
+    },
+  },
   state => ({
     errorCode: state.login.code,
     inProgress: state.progress.inProgress,
+    loggedIn: state.login.loggedIn,
+    user: state.login.user,
   })
 )
-@canFacebookLogin
-@canLogin
+@loadFacebook
 export default class Register extends React.Component {
   static propTypes = {
     errorCode: React.PropTypes.number.isRequired,
-    inProgress: React.PropTypes.array.isRequired,
     fields: React.PropTypes.object.isRequired,
     handleSubmit: React.PropTypes.func.isRequired,
+    inProgress: React.PropTypes.array.isRequired,
+    location: React.PropTypes.object.isRequired,
+    loggedIn: React.PropTypes.bool.isRequired,
+    user: React.PropTypes.object.isRequired,
   };
 
   static contextTypes = {
+    store: React.PropTypes.object.isRequired,
     router: React.PropTypes.object.isRequired,
   };
 
   /**
+   * Component Lifecycle
+   */
+
+  // If the user is already logged in, handle post-login tasks
+  componentDidMount() {
+    if (this.props.loggedIn) {
+      this.handlePostRegister();
+    }
+  }
+
+  // If the user logs in, handle post-login tasks
+  componentDidUpdate(prevProps) {
+    if (!prevProps.loggedIn && this.props.loggedIn) {
+      this.handlePostRegister();
+    }
+  }
+
+  /**
    * Handlers
    */
-  handleRegister = (values, dispatch) => {
+  handlePostRegister = () => {
+    // Set authorization token
+    const { router, store } = this.context;
+    const { user, location } = this.props;
+    setAuthToken(user.authToken, store);
+
+    if (location.query && location.query.redirect) {
+      router.push(location.query.redirect);
+    } else {
+      router.push('/');
+    }
+  };
+
+  registerUser = (values, dispatch) => {
     const { username, email, password1, password2 } = values;
     const newUser = { username, email, password1, password2 };
     return dispatch(register(newUser));
   };
 
-  handleFacebookRegister = (values, dispatch) => {
-    return this.facebookLogin().then(response => {
+  registerUserOnFacebook = (values, dispatch) => {
+    this.facebookLogin().then(response => {
       if (response.status === 'connected') {
         const { accessToken } = response;
         dispatch(facebookLogin({ accessToken }));
@@ -66,43 +115,48 @@ export default class Register extends React.Component {
    */
   render() {
     const { fields, inProgress, errorCode, handleSubmit } = this.props;
-    const registerInProgress = includes(inProgress, 'register') ||
-                               includes(inProgress, 'login');
+    const registerInProgress = includes(inProgress, 'register') || includes(inProgress, 'login');
     const facebookInProgress = includes(inProgress, 'facebookLogin');
 
     return (
       <div>
         <Helmet title="Register" />
         <Title>Sign up for PianoShelf</Title>
-        <ErrorMessage errorCode={errorCode}
-          dontDisplayIf={registerInProgress || facebookInProgress}
+        <ErrorMessage
+          errorCode={errorCode}
+          dontDisplayIf={registerInProgress || facebookInProgress ||
+            errorCode === success.REGISTERED || errorCode === success.LOGGED_IN}
         />
         <form
           className="authentication__form"
-          onSubmit={handleSubmit(this.handleRegister)}
+          onSubmit={handleSubmit(this.registerUser)}
         >
           <div className="authentication__inputs">
-            <Input placeholder="Username"
+            <Input
+              placeholder="Username"
               name="username"
               errorCode={errorCode}
               errorWhen={[errors.NO_USERNAME, errors.USERNAME_TAKEN]}
               focusOnLoad
               field={fields.username}
             />
-            <Input placeholder="Email"
+            <Input
+              placeholder="Email"
               name="email"
               errorCode={errorCode}
               errorWhen={[errors.NO_EMAIL, errors.INVALID_EMAIL, errors.EMAIL_ALREADY_REGISTERED]}
               field={fields.email}
             />
-            <Input placeholder="Password"
+            <Input
+              placeholder="Password"
               name="password1"
               password
               errorCode={errorCode}
               errorWhen={[errors.NO_PASSWORD, errors.NOT_STRONG_PASSWORD]}
               field={fields.password1}
             />
-            <Input placeholder="Confirm Password"
+            <Input
+              placeholder="Confirm Password"
               name="password2"
               password
               errorCode={errorCode}
@@ -110,7 +164,9 @@ export default class Register extends React.Component {
               field={fields.password2}
             />
           </div>
-          <Button color="blue-light" submittedIf={registerInProgress}
+          <Button
+            color="blue-light"
+            submittedIf={registerInProgress}
             disableIf={registerInProgress || facebookInProgress}
           >
             <FontAwesome className="authentication__button-icon" name="star" />
@@ -120,9 +176,11 @@ export default class Register extends React.Component {
         <Link to="/login" className="authentication__link">I have an account</Link>
         <hr className="authentication__hr" />
         <form
-          onSubmit={handleSubmit(this.handleFacebook)}
+          onSubmit={handleSubmit(this.registerUserOnFacebook)}
         >
-          <Button color="facebook" submittedIf={facebookInProgress}
+          <Button
+            color="facebook"
+            submittedIf={facebookInProgress}
             disableIf={registerInProgress || facebookInProgress}
           >
             <FontAwesome className="authentication__button-icon" name="facebook-square" />

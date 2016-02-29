@@ -1,5 +1,6 @@
 if (process.env.NODE_ENV === 'production') {
   module.exports = require('./DevTools.prod');
 } else {
-  module.exports = require('./DevTools.dev');
+  // Use prod for now
+  module.exports = require('./DevTools.prod');
 }

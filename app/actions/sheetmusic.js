@@ -25,7 +25,6 @@ import {
   SHEETMUSIC_DOWNLOAD,
 } from '../constants/sheetmusic';
 
-  // SHEETMUSIC_GET_TOP,
 /**
  * Sheet music manipulation functions
  */
@@ -70,29 +69,16 @@ export const deleteSheetMusic = createAction(
  * Getting list of sheet music
  */
 
-// export const getTopSheetMusic = createAction(
-  // SHEETMUSIC_GET_TOP,
-  // async store => {
-    // const response = await get({
-      // endpoint: '/sheetmusic/top',
-      // store,
-    // });
-
-    // if (isActionError(response)) {
-      // // TODO: Find any errors to put here
-      // return response;
-    // }
-
-    // return actionDone(mapSheetMusic(response.payload, result => result.sheetmusic));
-  // }
-// );
-
 export const getTrendingSheetMusic = createAction(
   SHEETMUSIC_GET_TRENDING,
   async (days, results, store) => {
     const response = await get({
-      endpoint: '/sheetmusic/trending/',
-      params: { days, results },
+      endpoint: '/sheetmusic/',
+      params: {
+        order_by: 'trending',
+        days,
+        results,
+      },
       store,
     });
 
@@ -101,7 +87,9 @@ export const getTrendingSheetMusic = createAction(
       return response;
     }
 
-    return actionDone(mapSheetMusic(response.payload, result => result.sheetmusic));
+    return actionDone({
+      results: mapSheetMusic(response.payload.results),
+    });
   }
 );
 
@@ -121,14 +109,15 @@ export const getSheetMusicList = createAction(
       store,
     });
 
-    console.log(response.payload);
-
     if (isActionError(response)) {
       // TODO: Find any errors to put here
       return response;
     }
 
-    return actionDone(mapSheetMusic(response.payload.results));
+    return actionDone({
+      results: mapSheetMusic(response.payload.results),
+      count: response.payload.count,
+    });
   }
 );
 
@@ -150,7 +139,10 @@ export const getMostPopularSheetMusic = createAction(
       return response;
     }
 
-    return actionDone(mapSheetMusic(response.payload.results));
+    return actionDone({
+      results: mapSheetMusic(response.payload.results),
+      count: response.payload.count,
+    });
   }
 );
 

@@ -3,53 +3,101 @@ import FontAwesome from 'react-fontawesome';
 import includes from 'lodash/collection/includes';
 import Helmet from 'react-helmet';
 import React from 'react';
+import { asyncConnect } from 'redux-async-connect';
 import { Link } from 'react-router';
 import { reduxForm } from 'redux-form';
 
 import Button from './utils/Button';
-import canLogin from '../../decorators/canLogin';
-import canFacebookLogin from '../../decorators/canFacebookLogin';
+import loadFacebook from '../../decorators/loadFacebook';
 import ErrorMessage from './utils/ErrorMessage';
 import Input from './utils/Input';
 import Title from './utils/Title';
-import { login, facebookLogin } from '../../actions/login';
-import { errors } from '../../utils/constants';
+import { clearErrors, login, facebookLogin } from '../../actions/login';
+import { errors, success } from '../../utils/constants';
+import { setAuthToken } from '../../utils/api';
 
 export const fieldNames = [
   'username',
   'password',
 ];
 
+@asyncConnect({
+  promise: (params, { store }) => store.dispatch(clearErrors()),
+})
 @reduxForm(
-  { form: 'login', fields: fieldNames },
+  {
+    form: 'login',
+    fields: fieldNames,
+    initialValues: { username: '', password: '' },
+  },
   state => ({
     errorCode: state.login.code,
     inProgress: state.progress.inProgress,
+    loggedIn: state.login.loggedIn,
+    user: state.login.user,
   })
 )
-@canFacebookLogin
-@canLogin
+@loadFacebook
 export default class Login extends React.Component {
   /**
    * PropTypes
    */
   static propTypes = {
     errorCode: React.PropTypes.number.isRequired,
-    inProgress: React.PropTypes.array.isRequired,
     fields: React.PropTypes.object.isRequired,
     handleSubmit: React.PropTypes.func.isRequired,
+    inProgress: React.PropTypes.array.isRequired,
+    location: React.PropTypes.object.isRequired,
+    loggedIn: React.PropTypes.bool.isRequired,
+    user: React.PropTypes.object.isRequired,
   };
+
+  static contextTypes = {
+    store: React.PropTypes.object.isRequired,
+    router: React.PropTypes.object.isRequired,
+  };
+
+  /**
+   * Component Lifecycle
+   */
+
+  // If the user is already logged in, handle post-login tasks
+  componentDidMount() {
+    if (this.props.loggedIn) {
+      this.handlePostLogin();
+    }
+  }
+
+  // If the user logs in, handle post-login tasks
+  componentDidUpdate(prevProps) {
+    if (!prevProps.loggedIn && this.props.loggedIn) {
+      this.handlePostLogin();
+    }
+  }
 
   /**
    * Handlers
    */
-  handleLogin = (values, dispatch) => {
+  handlePostLogin = () => {
+    // Set authorization token
+    const { router, store } = this.context;
+    const { user, location } = this.props;
+    setAuthToken(user.authToken, store);
+
+    if (location.query && location.query.redirect) {
+      router.push(location.query.redirect);
+    } else {
+      router.push('/');
+    }
+  };
+
+  logUserIn = (values, dispatch) => {
     const { username, password } = values;
     return dispatch(login(username, password));
   };
 
-  handleFacebookRegister = (values, dispatch) => {
-    return this.facebookLogin().then(response => {
+  logFacebookUserIn = (values, dispatch) => {
+    this.facebookLogin().then(response => {
       if (response.status === 'connected') {
         const { accessToken } = response;
         dispatch(facebookLogin({ accessToken }));
@@ -69,19 +117,23 @@ export default class Login extends React.Component {
       <div>
         <Helmet title="Log in" />
         <Title>Log in to PianoShelf</Title>
-        <ErrorMessage errorCode={errorCode}
-          dontDisplayIf={loginInProgress || facebookInProgress}
+        <ErrorMessage
+          errorCode={errorCode}
+          dontDisplayIf={loginInProgress || facebookInProgress ||
+            errorCode === success.LOGGED_IN}
         />
-        <form className="authentication__form" onSubmit={handleSubmit(this.handleLogin)}>
+        <form className="authentication__form" onSubmit={handleSubmit(this.logUserIn)}>
           <div className="authentication__inputs">
-            <Input placeholder="Username"
+            <Input
+              placeholder="Username"
               name="username"
               errorCode={errorCode}
               errorWhen={[errors.NO_USERNAME]}
               focusOnLoad
               field={fields.username}
             />
-            <Input placeholder="Password"
+            <Input
+              placeholder="Password"
               name="password"
               password
               errorCode={errorCode}
@@ -89,7 +141,9 @@ export default class Login extends React.Component {
               field={fields.password}
             />
           </div>
-          <Button color="orange" submittedIf={loginInProgress}
+          <Button
+            color="orange"
+            submittedIf={loginInProgress}
             disableIf={loginInProgress || facebookInProgress}
           >
             <FontAwesome className="authentication__button-icon" name="sign-in" />
@@ -98,8 +152,10 @@ export default class Login extends React.Component {
         </form>
         <Link to="/login/forgot" className="authentication__link">I forgot my password</Link>
         <hr className="authentication__hr" />
-        <form onSubmit={handleSubmit(this.handleFacebook)}>
-          <Button color="facebook" submittedIf={facebookInProgress}
+        <form onSubmit={handleSubmit(this.logFacebookUserIn)}>
+          <Button
+            color="facebook"
+            submittedIf={facebookInProgress}
             disableIf={loginInProgress || facebookInProgress}
           >
             <FontAwesome className="authentication__button-icon" name="facebook-square" />

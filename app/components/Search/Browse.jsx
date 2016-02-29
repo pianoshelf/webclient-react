@@ -7,7 +7,7 @@ import isEqual from 'lodash/lang/isEqual';
 import React from 'react';
 import { asyncConnect } from 'redux-async-connect';
 import { connect } from 'react-redux';
-import { findDOMNode } from 'react-dom';
+import { reduxForm } from 'redux-form';
 
 import BrowseList from './utils/BrowseList';
 import Pagination from './utils/Pagination';
@@ -17,7 +17,6 @@ import Spinner from './utils/Spinner';
 
 import { getTrendingSheetMusic, getSheetMusicList } from '../../actions/sheetmusic';
 import { search } from '../../actions/search';
-import { addProgress, removeProgress } from '../../actions/progress';
 
 // The number of items per search page
 const PAGE_SIZE = 12;
@@ -77,12 +76,21 @@ const PAGE_SIZE = 12;
 
 @connect(
   state => ({
-    sheetMusicList: state.sheetmusic.lists.list.list,
+    sheetMusicList: state.sheetmusic.lists.list,
     searchResults: state.search,
-    trendingResults: state.sheetmusic.lists.trending.list,
+    trendingResults: state.sheetmusic.lists.trending,
     inProgress: state.progress.inProgress,
   })
 )
+
+@reduxForm({
+  form: 'search',
+  fields: ['search'],
+}, (state, props) => ({
+  initialValues: {
+    search: props.location.query.query || '',
+  },
+}))
 
 export default class Browse extends React.Component {
   static propTypes = {
@@ -113,13 +121,19 @@ export default class Browse extends React.Component {
       ]),
     }),
     // List of sheet music obtained from filters
-    sheetMusicList: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
+    sheetMusicList: React.PropTypes.object.isRequired,
     // List of search results
     searchResults: React.PropTypes.object.isRequired,
+    // List of trending results
+    trendingResults: React.PropTypes.object.isRequired,
     // Progress array
     inProgress: React.PropTypes.array.isRequired,
     // Redux store
     store: React.PropTypes.object,
+    // Form fields
+    fields: React.PropTypes.object,
+    // Handle change from redux-form
+    handleChange: React.PropTypes.func,
   };
 
   static contextTypes = {
@@ -158,31 +172,23 @@ export default class Browse extends React.Component {
     });
   };
 
-  handleSearchTextChange = () => {
-    this.props.store.dispatch(addProgress('searchQuery'));
-
-    // Attach debounce function to this instance and cache it.
-    this.searchQueryChangeFunction = this.searchQueryChangeFunction ||
-      debounce(this.handleSearchQueryChange, 500);
-
-    // Call the retrieved property.
-    this.searchQueryChangeFunction();
-  };
-
   handleSearchQueryChange = () => {
-    this.props.store.dispatch(removeProgress('searchQuery'));
-    const value = findDOMNode(this.refs.searchBox).value;
-    if (value === '') {
-      this.context.router.replace({
-        pathname: this.props.location.pathname,
-        query: { show: 'popular' },
-      });
-    } else {
-      this.context.router.replace({
-        pathname: this.props.location.pathname,
-        query: { query: value },
-      });
-    }
+    this.handleSearchChange = this.handleSearchChange || debounce(() => {
+      const { value } = this.props.fields.search;
+      if (value === '') {
+        this.context.router.replace({
+          pathname: this.props.location.pathname,
+          query: { show: 'popular' },
+        });
+      } else {
+        this.context.router.replace({
+          pathname: this.props.location.pathname,
+          query: { query: value },
+        });
+      }
+    }, 500);
+
+    this.handleSearchChange();
   };
 
   /**
@@ -190,7 +196,8 @@ export default class Browse extends React.Component {
    */
 
   render() {
-    const { query } = this.props.location.query || {};
+    const { location, fields, searchResults, trendingResults, sheetMusicList } = this.props;
+    const { show, query } = location.query || {};
 
     const inProgress = intersection(this.props.inProgress, [
       'search',
@@ -210,57 +217,56 @@ export default class Browse extends React.Component {
       'search__results--in-progress': inProgress,
     });
 
+    let resultsToShow = [];
+    if (show === 'trending') {
+      resultsToShow = trendingResults;
+    } else {
+      resultsToShow = sheetMusicList;
+    }
+
     return (
       <div>
         <Helmet title="Browse Sheet Music" />
-        <div className="search__browse-search">
+        <form className="search__browse-search" onChange={this.handleSearchQueryChange}>
           <input type="text"
             className="search__browse-search-input"
             placeholder="Search for sheet music..."
-            defaultValue={query || ''}
-            onChange={this.handleSearchTextChange}
             ref="searchBox"
+            {...fields.search}
           />
           {/*
             Add this back once the API returns a proper search result count.
             <If condition={query}>
               <div className="search__browse-search-count">
-                <If condition={this.props.searchResults.count === 1}>
+                <If condition={searchResults.count === 1}>
                   <span>1 result</span>
                 <Else />
-                  <span>{this.props.searchResults.count} results</span>
+                  <span>{searchResults.count} results</span>
                 </If>
               </div>
             </If>
             */}
-        </div>
+        </form>
         <div className="search__results-panel">
           <If condition={displayFilters}>
             <div className="search__filter-wrapper">
-              <SearchFilters
-                location={this.props.location}
-                onFilterChange={this.handleFilterChange}
-              />
+              <SearchFilters location={location} onFilterChange={this.handleFilterChange} />
             </div>
           </If>
           <div className={resultWrapperClassName}>
             <div className={resultsClassName}>
               <If condition={query}>
-                <SearchResults
-                  searchResults={this.props.searchResults}
-                />
+                <SearchResults searchResults={searchResults} />
               <Else />
-                <BrowseList
-                  sheetMusicList={this.props.sheetMusicList}
-                />
+                <BrowseList sheetMusicList={resultsToShow.results} />
               </If>
             </div>
             <If condition={inProgress}>
               <Spinner />
             </If>
             <Pagination
-              location={this.props.location}
-              sheetMusicCount={this.props.sheetMusicList.count}
+              location={location}
+              sheetMusicCount={resultsToShow.count}
               pageSize={PAGE_SIZE}
             />
           </div>

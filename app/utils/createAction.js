@@ -13,15 +13,19 @@
 export default function createAction(type, handler) {
   return (...args) => {
     return dispatch => {
-      dispatch({ type, progress: 'start' });
-      return Promise.resolve(handler(...args)).then(action => {
-        const { error, code, payload } = action;
-        if (error) {
-          return dispatch({ type, payload, code, progress: 'error' });
-        } else {
-          return dispatch({ type, payload, progress: 'done' });
-        }
-      });
+      if (handler) {
+        dispatch({ type, progress: 'start' });
+        return Promise.resolve(handler(...args)).then(action => {
+          const { error, code, payload } = action;
+          if (error) {
+            return dispatch({ type, payload, code, progress: 'error' });
+          } else {
+            return dispatch({ type, payload, progress: 'done' });
+          }
+        });
+      } else {
+        return Promise.resolve(dispatch({ type, progress: 'done' }));
+      }
     };
   };
 }

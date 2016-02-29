@@ -20,7 +20,7 @@ import { getMostPopularSheetMusic } from '../actions/sheetmusic';
 @connect(
   state => ({
     loggedIn: state.login.loggedIn,
-    popularSheetMusic: state.sheetmusic.lists.popular.list,
+    popularSheetMusic: state.sheetmusic.lists.popular.results,
   }),
 )
 export default class Homepage extends React.Component {
@@ -117,9 +117,9 @@ export default class Homepage extends React.Component {
       <div className="homepage">
         <Helmet title="PianoShelf - free piano sheet music" titleTemplate="%s" />
         <NavBar disappearing disappearingOffset={50} />
-        {this.renderMainPanel.call(this)}
-        {this.renderPopularPanel.call(this)}
-        {this.renderInfoPanel.call(this)}
+        {this.renderMainPanel()}
+        {this.renderPopularPanel()}
+        {this.renderInfoPanel()}
         <Footer />
       </div>
     );

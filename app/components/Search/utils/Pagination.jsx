@@ -8,13 +8,13 @@ export default function Pagination({ sheetMusicCount, pageSize, location }) {
 
   // Don't display pagination if we have a search query.
   // TODO(ankit): Remove this once pagination is implemented on search page.
-  if (sheetMusicCount === 0 || query) return null;
+  if (sheetMusicCount === 0 || query) return <div />;
 
   const numberOfPages = Math.ceil(sheetMusicCount / pageSize);
   const currentPage = parseInt(page || 1, 10);
 
   // Don't display pagination buttons if we have less than 2 pages
-  if (numberOfPages < 2) return null;
+  if (numberOfPages < 2) return <div />;
 
   return (
     <div className="search__pagination">

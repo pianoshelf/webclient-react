@@ -43,23 +43,13 @@ describe('actions/sheetmusic', () => {
     });
   });
 
-  describe.skip('#getTopSheetMusic', () => {
-    it('calls the correct API', () => {
-      const scope = mockApiCall({
-        method: 'get',
-        path: '/api/sheetmusic/top',
-      });
-      return sheetmusic.getTopSheetMusic(1234)(dispatch)
-        .then(() => scope.done());
-    });
-  });
-
   describe('#getTrendingSheetMusic', () => {
     it('calls the correct API', () => {
       const scope = mockApiCall({
         method: 'get',
-        path: '/api/sheetmusic/trending/',
+        path: '/api/sheetmusic/',
         params: {
+          order_by: 'trending',
           days: 1234,
           results: 5678,
         },

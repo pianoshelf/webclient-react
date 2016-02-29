@@ -20,7 +20,14 @@ export const fieldNames = [
 ];
 
 @reduxForm(
-  { form: 'resetPasswordConfirm', fields: fieldNames },
+  {
+    form: 'resetPasswordConfirm',
+    fields: fieldNames,
+    initialValues: {
+      password1: '',
+      password2: '',
+    },
+  },
   state => ({
     errorCode: state.login.code,
     inProgress: state.progress.inProgress,

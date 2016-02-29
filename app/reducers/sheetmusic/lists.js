@@ -2,44 +2,37 @@
 import createReducer from '../../utils/createReducer';
 
 import {
-  SHEETMUSIC_GET_TOP,
   SHEETMUSIC_GET_TRENDING,
   SHEETMUSIC_GET_LIST,
   SHEETMUSIC_GET_POPULAR,
 } from '../../constants/sheetmusic';
 
-function createList(items = []) {
-  return {
-    list: items,
-    count: items.length,
-  };
-}
-
 /**
- * Reducer for sheet music lists, like trending, popular, and top sheet music. Also allows for
+ * Reducer for sheet music lists, like trending, and popular sheet music. Also allows for
  * general lists, like with filters.
  */
 export default createReducer({
   errorCode: 0,
-  list: createList(),
-  popular: createList(),
-  top: createList(),
-  trending: createList(),
+  list: { results: [], count: 0 },
+  popular: { results: [], count: 0 },
+  trending: { results: [], count: 0 },
 }, {
 
   [SHEETMUSIC_GET_LIST]: {
     done(state, payload) {
-      console.log('i got the list yay');
       return {
         ...state,
-        list: createList(payload),
+        list: {
+          results: payload.results,
+          count: payload.count,
+        },
         errorCode: 0,
       };
     },
     error(state, code) {
       return {
         ...state,
-        list: createList(),
+        list: { results: [], count: 0 },
         errorCode: code,
       };
     },
@@ -49,31 +42,17 @@ export default createReducer({
     done(state, payload) {
       return {
         ...state,
-        popular: createList(payload),
+        popular: {
+          results: payload.results,
+          count: payload.count,
+        },
         errorCode: 0,
       };
     },
     error(state, code) {
       return {
         ...state,
-        popular: createList(),
-        errorCode: code,
-      };
-    },
-  },
-
-  [SHEETMUSIC_GET_TOP]: {
-    done(state, payload) {
-      return {
-        ...state,
-        top: createList(payload),
-        errorCode: 0,
-      };
-    },
-    error(state, code) {
-      return {
-        ...state,
-        top: createList(),
+        popular: { results: [], count: 0 },
         errorCode: code,
       };
     },
@@ -83,14 +62,16 @@ export default createReducer({
     done(state, payload) {
       return {
         ...state,
-        trending: createList(payload),
+        trending: {
+          results: payload.results,
+        },
         errorCode: 0,
       };
     },
     error(state, code) {
       return {
         ...state,
-        trending: createList(),
+        trending: { results: [] },
         errorCode: code,
       };
     },

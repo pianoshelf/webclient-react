@@ -29,7 +29,7 @@ import { getSheetMusic, getComments } from '../../actions/sheetmusic';
 @connect(
   state => ({
     errorCode: state.sheetmusic.results.errorCode,
-    result: state.sheetmusic.results,
+    result: state.sheetmusic.results.result,
     commentResult: state.sheetmusic.comments,
     inProgress: state.progress.inProgress,
     loggedIn: state.login.loggedIn,
@@ -49,7 +49,7 @@ export default class Viewer extends React.Component {
     errorCode: React.PropTypes.number.isRequired,
     result: React.PropTypes.object.isRequired,
     commentResult: React.PropTypes.object.isRequired,
-    inProgress: React.PropTypes.bool.isRequired,
+    inProgress: React.PropTypes.array.isRequired,
     loggedIn: React.PropTypes.bool.isRequired,
     user: React.PropTypes.object.isRequired,
     hasFullscreen: React.PropTypes.bool,
@@ -247,7 +247,7 @@ export default class Viewer extends React.Component {
   renderComments() {
     return (
       <InfoBox title="Comments" icon="comment">
-        <Comments id={this.props.result.id} comments={this.props.commentResult.comment}/>
+        <Comments id={this.props.result.id} comments={this.props.commentResult.list.comment}/>
       </InfoBox>
     );
   }
@@ -257,16 +257,15 @@ export default class Viewer extends React.Component {
 
     if (!result.difficulty) return null;
 
-    const fullStarCount = result.difficulty;
-    const emptyStarCount = 5 - result.difficulty;
+    const starCount = result.difficulty;
 
     return (
       <Detail title="Difficulty">
         <div className="sheetmusic__difficulty-stars">
-          {times(fullStarCount, index => (
+          {times(starCount, index => (
             <FontAwesome className="sheetmusic__difficulty-star" name="star" key={index} />
           ))}
-          {times(emptyStarCount, index => (
+          {times(5 - starCount, index => (
             <FontAwesome className="sheetmusic__difficulty-star" name="star-o" key={index + 5} />
           ))}
         </div>
@@ -314,34 +313,29 @@ export default class Viewer extends React.Component {
 
   render() {
     const title = this.props.result ? this.props.result.title : 'Loading...';
-    const inProgress = (this.props.inProgress.indexOf('getSheetMusic') !== -1);
-
-    if (inProgress) {
-      return (
-        <div>
-          <Helmet title={title} />
-          <LoadingScreen />
-        </div>
-      );
-    }
+    const inProgress = this.props.inProgress.indexOf('getSheetMusic') !== -1;
 
     return (
       <div>
         <Helmet title={title} />
-        <div className="sheetmusic__main" ref="mainViewer">
-          {this.renderSheetMusicViewer()}
-          {this.renderSheetMusicControls()}
-        </div>
-        <ResponsiveContainer className="sheetmusic__details">
-          <div className="sheetmusic__details-left">
-            {this.renderDescription()}
-            {this.renderVideos()}
-            {this.renderComments()}
+        <If condition={inProgress}>
+          <LoadingScreen />
+        <Else />
+          <div className="sheetmusic__main" ref="mainViewer">
+            {this.renderSheetMusicViewer()}
+            {this.renderSheetMusicControls()}
           </div>
-          <div className="sheetmusic__details-right">
-            {this.renderInfo()}
-          </div>
-        </ResponsiveContainer>
+          <ResponsiveContainer className="sheetmusic__details">
+            <div className="sheetmusic__details-left">
+              {this.renderDescription()}
+              {this.renderVideos()}
+              {this.renderComments()}
+            </div>
+            <div className="sheetmusic__details-right">
+              {this.renderInfo()}
+            </div>
+          </ResponsiveContainer>
+        </If>
       </div>
     );
   }

@@ -76,4 +76,15 @@ describe('utils/createAction', () => {
       });
     });
   });
+
+  it('dispatches with no payload when no function is provided', () => {
+    const dispatch = spy();
+    const action = createAction(ACTION_NAME);
+    action()(dispatch).then(() => {
+      expect(dispatch).to.have.been.calledWithExactly({
+        type: ACTION_NAME,
+        progress: 'done',
+      });
+    });
+  });
 });
