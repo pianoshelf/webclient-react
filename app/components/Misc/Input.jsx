@@ -13,7 +13,7 @@ export default class Input extends React.Component {
     focusOnLoad: React.PropTypes.bool,
 
     // Placeholder to display in the input box
-    placeholder: React.PropTypes.string.isRequired,
+    placeholder: React.PropTypes.node.isRequired,
 
     // Type of the textbox
     type: React.PropTypes.oneOf(['text', 'password']),
@@ -50,7 +50,7 @@ export default class Input extends React.Component {
       <div className={groupClassName}>
         <input className={inputClassName} ref="input" required {...props} />
         <span className={barClassName} />
-        <label className={labelClassName}>{placeholder.toUpperCase()}</label>
+        <label className={labelClassName}>{placeholder}</label>
       </div>
     );
   }

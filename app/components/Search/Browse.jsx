@@ -1,6 +1,7 @@
 
 import classNames from 'classnames';
 import debounce from 'lodash/function/debounce';
+import FontAwesome from 'react-fontawesome';
 import Helmet from 'react-helmet';
 import intersection from 'lodash/array/intersection';
 import isEqual from 'lodash/lang/isEqual';
@@ -22,6 +23,14 @@ import { search } from '../../actions/search';
 // The number of items per search page
 const PAGE_SIZE = 12;
 
+// The delay before we search for something
+const SEARCH_DELAY = 500;
+
+// Create a debounced search function
+const debouncedSearch = debounce((query, store) => {
+  store.dispatch(search(query, store));
+}, SEARCH_DELAY);
+
 @asyncConnect({
   promise: (params, { location, store }) => {
     const {
@@ -32,7 +41,7 @@ const PAGE_SIZE = 12;
     } = location.query;
 
     if (searchQuery) {
-      return store.dispatch(search(searchQuery, store));
+      return debouncedSearch(searchQuery, store);
     } else {
       switch (show) {
         case 'trending':
@@ -142,17 +151,6 @@ export default class Browse extends React.Component {
   };
 
   /**
-   * Component lifecycle methods
-   */
-
-  componentDidUpdate(prevProps) {
-    // If query params change, scroll to the top of the page
-    if (!isEqual(prevProps.location.query, this.props.location.query)) {
-      window.scrollTo(0, 0);
-    }
-  }
-
-  /**
    * Handlers
    */
 
@@ -173,23 +171,24 @@ export default class Browse extends React.Component {
     });
   };
 
-  handleSearchQueryChange = () => {
-    this.handleSearchChange = this.handleSearchChange || debounce(() => {
-      const { value } = this.props.fields.search;
-      if (value === '') {
-        this.context.router.replace({
-          pathname: this.props.location.pathname,
-          query: { show: 'popular' },
-        });
-      } else {
-        this.context.router.replace({
-          pathname: this.props.location.pathname,
-          query: { query: value },
-        });
-      }
-    }, 500);
+  handleSearchQueryChange = debounce(() => {
+    const { value } = this.props.fields.search;
+    if (value === '') {
+      this.context.router.replace({
+        pathname: this.props.location.pathname,
+        query: { show: 'popular' },
+      });
+    } else {
+      this.context.router.replace({
+        pathname: this.props.location.pathname,
+        query: { query: value },
+      });
+    }
+  }, SEARCH_DELAY);
 
-    this.handleSearchChange();
+  handleSearchQuerySubmit = event => {
+    event.preventDefault();
+    this.handleSearchQueryChange();
   };
 
   /**
@@ -228,10 +227,18 @@ export default class Browse extends React.Component {
     return (
       <div>
         <Helmet title="Browse Sheet Music" />
-        <form className="search__browse-search" onChange={this.handleSearchQueryChange}>
+        <form
+          className="search__browse-search"
+          onChange={this.handleSearchQueryChange}
+          onSubmit={this.handleSearchQuerySubmit}
+        >
           <Input
-            className="search__browse-search-input"
-            placeholder="Search for sheet music"
+            placeholder={
+              <span>
+                <FontAwesome name="search" className="search__browse-search-input-icon" />
+                Search for sheet music
+              </span>
+            }
             ref="searchBox"
             {...fields.search}
           />

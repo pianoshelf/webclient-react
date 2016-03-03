@@ -43,6 +43,9 @@ const loadAsync = props => (
   <ReduxAsyncConnect {...props} helpers={{ location: props.location }} />
 );
 
+// Scroll to top on every render
+const scrollToTop = () => window.scrollTo(0, 0);
+
 // Re-render everything on reactRoot
 render(
   <Provider store={store} key="provider">
@@ -52,6 +55,7 @@ render(
         render={loadAsync}
         history={history}
         routes={routes}
+        onUpdate={scrollToTop}
       />
     </div>
   </Provider>,

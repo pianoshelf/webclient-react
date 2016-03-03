@@ -16,16 +16,22 @@ $button-border-radius: 0
  */
 
 =color-area($color, $textColor: $black)
-  border-color: $color
-  background-color: lighten($color, 20%)
+  background-color: lighten($color, 15%)
   color: $textColor
 
 =clickable($color, $textColor: $black)
   +color-area($color, $textColor)
+  border: 1px solid transparent
+  transition: 0.2s ease all
+  color: $textColor
   &:hover
     border-color: $color
-    background-color: lighten($color, 24%)
     color: $textColor
+  &:active, &:focus
+    border-color: darken($color, 10%)
+    background-color: lighten($color, 5%)
+    color: $textColor
+    outline: none
 
 =color-area-gradient($color, $textColor: $black)
   border-color: darken($color, 10%)
