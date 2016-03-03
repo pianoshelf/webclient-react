@@ -11,7 +11,7 @@ import RightButton from './utils/RightButton';
 
 @withState('slide', 'setSlide', 1)
 @withState('fullscreen', 'setFullScreen', false)
-@withState('screenfull', 'setScreenfullModule', {})
+@withState('screenfullModule', 'setScreenfullModule', {})
 export default class MainViewer extends React.Component {
   static propTypes = {
     images: React.PropTypes.array.isRequired,
