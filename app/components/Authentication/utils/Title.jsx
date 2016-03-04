@@ -1,15 +1,8 @@
 
 import React from 'react';
 
-export default React.createClass({
-
-  propTypes: {
-    children: React.PropTypes.node,
-  },
-
-  render() {
-    return (
-      <div className="authentication__title">{this.props.children}</div>
-    );
-  },
-});
+export default function Title({ children }) {
+  return (
+    <div className="authentication__title">{children}</div>
+  );
+}

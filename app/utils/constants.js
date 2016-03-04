@@ -1,5 +1,5 @@
 /**
- * This file contains constants used throughout the PianoShelf code base,
+ * This file contains constants used throughout the Pianoshelf code base,
  * such as error numbers.
  */
 
@@ -9,6 +9,7 @@ let s = 1; // Starting point
 export const errors = {
 
   // Client side errors
+  NETWORK_ERROR: s++,
   INVALID_EMAIL: s++,
   NO_EMAIL: s++,
   NO_PASSWORD: s++,
@@ -34,6 +35,7 @@ export const success = {
   REGISTERED: s++,
   PASSWORD_RESET: s++,
   PASSWORD_CONFIRM_RESET: s++,
+  PASSWORD_CHANGED: s++,
   EMAIL_VERIFIED: s++,
 
 };

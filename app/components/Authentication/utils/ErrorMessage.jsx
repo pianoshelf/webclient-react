@@ -28,7 +28,7 @@ function getErrorMessage(errorCode) {
     case errors.EMAIL_NOT_REGISTERED:
       return [
         true,
-        'Either the email you specified is not registered with PianoShelf or your email address' +
+        'Either the email you specified is not registered with Pianoshelf or your email address ' +
           'hasn\'t been activated yet.',
       ];
     case errors.EXPIRED_LINK:
@@ -54,15 +54,15 @@ export default function ErrorMessage({ errorCode, dontDisplayIf }) {
 
     return (
       <div className={className}>
-        <FontAwesome className="authentication__message-icon"
+        <FontAwesome
+          className="authentication__message-icon"
           name={isError ? 'exclamation-circle' : 'info-circle'}
-          size="lg"
         />
         {errorMessage}
       </div>
     );
   } else {
-    return '';
+    return <div />;
   }
 }
 

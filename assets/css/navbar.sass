@@ -43,7 +43,7 @@ $navbar-logo-height-mobile: 67.5px
 .navbar__logo-buffer
   display: inline-block
   float: left
-  width: $navbar-logo-height-mobile + 10px
+  width: $navbar-logo-height-mobile + 7px
   height: $navbar-height-mobile
   +when-tablet
     width: $navbar-logo-height + 10px
@@ -57,7 +57,6 @@ $navbar-logo-height-mobile: 67.5px
   font-size: 25px
   font-family: $title-font
   color: darken($blue, 30%)
-  font-weight: $weight-light
   transition: color 0.2s, top 0.2s
   position: relative
   top: 0
@@ -66,9 +65,10 @@ $navbar-logo-height-mobile: 67.5px
     font-size: 35px
   &--homepage
     color: #fff
-    top: 8px
+    top: 7px
+    opacity: 0.9
     +when-tablet
-      top: 10px
+      top: 9px
 
 // This is for the beta symbol
 .navbar__title-beta
@@ -94,23 +94,29 @@ $navbar-logo-height-mobile: 67.5px
 .navbar__button
   display: inline-block
   float: right
-  font-size: 16px
+  font-size: 15px
   text-decoration: none
   color: #000
-  padding: 8px
-  margin: 10px 10px 10px 0
+  padding: 10px 5px 6px 5px
+  margin: 12px 5px 10px 0
   line-height: $navbar-height-mobile - 40px
   transition-duration: 0.2s
   transition-property: color, background-color, border-color
-  +standard-borders
-  +clickable($blue-light)
   +when-tablet
+    padding: 10px 10px 6px 10px
+    margin: 12px 10px 10px 0
     line-height: $navbar-height - 40px
     font-size: 20px
+  +clickable($blue-light)
   &--important
     +clickable($green)
   &--homepage
     background: transparent
     border-color: transparent
     color: #fff
+    &:hover
+      color: #fff
+      border-color: transparent
+    &:active, &:focus
+      color: #000
 

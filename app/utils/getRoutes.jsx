@@ -1,10 +1,8 @@
+/* eslint-disable no-unused-vars */
 
 // Import external modules
 import React from 'react';
 import { Route, Redirect } from 'react-router';
-
-// Import internal modules
-import { requireNoAuth } from './authUtils';
 
 // Main components
 import App from '../components/App';
@@ -37,11 +35,23 @@ import TermsOfService from '../components/Static/TermsOfService';
  * A function that retrieves the route configuration for both
  * the server and client.
  *
- * @param {Flux} flux The flux object.
+ * @param {Store} store The redux store.
  *
  * @return {React.Component} The set of routes objects.
  */
-export default function getRoutes(flux) {
+export default function getRoutes(store) {
+  function requireAuth(nextState, replace) {
+    if (!store.getState().login.loggedIn) {
+      replace({ pathname: '/login/', query: { redirect: nextState.location.pathname } });
+    }
+  }
+
+  function requireNoAuth(nextState, replace) {
+    if (store.getState().login.loggedIn) {
+      replace({ pathname: '/' });
+    }
+  }
+
   return (
     <Route component={App}>
 
@@ -50,14 +60,14 @@ export default function getRoutes(flux) {
 
       { /* Authentication routes */ }
       <Route component={Authentication}>
-        <Route path="/login" component={Login} onEnter={requireNoAuth(flux)} />
-        <Route path="/login/forgot" component={ResetPassword} onEnter={requireNoAuth(flux)} />
+        <Route path="/login" component={Login} onEnter={requireNoAuth} />
+        <Route path="/register" component={Register} onEnter={requireNoAuth} />
+        <Route path="/login/forgot" component={ResetPassword} onEnter={requireNoAuth} />
         <Route path="/login/reset/:uid/:token" component={ResetPasswordConfirm}
-          onEnter={requireNoAuth(flux)}
+          onEnter={requireNoAuth}
         />
         <Route path="/login/verify/:key" component={VerifyEmail} />
         <Route path="/logout" component={Logout} />
-        <Route path="/register" component={Register} onEnter={requireNoAuth(flux)} />
         <Redirect from="/password-reset-confirm/:uid/:token" to="/login/reset/:uid/:token" />
         <Redirect from="/verify-email/:key" to="/login/verify/:key" />
       </Route>

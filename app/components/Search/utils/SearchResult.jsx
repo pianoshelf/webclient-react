@@ -7,7 +7,14 @@ import { Link } from 'react-router';
 import ViewsTag from './ViewsTag';
 import DifficultyLevelTag from './DifficultyLevelTag';
 import SheetMusicTags from './SheetMusicTags';
+import { createEventTracker } from '../../../utils/analytics';
 import { sheetMusicPropType } from '../../../utils/sheetMusicUtils';
+
+const trackEvent = createEventTracker('Browse');
+
+function trackResultClick() {
+  trackEvent('click', 'Sheet Music Result');
+}
 
 export default function SearchResult({ sheetMusic, isFirstItem = false, isLastItem = false }) {
   const className = classNames('search__result', {
@@ -23,7 +30,11 @@ export default function SearchResult({ sheetMusic, isFirstItem = false, isLastIt
   if (normalizedKey) tags.push(normalizedKey);
 
   return (
-    <Link className={className} to={`/sheetmusic/${sheetMusic.id}/${sheetMusic.uniqueUrl}`}>
+    <Link
+      to={`/sheetmusic/${sheetMusic.id}/${sheetMusic.uniqueUrl}`}
+      className={className}
+      onClick={trackResultClick}
+    >
       <If condition={sheetMusic.thumbnailUrl}>
         <img src={sheetMusic.thumbnailUrl}
           className="search__result-thumbnail"

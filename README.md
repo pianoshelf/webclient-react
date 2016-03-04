@@ -1,12 +1,12 @@
-# PianoShelf Web Client
+# Pianoshelf Web Client
 
 [![Circle CI](https://circleci.com/gh/pianoshelf/webclient-react/tree/master.svg?style=svg)](https://circleci.com/gh/Pianoshelf/webclient-react/tree/master)
 
-This repository is the new front-end for Pianoshelf.com written in React and Flux.
+This repository is the new front-end for Pianoshelf.com written in React and Redux.
 
 ## Installation
 
-To set up an instance of the front-end for PianoShelf, install all packages:
+To set up an instance of the front-end for Pianoshelf, install all packages:
 
     $ npm install
 

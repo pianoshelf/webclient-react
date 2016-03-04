@@ -3,6 +3,7 @@
 @import 'variables/fonts'
 @import 'variables/globals'
 @import 'variables/responsive'
+@import 'variables/colors'
 
 .authentication__box
   +when-tablet
@@ -25,7 +26,6 @@
     max-width: 300px
     margin: auto
     padding: 15px
-    +standard-borders
     border-color: $grey-normal
     background-color: $white
 
@@ -34,6 +34,8 @@
   font-size: 15px
   margin: 5px 0 5px 0
   padding: 0 5px
+  line-height: 1.5
+  text-rendering: optimizeLegibility
 
 .authentication__title
   font-family: $title-font
@@ -44,38 +46,29 @@
 .authentication__message
   font-size: 15px
   padding: 5px 10px 5px 35px
-  margin-bottom: 5px
+  margin-bottom: 20px
   position: relative
-  +standard-borders
+  text-rendering: optimizeLegibility
   &--info
-    +color-area-gradient(lighten($blue-light, 10%))
+    +color-area($blue-light)
   &--error
-    +color-area-gradient(lighten($red, 10%))
+    +color-area($red)
 
 .authentication__message-icon
   position: absolute
-  top: 10px
+  top: 7px
   left: 10px
 
 .authentication__inputs
+  font-size: 15px
   margin-top: 5px
   margin-bottom: 5px
 
-.authentication__input
-  padding: 3px 8px
-  margin: 2px 0
-  width: 100%
-  +standard-borders
-  border-color: $grey-light;
-  &--error
-    border-color: lighten($red, 10%)
-
 .authentication__button
   border: 0
-  padding: 5px 10px
+  padding: 6px 10px 4px 10px
   width: 100%
-  margin: 5px 0
-  +standard-borders
+  margin-top: 5px
   &--orange
     +clickable($orange)
   &--blue-light
@@ -89,7 +82,7 @@
   margin-right: 5px
 
 .authentication__link
-  margin-top: 5px
+  margin-top: 10px
   font-size: 14px
   display: block
   text-decoration: none
@@ -98,7 +91,7 @@
 
 .authentication__hr
   border: 0
-  border-bottom: 2px solid $grey-light
-  margin: 10px
+  border-bottom: 1px solid $grey-light
+  margin: 10px 0
 
 

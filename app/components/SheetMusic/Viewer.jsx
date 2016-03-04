@@ -1,256 +1,63 @@
 
-import defer from 'lodash/function/defer';
-import fluxMixin from 'flummox/mixin';
 import FontAwesome from 'react-fontawesome';
-import FullScreenMixin from 'react-fullscreen-component';
 import Helmet from 'react-helmet';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import React from 'react';
-import Carousel from 'nuka-carousel';
-import times from 'lodash/utility/times';
+import times from 'lodash/times';
+import { asyncConnect } from 'redux-async-connect';
+import { connect } from 'react-redux';
 
 import Detail from './utils/Detail';
-import EmptyComponent from './utils/EmptyComponent';
 import InfoBox from './utils/InfoBox';
-import LeftButton from './utils/LeftButton';
 import LoadingScreen from './utils/LoadingScreen';
+import MainViewer from './MainViewer';
 import ResponsiveContainer from '../Misc/ResponsiveContainer';
-import RightButton from './utils/RightButton';
 import Comments from './comments/Comments';
 import { getDifficultyText } from '../../utils/sheetMusicUtils';
+import { getSheetMusic, getComments } from '../../actions/sheetmusic';
 
-function retrieveInitialData(flux, params) {
-  const sheetMusicActions = flux.getActions('sheetmusic');
-
-  return Promise.all([
-    sheetMusicActions.getSheetMusic(parseInt(params.id, 10), flux),
-    sheetMusicActions.getComments(parseInt(params.id, 10), flux),
-  ]);
-}
-
-export default React.createClass({
-
-  propTypes: {
-    /**
-     * The dynamic components of the URL
-     */
+@asyncConnect({
+  promise: ({ id }, { store }) => Promise.all([
+    store.dispatch(getSheetMusic(parseInt(id, 10), store)),
+    store.dispatch(getComments(parseInt(id, 10), store)),
+  ]),
+})
+@connect(
+  state => ({
+    errorCode: state.sheetmusic.results.errorCode,
+    result: state.sheetmusic.results.result,
+    commentResult: state.sheetmusic.comments,
+    inProgress: state.progress.inProgress,
+    loggedIn: state.login.loggedIn,
+    user: state.login.user,
+  }),
+)
+export default class Viewer extends React.Component {
+  static propTypes = {
     params: React.PropTypes.shape({
-
-      /**
-       * The id of the sheet music
-       */
       id: React.PropTypes.string,
-
-      /**
-       * The slug of the sheet music
-       */
       slug: React.PropTypes.string,
-
     }),
-
-    /**
-     * An object containing location information
-     */
     location: React.PropTypes.shape({
-
-      /**
-       * The current path name
-       */
       pathname: React.PropTypes.string,
-
-      /**
-       * The query parameters for the search results
-       */
       query: React.PropTypes.object,
     }),
-  },
+    errorCode: React.PropTypes.number.isRequired,
+    result: React.PropTypes.object.isRequired,
+    commentResult: React.PropTypes.object.isRequired,
+    inProgress: React.PropTypes.array.isRequired,
+    loggedIn: React.PropTypes.bool.isRequired,
+    user: React.PropTypes.object.isRequired,
+  };
 
-  mixins: [
-    PureRenderMixin,
-    FullScreenMixin,
-    fluxMixin({
-      sheetmusic: store => ({
-        errorCode: store.state.errorCode,
-        sheetMusicResult: store.state.sheetMusicResult,
-      }),
-      comments: store => ({
-        commentResult: store.state.commentResult,
-      }),
-      progress: store => store.state,
-      login: store => ({
-        loggedIn: store.state.loggedIn,
-        user: store.state.user,
-      }),
-    }),
-  ],
-
-  statics: {
-    routeWillRun({ flux, state }) {
-      return retrieveInitialData(flux, state.params);
-    },
-  },
-
-  getInitialState() {
-    return {
-      showVideos: 1,
-      pageNumber: null,
-      pageCount: null,
-    };
-  },
-
-  componentDidMount() {
-    // Retrieve initial data when sheet music and params are out of sync.
-    if (parseInt(this.props.params.id, 10) !== this.state.sheetMusicResult.id) {
-      retrieveInitialData(this.flux, this.props.params);
-    }
-
-    // Add window listeners for left or right keys
-    window.addEventListener('keydown', this.handleRightOrLeftKeyPress_);
-
-    // Update carousel data, such as page state.
-    defer(() => this.handleSetCarouselData_());
-  },
-
-  componentDidUpdate() {
-    defer(() => this.handleSetCarouselData_());
-  },
-
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleRightOrLeftKeyPress_);
-  },
-
-  componentWillReceiveNewProps() {
-    retrieveInitialData(this.flux, this.props.params);
-  },
-
-  handleDownload_() {
-
-  },
-
-  handleSetCarouselData_() {
-    if (this.refs.carousel) {
-      // HACK: Get carousel state properties
-      const carouselState = this.refs.carousel.state;
-
-      this.setState({
-        pageNumber: carouselState.currentSlide + 1,
-        pageCount: carouselState.slideCount,
-      });
-    }
-  },
-
-  handleShowMoreVideos_(event) {
+  handleShowMoreVideos = event => {
     event.preventDefault();
     this.setState({
       showVideos: this.state.showVideos + 5,
     });
-  },
+  };
 
-  handleNullify_(event) {
-    event.preventDefault();
-  },
-
-  handleRightOrLeftKeyPress_(event) {
-    if (!this.refs.carousel) return;
-    if (event.keyCode === 39) { // Right key press
-      this.refs.carousel.nextSlide();
-    } else if (event.keyCode === 37) { // Left key press
-      this.refs.carousel.previousSlide();
-    }
-  },
-
-  handleFullscreen_(event) {
-    event.preventDefault();
-    if (this.state.isFullscreen) {
-      this.exitFullscreen();
-    } else {
-      this.requestFullscreen(this.refs.mainViewer);
-    }
-  },
-
-  renderSheetMusicViewer_() {
-    const images = this.state.sheetMusicResult.images || [];
-
-    const decorators = [
-      { component: LeftButton, position: 'CenterLeft' },
-      { component: RightButton, position: 'CenterRight' },
-      { component: EmptyComponent }, // The dots at the bottom
-    ];
-
-    const imageElements = images.map((image, index) => (
-      <div className="sheetmusic__viewer-page" key={index}>
-        <img className="sheetmusic__viewer-page-image"
-          src={image}
-          onDragStart={this.handleNullify_}
-          onClick={this.handleNullify_}
-        />
-      </div>
-    ));
-
-    return (
-      <div className="sheetmusic__viewer-container">
-        <Carousel
-          className="sheetmusic__viewer"
-          cellAlign="center"
-          dragging
-          slidesToShow={1}
-          slidesToScroll={1}
-          slideWidth={1}
-          easing="easeOutQuad"
-          edgeEasing="easeOutQuad"
-          decorators={decorators}
-          data={this.handleSetCarouselData_}
-          ref="carousel"
-        >
-          {imageElements}
-        </Carousel>
-      </div>
-    );
-  },
-
-  renderSheetMusicControls_() {
-    return (
-      <ResponsiveContainer className="sheetmusic__controls-container">
-        <If condition={this.state.pageCount}>
-          <div className="sheetmusic__controls-page-number">
-            Page {this.state.pageNumber} / {this.state.pageCount}
-          </div>
-        </If>
-        <If condition={this.state.hasFullscreen}>
-          <a className="sheetmusic__controls sheetmusic__controls--full-screen"
-            onClick={this.handleFullscreen_}
-            href="#"
-          >
-            <If condition={this.state.isFullscreen}>
-              <span>
-                <FontAwesome className="sheetmusic__controls-icon" name="times" />
-                Exit
-              </span>
-            <Else />
-              <span>
-                <FontAwesome className="sheetmusic__controls-icon" name="arrows-alt" />
-                Full Screen
-              </span>
-            </If>
-          </a>
-        </If>
-        <If condition={!this.state.isFullscreen}>
-          <a className="sheetmusic__controls sheetmusic__controls--download"
-            onClick={this.handleDownload_}
-            href="#"
-          >
-            <span>
-              <FontAwesome className="sheetmusic__controls-icon" name="cloud-download" />
-              Download PDF
-            </span>
-          </a>
-        </If>
-      </ResponsiveContainer>
-    );
-  },
-
-  renderDescription_() {
-    const longDescription = this.state.sheetMusicResult.longDescription;
+  renderDescription() {
+    const longDescription = this.props.result.longDescription;
     return (
       <InfoBox className="sheetmusic__description" title="Description">
         <If condition={longDescription}>
@@ -262,10 +69,10 @@ export default React.createClass({
         </If>
       </InfoBox>
     );
-  },
+  }
 
-  renderVideos_() {
-    const videos = this.state.sheetMusicResult.videos;
+  renderVideos() {
+    const videos = this.props.result.videos;
     if (!videos || !videos.length) return null;
 
     const videoElements = videos.slice(0, this.state.showVideos).map((video, index) => (
@@ -280,7 +87,7 @@ export default React.createClass({
         <If condition={this.state.showVideos < videos.length}>
           <a className="sheetmusic__video-show-more"
             href="#"
-            onClick={this.handleShowMoreVideos_}
+            onClick={this.handleShowMoreVideos}
           >
             <FontAwesome className="sheetmusic__video-show-more-icon" name="angle-down" />
             See More Videos
@@ -288,31 +95,30 @@ export default React.createClass({
         </If>
       </InfoBox>
     );
-  },
+  }
 
-  renderComments_() {
+  renderComments() {
     return (
       <InfoBox title="Comments" icon="comment">
-        <Comments id={this.state.sheetMusicResult.id} comments={this.state.commentResult.comment}/>
+        <Comments id={this.props.result.id} comments={this.props.commentResult.list.comment} />
       </InfoBox>
     );
-  },
+  }
 
-  renderDifficultyNode_() {
-    const result = this.state.sheetMusicResult;
+  renderDifficultyNode() {
+    const result = this.props.result;
 
     if (!result.difficulty) return null;
 
-    const fullStarCount = result.difficulty;
-    const emptyStarCount = 5 - result.difficulty;
+    const starCount = result.difficulty;
 
     return (
       <Detail title="Difficulty">
         <div className="sheetmusic__difficulty-stars">
-          {times(fullStarCount, index => (
+          {times(starCount, index => (
             <FontAwesome className="sheetmusic__difficulty-star" name="star" key={index} />
           ))}
-          {times(emptyStarCount, index => (
+          {times(5 - starCount, index => (
             <FontAwesome className="sheetmusic__difficulty-star" name="star-o" key={index + 5} />
           ))}
         </div>
@@ -321,10 +127,10 @@ export default React.createClass({
         </div>
       </Detail>
     );
-  },
+  }
 
-  renderInfo_() {
-    const result = this.state.sheetMusicResult;
+  renderInfo() {
+    const result = this.props.result;
 
     return (
       <InfoBox title="Details">
@@ -353,43 +159,34 @@ export default React.createClass({
             {result.license}
           </Detail>
         </If>
-        {this.renderDifficultyNode_()}
+        {this.renderDifficultyNode()}
       </InfoBox>
     );
-  },
+  }
 
   render() {
-    const title = this.state.sheetMusicResult ? this.state.sheetMusicResult.title : 'Loading...';
-    const inProgress = (this.state.inProgress.indexOf('getSheetMusic') !== -1);
-
-    if (inProgress) {
-      return (
-        <div>
-          <Helmet title={title} />
-          <LoadingScreen />
-        </div>
-      );
-    }
+    const title = this.props.result ? this.props.result.title : 'Loading...';
+    const inProgress = this.props.inProgress.indexOf('getSheetMusic') !== -1;
 
     return (
       <div>
         <Helmet title={title} />
-        <div className="sheetmusic__main" ref="mainViewer">
-          {this.renderSheetMusicViewer_()}
-          {this.renderSheetMusicControls_()}
-        </div>
-        <ResponsiveContainer className="sheetmusic__details">
-          <div className="sheetmusic__details-left">
-            {this.renderDescription_()}
-            {this.renderVideos_()}
-            {this.renderComments_()}
-          </div>
-          <div className="sheetmusic__details-right">
-            {this.renderInfo_()}
-          </div>
-        </ResponsiveContainer>
+        <If condition={inProgress}>
+          <LoadingScreen />
+        <Else />
+          <MainViewer ref="mainViewer" images={this.props.result.images} />
+          <ResponsiveContainer className="sheetmusic__details">
+            <div className="sheetmusic__details-left">
+              {this.renderDescription()}
+              {/* this.renderVideos() */}
+              {this.renderComments()}
+            </div>
+            <div className="sheetmusic__details-right">
+              {this.renderInfo()}
+            </div>
+          </ResponsiveContainer>
+        </If>
       </div>
     );
-  },
-
-});
+  }
+}

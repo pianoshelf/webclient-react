@@ -1,70 +1,85 @@
 
-import fluxMixin from 'flummox/mixin';
 import FontAwesome from 'react-fontawesome';
 import Helmet from 'react-helmet';
-import LinkedStateMixin from 'react-addons-linked-state-mixin';
-import includes from 'lodash/collection/includes';
+import includes from 'lodash/includes';
 import React from 'react';
+import { asyncConnect } from 'redux-async-connect';
 import { Link } from 'react-router';
+import { reduxForm } from 'redux-form';
 
 import Button from './utils/Button';
 import ErrorMessage from './utils/ErrorMessage';
 import InfoText from './utils/InfoText';
-import Input from './utils/Input';
+import Input from '../Misc/Input';
 import Title from './utils/Title';
+import { clearErrors, resetPassword } from '../../actions/login';
+import { createEventTracker } from '../../utils/analytics';
+import { isDispatchedActionError } from '../../utils/actionUtils';
 import { errors } from '../../utils/constants';
 
-export default React.createClass({
+const trackEvent = createEventTracker('ResetPassword');
 
-  mixins: [
-    LinkedStateMixin,
-    fluxMixin({
-      login: store => store.state,
-      progress: store => store.state,
-    }),
-  ],
+export const fieldNames = [
+  'email',
+];
 
-  getInitialState() {
-    return {
-      email: '',
-    };
+@asyncConnect({
+  promise: (params, { store }) => store.dispatch(clearErrors()),
+})
+@reduxForm(
+  {
+    form: 'resetPassword',
+    fields: fieldNames,
+    initialValues: { email: '' },
   },
+  state => ({
+    errorCode: state.login.code,
+    inProgress: state.progress.inProgress,
+  })
+)
+export default class ResetPassword extends React.Component {
+  static propTypes = {
+    errorCode: React.PropTypes.number.isRequired,
+    inProgress: React.PropTypes.array.isRequired,
+    fields: React.PropTypes.object.isRequired,
+    handleSubmit: React.PropTypes.func.isRequired,
+  };
 
-  handleSubmit_(event) {
-    event.preventDefault();
-
-    const { email } = this.state;
-
-    // Trigger action
-    const loginActions = this.flux.getActions('login');
-    loginActions.resetPassword(email, this.flux);
-  },
+  handleResetPassword = (values, dispatch) => {
+    const { email } = values;
+    dispatch(resetPassword(email)).then(action => {
+      if (isDispatchedActionError(action)) {
+        trackEvent('error', 'Reset Password Error');
+      } else {
+        trackEvent('submit', 'Reset Password Success');
+      }
+    });
+  };
 
   render() {
-    const inProgress = includes(this.state.inProgress, 'resetPassword');
+    const { fields, inProgress, errorCode, handleSubmit } = this.props;
+    const resetInProgress = includes(inProgress, 'resetPassword');
 
     return (
       <div>
         <Helmet title="Reset Password" />
         <Title>Reset your password</Title>
-        <ErrorMessage errorCode={this.state.errorCode}
-          dontDisplayIf={this.state.loggedIn || inProgress}
-        />
+        <ErrorMessage errorCode={errorCode} dontDisplayIf={resetInProgress} />
         <InfoText>
-          Enter the email address you used to sign up for PianoShelf, and we will email you
+          Enter the email address you used to sign up for Pianoshelf, and we will email you
           a link to reset your password.
         </InfoText>
-        <form className="authentication__form" onSubmit={this.handleSubmit_}>
+        <form className="authentication__form" onSubmit={handleSubmit(this.handleResetPassword)}>
           <div className="authentication__inputs">
-            <Input placeholder="Email"
+            <Input
+              placeholder="Email"
               name="email"
-              errorCode={this.state.errorCode}
-              errorWhen={[errors.NO_EMAIL, errors.INVALID_EMAIL]}
+              errorWhen={errorCode === errors.NO_EMAIL || errorCode === errors.INVALID_EMAIL}
               focusOnLoad
-              valueLink={this.linkState('email')}
+              {...fields.email}
             />
           </div>
-          <Button color="red" disableIf={inProgress} submittedIf={inProgress}>
+          <Button color="red" disableIf={resetInProgress} submittedIf={resetInProgress}>
             <FontAwesome className="authentication__button-icon" name="paper-plane" />
             Reset password
           </Button>
@@ -72,6 +87,5 @@ export default React.createClass({
         <Link to="/login" className="authentication__link">I want to log in</Link>
       </div>
     );
-  },
-
-});
+  }
+}

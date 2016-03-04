@@ -4,9 +4,7 @@ import base64 from 'base-64';
 import bodyParser from 'body-parser';
 import bunyan from 'bunyan';
 import cookieParser from 'cookie-parser';
-import defer from 'lodash/function/defer';
 import express from 'express';
-import FluxComponent from 'flummox/component';
 import fs from 'fs';
 import Helmet from 'react-helmet';
 import http from 'http';
@@ -15,14 +13,17 @@ import path from 'path';
 import PrettyStream from 'bunyan-prettystream';
 import React from 'react';
 import utf8 from 'utf8';
+import { Provider } from 'react-redux';
 import { renderToString } from 'react-dom/server';
-import { RouterContext, match } from 'react-router';
+import { match } from 'react-router';
+import { ReduxAsyncConnect, loadOnServer } from 'redux-async-connect';
 
 // Import internal modules
 import config from '../config';
-import Flux from './Flux';
+import configureStore from './utils/configureStore';
+import DevTools from './components/DevTools';
 import getRoutes from './utils/getRoutes';
-import { prefetchRouteData } from './utils/routeUtils';
+import { getUser } from './actions/login';
 
 // Launch application
 const app = express();
@@ -32,7 +33,7 @@ const httpServer = http.createServer(app);
 const prettyStream = new PrettyStream();
 prettyStream.pipe(process.stdout);
 const log = bunyan.createLogger({
-  name: 'PianoShelf',
+  name: 'Pianoshelf',
   streams: [
     {
       level: 'debug',
@@ -99,69 +100,85 @@ if (process.env.NODE_ENV === 'production') {
 
 // Capture all requests
 app.use((req, res) => {
-  // Create Flux object
-  const flux = new Flux(req);
+  // Get the initial state of our app
+  const store = configureStore();
 
-  const routes = getRoutes(flux);
+  // HACK: Attach request object to store
+  // TODO: PLEASE PLEASE PLEASE Find a better way to do this
+  store.request = req;
 
-  match({ routes, location: req.url }, (error, redirectLocation, renderProps) => {
-    if (redirectLocation) {
-      res.redirect(301, redirectLocation.pathname + redirectLocation.search);
-    } else if (error) {
-      res.status(500).send(error.message);
-    } else if (renderProps === null) {
-      res.status(404).send('Not Found');
-    } else {
-      // Function that renders the route.
-      const renderRoute = () => defer(() => {
-        try {
-          // Render our entire app to a string, and make sure we wrap everything
-          // with FluxComponent, which adds the flux context to the entire app.
-          const renderedString = renderToString(
-            <FluxComponent flux={flux}>
-              <RouterContext {...renderProps} />
-            </FluxComponent>
-          );
+  // Populate store with user authentication information
+  store.dispatch(getUser(store)).then(() => {
+    // Perform route matching and verification
+    match({
+      routes: getRoutes(store),
+      location: req.url,
+    }, (error, redirectLocation, renderProps) => {
+      if (redirectLocation) {
+        // Redirect if we have to
+        res.redirect(301, redirectLocation.pathname + redirectLocation.search);
+      } else if (error) {
+        // Return an error if an error occurred
+        res.status(500).send(`Server error occurred: ${error.message}`);
+      } else if (renderProps === null) {
+        // Return 404 if no match occurred
+        res.status(404).send('Not Found');
+      } else {
+        loadOnServer(renderProps, store, {
+          request: req,
+          location: renderProps.location,
+        }).then(() => {
+          try {
+            // Render our entire app to a string, and make sure we wrap everything
+            // with Provider, which adds the redux store to the entire app.
+            const renderedString = renderToString(
+              <Provider store={store} key="provider">
+                <div>
+                  <DevTools />
+                  <ReduxAsyncConnect {...renderProps} />
+                </div>
+              </Provider>
+            );
 
-          // Base64 encode all the data in our stores.
-          const inlineData = base64.encode(utf8.encode(flux.serialize()));
+            // Base64 encode all the data in our stores.
+            const inlineData = base64.encode(utf8.encode(JSON.stringify(store.getState())));
 
-          // Get title, meta, and link tags.
-          const { title, meta, link } = Helmet.rewind();
+            // Get title, meta, and link tags.
+            const { title, meta, link } = Helmet.rewind();
 
-          // Generate boilerplate output.
-          const output =
-            `<!DOCTYPE html>
-            <html>
-              <head>
-                <meta charset="utf-8" />
-                <meta name="viewport" content="width=device-width,initial-scale=1" />
-                ${meta}
-                <title>${title}</title>
-                <link rel="stylesheet" href="${cssPath}" />
-                ${link}
-              </head>
-              <body>
-                <div id="react-root">${renderedString}</div>
-                <script type="text/inline-data" id="react-data">${inlineData}</script>
-                <script src="${jsPath}"></script>
-              </body>
-            </html>`;
+            // Generate boilerplate output.
+            const output =
+              `<!DOCTYPE html>
+              <html>
+                <head>
+                  <meta charset="utf-8" />
+                  <meta name="viewport" content="width=device-width,initial-scale=1" />
+                  ${meta}
+                  <title>${title}</title>
+                  <link rel="stylesheet" href="${cssPath}" />
+                  ${link}
+                </head>
+                <body>
+                  <div id="react-root">${renderedString}</div>
+                  <script>window.__INITIAL_STATE__ = "${inlineData}";</script>
+                  <script src="${jsPath}"></script>
+                </body>
+              </html>`;
 
-          // Send output to ExpressJS.
-          res.send(output);
-        } catch (err) {
+            // Send output to ExpressJS.
+            res.send(output);
+          } catch (err) {
+            log.error('There was a problem renderring the page. Here\'s the error:');
+            log.error(err);
+            res.status(500).send(err);
+          }
+        }).catch(err => {
           log.error('There was a problem renderring the page. Here\'s the error:');
           log.error(err);
-
           res.status(500).send(err);
-        }
-      });
-
-      // Make sure we render our route even if the promise fails.
-      prefetchRouteData(renderProps.components, { flux, state: renderProps })
-        .then(renderRoute, renderRoute);
-    }
+        });
+      }
+    });
   });
 });
 
@@ -171,6 +188,6 @@ if (!!process.env.TESTING) {
 } else {
   // Launch application
   httpServer.listen(config.ports.express, () => {
-    log.info(`PianoShelf listening on port ${config.ports.express}`);
+    log.info(`Pianoshelf listening on port ${config.ports.express}`);
   });
 }

@@ -1,0 +1,3 @@
+export const PROGRESS_RESET = 'PROGRESS_RESET';
+export const PROGRESS_ADD = 'PROGRESS_ADD';
+export const PROGRESS_REMOVE = 'PROGRESS_REMOVE';

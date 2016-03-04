@@ -1,37 +1,72 @@
 
-import fluxMixin from 'flummox/mixin';
 import Helmet from 'react-helmet';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import React from 'react';
+import { asyncConnect } from 'redux-async-connect';
+import { connect } from 'react-redux';
 
 import InfoText from './utils/InfoText';
-import { CanLogoutMixin } from '../../utils/authUtils';
+import { clearErrors, logout } from '../../actions/login';
+import { deleteAuthToken } from '../../utils/api';
 
-function retrieveInitialData(flux) {
-  const loginActions = flux.getActions('login');
-  return loginActions.logout(flux);
-}
+@asyncConnect({
+  promise: (params, { store }) => store.dispatch(clearErrors()),
+})
+@connect(
+  state => ({
+    loggedIn: state.login.loggedIn,
+  }),
+)
+export default class Logout extends React.Component {
+  static propTypes = {
+    loggedIn: React.PropTypes.bool.isRequired,
+    location: React.PropTypes.object.isRequired,
+  };
 
-export default React.createClass({
+  static contextTypes = {
+    store: React.PropTypes.object.isRequired,
+    router: React.PropTypes.object.isRequired,
+  };
 
-  mixins: [
-    PureRenderMixin,
-    CanLogoutMixin,
-    fluxMixin({
-      login: store => store.state,
-    }),
-  ],
+  /**
+   * Component Lifecycle
+   */
 
-  statics: {
-    routeWillRun({ flux }) {
-      return retrieveInitialData(flux);
-    },
-  },
-
+  // When the user loads this component, log them out, else handle post-logout tasks.
   componentDidMount() {
-    if (this.state.loggedIn) retrieveInitialData(this.flux);
-  },
+    const { store } = this.context;
+    if (this.props.loggedIn) {
+      store.dispatch(logout());
+    } else {
+      this.handlePostLogout();
+    }
+  }
 
+  // When user is logged out, handle post-logout tasks.
+  componentDidUpdate(prevProps) {
+    if (prevProps.loggedIn && !this.props.loggedIn) {
+      this.handlePostLogout();
+    }
+  }
+
+  /**
+   * Handlers
+   */
+  handlePostLogout = () => {
+    // Delete authorization token cookie
+    const { router, store } = this.context;
+    const { location } = this.props;
+    deleteAuthToken(store);
+
+    if (location.query && location.query.redirect) {
+      router.push(location.query.redirect);
+    } else {
+      router.push('/');
+    }
+  };
+
+  /**
+   * Render method
+   */
   render() {
     return (
       <div>
@@ -41,6 +76,5 @@ export default React.createClass({
         </InfoText>
       </div>
     );
-  },
-
-});
+  }
+}

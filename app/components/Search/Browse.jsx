@@ -1,111 +1,120 @@
 
 import classNames from 'classnames';
-import debounce from 'lodash/function/debounce';
-import fluxMixin from 'flummox/mixin';
+import debounce from 'lodash/debounce';
 import FontAwesome from 'react-fontawesome';
 import Helmet from 'react-helmet';
-import includes from 'lodash/collection/includes';
-import intersection from 'lodash/array/intersection';
-import isEqual from 'lodash/lang/isEqual';
+import intersection from 'lodash/intersection';
 import React from 'react';
-import { findDOMNode } from 'react-dom';
-import { Link } from 'react-router';
+import { asyncConnect } from 'redux-async-connect';
+import { connect } from 'react-redux';
+import { reduxForm } from 'redux-form';
 
-import FilterGroup from './utils/FilterGroup';
-import PaidSearchResult from './utils/PaidSearchResult';
-import SearchResult from './utils/SearchResult';
+import BrowseList from './utils/BrowseList';
+import Input from '../Misc/Input';
+import Pagination from './utils/Pagination';
+import SearchFilters from './utils/SearchFilters';
+import SearchResults from './utils/SearchResults';
+import Spinner from './utils/Spinner';
+
+import { getTrendingSheetMusic, getSheetMusicList } from '../../actions/sheetmusic';
+import { search } from '../../actions/search';
 
 // The number of items per search page
 const PAGE_SIZE = 12;
 
-function retrieveInitialData(flux, query) {
-  const sheetMusicActions = flux.getActions('sheetmusic');
+// The delay before we search for something
+const SEARCH_DELAY = 500;
 
-  let { show, page, trending } = query || {};
-  const { query: searchQuery } = query || {};
+// Create a debounced search function
+const debouncedSearch = debounce((query, store) => {
+  store.dispatch(search(query, store));
+}, SEARCH_DELAY);
 
-  // Default to the first page
-  page = page || 1;
+@asyncConnect({
+  promise: (params, { location, store }) => {
+    const {
+      page = 1,
+      show = 'popular',
+      trending = '7days',
+      query: searchQuery,
+    } = location.query;
 
-  // Default to the popular view
-  show = show || 'popular';
-
-  // Default to seven days
-  trending = trending || '7days';
-
-  if (searchQuery) {
-    return sheetMusicActions.search(searchQuery, flux);
-  } else if (show === 'trending') {
-    if (trending === '90days') {
-      return sheetMusicActions.getTrendingSheetMusic(90, PAGE_SIZE, flux);
-    } else if (trending === '30days') {
-      return sheetMusicActions.getTrendingSheetMusic(30, PAGE_SIZE, flux);
+    if (searchQuery) {
+      return debouncedSearch(searchQuery, store);
     } else {
-      return sheetMusicActions.getTrendingSheetMusic(7, PAGE_SIZE, flux);
+      switch (show) {
+        case 'trending':
+          if (trending === '90days') {
+            return store.dispatch(getTrendingSheetMusic(90, PAGE_SIZE, store));
+          } else if (trending === '30days') {
+            return store.dispatch(getTrendingSheetMusic(30, PAGE_SIZE, store));
+          }
+          return store.dispatch(getTrendingSheetMusic(7, PAGE_SIZE, store));
+        case 'new':
+          return store.dispatch(
+            getSheetMusicList(
+              { page, orderBy: 'new', sortBy: 'desc', pageSize: PAGE_SIZE },
+              store
+            )
+          );
+        case 'most_difficult':
+          return store.dispatch(
+            getSheetMusicList(
+              { page, orderBy: 'difficulty', sortBy: 'desc', pageSize: PAGE_SIZE },
+              store
+            )
+          );
+        case 'least_difficult':
+          return store.dispatch(
+            getSheetMusicList(
+              { page, orderBy: 'difficulty', sortBy: 'asc', pageSize: PAGE_SIZE },
+              store
+            )
+          );
+        default:
+          return store.dispatch(
+            getSheetMusicList(
+              { page, orderBy: 'popular', sortBy: 'desc', pageSize: PAGE_SIZE },
+              store
+            )
+          );
+      }
     }
-  } else if (show === 'new') {
-    return sheetMusicActions.getSheetMusicList({
-      page,
-      orderBy: 'new',
-      sortBy: 'desc',
-      pageSize: PAGE_SIZE,
-    }, flux);
-  } else if (show === 'most_difficult') {
-    return sheetMusicActions.getSheetMusicList({
-      page,
-      orderBy: 'difficulty',
-      sortBy: 'desc',
-      pageSize: PAGE_SIZE,
-    }, flux);
-  } else if (show === 'least_difficult') {
-    return sheetMusicActions.getSheetMusicList({
-      page,
-      orderBy: 'difficulty',
-      sortBy: 'asc',
-      pageSize: PAGE_SIZE,
-    }, flux);
-  } else { // Popular
-    return sheetMusicActions.getSheetMusicList({
-      page,
-      orderBy: 'popular',
-      sortBy: 'desc',
-      pageSize: PAGE_SIZE,
-    }, flux);
-  }
-}
+  },
+})
 
-export default React.createClass({
+@connect(
+  state => ({
+    sheetMusicList: state.sheetmusic.lists.list,
+    searchResults: state.search,
+    trendingResults: state.sheetmusic.lists.trending,
+    inProgress: state.progress.inProgress,
+  })
+)
 
-  propTypes: {
+@reduxForm({
+  form: 'search',
+  fields: ['search'],
+}, (state, props) => ({
+  initialValues: {
+    search: props.location.query.query || '',
+  },
+}))
 
-    /**
-     * An object containing location information
-     */
+export default class Browse extends React.Component {
+  static propTypes = {
+    // An object containing location information
     location: React.PropTypes.shape({
-
-      /**
-       * The current path name
-       */
+      // The current path name
       pathname: React.PropTypes.string,
-
-      /**
-       * The query parameters for the search results
-       */
+      // The query parameters for the search results
       query: React.PropTypes.oneOfType([
         React.PropTypes.shape({
           // When there is a search query
-
-          /**
-           * The search query
-           */
           query: React.PropTypes.string,
         }),
         React.PropTypes.shape({
-          // When there is no search query
-
-          /**
-           * What to show when a query is not made
-           */
+          // What to show when a query is not made
           show: React.PropTypes.oneOf([
             'popular',
             'new',
@@ -113,143 +122,38 @@ export default React.createClass({
             'most_difficult',
             'least_difficult',
           ]),
-
-          /**
-           * The page number
-           */
+          // The page number
           page: React.PropTypes.string,
-
-          /**
-           * How many days to calculate trending over
-           */
+          // How many days to calculate trending over
           trendingBy: React.PropTypes.string,
         }),
       ]),
     }),
-  },
+    // List of sheet music obtained from filters
+    sheetMusicList: React.PropTypes.object.isRequired,
+    // List of search results
+    searchResults: React.PropTypes.object.isRequired,
+    // List of trending results
+    trendingResults: React.PropTypes.object.isRequired,
+    // Progress array
+    inProgress: React.PropTypes.array.isRequired,
+    // Redux store
+    store: React.PropTypes.object,
+    // Form fields
+    fields: React.PropTypes.object,
+    // Handle change from redux-form
+    handleChange: React.PropTypes.func,
+  };
 
-  contextTypes: {
+  static contextTypes = {
     router: React.PropTypes.object.isRequired,
-  },
+  };
 
-  mixins: [
-    fluxMixin({
-      sheetmusic: store => ({
-        sheetMusicList: store.state.sheetMusicList,
-        searchResults: store.state.searchResults,
-      }),
-      progress: store => store.state,
-    }),
-  ],
+  /**
+   * Handlers
+   */
 
-  // Define what should be fetched before route is renderred.
-  statics: {
-    routeWillRun({ flux, state }) {
-      return retrieveInitialData(flux, state.location.query);
-    },
-  },
-
-  componentDidMount() {
-    const { query } = this.props.location.query || {};
-
-    if ((query && !this.state.searchResults.free.length) ||
-       (!query && !this.state.sheetMusicList.list.length)) {
-      retrieveInitialData(this.flux, this.props.location.query || {});
-    }
-  },
-
-  componentDidUpdate(prevProps) {
-    // If query params change, reload the data.
-    if (!isEqual(prevProps.location.query, this.props.location.query)) {
-      // Scroll to the top of the page.
-      window.scrollTo(0, 0);
-
-      // Update state given the query.
-      retrieveInitialData(this.flux, this.props.location.query || {});
-    }
-  },
-
-  getFilter_(text, icon) {
-    return (
-      <span>
-        <If condition={icon}>
-          <FontAwesome name={icon} className="search__filter-group-filter-icon" />
-        </If>
-        {text}
-      </span>
-    );
-  },
-
-  getFilters_() {
-    let { show, trending } = this.props.location.query || {};
-
-    show = includes([
-      'popular',
-      'new',
-      'trending',
-      'most_difficult',
-      'least_difficult',
-    ], show) ? show : 'popular';
-
-    trending = includes([
-      '7days',
-      '30days',
-      '90days',
-    ], trending) ? trending : '7days';
-
-    const sortByFilters = {
-      groupName: 'sort',
-      groupTitle: 'Sort by',
-      multiSelect: false,
-      isHalfSpace: false,
-      value: show,
-      filters: [
-        {
-          value: 'popular',
-          valueNode: this.getFilter_('Popular', 'thumbs-up'),
-        }, {
-          value: 'new',
-          valueNode: this.getFilter_('New', 'star'),
-        }, {
-          value: 'trending',
-          valueNode: this.getFilter_('Trending', 'line-chart'),
-        }, {
-          value: 'most_difficult',
-          valueNode: this.getFilter_('Most Difficult', 'frown-o'),
-        }, {
-          value: 'least_difficult',
-          valueNode: this.getFilter_('Least Difficult', 'smile-o'),
-        },
-      ],
-    };
-
-    const trendingFilters = {
-      groupName: 'trending',
-      groupTitle: 'Trending by',
-      multiSelect: false,
-      isHalfSpace: false,
-      value: trending,
-      filters: [
-        {
-          value: '7days',
-          valueNode: this.getFilter_('Last Week'),
-        }, {
-          value: '30days',
-          valueNode: this.getFilter_('Last Month'),
-        }, {
-          value: '90days',
-          valueNode: this.getFilter_('Last 3 Months'),
-        },
-      ],
-    };
-
-    return [
-      sortByFilters,
-      show === 'trending' ? trendingFilters : {},
-    ];
-  },
-
-  handleFilterChange_(groupName, nextValue) {
+  handleFilterChange = (groupName, nextValue) => {
     let nextParams = {};
     if (groupName === 'sort') {
       if (nextValue === 'trending') {
@@ -264,22 +168,10 @@ export default React.createClass({
       pathname: this.props.location.pathname,
       query: nextParams,
     });
-  },
+  };
 
-  handleSearchTextChange_() {
-    this.flux.getActions('progress').addProgress('searchQuery');
-
-    // Attach debounce function to this instance and cache it.
-    this.searchQueryChangeFunction_ = this.searchQueryChangeFunction_ ||
-      debounce(this.handleSearchQueryChange_, 500);
-
-    // Call the retrieved property.
-    this.searchQueryChangeFunction_();
-  },
-
-  handleSearchQueryChange_() {
-    this.flux.getActions('progress').removeProgress('searchQuery');
-    const value = findDOMNode(this.refs.searchBox).value;
+  handleSearchQueryChange = debounce(() => {
+    const { value } = this.props.fields.search;
     if (value === '') {
       this.context.router.replace({
         pathname: this.props.location.pathname,
@@ -291,151 +183,22 @@ export default React.createClass({
         query: { query: value },
       });
     }
-  },
+  }, SEARCH_DELAY);
 
-  renderSearchFilters_() {
-    return (
-      <div className="search__filters">
-        {this.getFilters_()
-          .filter(filterGroup => filterGroup.groupName)
-          .map(filterGroup => (
-            <FilterGroup {...filterGroup}
-              key={filterGroup.groupName}
-              onChange={this.handleFilterChange_}
-            />
-          ))}
-      </div>
-    );
-  },
+  handleSearchQuerySubmit = event => {
+    event.preventDefault();
+    this.handleSearchQueryChange();
+  };
 
-  renderSpinner_() {
-    return (
-      <div className="search__spinner">
-        <FontAwesome name="cog" spin />
-      </div>
-    );
-  },
-
-  renderSearchResults_() {
-    const { free, paid } = this.state.searchResults;
-
-    const freeResultsElements = free.map((sheetMusic, index) => (
-      <SearchResult sheetMusic={sheetMusic}
-        key={index}
-        firstItem={index === 0}
-        lastItem={index === free.length - 1}
-      />
-    ));
-
-    const paidResultsElements = paid.map((sheetMusic, index) => (
-      <PaidSearchResult paidSheetMusic={sheetMusic}
-        key={index}
-        firstItem={index === 0}
-        lastItem={index === free.length - 1}
-      />
-    ));
-
-    return (
-      <div>
-        <div className="search__results-free">
-          <If condition={free.length > 0}>
-            {freeResultsElements}
-          <Else />
-            <div className="search__results-not-found">
-              Could not find anything.
-            </div>
-          </If>
-        </div>
-        <If condition={paid && paid.length > 0}>
-          <div>
-            <div className="search__results-other-sources">
-              Other Sources
-            </div>
-            <div className="search__results-paid">
-              {paidResultsElements}
-            </div>
-          </div>
-        </If>
-      </div>
-    );
-  },
-
-  renderBrowsePage_() {
-    const { list } = this.state.sheetMusicList;
-
-    const listElements = list.map((sheetMusic, index) => (
-      <SearchResult sheetMusic={sheetMusic}
-        key={sheetMusic.id}
-        firstItem={index === 0}
-        lastItem={index === list.length - 1}
-      />
-    ));
-
-    return (
-      <If condition={list.length > 0}>
-        {listElements}
-      <Else />
-        <div className="search__results-not-found">
-          Nothing to display!
-        </div>
-      </If>
-    );
-  },
-
-  renderPagination_() {
-    const { count } = this.state.sheetMusicList;
-    const { page, query } = this.props.location.query || {};
-
-    // Don't display pagination if we have a search query.
-    // TODO(ankit): Remove this once pagination is implemented on search page.
-    if (count === 0 || query) return null;
-
-    const numberOfPages = Math.ceil(count / PAGE_SIZE);
-    const currentPage = parseInt(page || 1, 10);
-
-    // Don't display pagination buttons if we have less than 2 pages
-    if (numberOfPages < 2) return null;
-
-    return (
-      <div className="search__pagination">
-        <If condition={currentPage > 1}>
-          <Link
-            to={{
-              pathname: this.props.location.pathname,
-              query: { ...this.props.location.query, page: currentPage - 1 },
-            }}
-            className="search__pagination-button"
-          >
-            <FontAwesome name="angle-left" />
-          </Link>
-        <Else />
-          <div className="search__pagination-button" />
-        </If>
-        <div className="search__pagination-current-page">
-          {`Page ${currentPage}`}
-        </div>
-        <If condition={currentPage < numberOfPages}>
-          <Link
-            to={{
-              pathname: this.props.location.pathname,
-              query: { ...this.props.location.query, page: currentPage + 1 },
-            }}
-            className="search__pagination-button"
-          >
-            <FontAwesome name="angle-right" />
-          </Link>
-        <Else />
-          <div className="search__pagination-button" />
-        </If>
-        <div className="search__pagination-clearfix" />
-      </div>
-    );
-  },
+  /**
+   * Render
+   */
 
   render() {
-    const { query } = this.props.location.query || {};
+    const { location, fields, searchResults, trendingResults, sheetMusicList } = this.props;
+    const { show, query } = location.query || {};
 
-    const inProgress = intersection(this.state.inProgress, [
+    const inProgress = intersection(this.props.inProgress, [
       'search',
       'searchQuery',
       'sheetMusicList',
@@ -453,54 +216,69 @@ export default React.createClass({
       'search__results--in-progress': inProgress,
     });
 
+    let resultsToShow = [];
+    if (show === 'trending') {
+      resultsToShow = trendingResults;
+    } else {
+      resultsToShow = sheetMusicList;
+    }
+
     return (
       <div>
         <Helmet title="Browse Sheet Music" />
-        <div className="search__browse-search">
-          <input type="text"
-            className="search__browse-search-input"
-            placeholder="Search for sheet music..."
-            defaultValue={query || ''}
-            onChange={this.handleSearchTextChange_}
+        <form
+          className="search__browse-search"
+          onChange={this.handleSearchQueryChange}
+          onSubmit={this.handleSearchQuerySubmit}
+        >
+          <Input
+            placeholder={
+              <span>
+                <FontAwesome name="search" className="search__browse-search-input-icon" />
+                Search for sheet music
+              </span>
+            }
             ref="searchBox"
+            {...fields.search}
           />
           {/*
             Add this back once the API returns a proper search result count.
             <If condition={query}>
               <div className="search__browse-search-count">
-                <If condition={this.state.searchResults.count === 1}>
+                <If condition={searchResults.count === 1}>
                   <span>1 result</span>
                 <Else />
-                  <span>{this.state.searchResults.count} results</span>
+                  <span>{searchResults.count} results</span>
                 </If>
               </div>
             </If>
             */}
-        </div>
+        </form>
         <div className="search__results-panel">
           <If condition={displayFilters}>
             <div className="search__filter-wrapper">
-              {this.renderSearchFilters_()}
+              <SearchFilters location={location} onFilterChange={this.handleFilterChange} />
             </div>
           </If>
           <div className={resultWrapperClassName}>
             <div className={resultsClassName}>
               <If condition={query}>
-                {this.renderSearchResults_()}
+                <SearchResults searchResults={searchResults} />
               <Else />
-                {this.renderBrowsePage_()}
+                <BrowseList sheetMusicList={resultsToShow.results} />
               </If>
             </div>
             <If condition={inProgress}>
-              <div className="search__spinner">
-                {this.renderSpinner_()}
-              </div>
+              <Spinner />
             </If>
-            {this.renderPagination_()}
+            <Pagination
+              location={location}
+              sheetMusicCount={resultsToShow.count}
+              pageSize={PAGE_SIZE}
+            />
           </div>
         </div>
       </div>
     );
-  },
-
-});
+  }
+}

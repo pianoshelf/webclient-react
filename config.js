@@ -27,6 +27,9 @@ module.exports = {
       src: ['./app/**/**/**/*.js', './app/**/**/**/*.jsx'],
       out: 'build',
     },
+    tests: {
+      src: ['./test/**/**/**/*.js', './test/**/**/**/*.jsx'],
+    },
     staticAssets: 'build/static/',
   },
 
@@ -55,13 +58,13 @@ module.exports = {
   build: {
     babel: {
       client: {
-        presets: ['es2015', 'react', 'stage-0'],
-        plugins: ['jsx-control-statements'],
+        presets: ['react', 'es2015', 'stage-0'],
+        plugins: ['transform-decorators-legacy', 'jsx-control-statements'],
       },
       server: {
-        presets: ['node5', 'react', 'stage-0'],
-        plugins: ['jsx-control-statements'],
-      }
+        presets: ['react', 'node5', 'stage-0'],
+        plugins: ['transform-decorators-legacy', 'jsx-control-statements'],
+      },
     },
     sass: {
       style: 'compact',
@@ -70,6 +73,10 @@ module.exports = {
     autoprefixer: {
       browsers: ['> 5%'],
     },
+  },
+
+  googleAnalytics: {
+    trackingId: 'UA-58120482-1',
   },
 
 };

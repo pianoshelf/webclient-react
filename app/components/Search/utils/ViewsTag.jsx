@@ -3,7 +3,7 @@ import FontAwesome from 'react-fontawesome';
 import React from 'react';
 
 export default function ViewsTag({ viewCount }) {
-  if (!viewCount) return '';
+  if (!viewCount) return <div />;
   return (
     <div className="search__result-property search__result-property--dark" key="views">
       <FontAwesome name="eye" className="search__result-property-icon" />
@@ -13,5 +13,5 @@ export default function ViewsTag({ viewCount }) {
 }
 
 ViewsTag.propTypes = {
-  viewCount: React.PropTypes.string.isRequired,
+  viewCount: React.PropTypes.number.isRequired,
 };
