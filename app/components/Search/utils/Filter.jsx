@@ -2,9 +2,14 @@
 import classNames from 'classnames';
 import React from 'react';
 
+import { createEventTracker } from '../../../utils/analytics';
+
+const trackEvent = createEventTracker('Browse');
+
 function handleOnClick(options) {
   return function handleOnClickImpl(event) {
     event.preventDefault();
+    trackEvent('click', 'Filter Change');
     options.onChange(options.value, !options.isSelected);
   };
 }

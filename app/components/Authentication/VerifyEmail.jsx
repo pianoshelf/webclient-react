@@ -5,8 +5,11 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
 import InfoText from './utils/InfoText';
+import { createEventTracker } from '../../utils/analytics';
 import { errors, success } from '../../utils/constants';
 import { verifyEmail } from '../../actions/login';
+
+const trackEvent = createEventTracker('VerifyEmail');
 
 @connect(
   state => ({
@@ -24,6 +27,16 @@ export default class VerifyEmail extends React.Component {
 
   componentDidMount() {
     this.props.store.dispatch(verifyEmail(this.props.params.key));
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.errorCode !== success.EMAIL_VERIFIED &&
+        this.props.errorCode === success.EMAIL_VERIFIED) {
+      trackEvent('load', 'Verify Email Success');
+    } else if (prevProps.errorCode !== success.EMAIL_UNVERIFIED &&
+        this.props.errorCode === success.EMAIL_UNVERIFIED) {
+      trackEvent('error', 'Verify Email Error');
+    }
   }
 
   render() {

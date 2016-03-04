@@ -13,8 +13,11 @@ import ErrorMessage from './utils/ErrorMessage';
 import Input from '../Misc/Input';
 import Title from './utils/Title';
 import { clearErrors, login, facebookLogin } from '../../actions/login';
+import { createEventTracker } from '../../utils/analytics';
 import { errors, success } from '../../utils/constants';
 import { setAuthToken } from '../../utils/api';
+
+const trackEvent = createEventTracker('Login');
 
 export const fieldNames = [
   'username',
@@ -84,6 +87,9 @@ export default class Login extends React.Component {
     const { user, location } = this.props;
     setAuthToken(user.authToken, store);
 
+    // Log the event
+    trackEvent('login', 'Login Success');
+
     if (location.query && location.query.redirect) {
       router.push(location.query.redirect);
     } else {
@@ -101,6 +107,8 @@ export default class Login extends React.Component {
       if (response.status === 'connected') {
         const { accessToken } = response;
         dispatch(facebookLogin({ accessToken }));
+      } else {
+        trackEvent('error', 'Facebook Error');
       }
     });
   };

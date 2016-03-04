@@ -7,7 +7,7 @@ import FontAwesome from 'react-fontawesome';
 import React from 'react';
 import Slider from 'react-slick';
 
-import ResponsiveContainer from './ResponsiveContainer';
+import ResponsiveContainer from '../Misc/ResponsiveContainer';
 import SheetMusicThumbnail from './SheetMusicThumbnail';
 
 export default class SheetMusicCarousel extends React.Component {

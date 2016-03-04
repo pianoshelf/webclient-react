@@ -13,7 +13,11 @@ import InfoText from './utils/InfoText';
 import Input from '../Misc/Input';
 import Title from './utils/Title';
 import { clearErrors, resetPasswordConfirm } from '../../actions/login';
+import { createEventTracker } from '../../utils/analytics';
 import { errors, success } from '../../utils/constants';
+import { isDispatchedActionError } from '../../utils/actionUtils';
+
+const trackEvent = createEventTracker('ResetPasswordConfirm');
 
 export const fieldNames = [
   'password1',
@@ -50,7 +54,13 @@ export default class ResetPasswordConfirm extends React.Component {
     const { password1, password2 } = values;
     const { token, uid } = this.props.params;
     const user = { password1, password2 };
-    dispatch(resetPasswordConfirm(user, uid, token));
+    dispatch(resetPasswordConfirm(user, uid, token)).then(action => {
+      if (isDispatchedActionError(action)) {
+        trackEvent('error', 'Reset Password Confirm Error');
+      } else {
+        trackEvent('submit', 'Reset Password Confirm Success');
+      }
+    });
   };
 
   render() {

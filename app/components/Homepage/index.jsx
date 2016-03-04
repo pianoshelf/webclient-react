@@ -8,11 +8,14 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
 // Import internal modules
-import NavBar from './Fixtures/NavBar';
-import Footer from './Fixtures/Footer';
-import ResponsiveContainer from './Misc/ResponsiveContainer';
-import SheetMusicCarousel from './Misc/SheetMusicCarousel';
-import { getMostPopularSheetMusic } from '../actions/sheetmusic';
+import NavBar from '../Fixtures/NavBar';
+import Footer from '../Fixtures/Footer';
+import ResponsiveContainer from '../Misc/ResponsiveContainer';
+import SheetMusicCarousel from './SheetMusicCarousel';
+import { createEventTracker } from '../../utils/analytics';
+import { getMostPopularSheetMusic } from '../../actions/sheetmusic';
+
+const trackEvent = createEventTracker('Homepage');
 
 @asyncConnect({
   promise: (params, { store }) => store.dispatch(getMostPopularSheetMusic(store)),
@@ -29,6 +32,14 @@ export default class Homepage extends React.Component {
     popularSheetMusic: React.PropTypes.array.isRequired,
   };
 
+  trackBrowseLink = () => {
+    trackEvent('click', 'Browse Sheet Music');
+  };
+
+  trackSignUpLink = () => {
+    trackEvent('click', 'Sign Up Now');
+  };
+
   renderMainPanel() {
     const { loggedIn } = this.props;
     return (
@@ -38,11 +49,24 @@ export default class Homepage extends React.Component {
             Explore, share, and download sheet music for free.
           </h2>
           <div className="homepage__main-search">
-            <Link to="/browse" className="homepage__main-search-input">Browse Sheet Music</Link>
+            <Link
+              to="/browse"
+              className="homepage__main-search-input"
+            >
+              Browse Sheet Music
+            </Link>
           </div>
           <If condition={!loggedIn}>
             <div className="homepage__main-register">
-              or <Link to="/register" className="homepage__main-register-link">sign up now</Link>.
+              or
+              {' '}
+              <Link
+                to="/register"
+                className="homepage__main-register-link"
+              >
+                sign up now
+              </Link>
+              .
             </div>
           </If>
         </div>
@@ -115,7 +139,6 @@ export default class Homepage extends React.Component {
   render() {
     return (
       <div className="homepage">
-
         <Helmet title="Pianoshelf - free piano sheet music" titleTemplate="%s" />
         <NavBar disappearing disappearingOffset={50} />
         {this.renderMainPanel()}

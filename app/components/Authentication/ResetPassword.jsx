@@ -13,7 +13,11 @@ import InfoText from './utils/InfoText';
 import Input from '../Misc/Input';
 import Title from './utils/Title';
 import { clearErrors, resetPassword } from '../../actions/login';
+import { createEventTracker } from '../../utils/analytics';
+import { isDispatchedActionError } from '../../utils/actionUtils';
 import { errors } from '../../utils/constants';
+
+const trackEvent = createEventTracker('ResetPassword');
 
 export const fieldNames = [
   'email',
@@ -43,7 +47,13 @@ export default class ResetPassword extends React.Component {
 
   handleResetPassword = (values, dispatch) => {
     const { email } = values;
-    dispatch(resetPassword(email));
+    dispatch(resetPassword(email)).then(action => {
+      if (isDispatchedActionError(action)) {
+        trackEvent('error', 'Reset Password Error');
+      } else {
+        trackEvent('submit', 'Reset Password Success');
+      }
+    });
   };
 
   render() {

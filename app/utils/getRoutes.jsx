@@ -35,7 +35,7 @@ import TermsOfService from '../components/Static/TermsOfService';
  * A function that retrieves the route configuration for both
  * the server and client.
  *
- * @param {Flux} store The redux store.
+ * @param {Store} store The redux store.
  *
  * @return {React.Component} The set of routes objects.
  */

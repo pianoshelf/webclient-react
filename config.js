@@ -75,5 +75,9 @@ module.exports = {
     },
   },
 
+  googleAnalytics: {
+    trackingId: 'UA-58120482-1',
+  },
+
 };
 

@@ -5,6 +5,7 @@ import 'babel-polyfill';
 
 // Import external modules
 import base64 from 'base-64';
+import defer from 'lodash/defer';
 import React from 'react';
 import utf8 from 'utf8';
 import { Provider } from 'react-redux';
@@ -17,10 +18,14 @@ import { ReduxAsyncConnect } from 'redux-async-connect';
 import configureStore from './utils/configureStore';
 import DevTools from './components/DevTools';
 import getRoutes from './utils/getRoutes';
+import { loadAnalytics, trackPageView } from './utils/analytics';
 
 // Add our isomorphic constants
 window.__SERVER__ = false;
 window.__CLIENT__ = true;
+
+// Load Google Analytics
+loadAnalytics();
 
 // Get react-root object
 const reactRoot = document.getElementById('react-root');
@@ -42,6 +47,9 @@ const routes = getRoutes(store);
 const loadAsync = props => (
   <ReduxAsyncConnect {...props} helpers={{ location: props.location }} />
 );
+
+// Track pageviews on every browser history change
+browserHistory.listen(location => trackPageView(location));
 
 // Scroll to top on every render
 const scrollToTop = () => window.scrollTo(0, 0);

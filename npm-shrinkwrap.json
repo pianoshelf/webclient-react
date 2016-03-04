@@ -236,6 +236,11 @@
       "from": "autosize@*",
       "resolved": "https://registry.npmjs.org/autosize/-/autosize-3.0.15.tgz"
     },
+    "autotrack": {
+      "version": "0.6.1",
+      "from": "autotrack@*",
+      "resolved": "https://registry.npmjs.org/autotrack/-/autotrack-0.6.1.tgz"
+    },
     "aws-sign2": {
       "version": "0.6.0",
       "from": "aws-sign2@>=0.6.0 <0.7.0",
@@ -1724,6 +1729,11 @@
       "from": "clone-stats@>=0.0.1 <0.0.2",
       "resolved": "https://registry.npmjs.org/clone-stats/-/clone-stats-0.0.1.tgz"
     },
+    "closest": {
+      "version": "0.0.1",
+      "from": "closest@0.0.1",
+      "resolved": "https://registry.npmjs.org/closest/-/closest-0.0.1.tgz"
+    },
     "co": {
       "version": "3.1.0",
       "from": "co@3.1.0",
@@ -2019,6 +2029,18 @@
       "from": "dateformat@>=1.0.11 <2.0.0",
       "resolved": "https://registry.npmjs.org/dateformat/-/dateformat-1.0.12.tgz"
     },
+    "debounce": {
+      "version": "1.0.0",
+      "from": "debounce@>=1.0.0 <2.0.0",
+      "resolved": "https://registry.npmjs.org/debounce/-/debounce-1.0.0.tgz",
+      "dependencies": {
+        "date-now": {
+          "version": "1.0.1",
+          "from": "date-now@1.0.1",
+          "resolved": "https://registry.npmjs.org/date-now/-/date-now-1.0.1.tgz"
+        }
+      }
+    },
     "debug": {
       "version": "2.2.0",
       "from": "debug@>=2.2.0 <2.3.0",
@@ -2253,6 +2275,11 @@
       "version": "1.0.0",
       "from": "delayed-stream@>=1.0.0 <1.1.0",
       "resolved": "https://registry.npmjs.org/delayed-stream/-/delayed-stream-1.0.0.tgz"
+    },
+    "delegate": {
+      "version": "3.0.1",
+      "from": "delegate@>=3.0.0 <4.0.0",
+      "resolved": "https://registry.npmjs.org/delegate/-/delegate-3.0.1.tgz"
     },
     "delegates": {
       "version": "0.1.0",
@@ -4575,6 +4602,11 @@
       "version": "0.1.0",
       "from": "map-stream@>=0.1.0 <0.2.0",
       "resolved": "https://registry.npmjs.org/map-stream/-/map-stream-0.1.0.tgz"
+    },
+    "matches-selector": {
+      "version": "0.0.1",
+      "from": "matches-selector@0.0.1",
+      "resolved": "https://registry.npmjs.org/matches-selector/-/matches-selector-0.0.1.tgz"
     },
     "media-typer": {
       "version": "0.3.0",
