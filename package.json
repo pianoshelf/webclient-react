@@ -100,8 +100,6 @@
     "normalize.css": "^3.0.3",
     "nuka-carousel": "^1.0.2",
     "react": "^0.14.6",
-    "react-addons-linked-state-mixin": "^0.14.6",
-    "react-addons-pure-render-mixin": "^0.14.6",
     "react-dom": "^0.14.6",
     "react-fontawesome": "^0.2.5",
     "react-helmet": "^1.1.5",
