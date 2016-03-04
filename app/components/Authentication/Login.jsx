@@ -1,7 +1,7 @@
 
 import FontAwesome from 'react-fontawesome';
 import Helmet from 'react-helmet';
-import includes from 'lodash/collection/includes';
+import includes from 'lodash/includes';
 import React from 'react';
 import { asyncConnect } from 'redux-async-connect';
 import { Link } from 'react-router';

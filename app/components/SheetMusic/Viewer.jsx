@@ -2,7 +2,7 @@
 import FontAwesome from 'react-fontawesome';
 import Helmet from 'react-helmet';
 import React from 'react';
-import times from 'lodash/utility/times';
+import times from 'lodash/times';
 import { asyncConnect } from 'redux-async-connect';
 import { connect } from 'react-redux';
 
@@ -100,7 +100,7 @@ export default class Viewer extends React.Component {
   renderComments() {
     return (
       <InfoBox title="Comments" icon="comment">
-        <Comments id={this.props.result.id} comments={this.props.commentResult.list.comment}/>
+        <Comments id={this.props.result.id} comments={this.props.commentResult.list.comment} />
       </InfoBox>
     );
   }

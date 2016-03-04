@@ -119,7 +119,7 @@ app.use((req, res) => {
         res.redirect(301, redirectLocation.pathname + redirectLocation.search);
       } else if (error) {
         // Return an error if an error occurred
-        res.status(500).send('Server error occurred: ' + error.message);
+        res.status(500).send(`Server error occurred: ${error.message}`);
       } else if (renderProps === null) {
         // Return 404 if no match occurred
         res.status(404).send('Not Found');

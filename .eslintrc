@@ -28,7 +28,7 @@
     "func-names": 0,
     "no-else-return": 0,
     "jsx-quotes": [2, "prefer-double"],
-    "react/prefer-es6-class": 0,
+    "react/prop-types": 0,
     "import/no-unresolved": 0,
     "import/named": 0,
     "import/namespace": 0,

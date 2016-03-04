@@ -5,7 +5,6 @@
 @import 'variables/buttons'
 
 @import 'responsivecontainer'
-@import 'miscinput'
 
 .search
   min-height: 100vh
@@ -127,6 +126,13 @@
   color: #000
   border-bottom: $button-border-width solid $grey-normal
   padding: 10px 0 5px 0
+  transition: 0.2s border
+  &:hover, &:focus
+    border-bottom-color: $grey-text-normal
+    .search__result-right-arrow
+      color: $grey-text-dark
+    .search__result-property
+      opacity: 1
 
 .search__result--paid
   border-bottom: none
@@ -146,12 +152,6 @@
   margin-top: -0.5em
   font-size: 22px
   color: $grey-dark
-
-.search__result:hover .search__result-right-arrow
-  color: $grey-text-dark
-
-.search__result:hover .search__result-property
-  opacity: 1
 
 .search__result-thumbnail
   float: left

@@ -109,12 +109,11 @@ export const login = createAction(
  */
 export const logout = createAction(
   LOGIN_LOGOUT,
-  async () => {
-    return await post({
+  async () =>
+    await post({
       endpoint: '/logout/',
       auth: true,
-    });
-  }
+    })
 );
 
 /**

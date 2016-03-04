@@ -1,6 +1,6 @@
 
 import FontAwesome from 'react-fontawesome';
-import includes from 'lodash/collection/includes';
+import includes from 'lodash/includes';
 import React from 'react';
 
 import FilterGroup from './FilterGroup';

@@ -1,10 +1,9 @@
 
 import classNames from 'classnames';
-import debounce from 'lodash/function/debounce';
+import debounce from 'lodash/debounce';
 import FontAwesome from 'react-fontawesome';
 import Helmet from 'react-helmet';
-import intersection from 'lodash/array/intersection';
-import isEqual from 'lodash/lang/isEqual';
+import intersection from 'lodash/intersection';
 import React from 'react';
 import { asyncConnect } from 'redux-async-connect';
 import { connect } from 'react-redux';

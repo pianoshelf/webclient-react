@@ -1,5 +1,5 @@
 
-import cloneDeep from 'lodash/lang/cloneDeep';
+import cloneDeep from 'lodash/cloneDeep';
 import React from 'react';
 
 /**
@@ -55,9 +55,9 @@ export function convertSheetMusic(sheetMusic) {
  * @return {Object} An object with all the necessary properties representing a sheet music.
  */
 export function mapSheetMusic(sheetMusicArray = [], iterator = value => value) {
-  return sheetMusicArray.map(sheetMusicItem => {
-    return convertSheetMusic(iterator(cloneDeep(sheetMusicItem)));
-  });
+  return sheetMusicArray.map(sheetMusicItem =>
+    convertSheetMusic(iterator(cloneDeep(sheetMusicItem)))
+  );
 }
 
 /**

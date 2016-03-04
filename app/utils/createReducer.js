@@ -50,10 +50,9 @@ export default function createReducer(initialState = {}, reducerObject = {}) {
   });
 
   // Return the wrapped reducer
-  return (state = initialState, action) => {
-    return reducers.reduce(
+  return (state = initialState, action) =>
+    reducers.reduce(
       (prevState, reducer) => reducer(prevState, action),
       state
     );
-  };
 }

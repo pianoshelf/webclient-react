@@ -7,11 +7,10 @@ import {
 
 export const search = createAction(
   SEARCH_SHEETMUSIC,
-  async (query, store) => {
-    return await get({
+  async (query, store) =>
+    await get({
       endpoint: '/search/',
       params: { query },
       store,
-    });
-  }
+    })
 );

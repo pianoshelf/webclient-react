@@ -48,21 +48,19 @@ export const getSheetMusic = createAction(
 
 export const updateSheetMusic = createAction(
   SHEETMUSIC_UPDATE,
-  async (sheetId, data) => {
-    return await patch({
+  async (sheetId, data) =>
+    await patch({
       endpoint: `/sheetmusic/${sheetId}/`,
       params: { sheetmusic: data },
-    });
-  }
+    })
 );
 
 export const deleteSheetMusic = createAction(
   SHEETMUSIC_DELETE,
-  async sheetId => {
-    return await del({
+  async sheetId =>
+    await del({
       endpoint: `/sheetmusic/${sheetId}/`,
-    });
-  }
+    })
 );
 
 /**
@@ -152,43 +150,39 @@ export const getMostPopularSheetMusic = createAction(
 
 export const getComposers = createAction(
   SHEETMUSIC_GET_COMPOSERS,
-  async store => {
-    return await get({
+  async store =>
+    await get({
       endpoint: '/composers/',
       store,
-    });
-  }
+    })
 );
 
 export const getRating = createAction(
   SHEETMUSIC_GET_RATING,
-  async (sheetId, store) => {
-    return await get({
+  async (sheetId, store) =>
+    await get({
       endpoint: '/sheetmusic/getrating',
       params: { sheet_id: sheetId },
       store,
-    });
-  }
+    })
 );
 
 export const postRating = createAction(
   SHEETMUSIC_POST_RATING,
-  async (sheetId, value) => {
-    return await post({
+  async (sheetId, value) =>
+    await post({
       endpoint: '/sheetmusic/rate/',
       params: { sheetmusic: sheetId, value },
-    });
-  }
+    })
 );
 
 export const getUploads = createAction(
   SHEETMUSIC_GET_UPLOADS,
-  async store => {
-    return await get({
+  async store =>
+    await get({
       endpoint: '/sheetmusic/uploads/',
       store,
-    });
-  }
+    })
 );
 
 export const postVideo = createAction(
@@ -210,81 +204,73 @@ export const postVideo = createAction(
 
 export const increaseViewCount = createAction(
   SHEETMUSIC_INCR_VIEW_COUNT,
-  async sheetId => {
-    return await post({
+  async sheetId =>
+    await post({
       endpoint: '/sheetmusic/viewCount/',
       params: { sheetmusic_id: sheetId },
-    });
-  }
+    })
 );
 
 export const getComments = createAction(
   SHEETMUSIC_COMMENT_GET,
-  async (sheetId, store) => {
-    return await get({
+  async (sheetId, store) =>
+    await get({
       endpoint: '/comment/',
       params: { sheetmusicId: sheetId },
       store,
-    });
-  }
+    })
 );
 
 export const addComment = createAction(
   SHEETMUSIC_COMMENT_ADD,
-  async (commentText, sheetId, recipientId) => {
-    return await post({
+  async (commentText, sheetId, recipientId) =>
+    await post({
       endpoint: '/comment/',
       params: { commentText, sheetmusicId: sheetId, recipientId },
-    });
-  }
+    })
 );
 
 export const removeComment = createAction(
   SHEETMUSIC_COMMENT_DELETE,
-  async (commentId) => {
-    return await del({
+  async (commentId) =>
+    await del({
       endpoint: `/comment/${commentId}/`,
-    });
-  }
+    })
 );
 
 export const editComment = createAction(
   SHEETMUSIC_COMMENT_EDIT,
-  async (commentId, commentText) => {
-    return await patch({
+  async (commentId, commentText) =>
+    await patch({
       endpoint: `/comment/${commentId}/`,
       params: { commentText },
-    });
-  }
+    })
 );
 
 export const undoRemoveComment = createAction(
   SHEETMUSIC_COMMENT_UNDO_REMOVE,
-  async (commentId) => {
-    return await post({
+  async (commentId) =>
+    await post({
       endpoint: `/comment/${commentId}/undodelete/`,
-    });
-  }
+    })
 );
 
 export const upvoteComment = createAction(
   SHEETMUSIC_COMMENT_UPVOTE,
-  async (commentId, sheetId, store) => {
-    return await get({
+  async (commentId, sheetId, store) =>
+    await get({
       endpoint: '/commentupvote/',
       params: { commentId, sheetmusicId: sheetId },
       store,
-    });
-  }
+    })
 );
 
 export const getSheetMusicDownloadLink = createAction(
   SHEETMUSIC_DOWNLOAD,
-  async (sheetId, store) => {
-    return await get({
+  async (sheetId, store) =>
+    await get({
       endpoint: '/sheetmusic/downloads/',
       params: { sheetmusic_id: sheetId },
       store,
-    });
-  }
+    })
 );

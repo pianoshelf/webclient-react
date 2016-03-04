@@ -1,7 +1,7 @@
 // Disable param reassigning rules because that's how decorators work
 /* eslint-disable no-param-reassign */
 
-import extend from 'lodash/object/extend';
+import extend from 'lodash/extend';
 
 import config from '../../config';
 
@@ -39,7 +39,7 @@ export default function canFacebookLogin(target) {
   };
 
   // Override existing component properties
-  target.prototype.componentDidMount = function componentDidMount() {
+  target.prototype.componentDidMount = function componentDidMount(...args) {
     // Function that will run after Facebook is done initializing
     window.fbAsyncInit = () => {
       /* global FB */
@@ -52,10 +52,10 @@ export default function canFacebookLogin(target) {
 
     // Asynchronously load Facebook
     (function (d, s, id) {
-      let js;
       const fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) { return; }
-      js = d.createElement(s); js.id = id;
+      const js = d.createElement(s);
+      js.id = id;
       js.src = '//connect.facebook.net/en_US/sdk.js';
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
@@ -68,16 +68,16 @@ export default function canFacebookLogin(target) {
     }
 
     // Call original componentDidMount function
-    parentDidMount.apply(this, arguments);
+    parentDidMount.call(this, ...args);
   };
 
-  target.prototype.componentWillUnmount = function componentWillUnmount() {
+  target.prototype.componentWillUnmount = function componentWillUnmount(...args) {
     // Remove fb-root div
     if (document.getElementById('fb-root')) {
       const fbRoot = document.getElementById('fb-root');
       fbRoot.parentElement.removeChild(fbRoot);
     }
-    parentWillUnmount.apply(this, arguments);
+    parentWillUnmount.call(this, ...args);
   };
 
   return target;

@@ -9,31 +9,28 @@ import {
 
 export const getShelf = createAction(
   SHELF_GET,
-  async (username, store) => {
-    return await get({
+  async (username, store) =>
+    await get({
       endpoint: '/shelf/',
       params: { username },
       store,
-    });
-  }
+    })
 );
 
 export const addToShelf = createAction(
   SHELF_ADD,
-  async sheetId => {
-    return await post({
+  async sheetId =>
+    await post({
       endpoint: '/shelf/',
       params: { sheetmusic: sheetId },
-    });
-  }
+    })
 );
 
 export const removeFromShelf = createAction(
   SHELF_REMOVE,
-  async sheetId => {
-    return await del({
+  async sheetId =>
+    await del({
       endpoint: '/shelf/',
       params: { sheetmusic: sheetId },
-    });
-  }
+    })
 );

@@ -35,6 +35,8 @@ function getCookie(store, name) {
   if (__SERVER__) {
     return (new Cookie(store.request)).get(name);
   }
+
+  return null;
 }
 
 /**

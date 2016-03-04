@@ -1,42 +1,49 @@
 import classNames from 'classnames';
-import LinkedStateMixin from 'react-addons-linked-state-mixin';
 import React from 'react';
+import { reduxForm } from 'redux-form';
 
-export default React.createClass({
-  propTypes: {
-    /**
-     * The id of the sheet music this reply box belongs to.
-     */
+import TextArea from '../../Misc/TextArea';
+
+export const fieldNames = ['reply'];
+
+@reduxForm({
+  form: 'commentReply',
+  fields: fieldNames,
+  initialValues: { reply: '' },
+})
+export default class ReplyBox extends React.Component {
+  static propTypes = {
     id: React.PropTypes.number.isRequired,
-
-    /**
-     * The recipient to be receiving the reply from this reply box.
-     */
     recipient: React.PropTypes.number,
-  },
+  };
 
-  mixins: [LinkedStateMixin],
+  handleSubmit = event => {
+    event.preventDefault();
+    this.props.handleSubmit(this.submitComment);
+  };
 
-  getInitialState() {
-    return {
-      text: '',
-    };
-  },
+  submitComment = (values, dispatch) => { // eslint-disable-line no-unused-vars
+    // submit comment
+  };
 
   render() {
-    const commentReplyBoxClasses = classNames('comment__send-button', {
-      comment__disabled: !this.state.text,
-    });
-
+    const { fields, values } = this.props;
     return (
-      <div>
-        <div className="comment__text-area">
-          <textarea className="comment__text-area" rows="2" valueLink={this.linkState('text')}/>
-        </div>
-        <div className={commentReplyBoxClasses}>
-          Reply
-        </div>
-      </div>
+      <form onSubmit={this.handleSubmit}>
+        <TextArea
+          className="comment__text-area"
+          placeholder="Reply"
+          name="reply"
+          {...fields.reply}
+        />
+        <input
+          type="submit"
+          value="Reply"
+          className={classNames('comment__send-button', {
+            'comment__send-button--disabled': !values.reply,
+          })}
+        />
+      </form>
     );
-  },
-});
+  }
+}

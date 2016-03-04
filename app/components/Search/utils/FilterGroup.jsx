@@ -1,6 +1,6 @@
 
-import defer from 'lodash/function/defer';
-import includes from 'lodash/collection/includes';
+import defer from 'lodash/defer';
+import includes from 'lodash/includes';
 import React from 'react';
 
 import Filter from './Filter';
