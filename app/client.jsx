@@ -5,7 +5,6 @@ import 'babel-polyfill';
 
 // Import external modules
 import base64 from 'base-64';
-import defer from 'lodash/defer';
 import React from 'react';
 import utf8 from 'utf8';
 import { Provider } from 'react-redux';
