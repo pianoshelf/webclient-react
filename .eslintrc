@@ -33,6 +33,7 @@
   "rules": {
     "new-cap": 0,
     "react/prop-types": 0,
+    "react/prefer-stateless-function": 0,
     "import/no-unresolved": 2,
     "import/named": 2,
     "import/namespace": 2,
