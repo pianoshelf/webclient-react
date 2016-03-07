@@ -41,44 +41,44 @@ const debouncedSearch = debounce((query, store) => {
 
     if (searchQuery) {
       return debouncedSearch(searchQuery, store);
-    } else {
-      switch (show) {
-        case 'trending':
-          if (trending === '90days') {
-            return store.dispatch(getTrendingSheetMusic(90, PAGE_SIZE, store));
-          } else if (trending === '30days') {
-            return store.dispatch(getTrendingSheetMusic(30, PAGE_SIZE, store));
-          }
-          return store.dispatch(getTrendingSheetMusic(7, PAGE_SIZE, store));
-        case 'new':
-          return store.dispatch(
-            getSheetMusicList(
-              { page, orderBy: 'new', sortBy: 'desc', pageSize: PAGE_SIZE },
-              store
-            )
-          );
-        case 'most_difficult':
-          return store.dispatch(
-            getSheetMusicList(
-              { page, orderBy: 'difficulty', sortBy: 'desc', pageSize: PAGE_SIZE },
-              store
-            )
-          );
-        case 'least_difficult':
-          return store.dispatch(
-            getSheetMusicList(
-              { page, orderBy: 'difficulty', sortBy: 'asc', pageSize: PAGE_SIZE },
-              store
-            )
-          );
-        default:
-          return store.dispatch(
-            getSheetMusicList(
-              { page, orderBy: 'popular', sortBy: 'desc', pageSize: PAGE_SIZE },
-              store
-            )
-          );
-      }
+    }
+
+    switch (show) {
+      case 'trending':
+        if (trending === '90days') {
+          return store.dispatch(getTrendingSheetMusic(90, PAGE_SIZE, store));
+        } else if (trending === '30days') {
+          return store.dispatch(getTrendingSheetMusic(30, PAGE_SIZE, store));
+        }
+        return store.dispatch(getTrendingSheetMusic(7, PAGE_SIZE, store));
+      case 'new':
+        return store.dispatch(
+          getSheetMusicList(
+            { page, orderBy: 'new', sortBy: 'desc', pageSize: PAGE_SIZE },
+            store
+          )
+        );
+      case 'most_difficult':
+        return store.dispatch(
+          getSheetMusicList(
+            { page, orderBy: 'difficulty', sortBy: 'desc', pageSize: PAGE_SIZE },
+            store
+          )
+        );
+      case 'least_difficult':
+        return store.dispatch(
+          getSheetMusicList(
+            { page, orderBy: 'difficulty', sortBy: 'asc', pageSize: PAGE_SIZE },
+            store
+          )
+        );
+      default:
+        return store.dispatch(
+          getSheetMusicList(
+            { page, orderBy: 'popular', sortBy: 'desc', pageSize: PAGE_SIZE },
+            store
+          )
+        );
     }
   },
 })

@@ -18,12 +18,10 @@ export default function createAction(type, handler) {
         const { error, code, payload } = action;
         if (error) {
           return dispatch({ type, payload, code, progress: 'error' });
-        } else {
-          return dispatch({ type, payload, progress: 'done' });
         }
+        return dispatch({ type, payload, progress: 'done' });
       });
-    } else {
-      return Promise.resolve(dispatch({ type, progress: 'done' }));
     }
+    return Promise.resolve(dispatch({ type, progress: 'done' }));
   };
 }

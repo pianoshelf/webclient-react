@@ -193,12 +193,11 @@ export const postVideo = createAction(
         endpoint: '/video/',
         params: { link, title, grade },
       });
-    } else {
-      return await post({
-        endpoint: '/video/',
-        params: { link, title, grade, sheetmusicId: sheetId },
-      });
     }
+    return await post({
+      endpoint: '/video/',
+      params: { link, title, grade, sheetmusicId: sheetId },
+    });
   }
 );
 

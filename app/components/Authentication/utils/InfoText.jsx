@@ -6,3 +6,7 @@ export default function InfoText({ children }) {
     <p className="authentication__text">{children}</p>
   );
 }
+
+InfoText.propTypes = {
+  children: React.PropTypes.node,
+};

@@ -58,9 +58,8 @@ function removeFromArray(array, item) {
   if (actionIndex !== -1) {
     newArray.splice(actionIndex, 1);
     return newArray;
-  } else {
-    return array;
   }
+  return array;
 }
 
 /**

@@ -174,17 +174,19 @@ export default class Viewer extends React.Component {
         <If condition={inProgress}>
           <LoadingScreen />
         <Else />
-          <MainViewer ref="mainViewer" images={this.props.result.images} />
-          <ResponsiveContainer className="sheetmusic__details">
-            <div className="sheetmusic__details-left">
-              {this.renderDescription()}
-              {/* this.renderVideos() */}
-              {this.renderComments()}
-            </div>
-            <div className="sheetmusic__details-right">
-              {this.renderInfo()}
-            </div>
-          </ResponsiveContainer>
+          <div>
+            <MainViewer ref="mainViewer" images={this.props.result.images} />
+            <ResponsiveContainer className="sheetmusic__details">
+              <div className="sheetmusic__details-left">
+                {this.renderDescription()}
+                {/* this.renderVideos() */}
+                {this.renderComments()}
+              </div>
+              <div className="sheetmusic__details-right">
+                {this.renderInfo()}
+              </div>
+            </ResponsiveContainer>
+          </div>
         </If>
       </div>
     );

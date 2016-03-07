@@ -58,13 +58,12 @@ export default class NavBar extends React.Component {
           <div className="navbar__title navbar__title--homepage">pianoshelf</div>
         </div>
       );
-    } else {
-      return (
-        <div>
-          <div className="navbar__title">pianoshelf</div>
-        </div>
-      );
     }
+    return (
+      <div>
+        <div className="navbar__title">pianoshelf</div>
+      </div>
+    );
   }
 
   render() {

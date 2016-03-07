@@ -38,71 +38,71 @@ let isRunningDevServer = false;
 /**
  * Compile our images
  */
-gulp.task('build:images', () => {
-  return gulp.src(config.files.images.src)
+gulp.task('build:images', () =>
+  gulp.src(config.files.images.src)
     .pipe(imagemin())
     .pipe(gulp.dest(`${config.files.staticAssets}${config.files.images.out}`))
-    .pipe(reload({ stream: true }));
-});
+    .pipe(reload({ stream: true }))
+);
 
 /**
  * Compile our CSS files
  */
-gulp.task('build:css', () => {
-  return gulp.src(config.files.css.entry)
+gulp.task('build:css', () =>
+  gulp.src(config.files.css.entry)
     .pipe(plumber())
     .pipe(sass(config.build.sass))
     .pipe(prefix(config.build.autoprefixer))
     .pipe(size({ title: 'CSS' }))
     .pipe(gulp.dest(`${config.files.staticAssets}${config.files.css.out}`))
-    .pipe(reload({ stream: true }));
-});
+    .pipe(reload({ stream: true }))
+);
 
 /**
  * Compile our CSS files for production. This minifies our CSS as well.
  */
-gulp.task('build:css:prod', () => {
-  return gulp.src(config.files.css.entry)
+gulp.task('build:css:prod', () =>
+  gulp.src(config.files.css.entry)
     .pipe(sass(config.build.sass))
     .pipe(prefix(config.build.autoprefixer))
     .pipe(minifyCss())
     .pipe(size({ title: 'CSS' }))
-    .pipe(gulp.dest(`${config.files.staticAssets}${config.files.css.out}`));
-});
+    .pipe(gulp.dest(`${config.files.staticAssets}${config.files.css.out}`))
+);
 
 /**
  * Lint all our JS files.
  */
-gulp.task('build:lint', () => {
-  return gulp.src(config.files.client.src)
+gulp.task('build:lint', () =>
+  gulp.src([config.files.client.src, config.files.tests.src])
     .pipe(cache('build:lint'))
     .pipe(eslint())
-    .pipe(eslint.format());
-});
+    .pipe(eslint.format())
+);
 
 /**
  * Lint all our JS files, and fail on error. Useful on CI machines and build scripts.
  */
-gulp.task('build:lint:prod', () => {
-  return gulp.src(config.files.client.src)
+gulp.task('build:lint:prod', () =>
+  gulp.src([config.files.client.src, config.files.tests.src])
     .pipe(eslint())
     .pipe(eslint.format())
-    .pipe(eslint.failOnError());
-});
+    .pipe(eslint.failOnError())
+);
 
 /**
  * Compile our server files.
  */
-gulp.task('build:server', () => {
-  return gulp.src(config.files.server.src)
+gulp.task('build:server', () =>
+  gulp.src(config.files.server.src)
     .pipe(cache('src:server'))
     .pipe(plumber())
     .pipe(sourcemaps.init())
     .pipe(babel(config.build.babel.server))
     .pipe(sourcemaps.write('.'))
     .pipe(size({ title: 'Server JS' }))
-    .pipe(gulp.dest(config.files.server.out));
-});
+    .pipe(gulp.dest(config.files.server.out))
+);
 
 /**
  * Compile our JS files for development and launch webpack-dev-server.
@@ -118,7 +118,9 @@ gulp.task('build:client', callback => {
       const jsFilePath = path.join(outputConfig.path, outputConfig.filename);
       gutil.log(`${gutil.colors.cyan('Client JS')} ${gutil.colors.green('all files ')}` +
                 `${gutil.colors.magenta(pretty(fs.statSync(jsFilePath).size))}`);
-    } catch (e) {}
+    } catch (e) {
+      // Continue regardless of error
+    }
 
     // Set boolean to true if we're not running the server.
     if (!isRunningDevServer) {

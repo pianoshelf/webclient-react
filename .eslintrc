@@ -18,21 +18,35 @@
     "For": true
   },
   "settings": {
-    "import/parser": "babel-eslint",
-    "import/resolve": {
-      "moduleDirectory": ["node_modules", "app"]
+    "import/ignore": [
+      "node_modules",
+      "config.js",
+      "app/utils/configureStore",
+      "app/components/DevTools"
+    ],
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx"]
+      }
     }
   },
   "rules": {
     "new-cap": 0,
-    "func-names": 0,
-    "no-else-return": 0,
-    "jsx-quotes": [2, "prefer-double"],
     "react/prop-types": 0,
-    "import/no-unresolved": 0,
-    "import/named": 0,
-    "import/namespace": 0,
-    "import/default": 0,
-    "import/export": 0
+    "import/no-unresolved": 2,
+    "import/named": 2,
+    "import/namespace": 2,
+    "import/default": 2,
+    "import/export": 2,
+    "jsx-control-statements/jsx-choose-not-empty": 1,
+    "jsx-control-statements/jsx-for-require-each": 1,
+    "jsx-control-statements/jsx-for-require-index": 1,
+    "jsx-control-statements/jsx-for-require-of": 1,
+    "jsx-control-statements/jsx-for-single-child": 1,
+    "jsx-control-statements/jsx-if-require-condition": 1,
+    "jsx-control-statements/jsx-if-single-child": 1,
+    "jsx-control-statements/jsx-otherwise-once-last": 1,
+    "jsx-control-statements/jsx-use-if-tag": 1,
+    "jsx-control-statements/jsx-when-require-condition": 1
   }
 }

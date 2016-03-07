@@ -1,11 +1,11 @@
 
-import testReducer from 'redux-test-reducer';
+// import testReducer from 'redux-test-reducer';
 
-import listReducer from '../../../app/reducers/sheetmusic/lists';
-import { createDoneAction } from '../../shared/actions';
-import { success } from '../../../app/utils/constants';
+// import listReducer from '../../../app/reducers/sheetmusic/lists';
+// import { createDoneAction } from '../../shared/actions';
+// import { success } from '../../../app/utils/constants';
 
-const assertReducer = testReducer(listReducer);
+// const assertReducer = testReducer(listReducer);
 
 describe('reducers/sheetmusic/lists', () => {
   it('can retrieve a list of sheet music');

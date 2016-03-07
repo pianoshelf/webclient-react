@@ -11,9 +11,8 @@
 export function actionDone(payload) {
   if (typeof payload !== 'undefined') {
     return { error: false, payload };
-  } else {
-    return { error: false };
   }
+  return { error: false };
 }
 
 /**
@@ -25,9 +24,8 @@ export function actionDone(payload) {
 export function actionError(errorCode, payload) {
   if (typeof payload !== 'undefined') {
     return { error: true, payload, code: errorCode };
-  } else {
-    return { error: true, code: errorCode };
   }
+  return { error: true, code: errorCode };
 }
 
 /**

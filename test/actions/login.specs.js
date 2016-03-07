@@ -74,17 +74,17 @@ describe('actions/login', () => {
         .then(() => scope.done());
     });
 
-    it('throws error when username is empty', () => {
-      return login.login('', 'pass')(dispatch).then(res => {
+    it('throws error when username is empty', () =>
+      login.login('', 'pass')(dispatch).then(res => {
         expect(getFailedResponseError(res)).to.equal(errors.NO_USERNAME);
-      });
-    });
+      })
+    );
 
-    it('throws error when the password is empty', () => {
-      return login.login('user', '')(dispatch).then(res => {
+    it('throws error when the password is empty', () =>
+      login.login('user', '')(dispatch).then(res => {
         expect(getFailedResponseError(res)).to.equal(errors.NO_PASSWORD);
-      });
-    });
+      })
+    );
 
     it('throws error when server says you cannot log in', () => {
       mockApiCall({
@@ -332,17 +332,17 @@ describe('actions/login', () => {
         .then(() => scope.done());
     });
 
-    it('throws error when email field is empty', () => {
-      return login.resetPassword('')(dispatch).then(res => {
+    it('throws error when email field is empty', () =>
+      login.resetPassword('')(dispatch).then(res => {
         expect(getFailedResponseError(res)).to.equal(errors.NO_EMAIL);
-      });
-    });
+      })
+    );
 
-    it('throws error when email field is not an email', () => {
-      return login.resetPassword('hello')(dispatch).then(res => {
+    it('throws error when email field is not an email', () =>
+      login.resetPassword('hello')(dispatch).then(res => {
         expect(getFailedResponseError(res)).to.equal(errors.INVALID_EMAIL);
-      });
-    });
+      })
+    );
 
     it('throws error when server says email is not registered', () => {
       mockApiCall({
@@ -381,32 +381,32 @@ describe('actions/login', () => {
         .then(() => scope.done());
     });
 
-    it('throws error when password is empty', () => {
-      return login.resetPasswordConfirm({
+    it('throws error when password is empty', () =>
+      login.resetPasswordConfirm({
         password1: '',
         password2: '',
       })(dispatch).then(res => {
         expect(getFailedResponseError(res)).to.equal(errors.NO_PASSWORD);
-      });
-    });
+      })
+    );
 
-    it('throws error when password is too short', () => {
-      return login.resetPasswordConfirm({
+    it('throws error when password is too short', () =>
+      login.resetPasswordConfirm({
         password1: 'pass',
         password2: 'pass',
       })(dispatch).then(res => {
         expect(getFailedResponseError(res)).to.equal(errors.NOT_STRONG_PASSWORD);
-      });
-    });
+      })
+    );
 
-    it('throws error when passwords do not match', () => {
-      return login.resetPasswordConfirm({
+    it('throws error when passwords do not match', () =>
+      login.resetPasswordConfirm({
         password1: 'password1',
         password2: 'password2',
       })(dispatch).then(res => {
         expect(getFailedResponseError(res)).to.equal(errors.NOT_SAME_PASSWORD);
-      });
-    });
+      })
+    );
 
     it('throws error when server says token is invalid', () => {
       mockApiCall({
@@ -472,32 +472,32 @@ describe('actions/login', () => {
         .then(() => scope.done());
     });
 
-    it('throws error when password is empty', () => {
-      return login.changePassword({
+    it('throws error when password is empty', () =>
+      login.changePassword({
         password1: '',
         password2: '',
       })(dispatch).then(res => {
         expect(getFailedResponseError(res)).to.equal(errors.NO_PASSWORD);
-      });
-    });
+      })
+    );
 
-    it('throws error when password is too short', () => {
-      return login.changePassword({
+    it('throws error when password is too short', () =>
+      login.changePassword({
         password1: 'pass',
         password2: 'pass',
       })(dispatch).then(res => {
         expect(getFailedResponseError(res)).to.equal(errors.NOT_STRONG_PASSWORD);
-      });
-    });
+      })
+    );
 
-    it('throws error when passwords do not match', () => {
-      return login.changePassword({
+    it('throws error when passwords do not match', () =>
+      login.changePassword({
         password1: 'password1',
         password2: 'password2',
       })(dispatch).then(res => {
         expect(getFailedResponseError(res)).to.equal(errors.NOT_SAME_PASSWORD);
-      });
-    });
+      })
+    );
 
     it('changes the users password');
   });

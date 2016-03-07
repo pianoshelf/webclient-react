@@ -27,9 +27,8 @@ export default function createReducer(initialState = {}, reducerObject = {}) {
       if (typeof reducer === 'function') {
         if (action.progress === 'done') {
           return reducer(state, action.payload);
-        } else {
-          return state;
         }
+        return state;
       }
 
       // If it is a mapping, execute the relevant methods

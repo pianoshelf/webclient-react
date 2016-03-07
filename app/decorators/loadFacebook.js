@@ -50,15 +50,14 @@ export default function canFacebookLogin(target) {
       });
     };
 
-    // Asynchronously load Facebook
-    (function (d, s, id) {
-      const fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) { return; }
-      const js = d.createElement(s);
-      js.id = id;
-      js.src = '//connect.facebook.net/en_US/sdk.js';
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
+    // Asynchronously load Facebook JS
+    if (!document.getElementById('facebook-jssdk')) {
+      const firstScript = document.getElementsByTagName('script')[0];
+      const facebookScript = document.createElement('script');
+      facebookScript.id = 'facebook-jssdk';
+      facebookScript.src = '//connect.facebook.net/en_US/sdk.js';
+      firstScript.parentNode.insertBefore(facebookScript, firstScript);
+    }
 
     // Inject fb-root div if it doesn't exist
     if (!document.getElementById('fb-root')) {
