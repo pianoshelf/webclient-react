@@ -15,7 +15,7 @@ import ResponsiveContainer from '../Misc/ResponsiveContainer';
   state => ({
     loggedIn: state.login.loggedIn,
     user: state.login.user,
-    isPageLoading: state.reduxAsyncConnect.promise.loading,
+    isLoaded: state.reduxAsyncConnect.loaded,
   }),
 )
 export default class NavBar extends React.Component {
@@ -23,7 +23,7 @@ export default class NavBar extends React.Component {
     disappearing: React.PropTypes.bool,
     disappearingOffset: React.PropTypes.number,
     loggedIn: React.PropTypes.bool.isRequired,
-    isPageLoading: React.PropTypes.bool,
+    isLoaded: React.PropTypes.bool,
   };
 
   state = {
@@ -47,6 +47,16 @@ export default class NavBar extends React.Component {
     }
   }
 
+  getButtonClass = options => {
+    const {
+      important = false,
+    } = options || {};
+    return classNames('navbar__button', {
+      'navbar__button--homepage': this.state.disappearingMode,
+      'navbar__button--important': important,
+    });
+  };
+
   handleStickyEvent = () => {
     const disappearingMode = this.props.disappearing &&
       window.pageYOffset < this.props.disappearingOffset;
@@ -68,18 +78,31 @@ export default class NavBar extends React.Component {
     );
   }
 
+  renderLoggedInWidgets() {
+    return (
+      <div className="navbar__component-container">
+        <Link to="/logout" className={this.getButtonClass()}>Logout</Link>
+      </div>
+    );
+  }
+
+  renderLoggedOutWidgets() {
+    return (
+      <div className="navbar__component-container">
+        <Link to="/browse" className={this.getButtonClass()}>Browse</Link>
+        <Link to="/login" className={this.getButtonClass()}>Log In</Link>
+        <Link to="/register" className={this.getButtonClass({ important: true })}>Sign Up</Link>
+      </div>
+    );
+  }
+
   render() {
     const navbarClass = classNames('navbar', {
       'navbar--homepage': this.state.disappearingMode,
     });
 
-    const buttonClass = (important) => classNames('navbar__button', {
-      'navbar__button--homepage': this.state.disappearingMode,
-      'navbar__button--important': important,
-    });
-
     const logoClass = classNames('navbar__logo', {
-      'navbar__logo--loading': this.props.isPageLoading,
+      'navbar__logo--loading': !this.props.isLoaded,
     });
 
     return (
@@ -88,15 +111,9 @@ export default class NavBar extends React.Component {
         <div className="navbar__logo-buffer" />
         {this.renderTitle()}
         <If condition={this.props.loggedIn}>
-          <div>
-            <Link to="/logout" className={buttonClass(false /* important */)}>Logout</Link>
-          </div>
+          {this.renderLoggedInWidgets()}
         <Else />
-          <div>
-            <Link to="/register" className={buttonClass(true /* important */)}>Sign Up</Link>
-            <Link to="/login" className={buttonClass(false /* important */)}>Log In</Link>
-            <Link to="/browse" className={buttonClass(false /* important */)}>Browse</Link>
-          </div>
+          {this.renderLoggedOutWidgets()}
         </If>
       </ResponsiveContainer>
     );

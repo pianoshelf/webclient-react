@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 // Import external modules
 import React from 'react';
 import { Route, Redirect } from 'react-router';
@@ -17,19 +15,32 @@ import ResetPassword from '../components/Authentication/ResetPassword';
 import ResetPasswordConfirm from '../components/Authentication/ResetPasswordConfirm';
 import VerifyEmail from '../components/Authentication/VerifyEmail';
 
+// Profile components
+import Profile from '../components/Profile';
+import ProfileViewer from '../components/Profile/Viewer';
+
 // Search components
 import Search from '../components/Search';
 import Browse from '../components/Search/Browse';
 
 // Sheet music components
 import SheetMusic from '../components/SheetMusic';
-import Viewer from '../components/SheetMusic/Viewer';
+import SheetMusicViewer from '../components/SheetMusic/Viewer';
 
 // Static components
 import Static from '../components/Static';
 import Copyright from '../components/Static/Copyright';
 import PrivacyPolicy from '../components/Static/PrivacyPolicy';
 import TermsOfService from '../components/Static/TermsOfService';
+
+// Dashboard components
+import Dashboard from '../components/Dashboard';
+
+// Uploader components
+import Upload from '../components/Upload';
+
+// Error components
+import Error404 from '../components/Error/Error404';
 
 /**
  * A function that retrieves the route configuration for both
@@ -52,11 +63,17 @@ export default function getRoutes(store) {
     }
   }
 
+  function goToDashboard(nextState, replace) {
+    if (store.getState().login.loggedIn) {
+      replace({ pathname: '/home' });
+    }
+  }
+
   return (
     <Route component={App}>
 
       { /* Homepage */ }
-      <Route path="/" component={Homepage} />
+      <Route path="/" component={Homepage} onEnter={goToDashboard} />
 
       { /* Authentication routes */ }
       <Route component={Authentication}>
@@ -72,6 +89,12 @@ export default function getRoutes(store) {
         <Redirect from="/verify-email/:key" to="/login/verify/:key" />
       </Route>
 
+      { /* Profile routes */ }
+      <Route component={Profile}>
+        <Route path="/user/:username" component={ProfileViewer} />
+        <Redirect from="/profile/:username" to="/user/:username" />
+      </Route>
+
       { /* Search routes */ }
       <Route component={Search}>
         <Route path="/browse" component={Browse} />
@@ -80,7 +103,7 @@ export default function getRoutes(store) {
 
       { /* Sheet music routes */ }
       <Route component={SheetMusic}>
-        <Route path="/sheetmusic/:id/:slug" component={Viewer} />
+        <Route path="/sheetmusic/:id/:slug" component={SheetMusicViewer} />
       </Route>
 
       { /* Static routes */ }
@@ -91,6 +114,15 @@ export default function getRoutes(store) {
         <Redirect path="/terms.html" to="/terms" />
         <Redirect path="/copyright.html" to="/copyright" />
       </Route>
+
+      { /* Dashboard route */ }
+      <Route path="/home" component={Dashboard} onEnter={requireAuth} />
+
+      { /* Upload route */ }
+      <Route path="/upload" component={Upload} onEnter={requireAuth} />
+
+      { /* Upload route */ }
+      <Route path="*" component={Error404} />
 
     </Route>
   );
