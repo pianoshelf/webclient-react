@@ -89,11 +89,11 @@ export const login = createAction(
     });
 
     if (isActionError(response)) {
-      const { payload } = response;
+      const { meta } = response;
 
       // Make sure user actually logged in
-      if (payload.non_field_errors &&
-          payload.non_field_errors[0] === 'Unable to log in with provided credentials.') {
+      if (meta.non_field_errors &&
+          meta.non_field_errors[0] === 'Unable to log in with provided credentials.') {
         return actionError(errors.UNABLE_TO_LOG_IN);
       }
 
@@ -128,10 +128,11 @@ export const verifyEmail = createAction(
     });
 
     if (isActionError(response)) {
-      const { payload } = response;
+      const { meta } = response;
 
       // Check if verification actually happened
-      if (payload.detail && payload.detail === 'Not found') {
+      if (meta.detail &&
+          meta.detail === 'Not found') {
         return actionError(errors.EMAIL_UNVERIFIED);
       }
     }
@@ -190,17 +191,17 @@ export const register = createAction(
     });
 
     if (isActionError(registerResponse)) {
-      const { payload } = registerResponse;
+      const { meta } = registerResponse;
 
       // Make sure username is not taken
-      if (payload.username &&
-          payload.username[0] === 'This username is already taken. Please choose another.') {
+      if (meta.username &&
+          meta.username[0] === 'This username is already taken. Please choose another.') {
         return actionError(errors.USERNAME_TAKEN);
       }
 
       // Make sure email address is not taken
-      if (payload.email &&
-          payload.email[0] === 'A user is already registered with this e-mail address.') {
+      if (meta.email &&
+          meta.email[0] === 'A user is already registered with this e-mail address.') {
         return actionError(errors.EMAIL_ALREADY_REGISTERED);
       }
 
@@ -218,18 +219,19 @@ export const register = createAction(
     });
 
     if (isActionError(loginResponse)) {
-      const { payload } = loginResponse;
+      const { meta } = loginResponse;
 
       // Make sure user actually logged in
-      if (payload.non_field_errors &&
-          payload.non_field_errors[0] === 'Unable to log in with provided credentials.') {
+      if (meta.non_field_errors &&
+          meta.non_field_errors[0] === 'Unable to log in with provided credentials.') {
         return actionError(errors.UNABLE_TO_LOG_IN);
       }
 
       return loginResponse;
     }
 
-    return actionDone(sanitizeUserInfo(loginResponse.payload));
+    const { payload } = loginResponse;
+    return actionDone(sanitizeUserInfo(payload));
   }
 );
 
@@ -255,11 +257,11 @@ export const resetPassword = createAction(
     });
 
     if (isActionError(response)) {
-      const { payload } = response;
+      const { meta } = response;
 
       // Check if the email is registered
-      if (payload.email &&
-          payload.email[0] === 'Invalid Email') {
+      if (meta.email &&
+          meta.email[0] === 'Invalid Email') {
         return actionError(errors.EMAIL_NOT_REGISTERED);
       }
     }
@@ -306,17 +308,17 @@ export const resetPasswordConfirm = createAction(
     }
 
     if (isActionError(response)) {
-      const { payload } = response;
+      const { meta } = response;
 
       // Check if token is invalid
-      if (payload.token &&
-          payload.token[0] === 'Invalid value') {
+      if (meta.token &&
+          meta.token[0] === 'Invalid value') {
         return actionError(errors.EXPIRED_LINK);
       }
 
       // Check if uid is invalid
-      if (payload.uid &&
-          payload.uid[0] === 'Invalid value') {
+      if (meta.uid &&
+          meta.uid[0] === 'Invalid value') {
         return actionError(errors.EXPIRED_LINK);
       }
     }
@@ -365,7 +367,12 @@ export const facebookLogin = createAction(
       auth: true,
     });
 
-    return actionDone(sanitizeUserInfo(response.payload));
+    if (isActionError(response)) {
+      return response;
+    }
+
+    const { payload } = response;
+    return actionDone(sanitizeUserInfo(payload));
   }
 );
 
@@ -381,6 +388,11 @@ export const twitterLogin = createAction(
       auth: true,
     });
 
-    return actionDone(sanitizeUserInfo(response.payload));
+    if (isActionError(response)) {
+      return response;
+    }
+
+    const { payload } = response;
+    return actionDone(sanitizeUserInfo(payload));
   }
 );

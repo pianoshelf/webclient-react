@@ -6,26 +6,24 @@
 /**
  * Returns a start action given an action payload.
  * @param {Object} payload The payload of the action.
+ * @param {Object} meta The meta field of the action.
  * @return {Object} Object representing a 'done' action.
  */
-export function actionDone(payload) {
+export function actionDone(payload, meta) {
   if (typeof payload !== 'undefined') {
-    return { error: false, payload };
+    return { error: false, payload, meta };
   }
-  return { error: false };
+  return { error: false, meta };
 }
 
 /**
  * Returns an error action given an action error code and payload.
  * @param {Number} errorCode The error code of the action.
- * @param {Object} payload The payload of the action.
+ * @param {Object} meta The meta field of the action.
  * @return {Object} Object representing a 'error' action.
  */
-export function actionError(errorCode, payload) {
-  if (typeof payload !== 'undefined') {
-    return { error: true, payload, code: errorCode };
-  }
-  return { error: true, code: errorCode };
+export function actionError(errorCode, meta) {
+  return { error: true, code: errorCode, meta };
 }
 
 /**

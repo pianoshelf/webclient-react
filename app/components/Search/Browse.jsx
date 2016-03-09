@@ -238,7 +238,6 @@ export default class Browse extends React.Component {
                 Search for sheet music
               </span>
             }
-            ref="searchBox"
             {...fields.search}
           />
           {/*

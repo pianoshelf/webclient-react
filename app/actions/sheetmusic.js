@@ -42,7 +42,8 @@ export const getSheetMusic = createAction(
       return response;
     }
 
-    return actionDone(convertSheetMusic(response.payload));
+    const { payload } = response;
+    return actionDone(convertSheetMusic(payload));
   }
 );
 
@@ -85,8 +86,10 @@ export const getTrendingSheetMusic = createAction(
       return response;
     }
 
+    const { payload, meta } = response;
     return actionDone({
-      results: mapSheetMusic(response.payload.results),
+      results: mapSheetMusic(payload),
+      count: meta.pagination.count,
     });
   }
 );
@@ -112,9 +115,10 @@ export const getSheetMusicList = createAction(
       return response;
     }
 
+    const { payload, meta } = response;
     return actionDone({
-      results: mapSheetMusic(response.payload.results),
-      count: response.payload.count,
+      results: mapSheetMusic(payload),
+      count: meta.pagination.count,
     });
   }
 );
@@ -137,9 +141,10 @@ export const getMostPopularSheetMusic = createAction(
       return response;
     }
 
+    const { payload, meta } = response;
     return actionDone({
-      results: mapSheetMusic(response.payload.results),
-      count: response.payload.count,
+      results: mapSheetMusic(payload),
+      count: meta.pagination.count,
     });
   }
 );

@@ -15,6 +15,7 @@ import ResponsiveContainer from '../Misc/ResponsiveContainer';
   state => ({
     loggedIn: state.login.loggedIn,
     user: state.login.user,
+    isPageLoading: state.reduxAsyncConnect.promise.loading,
   }),
 )
 export default class NavBar extends React.Component {
@@ -22,6 +23,7 @@ export default class NavBar extends React.Component {
     disappearing: React.PropTypes.bool,
     disappearingOffset: React.PropTypes.number,
     loggedIn: React.PropTypes.bool.isRequired,
+    isPageLoading: React.PropTypes.bool,
   };
 
   state = {
@@ -76,9 +78,13 @@ export default class NavBar extends React.Component {
       'navbar__button--important': important,
     });
 
+    const logoClass = classNames('navbar__logo', {
+      'navbar__logo--loading': this.props.isPageLoading,
+    });
+
     return (
       <ResponsiveContainer className={navbarClass}>
-        <Link to="/" className="navbar__logo" />
+        <Link to="/" className={logoClass} />
         <div className="navbar__logo-buffer" />
         {this.renderTitle()}
         <If condition={this.props.loggedIn}>

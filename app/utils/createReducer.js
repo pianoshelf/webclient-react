@@ -40,7 +40,7 @@ export default function createReducer(initialState = {}, reducerObject = {}) {
         } else if (reducer.done && action.progress === 'done') {
           return reducer.done(state, action.payload);
         } else if (reducer.error && action.progress === 'error') {
-          return reducer.error(state, action.code, action.payload);
+          return reducer.error(state, action.code, action.meta);
         }
       }
 

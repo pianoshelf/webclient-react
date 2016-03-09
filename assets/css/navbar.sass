@@ -35,9 +35,12 @@ $navbar-logo-height-mobile: 67.5px
   position: absolute
   left: 0
   background-image: url('../img/logo.svg')
+  background-size: cover
   +when-tablet
     width: $navbar-logo-height
     height: $navbar-logo-height
+  &--loading
+    background-image: url('../img/logo_animated.gif')
 
 // The staticly placed element behind the logo
 .navbar__logo-buffer

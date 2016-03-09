@@ -106,7 +106,7 @@
     "react-redux": "^4.4.0",
     "react-router": "^2.0.0",
     "react-router-redux": "^4.0.0",
-    "react-slick": "^0.6.6",
+    "react-slick": "^0.11.1",
     "react-tools": "^0.13.3",
     "react-transmit": "^2.6.4",
     "react-video": "^1.5.3",

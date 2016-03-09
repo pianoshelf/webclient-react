@@ -65,13 +65,15 @@ function finishRequest(resolve) {
   return (err, res) => {
     // Reject if there's an error, otherwise resolve.
     if (err) {
-      if (res) {
-        resolve(actionError(errors.NETWORK_ERROR, JSON.parse(res.text)));
+      if (res && res.status !== 500) {
+        const { meta = {} } = JSON.parse(res.text);
+        resolve(actionError(errors.API_ERROR, meta));
       } else {
         resolve(actionError(errors.NETWORK_ERROR));
       }
     } else {
-      resolve(actionDone(JSON.parse(res.text)));
+      const { data = {}, meta = {} } = JSON.parse(res.text);
+      resolve(actionDone(data, meta));
     }
   };
 }

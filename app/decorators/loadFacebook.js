@@ -27,7 +27,7 @@ export default function canFacebookLogin(target) {
               signedRequest: response.authResponse.signedRequest,
             });
 
-            resolve(loginResponse);
+            resolve({ status: loginResponse.status });
           });
         } else {
           resolve({ status: response.status });
