@@ -13,7 +13,6 @@ export default function Comments({ id, comments = [] }) {
       <Else />
         <div>There are no comments for this sheet music.</div>
       </If>
-      <div className="commment__text-box-prompt">Contribute to the discussion:</div>
       <ReplyBox id={id} />
     </div>
   );

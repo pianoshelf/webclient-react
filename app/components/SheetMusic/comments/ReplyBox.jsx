@@ -32,7 +32,7 @@ export default class ReplyBox extends React.Component {
       <form onSubmit={this.handleSubmit}>
         <TextArea
           className="comment__text-area"
-          placeholder="Reply"
+          placeholder="Contribute to the discussion"
           name="reply"
           {...fields.reply}
         />

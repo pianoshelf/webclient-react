@@ -54,7 +54,6 @@ $navbar-logo-height-mobile: 67.5px
 
 // This is for the title on the navbar
 .navbar__title
-  display: inline-block
   float: left
   line-height: $navbar-height-mobile
   font-size: 25px
@@ -63,7 +62,9 @@ $navbar-logo-height-mobile: 67.5px
   transition: color 0.2s, top 0.2s
   position: relative
   top: 0
+  display: none
   +when-tablet
+    display: inline-block
     line-height: $navbar-height
     font-size: 35px
   &--homepage
@@ -73,28 +74,35 @@ $navbar-logo-height-mobile: 67.5px
     +when-tablet
       top: 9px
 
-// This is for the beta symbol
-.navbar__title-beta
-  display: inline-block
-  float: left
-  line-height: $navbar-height-mobile - 18px
-  margin: 16px 10px 0 10px
-  font-size: 12px
-  transition: color 0.2s, top 0.2s
-  position: relative
-  top: 0
-  +when-tablet
-    line-height: $navbar-height - 20px
-    font-size: 14px
-    margin: 20px 12px 0 12px
-  &--homepage
-    color: #fff
-    top: 8px
-    +when-tablet
-      top: 10px
-
 .navbar__component-container
   float: right
+
+.navbar__user-text
+  display: inline-block
+  font-size: 15px
+  text-decoration: none
+  color: #000
+  padding: 11px 6px 6px 32px
+  margin: 12px 5px 10px 0
+  line-height: $navbar-height-mobile - 40px
+  border: 1px solid $grey-normal
+  position: relative
+  +when-tablet
+    padding: 11px 10px 6px 55px
+    margin: 12px 10px 10px 0
+    line-height: $navbar-height - 40px
+    font-size: 20px
+
+.navbar__user-text-avatar
+  display: inline-block
+  position: absolute
+  top: -1px
+  left: -1px
+  height: 27px
+  width: 27px
+  +when-tablet
+    height: 44px
+    width: 44px
 
 // This is for buttons in the navbar
 .navbar__button
@@ -125,3 +133,9 @@ $navbar-logo-height-mobile: 67.5px
     &:active, &:focus
       color: #000
 
+.navbar__button-icon
+  padding-right: 0.3em
+  line-height: inherit
+
+.navbar__button-icon-alone
+  line-height: inherit

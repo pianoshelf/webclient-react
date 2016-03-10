@@ -4,6 +4,7 @@
 
 // Import external modules
 import classNames from 'classnames';
+import FontAwesome from 'react-fontawesome';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
@@ -24,6 +25,7 @@ export default class NavBar extends React.Component {
     disappearingOffset: React.PropTypes.number,
     loggedIn: React.PropTypes.bool.isRequired,
     isLoaded: React.PropTypes.bool,
+    user: React.PropTypes.object,
   };
 
   state = {
@@ -50,6 +52,7 @@ export default class NavBar extends React.Component {
   getButtonClass = options => {
     const {
       important = false,
+      error = false,
     } = options || {};
     return classNames('navbar__button', {
       'navbar__button--homepage': this.state.disappearingMode,
@@ -79,9 +82,16 @@ export default class NavBar extends React.Component {
   }
 
   renderLoggedInWidgets() {
+    const { username } = this.props.user;
     return (
       <div className="navbar__component-container">
-        <Link to="/logout" className={this.getButtonClass()}>Logout</Link>
+        <div className="navbar__user-text">
+          <img className="navbar__user-text-avatar" />
+          {username}
+        </div>
+        <Link to="/logout" className={this.getButtonClass({ error: true })}>
+          <FontAwesome className="navbar__button-icon-alone" name="sign-out" />
+        </Link>
       </div>
     );
   }
@@ -89,9 +99,17 @@ export default class NavBar extends React.Component {
   renderLoggedOutWidgets() {
     return (
       <div className="navbar__component-container">
-        <Link to="/browse" className={this.getButtonClass()}>Browse</Link>
-        <Link to="/login" className={this.getButtonClass()}>Log In</Link>
-        <Link to="/register" className={this.getButtonClass({ important: true })}>Sign Up</Link>
+        <Link to="/browse" className={this.getButtonClass()}>
+          Browse
+        </Link>
+        <Link to="/login" className={this.getButtonClass()}>
+          <FontAwesome className="navbar__button-icon" name="sign-in" />
+          Log In
+        </Link>
+        <Link to="/register" className={this.getButtonClass({ important: true })}>
+          <FontAwesome className="navbar__button-icon" name="star" />
+          Sign Up
+        </Link>
       </div>
     );
   }
