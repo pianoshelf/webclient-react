@@ -81,11 +81,15 @@ export default class NavBar extends React.Component {
   renderLoggedInWidgets() {
     const { username, firstName, lastName } = this.props.user;
     // TODO: Remove this!!!!!
-    const avatar = 'https://pbs.twimg.com/profile_images/1562471633/IMG_8733quadrat900px.jpg';
+    const avatar = 'http://www.pethealthnetwork.com/sites/default/files/8-common-myths-about-' +
+      'surgery-and-cats-483673863.jpg';
     return (
       <div className="navbar__component-container">
         <Link to="/browse" className={this.getButtonClass()}>
           Browse
+        </Link>
+        <Link to="/upload" className={this.getButtonClass({ important: true })}>
+          Upload
         </Link>
         <div className="navbar__user-widget">
           <a href="#" className="navbar__user-widget-link" onClick={this.handleToggleMenu}>

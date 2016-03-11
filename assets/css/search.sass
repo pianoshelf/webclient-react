@@ -14,9 +14,10 @@
   min-height: calc(100vh - #{$footer-height})
 
 .search__browse-search
-  font-size: 18px
-  padding: 10px 5px
+  font-size: 16px
+  padding: 10px 5px 5px 5px
   +when-tablet
+    font-size: 18px
     padding: 30px 10px 10px 10px
 
 .search__browse-search-input-icon
@@ -127,6 +128,8 @@
   border-bottom: $button-border-width solid $grey-normal
   padding: 10px 0 5px 0
   transition: 0.2s border
+  clear: both
+  min-height: 100px
   &:hover, &:focus
     border-bottom-color: $grey-text-normal
     .search__result-right-arrow
@@ -193,6 +196,7 @@
   padding: 0
   margin: 0
   font-size: 12px
+  list-style: none
   +when-tablet
     font-size: 15px
 

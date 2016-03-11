@@ -86,6 +86,7 @@ $navbar-logo-height-mobile: 67.5px
 .navbar__user-widget
   display: inline-block
   float: left
+  margin-right: 10px
 
 .navbar__user-widget-link
   display: inline-block
@@ -135,7 +136,7 @@ $navbar-logo-height-mobile: 67.5px
   font-size: 14px
   color: $grey-text-normal
   +when-tablet
-    padding: 13px 8px
+    padding: 12px 7px
     font-size: 15px
 
 .navbar__user-widget-list
@@ -143,7 +144,8 @@ $navbar-logo-height-mobile: 67.5px
   right: 0
   top: $navbar-height-mobile + 1px
   z-index: 1
-  margin: 0 10px 0 0
+  margin: 0
+  margin-right: 20px
   padding: 0
   min-width: 150px
   list-style: none
@@ -201,6 +203,3 @@ $navbar-logo-height-mobile: 67.5px
     &:active, &:focus
       color: #000
 
-.navbar__button-icon
-  padding-right: 0.3em
-  line-height: inherit

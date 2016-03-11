@@ -1,5 +1,6 @@
 
 @import 'variables/fonts'
+@import 'variables/responsive'
 
 .error
   min-height: 100vh
@@ -21,10 +22,14 @@
 
 .error__message-title
   font-family: $title-font
-  font-size: 32px
+  font-size: 26px
   margin-bottom: 20px
+  +when-tablet
+    font-size: 32px
 
 .error__message-details
-  font-size: 16px
+  font-size: 14px
+  +when-tablet
+    font-size: 16px
 
 
