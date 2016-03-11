@@ -15,6 +15,7 @@ describe('utils/actionUtils', () => {
       expect(actionDone(123)).to.deep.equal({
         error: false,
         payload: 123,
+        meta: undefined,
       });
     });
 
@@ -22,6 +23,7 @@ describe('utils/actionUtils', () => {
       expect(actionDone('hi')).to.deep.equal({
         error: false,
         payload: 'hi',
+        meta: undefined,
       });
     });
 
@@ -29,12 +31,14 @@ describe('utils/actionUtils', () => {
       expect(actionDone({ hi: 'hi' })).to.deep.equal({
         error: false,
         payload: { hi: 'hi' },
+        meta: undefined,
       });
     });
 
     it('returns when no payload is provided', () => {
       expect(actionDone()).to.deep.equal({
         error: false,
+        meta: undefined,
       });
     });
   });
@@ -43,23 +47,23 @@ describe('utils/actionUtils', () => {
     it('returns payload when it is a number', () => {
       expect(actionError(0, 123)).to.deep.equal({
         error: true,
-        payload: 123,
+        meta: 123,
         code: 0,
       });
     });
 
-    it('returns payload when it is a string', () => {
+    it('returns meta when it is a string', () => {
       expect(actionError(0, 'hi')).to.deep.equal({
         error: true,
-        payload: 'hi',
+        meta: 'hi',
         code: 0,
       });
     });
 
-    it('returns payload when it is an object', () => {
+    it('returns meta when it is an object', () => {
       expect(actionError(0, { hi: 'hi' })).to.deep.equal({
         error: true,
-        payload: { hi: 'hi' },
+        meta: { hi: 'hi' },
         code: 0,
       });
     });
@@ -67,15 +71,8 @@ describe('utils/actionUtils', () => {
     it('returns code when it is a number', () => {
       expect(actionError(65535, 'hi')).to.deep.equal({
         error: true,
-        payload: 'hi',
+        meta: 'hi',
         code: 65535,
-      });
-    });
-
-    it('returns code when no payload is provided', () => {
-      expect(actionError(100)).to.deep.equal({
-        error: true,
-        code: 100,
       });
     });
   });

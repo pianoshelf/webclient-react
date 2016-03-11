@@ -54,7 +54,10 @@ describe('actions/sheetmusic', () => {
           results: 5678,
         },
         returnCode: 200,
-        returnValue: [],
+        returnData: [],
+        returnMeta: {
+          pagination: {},
+        },
       });
       return sheetmusic.getTrendingSheetMusic(1234, 5678)(dispatch)
         .then(() => scope.done());
@@ -73,7 +76,10 @@ describe('actions/sheetmusic', () => {
           sort_by: 4,
         },
         returnCode: 200,
-        returnValue: [],
+        returnData: [],
+        returnMeta: {
+          pagination: {},
+        },
       });
       return sheetmusic.getSheetMusicList({
         orderBy: 1,

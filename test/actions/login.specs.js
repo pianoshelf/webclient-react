@@ -27,7 +27,7 @@ describe('actions/login', () => {
       mockApiCall({
         method: 'get',
         path: '/api-auth/user/',
-        returnValue: {
+        returnData: {
           username: 'user',
           email: 'email@email.com',
           first_name: '',
@@ -52,10 +52,10 @@ describe('actions/login', () => {
       mockApiCall({
         method: 'get',
         path: '/api-auth/user/',
-        returnCode: 500,
+        returnCode: 401,
       });
       return login.getUser()(dispatch).then(res => {
-        expect(getFailedResponseError(res)).to.equal(errors.NETWORK_ERROR);
+        expect(getFailedResponseError(res)).to.equal(errors.API_ERROR);
       });
     });
   });
@@ -94,8 +94,8 @@ describe('actions/login', () => {
           username: 'user',
           password: 'pass',
         },
-        returnCode: 500,
-        returnValue: {
+        returnCode: 401,
+        returnMeta: {
           non_field_errors: ['Unable to log in with provided credentials.'],
         },
       });
@@ -112,7 +112,7 @@ describe('actions/login', () => {
           username: 'user',
           password: 'pass',
         },
-        returnValue: {
+        returnData: {
           username: 'user',
           email: 'email@email.com',
           first_name: '',
@@ -159,8 +159,8 @@ describe('actions/login', () => {
       mockApiCall({
         method: 'post',
         path: '/api-auth/register/account-confirm-email/verification1234/',
-        returnCode: 500,
-        returnValue: {
+        returnCode: 401,
+        returnMeta: {
           detail: 'Not found',
         },
       });
@@ -181,7 +181,7 @@ describe('actions/login', () => {
       const registerScope = mockApiCall({
         method: 'post',
         path: '/api-auth/register/',
-        returnValue: user,
+        returnData: user,
       });
       const loginScope = mockApiCall({
         method: 'post',
@@ -250,8 +250,8 @@ describe('actions/login', () => {
         method: 'post',
         path: '/api-auth/register/',
         params: user,
-        returnCode: 500,
-        returnValue: {
+        returnCode: 401,
+        returnMeta: {
           username: ['This username is already taken. Please choose another.'],
         },
       });
@@ -271,8 +271,8 @@ describe('actions/login', () => {
         method: 'post',
         path: '/api-auth/register/',
         params: user,
-        returnCode: 500,
-        returnValue: {
+        returnCode: 401,
+        returnMeta: {
           email: ['A user is already registered with this e-mail address.'],
         },
       });
@@ -292,7 +292,7 @@ describe('actions/login', () => {
         method: 'post',
         path: '/api-auth/register/',
         params: user,
-        returnValue: {
+        returnData: {
           username: 'user',
           email: 'email@email.com',
           first_name: '',
@@ -308,8 +308,8 @@ describe('actions/login', () => {
           username: 'user',
           password: 'password',
         },
-        returnCode: 500,
-        returnValue: {
+        returnCode: 401,
+        returnMeta: {
           non_field_errors: ['Unable to log in with provided credentials.'],
         },
       });
@@ -351,8 +351,8 @@ describe('actions/login', () => {
         params: {
           email: 'email@email.com',
         },
-        returnCode: 500,
-        returnValue: {
+        returnCode: 401,
+        returnMeta: {
           email: ['Invalid Email'],
         },
       });
@@ -418,8 +418,8 @@ describe('actions/login', () => {
           uid: 'uid',
           token: 'token',
         },
-        returnCode: 500,
-        returnValue: {
+        returnCode: 401,
+        returnMeta: {
           token: ['Invalid value'],
         },
       });
@@ -441,8 +441,8 @@ describe('actions/login', () => {
           uid: 'uid',
           token: 'token',
         },
-        returnCode: 500,
-        returnValue: {
+        returnCode: 401,
+        returnMeta: {
           uid: ['Invalid value'],
         },
       });
@@ -524,7 +524,7 @@ describe('actions/login', () => {
         params: {
           access_token: 'fb-token',
         },
-        returnValue: {
+        returnData: {
           username: 'user',
           email: 'email@email.com',
           first_name: '',
@@ -573,7 +573,7 @@ describe('actions/login', () => {
           access_token: 'twitter-token',
           access_token_secret: 'twitter-token-secret',
         },
-        returnValue: {
+        returnData: {
           username: 'user',
           email: 'email@email.com',
           first_name: '',
