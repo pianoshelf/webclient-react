@@ -97,7 +97,7 @@
     "lodash": "^4.6.1",
     "node-sass": "^3.2.0",
     "normalize.css": "^3.0.3",
-    "nuka-carousel": "^1.0.2",
+    "nuka-carousel": "git://github.com/kenwheeler/nuka-carousel.git#8925fad162d2eabdf55ad18f24659d9d0aee40d6",
     "numeral": "^1.5.3",
     "react": "^0.14.6",
     "react-dom": "^0.14.6",
