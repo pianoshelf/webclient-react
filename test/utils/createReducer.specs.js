@@ -110,7 +110,7 @@ describe('utils/createReducer', () => {
       type: ACTION_NAME_1,
       progress: 'error',
       code: 123,
-      payload: { hello: 'hello' },
+      meta: { hello: 'hello' },
     });
     expect(innerReducer).to.have.been.calledWithExactly({ hi: 'hi' }, 123, { hello: 'hello' });
   });

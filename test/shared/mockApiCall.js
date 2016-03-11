@@ -1,4 +1,7 @@
 import nock from 'nock';
+import config from '../../config';
+
+const ADDRESS = `http://localhost:${config.ports.django}`;
 
 /**
  * Test utility function that mocks a specific API call, and allows returning a status code and
@@ -9,16 +12,24 @@ export default function mockApiCall({
   path,
   params,
   returnCode = 200,
-  returnValue = '{}',
+  returnData = {},
+  returnMeta = {},
 }) {
+  const returnValue = {
+    data: returnData,
+    meta: {
+      ...returnMeta,
+      code: returnCode,
+    },
+  };
   if (method === 'get') {
     if (params) {
-      return nock('http://localhost:5000')
+      return nock(ADDRESS)
         .get(path).query(params).reply(returnCode, returnValue);
     }
-    return nock('http://localhost:5000')
+    return nock(ADDRESS)
       .get(path).reply(returnCode, returnValue);
   }
-  return nock('http://localhost:5000')[method.toLowerCase()](path, params)
+  return nock(ADDRESS)[method.toLowerCase()](path, params)
     .reply(returnCode, returnValue);
 }

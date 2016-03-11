@@ -60,7 +60,7 @@ export default function SearchResult({ sheetMusic, isFirstItem = false, isLastIt
         </div>
         <ul className="search__result-properties">
           <ViewsTag viewCount={sheetMusic.viewCount} />
-          <DifficultyLevelTag difficultyLevel={sheetMusic.difficultyLevel} />
+          <DifficultyLevelTag difficulty={sheetMusic.difficulty} />
           <SheetMusicTags tags={tags} />
         </ul>
       </div>

@@ -1,12 +1,15 @@
 
 import nock from 'nock';
 
+import config from '../../config';
 import { get, post, patch, del } from '../../app/utils/api';
+
+const ADDRESS = `http://localhost:${config.ports.django}`;
 
 describe('utils/api', () => {
   describe('#get', () => {
     it('calls the correct endpoint', () => {
-      const scope = nock('http://localhost:5000')
+      const scope = nock(ADDRESS)
         .get('/api/some/random/url/')
         .reply(200, '"success"');
       return get({
@@ -15,7 +18,7 @@ describe('utils/api', () => {
     });
 
     it('calls the correct auth endpoint', () => {
-      const scope = nock('http://localhost:5000')
+      const scope = nock(ADDRESS)
         .get('/api-auth/some/random/url/')
         .reply(200, '"success"');
       return get({
@@ -25,7 +28,7 @@ describe('utils/api', () => {
     });
 
     it('calls with correct params', () => {
-      const scope = nock('http://localhost:5000')
+      const scope = nock(ADDRESS)
         .get('/api/some/random/url/')
         .query({ hi: 'hi' })
         .reply(200, '"success"');
@@ -38,7 +41,7 @@ describe('utils/api', () => {
 
   describe('#post', () => {
     it('calls the correct endpoint', () => {
-      const scope = nock('http://localhost:5000')
+      const scope = nock(ADDRESS)
         .post('/api/some/random/url/', {})
         .reply(200, '"success"');
       return post({
@@ -47,7 +50,7 @@ describe('utils/api', () => {
     });
 
     it('calls with correct params', () => {
-      const scope = nock('http://localhost:5000')
+      const scope = nock(ADDRESS)
         .post('/api/some/random/url/', { hi: 'hi' })
         .reply(200, '"success"');
       return post({
@@ -59,7 +62,7 @@ describe('utils/api', () => {
 
   describe('#patch', () => {
     it('calls the correct endpoint', () => {
-      const scope = nock('http://localhost:5000')
+      const scope = nock(ADDRESS)
         .patch('/api/some/random/url/', {})
         .reply(200, '"success"');
       return patch({
@@ -68,7 +71,7 @@ describe('utils/api', () => {
     });
 
     it('calls with correct params', () => {
-      const scope = nock('http://localhost:5000')
+      const scope = nock(ADDRESS)
         .patch('/api/some/random/url/', { hi: 'hi' })
         .reply(200, '"success"');
       return patch({
@@ -80,7 +83,7 @@ describe('utils/api', () => {
 
   describe('#del', () => {
     it('calls the correct endpoint', () => {
-      const scope = nock('http://localhost:5000')
+      const scope = nock(ADDRESS)
         .delete('/api/some/random/url/', {})
         .reply(200, '"success"');
       return del({
@@ -89,7 +92,7 @@ describe('utils/api', () => {
     });
 
     it('calls with correct params', () => {
-      const scope = nock('http://localhost:5000')
+      const scope = nock(ADDRESS)
         .delete('/api/some/random/url/', { hi: 'hi' })
         .reply(200, '"success"');
       return del({

@@ -3,7 +3,6 @@ import testReducer from 'redux-test-reducer';
 
 import searchReducer from '../../app/reducers/search';
 import { createStartAction, createDoneAction, createErrorAction } from '../shared/actions';
-import { success } from '../../app/utils/constants';
 
 import { SEARCH_SHEETMUSIC } from '../../app/constants/search';
 

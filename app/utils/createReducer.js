@@ -27,9 +27,8 @@ export default function createReducer(initialState = {}, reducerObject = {}) {
       if (typeof reducer === 'function') {
         if (action.progress === 'done') {
           return reducer(state, action.payload);
-        } else {
-          return state;
         }
+        return state;
       }
 
       // If it is a mapping, execute the relevant methods
@@ -41,7 +40,7 @@ export default function createReducer(initialState = {}, reducerObject = {}) {
         } else if (reducer.done && action.progress === 'done') {
           return reducer.done(state, action.payload);
         } else if (reducer.error && action.progress === 'error') {
-          return reducer.error(state, action.code, action.payload);
+          return reducer.error(state, action.code, action.meta);
         }
       }
 

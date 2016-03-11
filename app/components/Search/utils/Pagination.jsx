@@ -51,3 +51,9 @@ export default function Pagination({ sheetMusicCount, pageSize, location }) {
     </div>
   );
 }
+
+Pagination.propTypes = {
+  location: React.PropTypes.object.isRequired,
+  pageSize: React.PropTypes.number.isRequired,
+  sheetMusicCount: React.PropTypes.number.isRequired,
+};

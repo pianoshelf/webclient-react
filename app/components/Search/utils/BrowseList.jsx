@@ -24,3 +24,7 @@ export default function BrowseList({ sheetMusicList }) {
     </If>
   );
 }
+
+BrowseList.propTypes = {
+  sheetMusicList: React.PropTypes.array.isRequired,
+};

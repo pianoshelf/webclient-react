@@ -22,10 +22,7 @@ export default createReducer({
     done(state, payload) {
       return {
         ...state,
-        list: {
-          results: payload.results,
-          count: payload.count,
-        },
+        list: { results: payload.results, count: payload.count },
         errorCode: 0,
       };
     },
@@ -42,10 +39,7 @@ export default createReducer({
     done(state, payload) {
       return {
         ...state,
-        popular: {
-          results: payload.results,
-          count: payload.count,
-        },
+        popular: { results: payload.results, count: payload.count },
         errorCode: 0,
       };
     },
@@ -62,16 +56,14 @@ export default createReducer({
     done(state, payload) {
       return {
         ...state,
-        trending: {
-          results: payload.results,
-        },
+        trending: { results: payload.results, count: payload.count },
         errorCode: 0,
       };
     },
     error(state, code) {
       return {
         ...state,
-        trending: { results: [] },
+        trending: { results: [], count: 0 },
         errorCode: code,
       };
     },

@@ -4,21 +4,22 @@ import React from 'react';
 
 import { getDifficultyText } from '../../../utils/sheetMusicUtils';
 
-export default function DifficultyLevelTag({ difficultyLevel }) {
-  const className = classNames('search__result-property', {
-    'search__result-property--blue': difficultyLevel === 1,
-    'search__result-property--green': difficultyLevel === 2 || difficultyLevel === 3,
-    'search__result-property--orange': difficultyLevel === 4,
-    'search__result-property--red': difficultyLevel === 5,
-  });
+export default function DifficultyLevelTag({ difficulty }) {
+  if (!difficulty) return <span />;
 
+  const className = classNames('search__result-property', {
+    'search__result-property--blue': difficulty === 1,
+    'search__result-property--green': difficulty === 2 || difficulty === 3,
+    'search__result-property--orange': difficulty === 4,
+    'search__result-property--red': difficulty === 5,
+  });
   return (
-    <div className={className} key="difficulty">
-      {getDifficultyText(difficultyLevel)}
-    </div>
+    <li className={className} key="difficulty">
+      {getDifficultyText(difficulty)}
+    </li>
   );
 }
 
 DifficultyLevelTag.propTypes = {
-  difficultyLevel: React.PropTypes.number.isRequired,
+  difficulty: React.PropTypes.number.isRequired,
 };

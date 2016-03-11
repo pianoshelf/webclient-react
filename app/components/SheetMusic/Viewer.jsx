@@ -16,9 +16,9 @@ import { getDifficultyText } from '../../utils/sheetMusicUtils';
 import { getSheetMusic, getComments } from '../../actions/sheetmusic';
 
 @asyncConnect({
-  promise: ({ id }, { store }) => Promise.all([
-    store.dispatch(getSheetMusic(parseInt(id, 10), store)),
-    store.dispatch(getComments(parseInt(id, 10), store)),
+  promise: ({ id }, { store, request }) => Promise.all([
+    store.dispatch(getSheetMusic(parseInt(id, 10), request)),
+    store.dispatch(getComments(parseInt(id, 10), request)),
   ]),
 })
 @connect(
@@ -174,17 +174,19 @@ export default class Viewer extends React.Component {
         <If condition={inProgress}>
           <LoadingScreen />
         <Else />
-          <MainViewer ref="mainViewer" images={this.props.result.images} />
-          <ResponsiveContainer className="sheetmusic__details">
-            <div className="sheetmusic__details-left">
-              {this.renderDescription()}
-              {/* this.renderVideos() */}
-              {this.renderComments()}
-            </div>
-            <div className="sheetmusic__details-right">
-              {this.renderInfo()}
-            </div>
-          </ResponsiveContainer>
+          <div>
+            <MainViewer ref="mainViewer" images={this.props.result.images} />
+            <ResponsiveContainer className="sheetmusic__details">
+              <div className="sheetmusic__details-left">
+                {this.renderDescription()}
+                {/* this.renderVideos() */}
+                {this.renderComments()}
+              </div>
+              <div className="sheetmusic__details-right">
+                {this.renderInfo()}
+              </div>
+            </ResponsiveContainer>
+          </div>
         </If>
       </div>
     );

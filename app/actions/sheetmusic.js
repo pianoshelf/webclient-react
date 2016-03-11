@@ -31,10 +31,10 @@ import {
 
 export const getSheetMusic = createAction(
   SHEETMUSIC_GET,
-  async (sheetId, store) => {
+  async (sheetId, request) => {
     const response = await get({
       endpoint: `/sheetmusic/${sheetId}/`,
-      store,
+      request,
     });
 
     if (isActionError(response)) {
@@ -42,7 +42,8 @@ export const getSheetMusic = createAction(
       return response;
     }
 
-    return actionDone(convertSheetMusic(response.payload));
+    const { payload } = response;
+    return actionDone(convertSheetMusic(payload));
   }
 );
 
@@ -69,7 +70,7 @@ export const deleteSheetMusic = createAction(
 
 export const getTrendingSheetMusic = createAction(
   SHEETMUSIC_GET_TRENDING,
-  async (days, results, store) => {
+  async (days, results, request) => {
     const response = await get({
       endpoint: '/sheetmusic/',
       params: {
@@ -77,7 +78,7 @@ export const getTrendingSheetMusic = createAction(
         days,
         results,
       },
-      store,
+      request,
     });
 
     if (isActionError(response)) {
@@ -85,15 +86,17 @@ export const getTrendingSheetMusic = createAction(
       return response;
     }
 
+    const { payload, meta } = response;
     return actionDone({
-      results: mapSheetMusic(response.payload.results),
+      results: mapSheetMusic(payload),
+      count: meta.pagination.count,
     });
   }
 );
 
 export const getSheetMusicList = createAction(
   SHEETMUSIC_GET_LIST,
-  async (options, store) => {
+  async (options, request) => {
     const filters = {
       order_by: options.orderBy,
       page: options.page,
@@ -104,7 +107,7 @@ export const getSheetMusicList = createAction(
     const response = await get({
       endpoint: '/sheetmusic/',
       params: filters,
-      store,
+      request,
     });
 
     if (isActionError(response)) {
@@ -112,16 +115,17 @@ export const getSheetMusicList = createAction(
       return response;
     }
 
+    const { payload, meta } = response;
     return actionDone({
-      results: mapSheetMusic(response.payload.results),
-      count: response.payload.count,
+      results: mapSheetMusic(payload),
+      count: meta.pagination.count,
     });
   }
 );
 
 export const getMostPopularSheetMusic = createAction(
   SHEETMUSIC_GET_POPULAR,
-  async store => {
+  async request => {
     const response = await get({
       endpoint: '/sheetmusic/',
       params: {
@@ -129,7 +133,7 @@ export const getMostPopularSheetMusic = createAction(
         page: 1,
         page_size: 12,
       },
-      store,
+      request,
     });
 
     if (isActionError(response)) {
@@ -137,9 +141,10 @@ export const getMostPopularSheetMusic = createAction(
       return response;
     }
 
+    const { payload, meta } = response;
     return actionDone({
-      results: mapSheetMusic(response.payload.results),
-      count: response.payload.count,
+      results: mapSheetMusic(payload),
+      count: meta.pagination.count,
     });
   }
 );
@@ -150,20 +155,20 @@ export const getMostPopularSheetMusic = createAction(
 
 export const getComposers = createAction(
   SHEETMUSIC_GET_COMPOSERS,
-  async store =>
+  async request =>
     await get({
       endpoint: '/composers/',
-      store,
+      request,
     })
 );
 
 export const getRating = createAction(
   SHEETMUSIC_GET_RATING,
-  async (sheetId, store) =>
+  async (sheetId, request) =>
     await get({
       endpoint: '/sheetmusic/getrating',
       params: { sheet_id: sheetId },
-      store,
+      request,
     })
 );
 
@@ -178,10 +183,10 @@ export const postRating = createAction(
 
 export const getUploads = createAction(
   SHEETMUSIC_GET_UPLOADS,
-  async store =>
+  async request =>
     await get({
       endpoint: '/sheetmusic/uploads/',
-      store,
+      request,
     })
 );
 
@@ -193,12 +198,11 @@ export const postVideo = createAction(
         endpoint: '/video/',
         params: { link, title, grade },
       });
-    } else {
-      return await post({
-        endpoint: '/video/',
-        params: { link, title, grade, sheetmusicId: sheetId },
-      });
     }
+    return await post({
+      endpoint: '/video/',
+      params: { link, title, grade, sheetmusicId: sheetId },
+    });
   }
 );
 
@@ -213,11 +217,11 @@ export const increaseViewCount = createAction(
 
 export const getComments = createAction(
   SHEETMUSIC_COMMENT_GET,
-  async (sheetId, store) =>
+  async (sheetId, request) =>
     await get({
       endpoint: '/comment/',
       params: { sheetmusicId: sheetId },
-      store,
+      request,
     })
 );
 
@@ -257,20 +261,20 @@ export const undoRemoveComment = createAction(
 
 export const upvoteComment = createAction(
   SHEETMUSIC_COMMENT_UPVOTE,
-  async (commentId, sheetId, store) =>
+  async (commentId, sheetId, request) =>
     await get({
       endpoint: '/commentupvote/',
       params: { commentId, sheetmusicId: sheetId },
-      store,
+      request,
     })
 );
 
 export const getSheetMusicDownloadLink = createAction(
   SHEETMUSIC_DOWNLOAD,
-  async (sheetId, store) =>
+  async (sheetId, request) =>
     await get({
       endpoint: '/sheetmusic/downloads/',
       params: { sheetmusic_id: sheetId },
-      store,
+      request,
     })
 );

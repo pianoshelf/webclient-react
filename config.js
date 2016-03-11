@@ -2,15 +2,15 @@
 module.exports = {
 
   ports: {
-    webpack: 8080,
+    webpack: 8000,
     express: 5092,
-    django: 5000,
+    django: 8001,
   },
 
   files: {
     client: {
       entry: './app/client.jsx',
-      src: ['./app/**/**/**/**/*.js', './app/**/**/**/**/*.jsx'],
+      src: './app/**/**/**/**/*.{js,jsx}',
       out: 'js',
       outFile: 'bundle.js',
     },
@@ -24,11 +24,11 @@ module.exports = {
       out: 'img',
     },
     server: {
-      src: ['./app/**/**/**/*.js', './app/**/**/**/*.jsx'],
+      src: './app/**/**/**/*.{js,jsx}',
       out: 'build',
     },
     tests: {
-      src: ['./test/**/**/**/*.js', './test/**/**/**/*.jsx'],
+      src: './test/**/**/**/*.{js,jsx}',
     },
     staticAssets: 'build/static/',
   },

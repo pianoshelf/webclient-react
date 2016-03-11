@@ -9,11 +9,11 @@ import {
 
 export const getShelf = createAction(
   SHELF_GET,
-  async (username, store) =>
+  async (username, request) =>
     await get({
       endpoint: '/shelf/',
       params: { username },
-      store,
+      request,
     })
 );
 

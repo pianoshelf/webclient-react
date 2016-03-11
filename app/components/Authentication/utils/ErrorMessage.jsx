@@ -61,9 +61,8 @@ export default function ErrorMessage({ errorCode, dontDisplayIf }) {
         {errorMessage}
       </div>
     );
-  } else {
-    return <div />;
   }
+  return <div />;
 }
 
 ErrorMessage.propTypes = {

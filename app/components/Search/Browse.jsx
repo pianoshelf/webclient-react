@@ -26,12 +26,12 @@ const PAGE_SIZE = 12;
 const SEARCH_DELAY = 500;
 
 // Create a debounced search function
-const debouncedSearch = debounce((query, store) => {
-  store.dispatch(search(query, store));
+const debouncedSearch = debounce((query, store, request) => {
+  store.dispatch(search(query, request));
 }, SEARCH_DELAY);
 
 @asyncConnect({
-  promise: (params, { location, store }) => {
+  promise: (params, { location, store, request }) => {
     const {
       page = 1,
       show = 'popular',
@@ -40,45 +40,45 @@ const debouncedSearch = debounce((query, store) => {
     } = location.query;
 
     if (searchQuery) {
-      return debouncedSearch(searchQuery, store);
-    } else {
-      switch (show) {
-        case 'trending':
-          if (trending === '90days') {
-            return store.dispatch(getTrendingSheetMusic(90, PAGE_SIZE, store));
-          } else if (trending === '30days') {
-            return store.dispatch(getTrendingSheetMusic(30, PAGE_SIZE, store));
-          }
-          return store.dispatch(getTrendingSheetMusic(7, PAGE_SIZE, store));
-        case 'new':
-          return store.dispatch(
-            getSheetMusicList(
-              { page, orderBy: 'new', sortBy: 'desc', pageSize: PAGE_SIZE },
-              store
-            )
-          );
-        case 'most_difficult':
-          return store.dispatch(
-            getSheetMusicList(
-              { page, orderBy: 'difficulty', sortBy: 'desc', pageSize: PAGE_SIZE },
-              store
-            )
-          );
-        case 'least_difficult':
-          return store.dispatch(
-            getSheetMusicList(
-              { page, orderBy: 'difficulty', sortBy: 'asc', pageSize: PAGE_SIZE },
-              store
-            )
-          );
-        default:
-          return store.dispatch(
-            getSheetMusicList(
-              { page, orderBy: 'popular', sortBy: 'desc', pageSize: PAGE_SIZE },
-              store
-            )
-          );
-      }
+      return debouncedSearch(searchQuery, store, request);
+    }
+
+    switch (show) {
+      case 'trending':
+        if (trending === '90days') {
+          return store.dispatch(getTrendingSheetMusic(90, PAGE_SIZE, request));
+        } else if (trending === '30days') {
+          return store.dispatch(getTrendingSheetMusic(30, PAGE_SIZE, request));
+        }
+        return store.dispatch(getTrendingSheetMusic(7, PAGE_SIZE, request));
+      case 'new':
+        return store.dispatch(
+          getSheetMusicList(
+            { page, orderBy: 'new', sortBy: 'desc', pageSize: PAGE_SIZE },
+            store
+          )
+        );
+      case 'most_difficult':
+        return store.dispatch(
+          getSheetMusicList(
+            { page, orderBy: 'difficulty', sortBy: 'desc', pageSize: PAGE_SIZE },
+            store
+          )
+        );
+      case 'least_difficult':
+        return store.dispatch(
+          getSheetMusicList(
+            { page, orderBy: 'difficulty', sortBy: 'asc', pageSize: PAGE_SIZE },
+            store
+          )
+        );
+      default:
+        return store.dispatch(
+          getSheetMusicList(
+            { page, orderBy: 'popular', sortBy: 'desc', pageSize: PAGE_SIZE },
+            store
+          )
+        );
     }
   },
 })
@@ -137,8 +137,6 @@ export default class Browse extends React.Component {
     trendingResults: React.PropTypes.object.isRequired,
     // Progress array
     inProgress: React.PropTypes.array.isRequired,
-    // Redux store
-    store: React.PropTypes.object,
     // Form fields
     fields: React.PropTypes.object,
     // Handle change from redux-form
@@ -238,7 +236,6 @@ export default class Browse extends React.Component {
                 Search for sheet music
               </span>
             }
-            ref="searchBox"
             {...fields.search}
           />
           {/*

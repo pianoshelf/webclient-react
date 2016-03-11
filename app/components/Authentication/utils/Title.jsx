@@ -6,3 +6,7 @@ export default function Title({ children }) {
     <div className="authentication__title">{children}</div>
   );
 }
+
+Title.propTypes = {
+  children: React.PropTypes.node,
+};

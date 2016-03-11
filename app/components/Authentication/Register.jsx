@@ -15,7 +15,7 @@ import Title from './utils/Title';
 import { clearErrors, register, facebookLogin } from '../../actions/login';
 import { createEventTracker } from '../../utils/analytics';
 import { errors, success } from '../../utils/constants';
-import { setAuthToken } from '../../utils/api';
+import { setAuthToken } from '../../utils/authUtils';
 
 const trackEvent = createEventTracker('Register');
 
@@ -87,9 +87,9 @@ export default class Register extends React.Component {
    */
   handlePostRegister = () => {
     // Set authorization token
-    const { router, store } = this.context;
+    const { router } = this.context;
     const { user, location } = this.props;
-    setAuthToken(user.authToken, store);
+    setAuthToken(user.authToken);
 
     // Log the event
     trackEvent('login', 'Register Success');
