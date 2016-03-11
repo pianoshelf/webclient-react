@@ -16,16 +16,18 @@ $navbar-logo-height-mobile: 67.5px
   position: fixed
   top: 0
   left: 0
-  z-index: 1
+  z-index: 2
   height: $navbar-height-mobile + $button-border-width
   background-color: #fff
   border-bottom: $button-border-width solid $blue-light
   transition: background-color 0.3s, border-color 0.3s
+  box-shadow: 0 0 2px darken($blue-light, 20%)
   +when-tablet
     height: $navbar-height + $button-border-width
-  &--homepage
+  &--transparent
     background-color: transparent
     border-color: transparent
+    box-shadow: none
 
 // This is for the logo on the navbar.
 .navbar__logo
@@ -56,8 +58,9 @@ $navbar-logo-height-mobile: 67.5px
 .navbar__title
   float: left
   line-height: $navbar-height-mobile
-  font-size: 25px
-  font-family: $title-font
+  font-size: 30px
+  font-family: $logo-font
+  letter-spacing: -3px
   color: darken($blue, 30%)
   transition: color 0.2s, top 0.2s
   position: relative
@@ -67,7 +70,7 @@ $navbar-logo-height-mobile: 67.5px
     display: inline-block
     line-height: $navbar-height
     font-size: 35px
-  &--homepage
+  &--transparent
     color: #fff
     top: 7px
     opacity: 0.9
@@ -76,54 +79,119 @@ $navbar-logo-height-mobile: 67.5px
 
 .navbar__component-container
   float: right
+  margin: 10px 10px 10px 0
+  +when-tablet
+    margin: 12px 10px 10px 0
 
-.navbar__user-text
+.navbar__user-widget
   display: inline-block
-  font-size: 15px
+  float: left
+
+.navbar__user-widget-link
+  display: inline-block
+  position: relative
   text-decoration: none
   color: #000
-  padding: 11px 6px 6px 32px
-  margin: 12px 5px 10px 0
-  line-height: $navbar-height-mobile - 40px
+  height: 28px
   border: 1px solid $grey-normal
-  position: relative
+  line-height: $navbar-height - 40px
   +when-tablet
-    padding: 11px 10px 6px 55px
-    margin: 12px 10px 10px 0
-    line-height: $navbar-height - 40px
-    font-size: 20px
+    height: 41px
+  &:hover, &:active, &:focus
+    border-color: $grey-dark
+    .navbar__user-text-down-arrow
+      color: $grey-text-dark
 
 .navbar__user-text-avatar
   display: inline-block
   position: absolute
-  top: -1px
-  left: -1px
-  height: 27px
-  width: 27px
+  border: 0
+  height: 26px
+  width: 26px
   +when-tablet
-    height: 44px
-    width: 44px
+    height: 39px
+    width: 39px
+
+.navbar__user-text
+  display: inline-block
+  padding: 2px 23px 0 35px
+  font-family: $title-font
+  font-size: 15px
+  line-height: $navbar-height-mobile - 24px
+  height: $navbar-height-mobile - 24px
+  +when-tablet
+    height: 41px
+    padding: 0 32px 0 53px
+    font-size: 18px
+    line-height: $navbar-height - 24px
+    height: $navbar-height - 24px
+
+.navbar__user-text-down-arrow
+  display: inline-block
+  position: absolute
+  top: 0
+  right: 0
+  padding: 6px 4px
+  font-size: 14px
+  color: $grey-text-normal
+  +when-tablet
+    padding: 13px 8px
+    font-size: 15px
+
+.navbar__user-widget-list
+  position: absolute
+  right: 0
+  top: $navbar-height-mobile + 1px
+  z-index: 1
+  margin: 0 10px 0 0
+  padding: 0
+  min-width: 150px
+  list-style: none
+  background-color: #fff
+  border: 2px solid $grey-dark
+  border-top: 0
+  box-shadow: 0 0 2px $grey-dark
+  font-size: 15px
+  +when-tablet
+    top: $navbar-height + 1px
+    font-size: 16px
+
+.navbar__user-widget-list-item-link
+  display: block
+  white-space: nowrap
+  padding: 1px 15px 0 15px
+  line-height: 30px
+  height: 30px
+  margin: 5px 0
+  color: #000
+  &:hover, &:active, &:focus
+    background-color: $grey-light
+
+.navbar__user-widget-list-icon
+  margin-right: 5px
 
 // This is for buttons in the navbar
 .navbar__button
   display: inline-block
+  float: left
   font-size: 15px
   text-decoration: none
   color: #000
-  padding: 10px 5px 6px 5px
-  margin: 12px 5px 10px 0
-  line-height: $navbar-height-mobile - 40px
+  padding: 0 5px
+  margin-right: 10px
+  line-height: $navbar-height-mobile - 20px
+  height: $navbar-height-mobile - 20px
   transition-duration: 0.2s
   transition-property: color, background-color, border-color
   +when-tablet
-    padding: 10px 10px 6px 10px
-    margin: 12px 10px 10px 0
-    line-height: $navbar-height - 40px
-    font-size: 20px
+    padding: 0 10px
+    line-height: $navbar-height - 24px
+    height: $navbar-height - 24px
+    font-size: 18px
   +clickable($blue-light)
   &--important
     +clickable($green)
-  &--homepage
+  &--transparent
     background: transparent
     border-color: transparent
     color: #fff
@@ -135,7 +203,4 @@ $navbar-logo-height-mobile: 67.5px
 
 .navbar__button-icon
   padding-right: 0.3em
-  line-height: inherit
-
-.navbar__button-icon-alone
   line-height: inherit

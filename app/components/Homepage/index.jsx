@@ -3,6 +3,7 @@
 import FontAwesome from 'react-fontawesome';
 import Helmet from 'react-helmet';
 import React from 'react';
+import withState from 'recompose/withState';
 import { asyncConnect } from 'redux-async-connect';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
@@ -17,6 +18,8 @@ import { getMostPopularSheetMusic } from '../../actions/sheetmusic';
 
 const trackEvent = createEventTracker('Homepage');
 
+const NAVBAR_DISAPPEARING_OFFSET = 50;
+
 @asyncConnect({
   promise: (params, { store }) => store.dispatch(getMostPopularSheetMusic(store)),
 })
@@ -26,11 +29,27 @@ const trackEvent = createEventTracker('Homepage');
     popularSheetMusic: state.sheetmusic.lists.popular.results,
   }),
 )
+@withState('transparentNavBar', 'setNavBarTransparency', true)
 export default class Homepage extends React.Component {
   static propTypes = {
     loggedIn: React.PropTypes.bool.isRequired,
     popularSheetMusic: React.PropTypes.array.isRequired,
+    transparentNavBar: React.PropTypes.bool.isRequired,
+    setNavBarTransparency: React.PropTypes.func.isRequired,
   };
+
+  componentDidMount() {
+    this.handleScrollChange();
+    window.addEventListener('load', this.handleScrollChange);
+    window.addEventListener('scroll', this.handleScrollChange);
+    window.addEventListener('resize', this.handleScrollChange);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('load', this.handleScrollChange);
+    window.removeEventListener('scroll', this.handleScrollChange);
+    window.removeEventListener('resize', this.handleScrollChange);
+  }
 
   trackBrowseLink = () => {
     trackEvent('click', 'Browse Sheet Music');
@@ -38,6 +57,12 @@ export default class Homepage extends React.Component {
 
   trackSignUpLink = () => {
     trackEvent('click', 'Sign Up Now');
+  };
+
+  handleScrollChange = () => {
+    this.props.setNavBarTransparency(() => (
+      window.pageYOffset < NAVBAR_DISAPPEARING_OFFSET
+    ));
   };
 
   renderMainPanel() {
@@ -137,10 +162,11 @@ export default class Homepage extends React.Component {
   }
 
   render() {
+    const { transparentNavBar } = this.props;
     return (
       <div className="homepage">
         <Helmet title="Pianoshelf - free piano sheet music" titleTemplate="%s" />
-        <NavBar disappearing disappearingOffset={50} />
+        <NavBar transparent={transparentNavBar} />
         {this.renderMainPanel()}
         {this.renderPopularPanel()}
         {this.renderInfoPanel()}

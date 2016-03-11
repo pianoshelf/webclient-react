@@ -6,6 +6,7 @@
 import classNames from 'classnames';
 import FontAwesome from 'react-fontawesome';
 import React from 'react';
+import withState from 'recompose/withState';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
@@ -19,34 +20,27 @@ import ResponsiveContainer from '../Misc/ResponsiveContainer';
     isLoaded: state.reduxAsyncConnect.loaded,
   }),
 )
+@withState('showMenu', 'setMenuVisibility', false)
 export default class NavBar extends React.Component {
   static propTypes = {
-    disappearing: React.PropTypes.bool,
-    disappearingOffset: React.PropTypes.number,
+    transparent: React.PropTypes.bool,
     loggedIn: React.PropTypes.bool.isRequired,
     isLoaded: React.PropTypes.bool,
     user: React.PropTypes.object,
+    showMenu: React.PropTypes.bool.isRequired,
+    setMenuVisibility: React.PropTypes.func.isRequired,
   };
 
-  state = {
-    disappearingMode: this.props.disappearing,
+  static defaultProps = {
+    transparent: false,
   };
 
   componentDidMount() {
-    if (this.props.disappearing) {
-      this.handleStickyEvent();
-      window.addEventListener('load', this.handleStickyEvent);
-      window.addEventListener('scroll', this.handleStickyEvent);
-      window.addEventListener('resize', this.handleStickyEvent);
-    }
+    window.addEventListener('click', this.handleHideMenu);
   }
 
   componentWillUnmount() {
-    if (this.props.disappearing) {
-      window.removeEventListener('load', this.handleStickyEvent);
-      window.removeEventListener('scroll', this.handleStickyEvent);
-      window.removeEventListener('resize', this.handleStickyEvent);
-    }
+    window.removeEventListener('click', this.handleHideMenu);
   }
 
   getButtonClass = options => {
@@ -54,22 +48,26 @@ export default class NavBar extends React.Component {
       important = false,
     } = options || {};
     return classNames('navbar__button', {
-      'navbar__button--homepage': this.state.disappearingMode,
+      'navbar__button--transparent': this.props.transparent,
       'navbar__button--important': important,
     });
   };
 
-  handleStickyEvent = () => {
-    const disappearingMode = this.props.disappearing &&
-      window.pageYOffset < this.props.disappearingOffset;
-    this.setState({ disappearingMode });
+  handleHideMenu = () => {
+    this.props.setMenuVisibility(() => false);
+  };
+
+  handleToggleMenu = event => {
+    event.preventDefault();
+    event.stopPropagation();
+    this.props.setMenuVisibility(value => !value);
   };
 
   renderTitle() {
-    if (this.state.disappearingMode) {
+    if (this.props.transparent) {
       return (
         <div>
-          <div className="navbar__title navbar__title--homepage">pianoshelf</div>
+          <div className="navbar__title navbar__title--transparent">pianoshelf</div>
         </div>
       );
     }
@@ -81,16 +79,42 @@ export default class NavBar extends React.Component {
   }
 
   renderLoggedInWidgets() {
-    const { username } = this.props.user;
+    const { username, firstName, lastName } = this.props.user;
+    // TODO: Remove this!!!!!
+    const avatar = 'https://pbs.twimg.com/profile_images/1562471633/IMG_8733quadrat900px.jpg';
     return (
       <div className="navbar__component-container">
-        <div className="navbar__user-text">
-          <img className="navbar__user-text-avatar" />
-          {username}
-        </div>
-        <Link to="/logout" className={this.getButtonClass({ important: true })}>
-          <FontAwesome className="navbar__button-icon-alone" name="sign-out" />
+        <Link to="/browse" className={this.getButtonClass()}>
+          Browse
         </Link>
+        <div className="navbar__user-widget">
+          <a href="#" className="navbar__user-widget-link" onClick={this.handleToggleMenu}>
+            <img src={avatar} className="navbar__user-text-avatar" />
+            <span href="#profile" className="navbar__user-text">
+              <If condition={firstName === '' || lastName === ''}>
+                {username}
+              <Else />
+                {`${firstName} ${lastName}`}
+              </If>
+            </span>
+            <FontAwesome className="navbar__user-text-down-arrow" name="chevron-down" />
+          </a>
+          <If condition={this.props.showMenu}>
+            <ul className="navbar__user-widget-list">
+              <li className="navbar__user-widget-list-item">
+                <Link className="navbar__user-widget-list-item-link" to={`/user/${username}`}>
+                  View Profile
+                </Link>
+              </li>
+              <li className="navbar__user-widget-list-item">
+                <Link className="navbar__user-widget-list-item-link" to="/logout">
+                  <FontAwesome className="navbar__user-widget-list-icon" name="sign-out" />
+                  Logout
+                </Link>
+              </li>
+            </ul>
+          </If>
+        </div>
       </div>
     );
   }
@@ -102,11 +126,9 @@ export default class NavBar extends React.Component {
           Browse
         </Link>
         <Link to="/login" className={this.getButtonClass()}>
-          <FontAwesome className="navbar__button-icon" name="sign-in" />
           Log In
         </Link>
         <Link to="/register" className={this.getButtonClass({ important: true })}>
-          <FontAwesome className="navbar__button-icon" name="star" />
           Sign Up
         </Link>
       </div>
@@ -115,7 +137,7 @@ export default class NavBar extends React.Component {
 
   render() {
     const navbarClass = classNames('navbar', {
-      'navbar--homepage': this.state.disappearingMode,
+      'navbar--transparent': this.props.transparent,
     });
 
     const logoClass = classNames('navbar__logo', {
