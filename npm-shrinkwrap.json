@@ -4632,9 +4632,9 @@
       "resolved": "https://registry.npmjs.org/npmlog/-/npmlog-2.0.2.tgz"
     },
     "nuka-carousel": {
-      "version": "1.0.4",
-      "from": "git://github.com/kenwheeler/nuka-carousel.git#8925fad162d2eabdf55ad18f24659d9d0aee40d6",
-      "resolved": "git://github.com/kenwheeler/nuka-carousel.git#8925fad162d2eabdf55ad18f24659d9d0aee40d6"
+      "version": "1.0.2",
+      "from": "nuka-carousel@>=1.0.2 <2.0.0",
+      "resolved": "https://registry.npmjs.org/nuka-carousel/-/nuka-carousel-1.0.2.tgz"
     },
     "num2fraction": {
       "version": "1.2.2",
