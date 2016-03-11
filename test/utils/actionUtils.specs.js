@@ -41,6 +41,14 @@ describe('utils/actionUtils', () => {
         meta: undefined,
       });
     });
+
+    it('returns meta when provided with one', () => {
+      expect(actionDone({ hi: 'hi' }, { meta: 'meta' })).to.deep.equal({
+        error: false,
+        payload: { hi: 'hi' },
+        meta: { meta: 'meta' },
+      });
+    });
   });
 
   describe('#actionError', () => {
