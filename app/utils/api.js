@@ -33,7 +33,7 @@ function getCookie(request, name) {
 
   // Get cookie from request if we're on the server.
   if (__SERVER__) {
-    return (new Cookie(request.request)).get(name);
+    return (new Cookie(request)).get(name);
   }
 
   return null;
@@ -95,7 +95,7 @@ export function get({ endpoint, params = {}, request, auth = false }) {
     const headers = getHeaders(request);
 
     // Mirror cookies if we're on the server.
-    if (__SERVER__) headers.Cookie = request.request.get('Cookie');
+    if (__SERVER__) headers.Cookie = request.get('Cookie');
 
     superagent.get(`${baseUrl}${auth ? authUrl : apiUrl}${endpoint}`)
       .query(params)
@@ -105,7 +105,7 @@ export function get({ endpoint, params = {}, request, auth = false }) {
         // that to the client by appending it to the response header.
         if (!err && __SERVER__ && res.headers['set-cookie']) {
           res.headers['set-cookie'].forEach(header => {
-            request.request.res.append('Set-Cookie', header);
+            request.res.append('Set-Cookie', header);
           });
         }
 

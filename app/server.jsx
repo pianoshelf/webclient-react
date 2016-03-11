@@ -104,7 +104,7 @@ app.use((req, res) => {
   const store = configureStore();
 
   // Populate store with user authentication information
-  store.dispatch(getUser(store)).then(() => {
+  store.dispatch(getUser(req)).then(() => {
     // Perform route matching and verification
     match({
       routes: getRoutes(store),
