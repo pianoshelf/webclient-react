@@ -31,10 +31,10 @@ import {
 
 export const getSheetMusic = createAction(
   SHEETMUSIC_GET,
-  async (sheetId, store) => {
+  async (sheetId, request) => {
     const response = await get({
       endpoint: `/sheetmusic/${sheetId}/`,
-      store,
+      request,
     });
 
     if (isActionError(response)) {
@@ -70,7 +70,7 @@ export const deleteSheetMusic = createAction(
 
 export const getTrendingSheetMusic = createAction(
   SHEETMUSIC_GET_TRENDING,
-  async (days, results, store) => {
+  async (days, results, request) => {
     const response = await get({
       endpoint: '/sheetmusic/',
       params: {
@@ -78,7 +78,7 @@ export const getTrendingSheetMusic = createAction(
         days,
         results,
       },
-      store,
+      request,
     });
 
     if (isActionError(response)) {
@@ -96,7 +96,7 @@ export const getTrendingSheetMusic = createAction(
 
 export const getSheetMusicList = createAction(
   SHEETMUSIC_GET_LIST,
-  async (options, store) => {
+  async (options, request) => {
     const filters = {
       order_by: options.orderBy,
       page: options.page,
@@ -107,7 +107,7 @@ export const getSheetMusicList = createAction(
     const response = await get({
       endpoint: '/sheetmusic/',
       params: filters,
-      store,
+      request,
     });
 
     if (isActionError(response)) {
@@ -125,7 +125,7 @@ export const getSheetMusicList = createAction(
 
 export const getMostPopularSheetMusic = createAction(
   SHEETMUSIC_GET_POPULAR,
-  async store => {
+  async request => {
     const response = await get({
       endpoint: '/sheetmusic/',
       params: {
@@ -133,7 +133,7 @@ export const getMostPopularSheetMusic = createAction(
         page: 1,
         page_size: 12,
       },
-      store,
+      request,
     });
 
     if (isActionError(response)) {
@@ -155,20 +155,20 @@ export const getMostPopularSheetMusic = createAction(
 
 export const getComposers = createAction(
   SHEETMUSIC_GET_COMPOSERS,
-  async store =>
+  async request =>
     await get({
       endpoint: '/composers/',
-      store,
+      request,
     })
 );
 
 export const getRating = createAction(
   SHEETMUSIC_GET_RATING,
-  async (sheetId, store) =>
+  async (sheetId, request) =>
     await get({
       endpoint: '/sheetmusic/getrating',
       params: { sheet_id: sheetId },
-      store,
+      request,
     })
 );
 
@@ -183,10 +183,10 @@ export const postRating = createAction(
 
 export const getUploads = createAction(
   SHEETMUSIC_GET_UPLOADS,
-  async store =>
+  async request =>
     await get({
       endpoint: '/sheetmusic/uploads/',
-      store,
+      request,
     })
 );
 
@@ -217,11 +217,11 @@ export const increaseViewCount = createAction(
 
 export const getComments = createAction(
   SHEETMUSIC_COMMENT_GET,
-  async (sheetId, store) =>
+  async (sheetId, request) =>
     await get({
       endpoint: '/comment/',
       params: { sheetmusicId: sheetId },
-      store,
+      request,
     })
 );
 
@@ -261,20 +261,20 @@ export const undoRemoveComment = createAction(
 
 export const upvoteComment = createAction(
   SHEETMUSIC_COMMENT_UPVOTE,
-  async (commentId, sheetId, store) =>
+  async (commentId, sheetId, request) =>
     await get({
       endpoint: '/commentupvote/',
       params: { commentId, sheetmusicId: sheetId },
-      store,
+      request,
     })
 );
 
 export const getSheetMusicDownloadLink = createAction(
   SHEETMUSIC_DOWNLOAD,
-  async (sheetId, store) =>
+  async (sheetId, request) =>
     await get({
       endpoint: '/sheetmusic/downloads/',
       params: { sheetmusic_id: sheetId },
-      store,
+      request,
     })
 );

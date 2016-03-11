@@ -21,7 +21,7 @@ const trackEvent = createEventTracker('Homepage');
 const NAVBAR_DISAPPEARING_OFFSET = 50;
 
 @asyncConnect({
-  promise: (params, { store }) => store.dispatch(getMostPopularSheetMusic(store)),
+  promise: (params, { store, request }) => store.dispatch(getMostPopularSheetMusic(request)),
 })
 @connect(
   state => ({

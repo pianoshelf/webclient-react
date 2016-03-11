@@ -44,15 +44,15 @@ export const clearErrors = createAction(LOGIN_CLEAR_ERRORS);
 
 /**
  * Gets the current logged in user
- * @param {Store} store The Redux store object.
+ * @param {Express.Request} request The Express request object.
  */
 export const getUser = createAction(
   LOGIN_GET,
-  async store => {
+  async request => {
     const response = await get({
       endpoint: '/user/',
       auth: true,
-      store,
+      request,
     });
 
     if (isActionError(response)) {

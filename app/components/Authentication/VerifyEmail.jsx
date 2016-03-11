@@ -16,17 +16,18 @@ const trackEvent = createEventTracker('VerifyEmail');
     errorCode: state.login.code,
     inProgress: state.progress.inProgress,
   }),
+  { verifyEmail }
 )
 export default class VerifyEmail extends React.Component {
   static propTypes = {
     errorCode: React.PropTypes.number.isRequired,
     inProgress: React.PropTypes.array.isRequired,
     params: React.PropTypes.object,
-    store: React.PropTypes.object.isRequired,
+    verifyEmail: React.PropTypes.func.isRequired,
   };
 
   componentDidMount() {
-    this.props.store.dispatch(verifyEmail(this.props.params.key));
+    this.props.verifyEmail(this.props.params.key);
   }
 
   componentDidUpdate(prevProps) {

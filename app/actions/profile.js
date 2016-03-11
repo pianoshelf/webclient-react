@@ -11,11 +11,11 @@ import {
 
 export const getProfile = createAction(
   PROFILE_GET,
-  async (username, store) =>
+  async (username, request) =>
     await get({
       endpoint: '/profile/',
       params: { username },
-      store,
+      request,
     })
 );
 
@@ -30,30 +30,30 @@ export const updateProfileDescription = createAction(
 
 export const getCommentsForUser = createAction(
   PROFILE_GET_COMMENTS_FOR_USER,
-  async (username, store) =>
+  async (username, request) =>
     await get({
       endpoint: '/comment/',
       params: { username },
-      store,
+      request,
     })
 );
 
 export const getUploadsForUser = createAction(
   PROFILE_GET_UPLOADS_FOR_USER,
-  async (username, page, store) =>
+  async (username, page, request) =>
     await get({
       endpoint: '/sheetmusic/uploads/',
       params: { username, page },
-      store,
+      request,
     })
 );
 
 export const getVideosForUser = createAction(
   PROFILE_GET_VIDEOS_FOR_USER,
-  async (username, store) =>
+  async (username, request) =>
     await get({
       endpoint: '/video/',
       params: { username },
-      store,
+      request,
     })
 );

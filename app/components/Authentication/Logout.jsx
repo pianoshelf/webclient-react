@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 import InfoText from './utils/InfoText';
 import { clearErrors, logout } from '../../actions/login';
-import { deleteAuthToken } from '../../utils/api';
+import { deleteAuthToken } from '../../utils/authUtils';
 
 @asyncConnect({
   promise: (params, { store }) => store.dispatch(clearErrors()),
@@ -15,15 +15,16 @@ import { deleteAuthToken } from '../../utils/api';
   state => ({
     loggedIn: state.login.loggedIn,
   }),
+  { logout }
 )
 export default class Logout extends React.Component {
   static propTypes = {
     loggedIn: React.PropTypes.bool.isRequired,
     location: React.PropTypes.object.isRequired,
+    logout: React.PropTypes.func.isRequired,
   };
 
   static contextTypes = {
-    store: React.PropTypes.object.isRequired,
     router: React.PropTypes.object.isRequired,
   };
 
@@ -33,9 +34,8 @@ export default class Logout extends React.Component {
 
   // When the user loads this component, log them out, else handle post-logout tasks.
   componentDidMount() {
-    const { store } = this.context;
     if (this.props.loggedIn) {
-      store.dispatch(logout());
+      this.props.logout();
     } else {
       this.handlePostLogout();
     }
@@ -53,9 +53,9 @@ export default class Logout extends React.Component {
    */
   handlePostLogout = () => {
     // Delete authorization token cookie
-    const { router, store } = this.context;
+    const { router } = this.context;
     const { location } = this.props;
-    deleteAuthToken(store);
+    deleteAuthToken();
 
     if (location.query && location.query.redirect) {
       router.push(location.query.redirect);

@@ -103,10 +103,6 @@ app.use((req, res) => {
   // Get the initial state of our app
   const store = configureStore();
 
-  // HACK: Attach request object to store
-  // TODO: PLEASE PLEASE PLEASE Find a better way to do this
-  store.request = req;
-
   // Populate store with user authentication information
   store.dispatch(getUser(store)).then(() => {
     // Perform route matching and verification

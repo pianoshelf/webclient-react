@@ -16,9 +16,9 @@ import { getDifficultyText } from '../../utils/sheetMusicUtils';
 import { getSheetMusic, getComments } from '../../actions/sheetmusic';
 
 @asyncConnect({
-  promise: ({ id }, { store }) => Promise.all([
-    store.dispatch(getSheetMusic(parseInt(id, 10), store)),
-    store.dispatch(getComments(parseInt(id, 10), store)),
+  promise: ({ id }, { store, request }) => Promise.all([
+    store.dispatch(getSheetMusic(parseInt(id, 10), request)),
+    store.dispatch(getComments(parseInt(id, 10), request)),
   ]),
 })
 @connect(
