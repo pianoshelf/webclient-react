@@ -52,7 +52,6 @@ export default class NavBar extends React.Component {
   getButtonClass = options => {
     const {
       important = false,
-      error = false,
     } = options || {};
     return classNames('navbar__button', {
       'navbar__button--homepage': this.state.disappearingMode,
@@ -89,7 +88,7 @@ export default class NavBar extends React.Component {
           <img className="navbar__user-text-avatar" />
           {username}
         </div>
-        <Link to="/logout" className={this.getButtonClass({ error: true })}>
+        <Link to="/logout" className={this.getButtonClass({ important: true })}>
           <FontAwesome className="navbar__button-icon-alone" name="sign-out" />
         </Link>
       </div>
