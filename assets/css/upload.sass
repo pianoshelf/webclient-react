@@ -6,13 +6,14 @@
 .upload__container
   padding: $navbar-height 20px 0 20px
 
-.upload__dropzone
+.upload__dropzone-wrapper
   margin-top: 20px
-  border: 2px dashed transparent
-  border-radius: 10px
-  background-color: $grey-light
   +when-tablet
     margin-top: 40px
+
+.upload__dropzone
+  border: 2px dashed transparent
+  background-color: $grey-light
   &:hover, &--active
     .upload__dropzone-cloud
       color: $blue-light
@@ -46,43 +47,58 @@
   font-size: 15px
   margin-bottom: 5px
 
-.upload__options
-  margin: 0 5px
-
 .upload__options-title
   margin: 15px 0
-  padding: 7px 10px
+  padding: 7px 6px
   border-bottom: 1px solid $grey-text-normal
+  border-left: 1px solid $grey-text-normal
   font-family: $title-font
   font-size: 18px
 
-.upload__options-input-field
+.upload__options-title-step
+  display: inline-block
+  font-family: $body-font
+  text-transform: uppercase
+  font-size: 15px
+  padding: 2px 6px
+  background-color: $grey-text-dark
+  color: #fff
+  margin-right: 10px
+  float: left
+
+.upload__options-input-clear
   +when-tablet
     clear: both
 
 .upload__options-input
+  display: block
   +when-tablet
     display: inline-block
     width: 70%
     float: left
 
 .upload__options-input-field-tip
-  display: none
+  display: block
   +when-tablet
     display: inline-block
     width: 30%
     float: left
 
 .upload__options-input-field-tip-box
-  display: none
-  font-size: 14px
-  margin-top: 15px
-  margin-left: 20px
+  display: block
   padding-left: 10px
-  min-height: 40px
   position: relative
-  color: $grey-text-normal
   +when-tablet
     display: inline-block
+    margin-top: 15px
+    margin-left: 20px
 
+.upload__options-input-field-tip-box-tip
+  color: $grey-text-dark
+  font-size: 14px
+
+.upload__options-input-field-tip-box-example
+  color: $grey-text-normal
+  padding-top: 5px
+  font-size: 13px
 
