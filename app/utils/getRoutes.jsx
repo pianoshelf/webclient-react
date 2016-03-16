@@ -21,7 +21,7 @@ import ProfileViewer from '../components/Profile/Viewer';
 
 // Search components
 import Search from '../components/Search';
-import Browse from '../components/Search/Browse';
+import SearchBrowse from '../components/Search/Browse';
 
 // Sheet music components
 import SheetMusic from '../components/SheetMusic';
@@ -32,6 +32,11 @@ import Static from '../components/Static';
 import Copyright from '../components/Static/Copyright';
 import PrivacyPolicy from '../components/Static/PrivacyPolicy';
 import TermsOfService from '../components/Static/TermsOfService';
+
+// Settings components
+import Settings from '../components/Settings';
+import SettingsProfile from '../components/Settings/Profile';
+import SettingsPassword from '../components/Settings/Password';
 
 // Dashboard components
 import Dashboard from '../components/Dashboard';
@@ -97,7 +102,7 @@ export default function getRoutes(store) {
 
       { /* Search routes */ }
       <Route component={Search}>
-        <Route path="/browse" component={Browse} />
+        <Route path="/browse" component={SearchBrowse} />
         <Redirect path="/sheetmusic" to="/browse" />
       </Route>
 
@@ -115,13 +120,20 @@ export default function getRoutes(store) {
         <Redirect path="/copyright.html" to="/copyright" />
       </Route>
 
+      { /* Settings route */ }
+      <Route component={Settings} onEnter={requireAuth}>
+        <Route path="/settings/profile" component={SettingsProfile} onEnter={requireAuth} />
+        <Route path="/settings/password" component={SettingsPassword} onEnter={requireAuth} />
+        <Redirect path="/settings" to="/settings/profile" />
+      </Route>
+
       { /* Dashboard route */ }
       <Route path="/home" component={Dashboard} onEnter={requireAuth} />
 
       { /* Upload route */ }
       <Route path="/upload" component={Upload} onEnter={requireAuth} />
 
-      { /* Upload route */ }
+      { /* 404 route */ }
       <Route path="*" component={Error404} />
 
     </Route>

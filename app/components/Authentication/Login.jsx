@@ -157,7 +157,7 @@ export default class Login extends React.Component {
           </Button>
         </form>
         <Link to="/login/forgot" className="authentication__link">I forgot my password</Link>
-        <Link to="/register" className="authentication__link">I want to sign up</Link>
+        <Link to="/register" className="authentication__link">I do not have an account</Link>
         <hr className="authentication__hr" />
         <form onSubmit={handleSubmit(this.logFacebookUserIn)}>
           <Button

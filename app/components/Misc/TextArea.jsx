@@ -1,6 +1,7 @@
 
 import autosize from 'autosize';
 import classNames from 'classnames';
+import FontAwesome from 'react-fontawesome';
 import omit from 'lodash/omit';
 import React from 'react';
 import { findDOMNode } from 'react-dom';
@@ -15,6 +16,9 @@ export default class TextArea extends React.Component {
 
     // Placeholder to display in the input box
     placeholder: React.PropTypes.node.isRequired,
+
+    // Font Awesome icon beside input placeholder
+    icon: React.PropTypes.string,
 
     // Class name of the input
     className: React.PropTypes.string,
@@ -33,8 +37,11 @@ export default class TextArea extends React.Component {
   }
 
   render() {
-    const { errorWhen, placeholder, className } = this.props;
-    const props = omit(this.props, ['errorWhen', 'focusOnLoad', 'placeholder', 'className']);
+    const { errorWhen, placeholder, className, icon } = this.props;
+    const props = omit(
+      this.props,
+      ['errorWhen', 'focusOnLoad', 'placeholder', 'className', 'icon']
+    );
 
     const groupClassName = classNames('misc-textarea__group', className);
 
@@ -54,7 +61,14 @@ export default class TextArea extends React.Component {
       <div className={groupClassName}>
         <textarea className={inputClassName} ref="input" required {...props} />
         <span className={barClassName} />
-        <label className={labelClassName}>{placeholder}</label>
+        <label className={labelClassName}>
+          <If condition={icon}>
+            <FontAwesome name={icon} className="misc-textarea__icon" />
+          </If>
+          <span>
+            {placeholder}
+          </span>
+        </label>
       </div>
     );
   }

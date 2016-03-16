@@ -111,6 +111,12 @@ export default class NavBar extends React.Component {
                 </Link>
               </li>
               <li className="navbar__user-widget-list-item">
+                <Link className="navbar__user-widget-list-item-link" to="/settings">
+                  <FontAwesome className="navbar__user-widget-list-icon" name="gear" />
+                  Profile Settings
+                </Link>
+              </li>
+              <li className="navbar__user-widget-list-item">
                 <Link className="navbar__user-widget-list-item-link" to="/logout">
                   <FontAwesome className="navbar__user-widget-list-icon" name="sign-out" />
                   Logout
@@ -150,7 +156,11 @@ export default class NavBar extends React.Component {
 
     return (
       <ResponsiveContainer className={navbarClass}>
-        <Link to="/" className={logoClass} />
+        <If condition={this.props.loggedIn}>
+          <Link to="/home" className={logoClass} />
+        <Else />
+          <Link to="/" className={logoClass} />
+        </If>
         <div className="navbar__logo-buffer" />
         {this.renderTitle()}
         <If condition={this.props.loggedIn}>

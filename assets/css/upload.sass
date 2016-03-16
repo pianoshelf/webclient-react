@@ -1,10 +1,88 @@
 
+@import 'variables/colors'
+@import 'variables/responsive'
 @import 'responsivecontainer'
-
-.upload
-  min-height: 100vh
 
 .upload__container
   padding: $navbar-height 20px 0 20px
-  min-height: calc(100vh - #{$footer-height})
+
+.upload__dropzone
+  margin-top: 20px
+  border: 2px dashed transparent
+  border-radius: 10px
+  background-color: $grey-light
+  +when-tablet
+    margin-top: 40px
+  &:hover, &--active
+    .upload__dropzone-cloud
+      color: $blue-light
+  &--active
+    border-color: $grey-dark
+
+.upload__dropzone-link
+  display: block
+  padding: 10px
+  text-align: center
+
+.upload__dropzone-cloud
+  display: block
+  color: $grey-text-normal
+  margin: 20px 0
+  font-size: 40px
+  +when-tablet
+    font-size: 50px
+    padding-bottom: 10px
+
+.upload__dropzone-text
+  margin: 20px 0
+
+.upload__dropzone-text-large
+  color: $grey-text-dark
+  font-size: 16px
+  margin-bottom: 15px
+
+.upload__dropzone-text-small
+  color: $grey-text-normal
+  font-size: 15px
+  margin-bottom: 5px
+
+.upload__options
+  margin: 0 5px
+
+.upload__options-title
+  margin: 15px 0
+  padding: 7px 10px
+  border-bottom: 1px solid $grey-text-normal
+  font-family: $title-font
+  font-size: 18px
+
+.upload__options-input-field
+  +when-tablet
+    clear: both
+
+.upload__options-input
+  +when-tablet
+    display: inline-block
+    width: 70%
+    float: left
+
+.upload__options-input-field-tip
+  display: none
+  +when-tablet
+    display: inline-block
+    width: 30%
+    float: left
+
+.upload__options-input-field-tip-box
+  display: none
+  font-size: 14px
+  margin-top: 15px
+  margin-left: 20px
+  padding-left: 10px
+  min-height: 40px
+  position: relative
+  color: $grey-text-normal
+  +when-tablet
+    display: inline-block
+
 

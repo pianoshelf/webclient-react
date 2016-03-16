@@ -65,9 +65,10 @@ $navbar-logo-height-mobile: 67.5px
   transition: color 0.2s, top 0.2s
   position: relative
   top: 0
-  display: none
+  display: inline-block
+  @media (max-width: 700px)
+    display: none
   +when-tablet
-    display: inline-block
     line-height: $navbar-height
     font-size: 35px
   &--transparent
@@ -183,8 +184,6 @@ $navbar-logo-height-mobile: 67.5px
   margin-right: 10px
   line-height: $navbar-height-mobile - 20px
   height: $navbar-height-mobile - 20px
-  transition-duration: 0.2s
-  transition-property: color, background-color, border-color
   +when-tablet
     padding: 0 10px
     line-height: $navbar-height - 24px

@@ -1,5 +1,6 @@
 
 import classNames from 'classnames';
+import FontAwesome from 'react-fontawesome';
 import omit from 'lodash/omit';
 import React from 'react';
 import { findDOMNode } from 'react-dom';
@@ -14,6 +15,9 @@ export default class Input extends React.Component {
 
     // Placeholder to display in the input box
     placeholder: React.PropTypes.node.isRequired,
+
+    // Font Awesome icon beside input placeholder
+    icon: React.PropTypes.string,
 
     // Type of the textbox
     type: React.PropTypes.oneOf(['text', 'password']),
@@ -34,8 +38,11 @@ export default class Input extends React.Component {
   }
 
   render() {
-    const { errorWhen, placeholder, className } = this.props;
-    const props = omit(this.props, ['errorWhen', 'focusOnLoad', 'placeholder', 'className']);
+    const { errorWhen, placeholder, className, icon } = this.props;
+    const props = omit(
+      this.props,
+      ['errorWhen', 'focusOnLoad', 'placeholder', 'className', 'icon']
+    );
 
     const groupClassName = classNames('misc-input__group', className);
 
@@ -55,7 +62,14 @@ export default class Input extends React.Component {
       <div className={groupClassName}>
         <input className={inputClassName} ref="input" required {...props} />
         <span className={barClassName} />
-        <label className={labelClassName}>{placeholder}</label>
+        <label className={labelClassName}>
+          <If condition={icon}>
+            <FontAwesome name={icon} className="misc-input__icon" />
+          </If>
+          <span>
+            {placeholder}
+          </span>
+        </label>
       </div>
     );
   }
