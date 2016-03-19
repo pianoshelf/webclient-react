@@ -1,4 +1,5 @@
 
+import FontAwesome from 'react-fontawesome';
 import React from 'react';
 import { asyncConnect } from 'redux-async-connect';
 import { connect } from 'react-redux';
@@ -46,16 +47,33 @@ export default class Dashboard extends React.Component {
         <div className="dashboard__list-title">
           My Shelf
         </div>
-        <ul className="dashboard__list-container">
-          {sheetMusicElements}
-          <li className="dashboard__list-container-item" key="shelf">
-            <Link to="/browse" className="dashboard__list-container-callout">
-              hi
-
-
-            </Link>
-          </li>
-        </ul>
+        <If condition={shelf.length === 0}>
+          <ul className="dashboard__list-container">
+            <li className="dashboard__list-container-item">
+              <Link to="/browse" className="dashboard__list-container-callout">
+                <FontAwesome name="search" className="dashboard__list-container-icon" />
+                <div className="dashboard__list-container-message">
+                  You do not have any sheet music in your shelf.
+                </div>
+                <div className="dashboard__list-container-message">
+                  Browse sheet music now!
+                </div>
+              </Link>
+            </li>
+          </ul>
+        <Else />
+          <ul className="dashboard__list-container">
+            {sheetMusicElements}
+            <li className="dashboard__list-container-item" key="sheetmusic">
+              <Link to="/browse" className="dashboard__list-container-callout">
+                <FontAwesome name="search" className="dashboard__list-container-icon" />
+                <div className="dashboard__list-container-message">
+                  Browse more sheet music.
+                </div>
+              </Link>
+            </li>
+          </ul>
+        </If>
       </div>
     );
   }
@@ -74,14 +92,33 @@ export default class Dashboard extends React.Component {
         <div className="dashboard__list-title">
           My Sheet Music
         </div>
-        <ul className="dashboard__list-container">
-          {sheetMusicElements}
-          <li className="dashboard__list-container-item" key="sheetmusic">
-            <Link to="/upload" className="dashboard__list-container-callout">
-
-            </Link>
-          </li>
-        </ul>
+        <If condition={uploads.length === 0}>
+          <ul className="dashboard__list-container">
+            <li className="dashboard__list-container-item">
+              <Link to="/upload" className="dashboard__list-container-callout">
+                <FontAwesome name="plus" className="dashboard__list-container-icon" />
+                <div className="dashboard__list-container-message">
+                  You have no sheet music.
+                </div>
+                <div className="dashboard__list-container-message">
+                  Upload one now!
+                </div>
+              </Link>
+            </li>
+          </ul>
+        <Else />
+          <ul className="dashboard__list-container">
+            {sheetMusicElements}
+            <li className="dashboard__list-container-item" key="sheetmusic">
+              <Link to="/upload" className="dashboard__list-container-callout">
+                <FontAwesome name="plus" className="dashboard__list-container-icon" />
+                <div className="dashboard__list-container-message">
+                  Upload more sheet music.
+                </div>
+              </Link>
+            </li>
+          </ul>
+        </If>
       </div>
     );
   }
