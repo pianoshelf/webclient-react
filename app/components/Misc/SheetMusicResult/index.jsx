@@ -64,8 +64,6 @@ export default function SheetMusicResult({ sheetMusic }) {
 }
 
 SheetMusicResult.propTypes = {
-  /**
-   * Make sure a valid sheet music was inputted.
-   */
+  // Make sure a valid sheet music was inputted.
   sheetMusic: sheetMusicPropType().isRequired,
 };

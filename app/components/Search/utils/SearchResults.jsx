@@ -20,3 +20,7 @@ export default function SearchResults({ searchResults }) {
     </div>
   );
 }
+
+SearchResults.propTypes = {
+  searchResults: React.PropTypes.array.isRequired,
+};

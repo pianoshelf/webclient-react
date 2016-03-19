@@ -1,7 +1,7 @@
 
 import createAction from '../utils/createAction';
-import { mapSheetMusic } from '../utils/sheetMusicUtils';
 import { actionDone } from '../utils/actionUtils';
+import { mapSheetMusic } from '../utils/sheetMusicUtils';
 import { get, post } from '../utils/api';
 import {
   PROFILE_GET,

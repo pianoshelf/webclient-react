@@ -261,7 +261,7 @@ describe('actions/sheetmusic', () => {
           sheetmusic: 1234,
         },
       });
-      return shelf.addToShelf(1234)(dispatch)
+      return sheetmusic.addToShelf(1234)(dispatch)
         .then(() => scope.done());
     });
   });
@@ -275,7 +275,7 @@ describe('actions/sheetmusic', () => {
           sheetmusic: 1234,
         },
       });
-      return shelf.removeFromShelf(1234)(dispatch)
+      return sheetmusic.removeFromShelf(1234)(dispatch)
         .then(() => scope.done());
     });
   });

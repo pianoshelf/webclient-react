@@ -99,52 +99,6 @@ export function sheetMusicPropType() {
 }
 
 /**
- * Function that maps through paid sheet music keys and returns a format we're comfortable with on
- * the client side.
- *
- * @param {Array} sheetMusicArray Array of objects representing the sheet music.
- * @param {Function=} iterator Can be used to extract sheet music from a specific property in
- *     object.
- *
- * @return {Object} An object with all the necessary properties representing a sheet music.
- */
-export function mapPaidSheetMusic(sheetMusicArray, iterator = value => value) {
-  return sheetMusicArray.map(sheetMusicItem => {
-    const sheetMusic = iterator(cloneDeep(sheetMusicItem));
-    return {
-      detailedDescription: sheetMusic.detailed_description,
-      instrument: sheetMusic.instrument,
-      level: sheetMusic.level,
-      musicFormat: sheetMusic.music_format,
-      pageUrl: sheetMusic.page_url,
-      shortDescription: sheetMusic.short_description,
-      source: sheetMusic.source,
-      thumbnailUrl: sheetMusic.thumbnail_url,
-      title: sheetMusic.title,
-    };
-  });
-}
-
-/**
- * Function that returns a React PropType for the paid sheet music object.
- *
- * @return {Function} React PropType for the object above.
- */
-export function paidSheetMusicPropType() {
-  return React.PropTypes.shape({
-    detailedDescription: React.PropTypes.string.isRequired,
-    instrument: React.PropTypes.string.isRequired,
-    level: React.PropTypes.string,
-    musicFormat: React.PropTypes.string.isRequired,
-    pageUrl: React.PropTypes.string.isRequired,
-    shortDescription: React.PropTypes.string.isRequired,
-    source: React.PropTypes.string.isRequired,
-    thumbnailUrl: React.PropTypes.string.isRequired,
-    title: React.PropTypes.string.isRequired,
-  });
-}
-
-/**
  * Function that converts a difficulty integer to text.
  *
  * @param {Number} difficulty Number representing the difficulty of sheet music. Ex. 1 for Beginner.

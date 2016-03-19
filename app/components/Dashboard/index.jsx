@@ -2,11 +2,13 @@
 import React from 'react';
 import { asyncConnect } from 'redux-async-connect';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 
 // Import other components
 import Footer from '../Fixtures/Footer';
 import NavBar from '../Fixtures/NavBar';
 import ResponsiveContainer from '../Misc/ResponsiveContainer';
+import SheetMusicResult from '../Misc/SheetMusicResult';
 import { getUploadsForUser } from '../../actions/profile';
 import { getShelf } from '../../actions/shelf';
 
@@ -31,30 +33,54 @@ export default class Dashboard extends React.Component {
   };
 
   renderMyShelf() {
-    console.log('shelf');
-    console.log(this.props.shelf);
+    const { shelf } = this.props;
+
+    const sheetMusicElements = shelf.map((sheetMusic, index) => (
+      <li className="dashboard__list-container-item" key={index}>
+        <SheetMusicResult sheetMusic={sheetMusic} />
+      </li>
+    ));
+
     return (
       <div className="dashboard__list">
         <div className="dashboard__list-title">
           My Shelf
         </div>
         <ul className="dashboard__list-container">
+          {sheetMusicElements}
+          <li className="dashboard__list-container-item" key="shelf">
+            <Link to="/browse" className="dashboard__list-container-callout">
+              hi
 
+
+            </Link>
+          </li>
         </ul>
       </div>
     );
   }
 
-
   renderMySheetMusic() {
-    console.log('uploads');
-    console.log(this.props.uploads);
+    const { uploads } = this.props;
+
+    const sheetMusicElements = uploads.map((sheetMusic, index) => (
+      <li className="dashboard__list-container-item" key={index}>
+        <SheetMusicResult sheetMusic={sheetMusic} />
+      </li>
+    ));
+
     return (
       <div className="dashboard__list">
         <div className="dashboard__list-title">
           My Sheet Music
         </div>
         <ul className="dashboard__list-container">
+          {sheetMusicElements}
+          <li className="dashboard__list-container-item" key="sheetmusic">
+            <Link to="/upload" className="dashboard__list-container-callout">
+
+            </Link>
+          </li>
         </ul>
       </div>
     );
@@ -66,7 +92,7 @@ export default class Dashboard extends React.Component {
         <div className="dashboard__wrapper-half dashboard__wrapper-half--left">
           {this.renderMyShelf()}
         </div>
-        <div className="dashboard__wrapper-half">
+        <div className="dashboard__wrapper-half dashboard__wrapper-half--right">
           {this.renderMySheetMusic()}
         </div>
       </div>

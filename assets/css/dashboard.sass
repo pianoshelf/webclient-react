@@ -1,6 +1,4 @@
 
-@import 'responsivecontainer'
-
 .dashboard
   min-height: 100vh
 
@@ -14,8 +12,12 @@
 .dashboard__wrapper-half
   width: 50%
   float: left
+  position: relative
   &--left
     border-right: 1px solid $grey-text-light
+  &--right
+    border-left: 1px solid $grey-text-light
+    right: 1px
 
 .dashboard__list
   
@@ -27,4 +29,16 @@
   padding: 7px
   margin: 0 10px
   border-bottom: 1px solid $grey-text-light
+
+.dashboard__list-container
+  list-style: none
+  margin: 0 10px
+  padding: 0
+
+.dashboard__list-container-callout
+  display: block
+  border-bottom: $button-border-width solid $grey-text-light
+  height: 100px
+  &:hover, &:focus
+    border-bottom-color: $grey-text-dark
 
