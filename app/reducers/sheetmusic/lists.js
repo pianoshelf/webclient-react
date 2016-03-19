@@ -19,10 +19,10 @@ export default createReducer({
 }, {
 
   [SHEETMUSIC_GET_LIST]: {
-    done(state, payload) {
+    done(state, { results, count }) {
       return {
         ...state,
-        list: { results: payload.results, count: payload.count },
+        list: { results, count },
         errorCode: 0,
       };
     },
@@ -36,10 +36,10 @@ export default createReducer({
   },
 
   [SHEETMUSIC_GET_POPULAR]: {
-    done(state, payload) {
+    done(state, { results, count }) {
       return {
         ...state,
-        popular: { results: payload.results, count: payload.count },
+        popular: { results, count },
         errorCode: 0,
       };
     },
@@ -53,10 +53,10 @@ export default createReducer({
   },
 
   [SHEETMUSIC_GET_TRENDING]: {
-    done(state, payload) {
+    done(state, { results, count }) {
       return {
         ...state,
-        trending: { results: payload.results, count: payload.count },
+        trending: { results, count },
         errorCode: 0,
       };
     },

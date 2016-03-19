@@ -20,32 +20,4 @@ describe('actions/shelf', () => {
         .then(() => scope.done());
     });
   });
-
-  describe('#addToShelf', () => {
-    it('calls the correct API', () => {
-      const scope = mockApiCall({
-        method: 'post',
-        path: '/api/shelf/',
-        params: {
-          sheetmusic: 1234,
-        },
-      });
-      return shelf.addToShelf(1234)(dispatch)
-        .then(() => scope.done());
-    });
-  });
-
-  describe('#removeFromShelf', () => {
-    it('calls the correct API', () => {
-      const scope = mockApiCall({
-        method: 'delete',
-        path: '/api/shelf/',
-        params: {
-          sheetmusic: 1234,
-        },
-      });
-      return shelf.removeFromShelf(1234)(dispatch)
-        .then(() => scope.done());
-    });
-  });
 });

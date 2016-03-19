@@ -1,8 +1,6 @@
 // Disable param reassigning rules because that's how decorators work
 /* eslint-disable no-param-reassign */
 
-import extend from 'lodash/extend';
-
 import config from '../../config';
 
 /**
@@ -19,18 +17,20 @@ export default function canFacebookLogin(target) {
       /* global FB */
       FB.login(response => {
         if (response.authResponse) {
+          // Test connection
           FB.api('/me', loginResponse => {
-            extend(loginResponse, {
+            resolve({
+              ...loginResponse,
               status: 'connected',
               accessToken: response.authResponse.accessToken,
               expiresIn: response.authResponse.expiresIn,
               signedRequest: response.authResponse.signedRequest,
             });
-
-            resolve({ status: loginResponse.status });
           });
         } else {
-          resolve({ status: response.status });
+          resolve({
+            status: response.status,
+          });
         }
       }, {
         scope: 'public_profile, email, user_birthday',

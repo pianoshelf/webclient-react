@@ -4,7 +4,7 @@ module.exports = {
   ports: {
     webpack: 8000,
     express: 5092,
-    django: 8001,
+    django: 8888,
   },
 
   files: {

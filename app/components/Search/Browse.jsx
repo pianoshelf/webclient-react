@@ -1,7 +1,6 @@
 
 import classNames from 'classnames';
 import debounce from 'lodash/debounce';
-import FontAwesome from 'react-fontawesome';
 import Helmet from 'react-helmet';
 import intersection from 'lodash/intersection';
 import React from 'react';

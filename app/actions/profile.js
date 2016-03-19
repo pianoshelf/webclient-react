@@ -1,5 +1,7 @@
 
 import createAction from '../utils/createAction';
+import { mapSheetMusic } from '../utils/sheetMusicUtils';
+import { actionDone } from '../utils/actionUtils';
 import { get, post } from '../utils/api';
 import {
   PROFILE_GET,
@@ -40,12 +42,19 @@ export const getCommentsForUser = createAction(
 
 export const getUploadsForUser = createAction(
   PROFILE_GET_UPLOADS_FOR_USER,
-  async (username, page, request) =>
-    await get({
+  async (username, page, request) => {
+    const response = await get({
       endpoint: '/sheetmusic/uploads/',
       params: { username, page },
       request,
-    })
+    });
+
+    const { payload, meta } = response;
+    return actionDone({
+      results: mapSheetMusic(payload),
+      count: meta.pagination.count,
+    });
+  }
 );
 
 export const getVideosForUser = createAction(

@@ -1,5 +1,4 @@
 
-import classNames from 'classnames';
 import FontAwesome from 'react-fontawesome';
 import React from 'react';
 import { Link } from 'react-router';
@@ -16,12 +15,7 @@ function trackResultClick() {
   trackEvent('click', 'Sheet Music Result');
 }
 
-export default function SearchResult({ sheetMusic, isFirstItem = false, isLastItem = false }) {
-  const className = classNames('search__result', {
-    'search__result--last-item': isLastItem,
-    'search__result--first-item': isFirstItem,
-  });
-
+export default function SheetMusicResult({ sheetMusic }) {
   // TODO(ankit): Eventually link this with new tags API
   const tags = [];
 
@@ -32,19 +26,19 @@ export default function SearchResult({ sheetMusic, isFirstItem = false, isLastIt
   return (
     <Link
       to={`/sheetmusic/${sheetMusic.id}/${sheetMusic.uniqueUrl}`}
-      className={className}
+      className="sheet-music-result"
       onClick={trackResultClick}
     >
       <If condition={sheetMusic.thumbnailUrl}>
         <img src={sheetMusic.thumbnailUrl}
-          className="search__result-thumbnail"
+          className="sheet-music-result__thumbnail"
         />
       </If>
-      <div className="search__result-details">
-        <div className="search__result-title">
+      <div className="sheet-music-result__details">
+        <div className="sheet-music-result__title">
           {sheetMusic.title}
         </div>
-        <div className="search__result-info">
+        <div className="sheet-music-result__info">
           <If condition={sheetMusic.musicStyle}>
             <span>
               <strong>{sheetMusic.musicStyle}</strong>
@@ -58,30 +52,20 @@ export default function SearchResult({ sheetMusic, isFirstItem = false, isLastIt
             </span>
           </If>
         </div>
-        <ul className="search__result-properties">
+        <ul className="sheet-music-result__properties">
           <ViewsTag viewCount={sheetMusic.viewCount} />
           <DifficultyLevelTag difficulty={sheetMusic.difficulty} />
           <SheetMusicTags tags={tags} />
         </ul>
       </div>
-      <FontAwesome name="angle-right" className="search__result-right-arrow" />
+      <FontAwesome name="angle-right" className="sheet-music-result__right-arrow" />
     </Link>
   );
 }
 
-SearchResult.propTypes = {
+SheetMusicResult.propTypes = {
   /**
    * Make sure a valid sheet music was inputted.
    */
   sheetMusic: sheetMusicPropType().isRequired,
-
-  /**
-   * Whether this search result is the first one in the list.
-   */
-  isFirstItem: React.PropTypes.bool,
-
-  /**
-   * Whether this search result is the last one in the list.
-   */
-  isLastItem: React.PropTypes.bool,
 };

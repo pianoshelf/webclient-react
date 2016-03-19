@@ -26,7 +26,7 @@ export default class Dropzone extends React.Component {
               10MB limit
             </div>
             <div className="upload__dropzone-text-small">
-              Supported formats: PDF, Lilypond
+              Supported formats: PDF
             </div>
           </div>
         </a>
