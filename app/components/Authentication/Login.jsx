@@ -19,7 +19,7 @@ import { setAuthToken } from '../../utils/authUtils';
 
 const trackEvent = createEventTracker('Login');
 
-export const fieldNames = [
+export const FIELD_NAMES = [
   'username',
   'password',
 ];
@@ -30,7 +30,7 @@ export const fieldNames = [
 @reduxForm(
   {
     form: 'login',
-    fields: fieldNames,
+    fields: FIELD_NAMES,
     initialValues: { username: '', password: '' },
   },
   state => ({

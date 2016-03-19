@@ -19,7 +19,7 @@ import { isDispatchedActionError } from '../../utils/actionUtils';
 
 const trackEvent = createEventTracker('ResetPasswordConfirm');
 
-export const fieldNames = [
+export const FIELD_NAMES = [
   'password1',
   'password2',
 ];
@@ -30,7 +30,7 @@ export const fieldNames = [
 @reduxForm(
   {
     form: 'resetPasswordConfirm',
-    fields: fieldNames,
+    fields: FIELD_NAMES,
     initialValues: {
       password1: '',
       password2: '',

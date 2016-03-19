@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { reduxForm } from 'redux-form';
 
 // Import other components
 import Dropzone from './Dropzone';
@@ -12,9 +13,30 @@ import NavBar from '../Fixtures/NavBar';
 import Footer from '../Fixtures/Footer';
 import ResponsiveContainer from '../Misc/ResponsiveContainer';
 
+const FIELD_NAMES = [
+  'file',
+  'title',
+  'author',
+  'genre',
+  'description',
+  'arrangement',
+  'key',
+];
+
+@reduxForm(
+  {
+    form: 'upload',
+    fields: FIELD_NAMES,
+  }
+)
 export default class Upload extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
+  };
+
+  handleSubmit = event => {
+    event.preventDefault();
+    console.log('submit!');
   };
 
   renderDropzone() {
@@ -27,6 +49,7 @@ export default class Upload extends React.Component {
   }
 
   renderOptions() {
+    const { fields } = this.props;
     return (
       <div className="upload__options">
         <Title step={2} text="Enter details" />
@@ -37,6 +60,7 @@ export default class Upload extends React.Component {
           >
             <Input
               icon="file-o"
+              {...fields.title}
               placeholder="Title"
             />
           </Field>
@@ -46,6 +70,7 @@ export default class Upload extends React.Component {
           >
             <Input
               icon="user"
+              {...fields.author}
               placeholder="Original Artist / Composer"
             />
           </Field>
@@ -55,6 +80,7 @@ export default class Upload extends React.Component {
           >
             <Input
               icon="music"
+              {...fields.genre}
               placeholder="Genre"
             />
           </Field>
@@ -64,6 +90,7 @@ export default class Upload extends React.Component {
           >
             <TextArea
               icon="pencil"
+              {...fields.description}
               placeholder="Description"
             />
           </Field>
@@ -72,6 +99,8 @@ export default class Upload extends React.Component {
           >
             <Checkbox
               label="Arrangement"
+              value={fields.arrangement.value}
+              onClick={fields.arrangement.onClick}
             />
           </Field>
           <Field
@@ -80,6 +109,7 @@ export default class Upload extends React.Component {
           >
             <Input
               icon="key"
+              {...fields.key}
               placeholder="Key"
             />
           </Field>
@@ -92,6 +122,11 @@ export default class Upload extends React.Component {
     return (
       <div className="upload__submit">
         <Title step={3} text="Submit" />
+        <div>
+          <button type="submit" className="upload__submit-button">
+            Upload
+          </button>
+        </div>
       </div>
     );
   }
@@ -101,9 +136,11 @@ export default class Upload extends React.Component {
       <div className="upload">
         <NavBar />
         <ResponsiveContainer className="upload__container">
-          {this.renderDropzone()}
-          {this.renderOptions()}
-          {this.renderSubmit()}
+          <form onSubmit={this.handleSubmit}>
+            {this.renderDropzone()}
+            {this.renderOptions()}
+            {this.renderSubmit()}
+          </form>
         </ResponsiveContainer>
         <Footer />
       </div>
