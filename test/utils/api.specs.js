@@ -17,16 +17,6 @@ describe('utils/api', () => {
       }).then(() => scope.done());
     });
 
-    it('calls the correct auth endpoint', () => {
-      const scope = nock(ADDRESS)
-        .get('/api-auth/some/random/url/')
-        .reply(200, '"success"');
-      return get({
-        endpoint: '/some/random/url/',
-        auth: true,
-      }).then(() => scope.done());
-    });
-
     it('calls with correct params', () => {
       const scope = nock(ADDRESS)
         .get('/api/some/random/url/')

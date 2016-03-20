@@ -1923,6 +1923,11 @@
       "from": "emitter-steward@>=1.0.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/emitter-steward/-/emitter-steward-1.0.0.tgz"
     },
+    "encoding": {
+      "version": "0.1.12",
+      "from": "encoding@>=0.1.11 <0.2.0",
+      "resolved": "https://registry.npmjs.org/encoding/-/encoding-0.1.12.tgz"
+    },
     "end-of-stream": {
       "version": "0.1.5",
       "from": "end-of-stream@>=0.1.5 <0.2.0",
@@ -2291,6 +2296,11 @@
           "version": "1.2.6",
           "from": "core-js@>=1.0.0 <2.0.0",
           "resolved": "https://registry.npmjs.org/core-js/-/core-js-1.2.6.tgz"
+        },
+        "whatwg-fetch": {
+          "version": "0.9.0",
+          "from": "whatwg-fetch@>=0.9.0 <0.10.0",
+          "resolved": "https://registry.npmjs.org/whatwg-fetch/-/whatwg-fetch-0.9.0.tgz"
         }
       }
     },
@@ -4526,6 +4536,11 @@
       "from": "nested-error-stacks@>=1.0.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/nested-error-stacks/-/nested-error-stacks-1.0.2.tgz"
     },
+    "node-fetch": {
+      "version": "1.4.0",
+      "from": "node-fetch@*",
+      "resolved": "https://registry.npmjs.org/node-fetch/-/node-fetch-1.4.0.tgz"
+    },
     "node-gyp": {
       "version": "3.3.1",
       "from": "node-gyp@>=3.0.1 <4.0.0",
@@ -5095,7 +5110,7 @@
     },
     "qs": {
       "version": "6.1.0",
-      "from": "qs@6.1.0",
+      "from": "qs@*",
       "resolved": "https://registry.npmjs.org/qs/-/qs-6.1.0.tgz"
     },
     "query-string": {
@@ -5278,7 +5293,14 @@
         "fbjs": {
           "version": "0.1.0-alpha.10",
           "from": "fbjs@0.1.0-alpha.10",
-          "resolved": "https://registry.npmjs.org/fbjs/-/fbjs-0.1.0-alpha.10.tgz"
+          "resolved": "https://registry.npmjs.org/fbjs/-/fbjs-0.1.0-alpha.10.tgz",
+          "dependencies": {
+            "whatwg-fetch": {
+              "version": "0.9.0",
+              "from": "whatwg-fetch@>=0.9.0 <0.10.0",
+              "resolved": "https://registry.npmjs.org/whatwg-fetch/-/whatwg-fetch-0.9.0.tgz"
+            }
+          }
         }
       }
     },
@@ -6694,9 +6716,9 @@
       }
     },
     "whatwg-fetch": {
-      "version": "0.9.0",
-      "from": "whatwg-fetch@>=0.9.0 <0.10.0",
-      "resolved": "https://registry.npmjs.org/whatwg-fetch/-/whatwg-fetch-0.9.0.tgz"
+      "version": "0.11.0",
+      "from": "whatwg-fetch@*",
+      "resolved": "https://registry.npmjs.org/whatwg-fetch/-/whatwg-fetch-0.11.0.tgz"
     },
     "whatwg-url-compat": {
       "version": "0.6.5",

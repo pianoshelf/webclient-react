@@ -17,7 +17,7 @@ describe('actions/login', () => {
     it('calls the correct API', () => {
       const scope = mockApiCall({
         method: 'get',
-        path: '/api-auth/user/',
+        path: '/api/auth/user/',
       });
       return login.getUser()(dispatch)
         .then(() => scope.done());
@@ -26,7 +26,7 @@ describe('actions/login', () => {
     it('returns user info properly', () => {
       mockApiCall({
         method: 'get',
-        path: '/api-auth/user/',
+        path: '/api/auth/user/',
         returnData: {
           username: 'user',
           email: 'email@email.com',
@@ -51,7 +51,7 @@ describe('actions/login', () => {
     it('returns error when user is not logged in', () => {
       mockApiCall({
         method: 'get',
-        path: '/api-auth/user/',
+        path: '/api/auth/user/',
         returnCode: 401,
       });
       return login.getUser()(dispatch).then(res => {
@@ -64,7 +64,7 @@ describe('actions/login', () => {
     it('calls the correct API', () => {
       const scope = mockApiCall({
         method: 'post',
-        path: '/api-auth/login/',
+        path: '/api/auth/login/',
         params: {
           username: 'user',
           password: 'pass',
@@ -89,7 +89,7 @@ describe('actions/login', () => {
     it('throws error when server says you cannot log in', () => {
       mockApiCall({
         method: 'post',
-        path: '/api-auth/login/',
+        path: '/api/auth/login/',
         params: {
           username: 'user',
           password: 'pass',
@@ -107,7 +107,7 @@ describe('actions/login', () => {
     it('logs user in properly', () => {
       mockApiCall({
         method: 'post',
-        path: '/api-auth/login/',
+        path: '/api/auth/login/',
         params: {
           username: 'user',
           password: 'pass',
@@ -138,7 +138,7 @@ describe('actions/login', () => {
     it('calls the correct API', () => {
       const scope = mockApiCall({
         method: 'post',
-        path: '/api-auth/logout/',
+        path: '/api/auth/logout/',
       });
       return login.logout()(dispatch)
         .then(() => scope.done());
@@ -149,7 +149,7 @@ describe('actions/login', () => {
     it('calls the correct API', () => {
       const scope = mockApiCall({
         method: 'post',
-        path: '/api-auth/register/account-confirm-email/verification1234/',
+        path: '/api/auth/register/account-confirm-email/verification1234/',
       });
       return login.verifyEmail('verification1234')(dispatch)
         .then(() => scope.done());
@@ -158,7 +158,7 @@ describe('actions/login', () => {
     it('throws error when server says verification has failed', () => {
       mockApiCall({
         method: 'post',
-        path: '/api-auth/register/account-confirm-email/verification1234/',
+        path: '/api/auth/register/account-confirm-email/verification1234/',
         returnCode: 401,
         returnMeta: {
           detail: 'Not found',
@@ -180,12 +180,12 @@ describe('actions/login', () => {
       };
       const registerScope = mockApiCall({
         method: 'post',
-        path: '/api-auth/register/',
+        path: '/api/auth/register/',
         returnData: user,
       });
       const loginScope = mockApiCall({
         method: 'post',
-        path: '/api-auth/login/',
+        path: '/api/auth/login/',
       });
       return login.register(user)(dispatch)
         .then(() => registerScope.done() && loginScope.done());
@@ -248,7 +248,7 @@ describe('actions/login', () => {
       };
       mockApiCall({
         method: 'post',
-        path: '/api-auth/register/',
+        path: '/api/auth/register/',
         params: user,
         returnCode: 401,
         returnMeta: {
@@ -269,7 +269,7 @@ describe('actions/login', () => {
       };
       mockApiCall({
         method: 'post',
-        path: '/api-auth/register/',
+        path: '/api/auth/register/',
         params: user,
         returnCode: 401,
         returnMeta: {
@@ -290,7 +290,7 @@ describe('actions/login', () => {
       };
       mockApiCall({
         method: 'post',
-        path: '/api-auth/register/',
+        path: '/api/auth/register/',
         params: user,
         returnData: {
           username: 'user',
@@ -303,7 +303,7 @@ describe('actions/login', () => {
       });
       mockApiCall({
         method: 'post',
-        path: '/api-auth/login/',
+        path: '/api/auth/login/',
         params: {
           username: 'user',
           password: 'password',
@@ -323,7 +323,7 @@ describe('actions/login', () => {
     it('calls the correct API', () => {
       const scope = mockApiCall({
         method: 'post',
-        path: '/api-auth/password/reset/',
+        path: '/api/auth/password/reset/',
         params: {
           email: 'email@email.com',
         },
@@ -347,7 +347,7 @@ describe('actions/login', () => {
     it('throws error when server says email is not registered', () => {
       mockApiCall({
         method: 'post',
-        path: '/api-auth/password/reset/',
+        path: '/api/auth/password/reset/',
         params: {
           email: 'email@email.com',
         },
@@ -366,7 +366,7 @@ describe('actions/login', () => {
     it('calls the correct API', () => {
       const scope = mockApiCall({
         method: 'post',
-        path: '/api-auth/password/reset/confirm/',
+        path: '/api/auth/password/reset/confirm/',
         params: {
           new_password1: 'password',
           new_password2: 'password',
@@ -411,7 +411,7 @@ describe('actions/login', () => {
     it('throws error when server says token is invalid', () => {
       mockApiCall({
         method: 'post',
-        path: '/api-auth/password/reset/confirm/',
+        path: '/api/auth/password/reset/confirm/',
         params: {
           new_password1: 'password',
           new_password2: 'password',
@@ -434,7 +434,7 @@ describe('actions/login', () => {
     it('throws error when server says uid is invalid', () => {
       mockApiCall({
         method: 'post',
-        path: '/api-auth/password/reset/confirm/',
+        path: '/api/auth/password/reset/confirm/',
         params: {
           new_password1: 'password',
           new_password2: 'password',
@@ -459,7 +459,7 @@ describe('actions/login', () => {
     it('calls the correct API', () => {
       const scope = mockApiCall({
         method: 'post',
-        path: '/api-auth/password/change/',
+        path: '/api/auth/password/change/',
         params: {
           new_password1: 'password',
           new_password2: 'password',
@@ -506,7 +506,7 @@ describe('actions/login', () => {
     it('calls the correct API', () => {
       const scope = mockApiCall({
         method: 'post',
-        path: '/api-auth/social-login/facebook/',
+        path: '/api/auth/social-login/facebook/',
         params: {
           access_token: 'fb-token',
         },
@@ -520,7 +520,7 @@ describe('actions/login', () => {
     it('logs user in properly', () => {
       mockApiCall({
         method: 'post',
-        path: '/api-auth/social-login/facebook/',
+        path: '/api/auth/social-login/facebook/',
         params: {
           access_token: 'fb-token',
         },
@@ -552,7 +552,7 @@ describe('actions/login', () => {
     it('calls the correct API', () => {
       const scope = mockApiCall({
         method: 'post',
-        path: '/api-auth/social-login/twitter/',
+        path: '/api/auth/social-login/twitter/',
         params: {
           access_token: 'twitter-token',
           access_token_secret: 'twitter-token-secret',
@@ -568,7 +568,7 @@ describe('actions/login', () => {
     it('logs user in properly', () => {
       mockApiCall({
         method: 'post',
-        path: '/api-auth/social-login/twitter/',
+        path: '/api/auth/social-login/twitter/',
         params: {
           access_token: 'twitter-token',
           access_token_secret: 'twitter-token-secret',

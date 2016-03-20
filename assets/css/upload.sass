@@ -11,9 +11,6 @@
   border-width: 2px
   border-style: solid
   border-color: $grey-light
-  &:hover, &--active
-    .upload__dropzone-cloud
-      color: $blue-light
   &--active
     border-style: dashed
     border-color: $grey-dark
@@ -25,6 +22,9 @@
     border-color: $red
     &:hover .upload__dropzone-text-dismiss-message
       color: $red
+  &:hover, &--active
+    .upload__dropzone-cloud
+      color: $blue-light
 
 .upload__dropzone-link
   background-color: $grey-light
