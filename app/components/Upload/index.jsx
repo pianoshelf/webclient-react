@@ -3,7 +3,7 @@ import React from 'react';
 import { reduxForm } from 'redux-form';
 
 // Import other components
-import Dropzone from './Dropzone';
+import Dropzone, { ERROR_SIZE, ERROR_TYPE } from './Dropzone';
 import Checkbox from '../Misc/Checkbox';
 import Field from './utils/Field';
 import Input from '../Misc/Input';
@@ -23,27 +23,67 @@ const FIELD_NAMES = [
   'key',
 ];
 
+const MAX_FILE_SIZE = 10000000;
+
 @reduxForm(
   {
     form: 'upload',
     fields: FIELD_NAMES,
-  }
+    validate(values) {
+      const errors = {};
+
+      if (values.file && values.file.length > 0) {
+        const file = values.file[0];
+
+        if (file.size > MAX_FILE_SIZE) {
+          errors.file = ERROR_SIZE;
+        }
+
+        if (file.type !== 'application/pdf' &&
+            (file.type !== '' || !file.name.endsWith('.ly'))) {
+          errors.file = ERROR_TYPE;
+        }
+      }
+
+      return errors;
+    },
+  },
+  state => ({
+    inProgress: state.progress.inProgress,
+  })
 )
 export default class Upload extends React.Component {
   static propTypes = {
-    children: React.PropTypes.node,
+    inProgress: React.PropTypes.array.isRequired,
+    fields: React.PropTypes.object.isRequired,
+    handleSubmit: React.PropTypes.func.isRequired,
   };
 
-  handleSubmit = event => {
-    event.preventDefault();
-    console.log('submit!');
+  handleUpload = file => {
+    const { fields } = this.props;
+    fields.file.onChange(file);
+  };
+
+  handleDismiss = () => {
+    const { fields } = this.props;
+    fields.file.onChange();
+  };
+
+  handleSubmit = values => {
+    console.log('submitting');
+    console.log(values);
   };
 
   renderDropzone() {
+    const { fields } = this.props;
     return (
       <div className="upload__dropzone-wrapper">
         <Title step={1} text="Upload file" />
-        <Dropzone />
+        <Dropzone
+          fileField={fields.file}
+          onDrop={this.handleUpload}
+          onDismiss={this.handleDismiss}
+        />
       </div>
     );
   }
@@ -99,7 +139,7 @@ export default class Upload extends React.Component {
           >
             <Checkbox
               label="Arrangement"
-              value={fields.arrangement.value}
+              checked={fields.arrangement.checked}
               onClick={fields.arrangement.onClick}
             />
           </Field>
@@ -132,11 +172,12 @@ export default class Upload extends React.Component {
   }
 
   render() {
+    const { handleSubmit } = this.props;
     return (
       <div className="upload">
         <NavBar />
         <ResponsiveContainer className="upload__container">
-          <form onSubmit={this.handleSubmit}>
+          <form onSubmit={handleSubmit(this.handleSubmit)}>
             {this.renderDropzone()}
             {this.renderOptions()}
             {this.renderSubmit()}

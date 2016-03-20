@@ -8,24 +8,37 @@
     margin-top: 40px
 
 .upload__dropzone
-  border: 2px dashed transparent
-  background-color: $grey-light
+  border-width: 2px
+  border-style: solid
+  border-color: $grey-light
   &:hover, &--active
     .upload__dropzone-cloud
       color: $blue-light
   &--active
+    border-style: dashed
     border-color: $grey-dark
+  &--success
+    border-color: $green
+  &--error
+    border-color: $red
 
 .upload__dropzone-link
+  background-color: $grey-light
   display: block
   padding: 10px
   text-align: center
+  &--uploaded
+    background-color: #fff
 
-.upload__dropzone-cloud
+.upload__dropzone-icon
   display: block
   color: $grey-text-normal
   margin: 20px 0
   font-size: 40px
+  &--success
+    color: darken($green, 20%)
+  &--error
+    color: darken($red, 20%)
   +when-tablet
     font-size: 50px
     padding-bottom: 10px
@@ -37,11 +50,21 @@
   color: $grey-text-dark
   font-size: 16px
   margin-bottom: 15px
+  &--uploaded
+    font-weight: $weight-bold
 
 .upload__dropzone-text-small
   color: $grey-text-normal
   font-size: 15px
   margin-bottom: 5px
+
+.upload__dropzone-text-message
+  color: $grey-text-normal
+  font-size: 15px
+  margin-bottom: 5px
+
+.upload__dropzone-text-message-icon
+  padding-right: 5px
 
 .upload__options-title
   margin: 15px 0
