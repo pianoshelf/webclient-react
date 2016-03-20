@@ -19,8 +19,12 @@
     border-color: $grey-dark
   &--success
     border-color: $green
+    &:hover .upload__dropzone-text-dismiss-message
+      color: $red
   &--error
     border-color: $red
+    &:hover .upload__dropzone-text-dismiss-message
+      color: $red
 
 .upload__dropzone-link
   background-color: $grey-light
@@ -58,12 +62,12 @@
   font-size: 15px
   margin-bottom: 5px
 
-.upload__dropzone-text-message
+.upload__dropzone-text-dismiss-message
   color: $grey-text-normal
   font-size: 15px
   margin-bottom: 5px
 
-.upload__dropzone-text-message-icon
+.upload__dropzone-text-dismiss-message-icon
   padding-right: 5px
 
 .upload__options-title

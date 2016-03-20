@@ -3,6 +3,7 @@ import React from 'react';
 import { reduxForm } from 'redux-form';
 
 // Import other components
+import beautifyFileName from '../../utils/beautifyFileName';
 import Dropzone, { ERROR_SIZE, ERROR_TYPE } from './Dropzone';
 import Checkbox from '../Misc/Checkbox';
 import Field from './utils/Field';
@@ -58,6 +59,17 @@ export default class Upload extends React.Component {
     fields: React.PropTypes.object.isRequired,
     handleSubmit: React.PropTypes.func.isRequired,
   };
+
+  componentDidUpdate(prevProps) {
+    const { fields } = this.props;
+
+    // Check if file was just uploaded and there is no error.
+    if (!prevProps.fields.file.value &&
+        fields.file.value && fields.file.value.length &&
+          !fields.file.error && fields.title.pristine) {
+      fields.title.onChange(beautifyFileName(fields.file.value[0].name));
+    }
+  }
 
   handleUpload = file => {
     const { fields } = this.props;

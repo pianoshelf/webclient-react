@@ -69,8 +69,8 @@ export default class Dropzone extends React.Component {
               <div className="upload__dropzone-text-small">
                 {errorMessage}
               </div>
-              <div className="upload__dropzone-text-message">
-                <FontAwesome className="upload__dropzone-text-message-icon" name="close" />
+              <div className="upload__dropzone-text-dismiss-message">
+                <FontAwesome className="upload__dropzone-text-dismiss-message-icon" name="close" />
                 <If condition={fileField.error}>
                   Click here to dismiss.
                 <Else />
@@ -86,7 +86,6 @@ export default class Dropzone extends React.Component {
     // Return drop zone
     return (
       <ReactDropzone
-        {...fileField}
         className="upload__dropzone"
         activeClassName="upload__dropzone--active"
         multiple={false}
