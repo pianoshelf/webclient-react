@@ -30,11 +30,14 @@ const FIELD_NAMES = [
 
 const MAX_FILE_SIZE = 10000000;
 
+const NOT_SELF_ARRANGED = 'NOT_SELF_ARRANGED';
+const SELF_ARRANGED = 'SELF_ARRANGED';
+
 @reduxForm(
   {
     form: 'upload',
     fields: FIELD_NAMES,
-    initialValues: { arrangedBy: 'selfArranged' },
+    initialValues: { arrangedBy: SELF_ARRANGED },
     validate(values) {
       const errors = {};
 
@@ -89,14 +92,44 @@ export default class Upload extends React.Component {
   handleSubmit = values => {
     const { fields } = this.props;
     const data = new FormData();
+
+    // const FIELD_NAMES = [
+      // 'file',
+      // 'title',
+      // 'composer',
+      // 'style',
+      // 'date',
+      // 'description',
+      // 'arrangement',
+      // 'arrangedBy',
+      // 'arranger',
+      // 'key',
+    // ];
+
     data.append('file', fields.file.value[0]);
-    data.append('title');
-    data.append('composer', '');
-    data.append('style', '');
-    data.append('date', '');
-    data.append('description', '');
+    data.append('title', fields.title.value);
+
+    if (fields.composer.value) {
+      data.append('composer_name', fields.composer.value);
+    }
+
+    if (fields.style.value) {
+      data.append('style', fields.style.value);
+    }
+
+    if (fields.description.value) {
+      data.append('desc', fields.description.value);
+    }
+
+    if (fields.date.value) {
+      data.append('date', fields.date.value);
+    }
+
+    if (fields.key.value) {
+      data.append('key', fields.key.value);
+    }
+
     data.append('arrangement', '');
-    data.append('key', '');
 
     console.log('submitting');
     console.log(values);
@@ -104,7 +137,7 @@ export default class Upload extends React.Component {
 
   handleArrangersNameChange = event => {
     this.props.fields.arranger.onChange(event);
-    this.props.fields.arrangedBy.onChange('notSelfArranged');
+    this.props.fields.arrangedBy.onChange(NOT_SELF_ARRANGED);
   };
 
   renderDropzone() {
@@ -181,8 +214,8 @@ export default class Upload extends React.Component {
                 <Radio
                   name="arrangedBy"
                   {...fields.arrangedBy}
-                  value="selfArranged"
-                  checked={fields.arrangedBy.value === 'selfArranged'}
+                  value={SELF_ARRANGED}
+                  checked={fields.arrangedBy.value === SELF_ARRANGED}
                   className="upload__options-input-field-arrangers"
                 >
                   Arranged by me
@@ -190,8 +223,8 @@ export default class Upload extends React.Component {
                 <Radio
                   name="arrangedBy"
                   {...fields.arrangedBy}
-                  value="notSelfArranged"
-                  checked={fields.arrangedBy.value === 'notSelfArranged'}
+                  value={NOT_SELF_ARRANGED}
+                  checked={fields.arrangedBy.value === NOT_SELF_ARRANGED}
                   className="upload__options-input-field-arrangers"
                 >
                   <Input
