@@ -4,7 +4,7 @@ import FontAwesome from 'react-fontawesome';
 import omit from 'lodash/omit';
 import React from 'react';
 
-export default class Checkbox extends React.Component {
+export default class Radio extends React.Component {
   render() {
     const { children, className, icon } = this.props;
     const props = omit(
@@ -12,27 +12,27 @@ export default class Checkbox extends React.Component {
       ['children', 'className', 'icon']
     );
 
-    const groupClassName = classNames('misc-checkbox__group', className);
+    const groupClassName = classNames('misc-radio__group', className);
 
     return (
       <label className={groupClassName}>
         <input
-          type="checkbox"
-          className="misc-checkbox__input"
+          type="radio"
+          className="misc-radio__input"
           {...props}
         />
-        <span className="misc-checkbox__checkbox" />
+        <span className="misc-radio__checkbox" />
         <span
-          className="misc-checkbox__label"
+          className="misc-radio__label"
         >
           <If condition={icon}>
-            <FontAwesome name={icon} className="misc-checkbox__icon" />
+            <FontAwesome name={icon} className="misc-radio__icon" />
           </If>
           <span>
             {children}
           </span>
         </span>
-        <span className="misc-checkbox__clear" />
+        <span className="misc-radio__clear" />
       </label>
     );
   }

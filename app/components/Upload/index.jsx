@@ -6,6 +6,7 @@ import { reduxForm } from 'redux-form';
 import beautifyFileName from '../../utils/beautifyFileName';
 import Dropzone, { ERROR_SIZE, ERROR_TYPE } from './Dropzone';
 import Checkbox from '../Misc/Checkbox';
+import Radio from '../Misc/Radio';
 import Field from './utils/Field';
 import Input from '../Misc/Input';
 import TextArea from '../Misc/TextArea';
@@ -17,10 +18,13 @@ import ResponsiveContainer from '../Misc/ResponsiveContainer';
 const FIELD_NAMES = [
   'file',
   'title',
-  'author',
-  'genre',
+  'composer',
+  'style',
+  'date',
   'description',
   'arrangement',
+  'arrangedBy',
+  'arranger',
   'key',
 ];
 
@@ -82,8 +86,24 @@ export default class Upload extends React.Component {
   };
 
   handleSubmit = values => {
+    const { fields } = this.props;
+    const data = new FormData();
+    data.append('file', fields.file.value[0]);
+    data.append('title');
+    data.append('composer', '');
+    data.append('style', '');
+    data.append('date', '');
+    data.append('description', '');
+    data.append('arrangement', '');
+    data.append('key', '');
+
     console.log('submitting');
     console.log(values);
+  };
+
+  handleArrangersNameFocus = event => {
+    this.props.fields.arranger.onFocus(event);
+    this.props.fields.arrangedBy.onChange('notSelfArranged');
   };
 
   renderDropzone() {
@@ -122,17 +142,17 @@ export default class Upload extends React.Component {
           >
             <Input
               icon="user"
-              {...fields.author}
+              {...fields.composer}
               placeholder="Original Artist / Composer"
             />
           </Field>
           <Field
-            tip="Enter the genre of the sheet music."
+            tip="Enter the style of the sheet music."
             example="Classical"
           >
             <Input
               icon="music"
-              {...fields.genre}
+              {...fields.style}
               placeholder="Genre"
             />
           </Field>
@@ -150,10 +170,38 @@ export default class Upload extends React.Component {
             tip="Is the sheet music an arrangement of the original?"
           >
             <Checkbox
-              label="Arrangement"
               checked={fields.arrangement.checked}
-              onClick={fields.arrangement.onClick}
-            />
+              onChange={fields.arrangement.onChange}
+            >
+              Arrangement
+            </Checkbox>
+            <If condition={fields.arrangement.checked}>
+              <div>
+                <Radio
+                  name="arrangedBy"
+                  {...fields.arrangedBy}
+                  value="selfArranged"
+                  checked={fields.arrangedBy.value === 'selfArranged'}
+                  className="upload__options-input-field-arrangers"
+                >
+                  Arranged by me
+                </Radio>
+                <Radio
+                  name="arrangedBy"
+                  {...fields.arrangedBy}
+                  value="notSelfArranged"
+                  checked={fields.arrangedBy.value === 'notSelfArranged'}
+                  className="upload__options-input-field-arrangers"
+                >
+                  <Input
+                    {...fields.arranger}
+                    onFocus={this.handleArrangersNameFocus}
+                    placeholder="Arranger's Name"
+                    className="upload__options-input-field-arrangers-input"
+                  />
+                </Radio>
+              </div>
+            </If>
           </Field>
           <Field
             tip="Enter the key of the sheet music."

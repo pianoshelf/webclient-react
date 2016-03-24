@@ -96,7 +96,6 @@ async function finishRequest(response) {
  *   @param {string} options.endpoint The API endpoint.
  *   @param {Object} options.params The query parameters to send in the URL.
  *   @param {Express.Request} options.request The request object.
- *
  * @return {Promise} A promise that resolves when the request is complete.
  */
 export async function get({ endpoint, params = {}, request }) {
@@ -119,7 +118,6 @@ export async function get({ endpoint, params = {}, request }) {
  * @param {Object} options
  *   @param {string} options.endpoint The API endpoint.
  *   @param {Object} options.params The query parameters to send in the request.
- *
  * @return {Promise} A promise that resolves when the request is complete.
  */
 export async function post({ endpoint, params = {} }) {
@@ -143,7 +141,6 @@ export async function post({ endpoint, params = {} }) {
  * @param {Object} options
  *   @param {string} options.endpoint The API endpoint.
  *   @param {Object} options.params The query parameters to send in the request.
- *
  * @return {Promise} A promise that resolves when the request is complete.
  */
 export async function patch({ endpoint, params = {} }) {
@@ -167,7 +164,6 @@ export async function patch({ endpoint, params = {} }) {
  * @param {Object} options
  *   @param {string} options.endpoint The API endpoint.
  *   @param {Object} options.params The query parameters to send in the request.
- *
  * @return {Promise} A promise that resolves when the request is complete.
  */
 export async function del({ endpoint, params = {} }) {
@@ -176,6 +172,29 @@ export async function del({ endpoint, params = {} }) {
       method: 'DELETE',
       headers: getHeaders(),
       body: JSON.stringify(params),
+      credentials: 'same-origin',
+    });
+
+    return await finishRequest(body);
+  } catch (e) {
+    return actionError(errors.NETWORK_ERROR);
+  }
+}
+
+/**
+ * Sends a POST request containing form data and returns a promise.
+ *
+ * @param {Object} options
+ *   @param {string} options.endpoint The API endpoint.
+ *   @param {Object} options.formData The FormData object to send in the request.
+ * @return {Promise} A promise that resolves when the request is complete.
+ */
+export async function upload({ endpoint, formData }) {
+  try {
+    const body = await fetch(getURL(endpoint), {
+      method: 'POST',
+      headers: getHeaders(),
+      body: formData,
       credentials: 'same-origin',
     });
 

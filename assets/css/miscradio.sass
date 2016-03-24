@@ -1,23 +1,24 @@
 
-.misc-checkbox__input
+.misc-radio__input
   position: absolute
   left: -9999px
 
-.misc-checkbox__group
+.misc-radio__group
   display: block
   margin-top: 0.8em
   margin-bottom: 0.8em
   height: 1.6em
   position: relative
-  &:hover .misc-checkbox__checkbox:before
+  &:hover .misc-radio__checkbox:before
     opacity: 0.3
 
-.misc-checkbox__checkbox
+.misc-radio__checkbox
   display: inline-block
   width: calc(2.0em + 1px)
   height: calc(2.0em + 1px)
   background-color: #fff
   border: 1px solid $grey-normal
+  border-radius: 3em
   position: absolute
   top: 0
   left: 0
@@ -27,25 +28,23 @@
     content: ''
     opacity: 0
     position: absolute
-    left: 0.7em
-    top: 0.08em
-    width: 0.6em
-    height: 1.4em
-    border-width: 0 0.2em 0.2em 0
-    border-style: solid
-    border-color: $blue-light
-    transform: rotate(45deg)
+    left: 7px
+    top: 7px
+    background-color: $blue-light
+    border-radius: 3em
+    width: calc(100% - 14px)
+    height: calc(100% - 14px)
     transition-duration: 0.1s
     transition-property: opacity
-  .misc-checkbox__input:checked + &
+  .misc-radio__input:checked + &
     background-color: $grey-light
     border-color: $grey-light
     &:before
       opacity: 1
-  .misc-checkbox__input:focus + &
+  .misc-radio__input:focus + &
     border-color: $grey-dark
 
-.misc-checkbox__label
+.misc-radio__label
   display: block
   color: $grey-text-normal
   font-size: 0.9em
@@ -56,9 +55,9 @@
   height: 1.6em
   user-select: none
 
-.misc-checkbox__icon
+.misc-radio__icon
   margin-right: 0.4em
 
-.misc-checkbox__clear
+.misc-radio__clear
   clear: both
 
