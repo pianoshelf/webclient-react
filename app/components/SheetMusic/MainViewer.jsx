@@ -8,12 +8,15 @@ import EmptyComponent from './utils/EmptyComponent';
 import LeftButton from './utils/LeftButton';
 import ResponsiveContainer from '../Misc/ResponsiveContainer';
 import RightButton from './utils/RightButton';
+import { post } from '../../utils/api';
 
 @withState('slide', 'setSlide', 1)
 @withState('fullscreen', 'setFullScreen', false)
 @withState('screenfullModule', 'setScreenfullModule', {})
 export default class MainViewer extends React.Component {
   static propTypes = {
+    id: React.PropTypes.number.isRequired,
+    loggedIn: React.PropTypes.bool.isRequired,
     images: React.PropTypes.array.isRequired,
     slide: React.PropTypes.number.isRequired,
     fullscreen: React.PropTypes.bool.isRequired,
@@ -107,7 +110,24 @@ export default class MainViewer extends React.Component {
         </Carousel>
       </div>
     );
-  }
+  };
+  
+  handleDownload = event => {
+    event.preventDefault();
+    if (this.props.loggedIn) {
+      post({
+        endpoint: '/sheetmusic/downloads/',
+        params: {'sheetmusic_id' : this.props.id},
+        auth: false,
+      }).then((result) => {
+        window.open(result.payload.pdf_url);
+      });
+    }
+    else {
+      // Error TODO: Handle this
+      console.log("Show error message");
+    }
+  };
 
   renderSheetMusicControls() {
     return (

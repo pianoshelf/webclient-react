@@ -175,7 +175,7 @@ export default class Viewer extends React.Component {
           <LoadingScreen />
         <Else />
           <div>
-            <MainViewer ref="mainViewer" images={this.props.result.images} />
+            <MainViewer ref="mainViewer" id={this.props.result.id} loggedIn={this.props.loggedIn} images={this.props.result.images} />
             <ResponsiveContainer className="sheetmusic__details">
               <div className="sheetmusic__details-left">
                 {this.renderDescription()}
