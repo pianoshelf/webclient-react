@@ -34,6 +34,7 @@ const MAX_FILE_SIZE = 10000000;
   {
     form: 'upload',
     fields: FIELD_NAMES,
+    initialValues: { arrangedBy: 'selfArranged' },
     validate(values) {
       const errors = {};
 
@@ -101,8 +102,8 @@ export default class Upload extends React.Component {
     console.log(values);
   };
 
-  handleArrangersNameFocus = event => {
-    this.props.fields.arranger.onFocus(event);
+  handleArrangersNameChange = event => {
+    this.props.fields.arranger.onChange(event);
     this.props.fields.arrangedBy.onChange('notSelfArranged');
   };
 
@@ -195,7 +196,7 @@ export default class Upload extends React.Component {
                 >
                   <Input
                     {...fields.arranger}
-                    onFocus={this.handleArrangersNameFocus}
+                    onChange={this.handleArrangersNameChange}
                     placeholder="Arranger's Name"
                     className="upload__options-input-field-arrangers-input"
                   />

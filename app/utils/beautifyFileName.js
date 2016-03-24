@@ -11,7 +11,5 @@ export default function beautifyFileName(filename) {
     .replace(/[^a-z0-9]+/g, ' ')
     .replace(/\s+/, ' ');
 
-  console.log(newFilename);
-
   return newFilename.charAt(0).toUpperCase() + newFilename.slice(1);
 }
