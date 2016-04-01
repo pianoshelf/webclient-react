@@ -21,7 +21,7 @@ function getCookie(name, request) {
   }
 
   // Get cookie from request if we're on the server.
-  if (__SERVER__) {
+  if (__SERVER__ && request) {
     return (new Cookie(request)).get(name);
   }
 
@@ -29,18 +29,27 @@ function getCookie(name, request) {
 }
 
 /**
+ * Gets the base URL of the project.
+ */
+function getBaseURL() {
+  if (__CLIENT__) {
+    return window.location.origin;
+  } else if (process.env.DOCKER === 'true') {
+    return `http://${config.hosts.django}:${config.ports.django}`;
+  }
+
+  return `http://localhost:${config.ports.django}`;
+}
+
+/**
  * Gets the absolute URL given the endpoint.
  */
 function getURL(endpoint, params) {
-  const BASE_URL = __CLIENT__ ?
-    window.location.origin :
-    `http://localhost:${config.ports.django}`;
-
   if (typeof params === 'object' && Object.keys(params).length > 0) {
-    return `${BASE_URL}/api${endpoint}?${qs.stringify(params)}`;
+    return `${getBaseURL()}/api${endpoint}?${qs.stringify(params)}`;
   }
 
-  return `${BASE_URL}/api${endpoint}`;
+  return `${getBaseURL()}/api${endpoint}`;
 }
 
 /**
@@ -52,23 +61,21 @@ function getHeaders(request) {
   headers.append('Accept', 'application/json');
   headers.append('Content-Type', 'application/json');
 
-  if (request) {
-    // Mirror cookies if we're on the server.
-    if (__SERVER__) {
-      headers.append('Cookie', request.get('Cookie'));
-    }
+  // Mirror cookies if we're on the server.
+  if (__SERVER__ && request) {
+    headers.append('Cookie', request.get('Cookie'));
+  }
 
-    // Set authorization token header if it exists.
-    const auth = getCookie(config.cookie.authtoken, request);
-    if (auth) {
-      headers.append('Authorization', auth);
-    }
+  // Set authorization token header if it exists.
+  const auth = getCookie(config.cookie.authtoken, request);
+  if (auth) {
+    headers.append('Authorization', auth);
+  }
 
-    // Set CSRF header if it exists.
-    const csrf = getCookie(config.cookie.csrf, request);
-    if (csrf) {
-      headers.append('X-CSRFToken', csrf);
-    }
+  // Set CSRF header if it exists.
+  const csrf = getCookie(config.cookie.csrf, request);
+  if (csrf) {
+    headers.append('X-CSRFToken', csrf);
   }
 
   return headers;

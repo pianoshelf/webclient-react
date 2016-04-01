@@ -60,7 +60,7 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // Proxy API requests to the python server if we're on a dev environment or if we specified the
 // override
-if (process.env.PROXY_API === 'true' || process.env.NODE_ENV !== 'production') {
+if (process.env.DOCKER !== 'true' || process.env.NODE_ENV !== 'production') {
   const proxy = httpProxy.createProxyServer({});
   app.use((req, res, next) => {
     if (/^\/api/.test(req.url)) {

@@ -9,8 +9,8 @@
     "compile": "gulp compile",
     "lint": "gulp build:lint",
     "production": "NODE_ENV=production node build/server",
-    "production:proxy": "PROXY_API=true NODE_ENV=production node build/server",
-    "test": "mocha --compilers js:babel-register --recursive test",
+    "production:docker": "DOCKER=true NODE_ENV=production node build/server",
+    "test": "DOCKER=true mocha --compilers js:babel-register --recursive test",
     "watch": "gulp watch"
   },
   "repository": {
