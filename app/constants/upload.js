@@ -1,1 +1,1 @@
-export const UPLOAD_PDF = 'UPLOAD_PDF';
+export const UPLOAD_FILE = 'UPLOAD_FILE';

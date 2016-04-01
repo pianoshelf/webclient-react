@@ -9,6 +9,7 @@ import profile from './profile';
 import progress from './progress';
 import search from './search';
 import sheetmusic from './sheetmusic';
+import upload from './upload';
 
 export default combineReducers({
   // My reducers
@@ -17,6 +18,7 @@ export default combineReducers({
   progress,
   search,
   sheetmusic,
+  upload,
 
   // External reducers
   form,

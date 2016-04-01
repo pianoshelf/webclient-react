@@ -26,6 +26,11 @@ export const errors = {
   EXPIRED_LINK: s++,
   EMAIL_UNVERIFIED: s++,
 
+  // Upload
+  NO_FILE: s++,
+  NO_TITLE: s++,
+  NO_COMPOSER: s++,
+
 };
 
 // Success constants
@@ -38,5 +43,8 @@ export const success = {
   PASSWORD_CONFIRM_RESET: s++,
   PASSWORD_CHANGED: s++,
   EMAIL_VERIFIED: s++,
+
+  // Upload
+  UPLOADED: s++,
 
 };

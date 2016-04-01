@@ -14,6 +14,11 @@ import Title from './utils/Title';
 import NavBar from '../Fixtures/NavBar';
 import Footer from '../Fixtures/Footer';
 import ResponsiveContainer from '../Misc/ResponsiveContainer';
+import { errors } from '../../utils/constants';
+import { uploadFile } from '../../actions/upload';
+
+const SELF_ARRANGED = 'SELF_ARRANGED';
+const NOT_SELF_ARRANGED = 'NOT_SELF_ARRANGED';
 
 const FIELD_NAMES = [
   'file',
@@ -22,7 +27,7 @@ const FIELD_NAMES = [
   'style',
   'date',
   'description',
-  'arrangement',
+  'isArrangement',
   'arrangedBy',
   'arranger',
   'key',
@@ -30,35 +35,33 @@ const FIELD_NAMES = [
 
 const MAX_FILE_SIZE = 10000000;
 
-const NOT_SELF_ARRANGED = 'NOT_SELF_ARRANGED';
-const SELF_ARRANGED = 'SELF_ARRANGED';
-
 @reduxForm(
   {
     form: 'upload',
     fields: FIELD_NAMES,
     initialValues: { arrangedBy: SELF_ARRANGED },
     validate(values) {
-      const errors = {};
+      const validationErrors = {};
 
       if (values.file && values.file.length > 0) {
         const file = values.file[0];
 
         if (file.size > MAX_FILE_SIZE) {
-          errors.file = ERROR_SIZE;
+          validationErrors.file = ERROR_SIZE;
         }
 
         if (file.type !== 'application/pdf' &&
             (file.type !== '' || !file.name.endsWith('.ly'))) {
-          errors.file = ERROR_TYPE;
+          validationErrors.file = ERROR_TYPE;
         }
       }
 
-      return errors;
+      return validationErrors;
     },
   },
   state => ({
     inProgress: state.progress.inProgress,
+    errorCode: state.upload.errorCode,
   })
 )
 export default class Upload extends React.Component {
@@ -89,50 +92,19 @@ export default class Upload extends React.Component {
     fields.file.onChange();
   };
 
-  handleSubmit = values => {
-    const { fields } = this.props;
-    const data = new FormData();
-
-    // const FIELD_NAMES = [
-      // 'file',
-      // 'title',
-      // 'composer',
-      // 'style',
-      // 'date',
-      // 'description',
-      // 'arrangement',
-      // 'arrangedBy',
-      // 'arranger',
-      // 'key',
-    // ];
-
-    data.append('file', fields.file.value[0]);
-    data.append('title', fields.title.value);
-
-    if (fields.composer.value) {
-      data.append('composer_name', fields.composer.value);
-    }
-
-    if (fields.style.value) {
-      data.append('style', fields.style.value);
-    }
-
-    if (fields.description.value) {
-      data.append('desc', fields.description.value);
-    }
-
-    if (fields.date.value) {
-      data.append('date', fields.date.value);
-    }
-
-    if (fields.key.value) {
-      data.append('key', fields.key.value);
-    }
-
-    data.append('arrangement', '');
-
-    console.log('submitting');
-    console.log(values);
+  handleSubmit = (values, dispatch) => {
+    dispatch(uploadFile({
+      file: values.file,
+      title: values.title,
+      composerName: values.composer,
+      style: values.style,
+      description: values.description,
+      date: values.date,
+      key: values.key,
+      isArrangement: values.isArrangement,
+      selfArranged: values.selfArranged === SELF_ARRANGED,
+      arranger: values.arranger,
+    }));
   };
 
   handleArrangersNameChange = event => {
@@ -155,7 +127,7 @@ export default class Upload extends React.Component {
   }
 
   renderOptions() {
-    const { fields } = this.props;
+    const { errorCode, fields } = this.props;
     return (
       <div className="upload__options">
         <Title step={2} text="Enter details" />
@@ -165,6 +137,7 @@ export default class Upload extends React.Component {
             example={"F\u00FCr Elise"}
           >
             <Input
+              errorWhen={errorCode === errors.NO_TITLE}
               icon="file-o"
               {...fields.title}
               placeholder="Title"
@@ -175,6 +148,7 @@ export default class Upload extends React.Component {
             example="Beethoven"
           >
             <Input
+              errorWhen={errorCode === errors.NO_COMPOSER}
               icon="user"
               {...fields.composer}
               placeholder="Original Artist / Composer"
@@ -204,12 +178,12 @@ export default class Upload extends React.Component {
             tip="Is the sheet music an arrangement of the original?"
           >
             <Checkbox
-              checked={fields.arrangement.checked}
-              onChange={fields.arrangement.onChange}
+              checked={fields.isArrangement.checked}
+              onChange={fields.isArrangement.onChange}
             >
               Arrangement
             </Checkbox>
-            <If condition={fields.arrangement.checked}>
+            <If condition={fields.isArrangement.checked}>
               <div>
                 <Radio
                   name="arrangedBy"
@@ -253,11 +227,12 @@ export default class Upload extends React.Component {
   }
 
   renderSubmit() {
+    const { handleSubmit } = this.props;
     return (
       <div className="upload__submit">
         <Title step={3} text="Submit" />
         <div>
-          <button type="submit" className="upload__submit-button">
+          <button className="upload__submit-button" onClick={handleSubmit(this.handleSubmit)}>
             Upload
           </button>
         </div>
@@ -266,16 +241,15 @@ export default class Upload extends React.Component {
   }
 
   render() {
-    const { handleSubmit } = this.props;
     return (
       <div className="upload">
         <NavBar />
         <ResponsiveContainer className="upload__container">
-          <form onSubmit={handleSubmit(this.handleSubmit)}>
+          <div>
             {this.renderDropzone()}
             {this.renderOptions()}
             {this.renderSubmit()}
-          </form>
+          </div>
         </ResponsiveContainer>
         <Footer />
       </div>

@@ -60,7 +60,6 @@ export default class Register extends React.Component {
   };
 
   static contextTypes = {
-    store: React.PropTypes.object.isRequired,
     router: React.PropTypes.object.isRequired,
   };
 
