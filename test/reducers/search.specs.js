@@ -9,31 +9,12 @@ import { SEARCH_SHEETMUSIC } from '../../app/constants/search';
 const assertReducer = testReducer(searchReducer);
 
 describe('reducers/search', () => {
-  it('sets progress to true when beginning a request', () => {
-    assertReducer({
-      from: {
-        errorCode: 0,
-        count: 0,
-        free: [],
-        progress: false,
-      },
-      to: {
-        errorCode: 0,
-        count: 0,
-        free: [],
-        progress: true,
-      },
-      action: createStartAction(SEARCH_SHEETMUSIC),
-    });
-  });
-
   it('lists out sheet music properties when retrieving a list of sheet music', () => {
     assertReducer({
       from: {
         errorCode: 0,
         count: 0,
         free: [],
-        progress: true,
       },
       to: {
         errorCode: 0,
@@ -62,7 +43,6 @@ describe('reducers/search', () => {
           videos: [],
           viewCount: undefined,
         }],
-        progress: false,
       },
       action: createDoneAction(SEARCH_SHEETMUSIC, {
         count: 1234,
@@ -88,13 +68,11 @@ describe('reducers/search', () => {
         errorCode: 0,
         count: 0,
         free: [],
-        progress: true,
       },
       to: {
         errorCode: 123,
         count: 0,
         free: [],
-        progress: false,
       },
       action: createErrorAction(SEARCH_SHEETMUSIC, 123),
     });

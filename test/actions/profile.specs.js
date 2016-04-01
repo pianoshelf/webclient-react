@@ -58,6 +58,8 @@ describe('actions/profile', () => {
           username: 'someUsername',
           page: 5,
         },
+        returnData: [],
+        returnMeta: { pagination: { count: 1 } },
       });
       return profile.getUploadsForUser('someUsername', 5)(dispatch)
         .then(() => scope.isDone());

@@ -36,7 +36,7 @@ function getURL(endpoint, params) {
     window.location.origin :
     `http://localhost:${config.ports.django}`;
 
-  if (params) {
+  if (typeof params === 'object' && Object.keys(params).length > 0) {
     return `${BASE_URL}/api${endpoint}?${qs.stringify(params)}`;
   }
 
@@ -52,21 +52,23 @@ function getHeaders(request) {
   headers.append('Accept', 'application/json');
   headers.append('Content-Type', 'application/json');
 
-  // Mirror cookies if we're on the server.
-  if (__SERVER__) {
-    headers.append('Cookie', request.get('Cookie'));
-  }
+  if (request) {
+    // Mirror cookies if we're on the server.
+    if (__SERVER__) {
+      headers.append('Cookie', request.get('Cookie'));
+    }
 
-  // Set authorization token header if it exists.
-  const auth = getCookie(config.cookie.authtoken, request);
-  if (auth) {
-    headers.append('Authorization', auth);
-  }
+    // Set authorization token header if it exists.
+    const auth = getCookie(config.cookie.authtoken, request);
+    if (auth) {
+      headers.append('Authorization', auth);
+    }
 
-  // Set CSRF header if it exists.
-  const csrf = getCookie(config.cookie.csrf, request);
-  if (csrf) {
-    headers.append('X-CSRFToken', csrf);
+    // Set CSRF header if it exists.
+    const csrf = getCookie(config.cookie.csrf, request);
+    if (csrf) {
+      headers.append('X-CSRFToken', csrf);
+    }
   }
 
   return headers;
@@ -108,6 +110,8 @@ export async function get({ endpoint, params = {}, request }) {
 
     return await finishRequest(body);
   } catch (e) {
+    console.log(e);
+    console.log(e.stack);
     return actionError(errors.NETWORK_ERROR);
   }
 }
