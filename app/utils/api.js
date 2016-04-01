@@ -110,8 +110,6 @@ export async function get({ endpoint, params = {}, request }) {
 
     return await finishRequest(body);
   } catch (e) {
-    console.log(e);
-    console.log(e.stack);
     return actionError(errors.NETWORK_ERROR);
   }
 }
