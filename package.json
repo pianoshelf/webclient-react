@@ -10,7 +10,7 @@
     "lint": "gulp build:lint",
     "production": "NODE_ENV=production node build/server",
     "production:docker": "DOCKER=true NODE_ENV=production node build/server",
-    "test": "DOCKER=true mocha --compilers js:babel-register --recursive test",
+    "test": "mocha --compilers js:babel-register --recursive test",
     "watch": "gulp watch"
   },
   "repository": {
