@@ -1,7 +1,4 @@
 
-@import 'variables/fonts'
-@import 'variables/colors'
-
 .misc-textarea__input
   margin-top: 0.9em
   padding: 0.6em 0.5em 0.4em 0.5em
@@ -12,7 +9,9 @@
   border-width: 1px
   border-color: $grey-normal
   transition: 0.2s ease all
+  color: $grey-text-dark
   resize: none
+  min-height: 4em
   &:focus
     outline: none
   &:focus, &:valid
@@ -66,4 +65,9 @@
   top: calc(0.5em + 2px)
   transition: 0.2s ease all
   text-transform: uppercase
+  user-select: none
+
+.misc-textarea__icon
+  padding-right: 0.4em
+  font-size: 0.95em
 

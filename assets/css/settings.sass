@@ -1,0 +1,55 @@
+
+.settings
+  min-height: 100vh
+
+.settings__container
+  padding: $navbar-height 20px 0 20px
+  min-height: calc(100vh - #{$footer-height})
+
+.settings__panel
+  display: table
+  padding: 30px 0 20px 0
+  width: 100%
+  min-height: calc(100vh - #{$footer-height + $navbar-height})
+
+.settings__links
+  display: table-cell
+  vertical-align: top
+  width: 170px
+
+.settings__links-menu-title
+  font-family: $title-font
+  padding: 10px
+  border-bottom: 1px solid $grey-text-normal
+  text-transform: uppercase
+
+.settings__links-menu-list
+  margin: 0
+  padding: 0
+
+.settings__links-menu-list-item
+  list-style: none
+  margin: 10px
+
+.settings__links-menu-link
+  display: block
+  color: $grey-text-dark
+  padding: 7px 10px 5px 10px
+  border: 1px solid $grey-normal
+  &--active
+    border-color: $blue-light
+    color: #000
+
+.settings__content
+  display: table-cell
+  border-left: 1px solid $grey-text-normal
+  padding: 10px
+
+.settings__content-title
+  font-family: $title-font
+  padding: 0 10px 10px 10px
+  border-bottom: 1px solid $grey-text-light
+
+.settings__content-form
+  margin: 0 10px
+

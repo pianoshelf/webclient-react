@@ -19,7 +19,7 @@ import { setAuthToken } from '../../utils/authUtils';
 
 const trackEvent = createEventTracker('Register');
 
-export const fieldNames = [
+export const FIELD_NAMES = [
   'username',
   'email',
   'password1',
@@ -32,7 +32,7 @@ export const fieldNames = [
 @reduxForm(
   {
     form: 'register',
-    fields: fieldNames,
+    fields: FIELD_NAMES,
     initialValues: {
       username: '',
       email: '',
@@ -60,7 +60,6 @@ export default class Register extends React.Component {
   };
 
   static contextTypes = {
-    store: React.PropTypes.object.isRequired,
     router: React.PropTypes.object.isRequired,
   };
 

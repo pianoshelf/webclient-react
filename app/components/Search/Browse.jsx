@@ -1,7 +1,6 @@
 
 import classNames from 'classnames';
 import debounce from 'lodash/debounce';
-import FontAwesome from 'react-fontawesome';
 import Helmet from 'react-helmet';
 import intersection from 'lodash/intersection';
 import React from 'react';
@@ -55,28 +54,28 @@ const debouncedSearch = debounce((query, store, request) => {
         return store.dispatch(
           getSheetMusicList(
             { page, orderBy: 'new', sortBy: 'desc', pageSize: PAGE_SIZE },
-            store
+            request
           )
         );
       case 'most_difficult':
         return store.dispatch(
           getSheetMusicList(
             { page, orderBy: 'difficulty', sortBy: 'desc', pageSize: PAGE_SIZE },
-            store
+            request
           )
         );
       case 'least_difficult':
         return store.dispatch(
           getSheetMusicList(
             { page, orderBy: 'difficulty', sortBy: 'asc', pageSize: PAGE_SIZE },
-            store
+            request
           )
         );
       default:
         return store.dispatch(
           getSheetMusicList(
             { page, orderBy: 'popular', sortBy: 'desc', pageSize: PAGE_SIZE },
-            store
+            request
           )
         );
     }
@@ -230,13 +229,10 @@ export default class Browse extends React.Component {
           onSubmit={this.handleSearchQuerySubmit}
         >
           <Input
-            placeholder={
-              <span>
-                <FontAwesome name="search" className="search__browse-search-input-icon" />
-                Search for sheet music
-              </span>
-            }
             {...fields.search}
+            placeholder="Search for Sheet Music"
+            icon="search"
+            value={fields.search.value}
           />
           {/*
             Add this back once the API returns a proper search result count.

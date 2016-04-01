@@ -1,0 +1,63 @@
+
+.misc-radio__input
+  position: absolute
+  left: -9999px
+
+.misc-radio__group
+  display: block
+  margin-top: 0.8em
+  margin-bottom: 0.8em
+  height: 1.6em
+  position: relative
+  &:hover .misc-radio__checkbox:before
+    opacity: 0.1
+
+.misc-radio__checkbox
+  display: inline-block
+  width: calc(2.0em + 1px)
+  height: calc(2.0em + 1px)
+  background-color: #fff
+  border: 1px solid $grey-normal
+  border-radius: 3em
+  position: absolute
+  top: 0
+  left: 0
+  transition-duration: 0.1s
+  transition-property: background-color border-color
+  &:before
+    content: ''
+    opacity: 0
+    position: absolute
+    left: 7px
+    top: 7px
+    background-color: $blue-light
+    border-radius: 3em
+    width: calc(100% - 14px)
+    height: calc(100% - 14px)
+    transition-duration: 0.1s
+    transition-property: opacity
+  .misc-radio__input:checked + &
+    background-color: $grey-light
+    border-color: $grey-light
+    &:before
+      opacity: 1
+  .misc-radio__input:focus + &
+    border-color: $grey-dark
+
+.misc-radio__label
+  display: block
+  color: $grey-text-normal
+  font-size: 0.9em
+  font-weight: $weight-normal
+  text-transform: uppercase
+  padding-left: 3em
+  line-height: 2.4em
+  height: 1.6em
+  user-select: none
+
+.misc-radio__icon
+  margin-right: 0.4em
+
+.misc-radio__clear
+  clear: both
+

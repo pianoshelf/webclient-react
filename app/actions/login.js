@@ -1,4 +1,3 @@
-
 import createAction from '../utils/createAction';
 import { actionDone, actionError, isActionError } from '../utils/actionUtils';
 import { errors } from '../utils/constants';
@@ -50,8 +49,7 @@ export const getUser = createAction(
   LOGIN_GET,
   async request => {
     const response = await get({
-      endpoint: '/user/',
-      auth: true,
+      endpoint: '/auth/user/',
       request,
     });
 
@@ -83,9 +81,8 @@ export const login = createAction(
 
     // Call the server
     const response = await post({
-      endpoint: '/login/',
+      endpoint: '/auth/login/',
       params: { username, password },
-      auth: true,
     });
 
     if (isActionError(response)) {
@@ -111,8 +108,7 @@ export const logout = createAction(
   LOGIN_LOGOUT,
   async () =>
     await post({
-      endpoint: '/logout/',
-      auth: true,
+      endpoint: '/auth/logout/',
     })
 );
 
@@ -123,8 +119,7 @@ export const verifyEmail = createAction(
   LOGIN_VERIFY_EMAIL,
   async (verificationKey) => {
     const response = await post({
-      endpoint: `/register/account-confirm-email/${verificationKey}/`,
-      auth: true,
+      endpoint: `/auth/register/account-confirm-email/${verificationKey}/`,
     });
 
     if (isActionError(response)) {
@@ -180,14 +175,13 @@ export const register = createAction(
 
     // Register the user
     const registerResponse = await post({
-      endpoint: '/register/',
+      endpoint: '/auth/register/',
       params: {
         username: user.username,
         password1: user.password1,
         password2: user.password2,
         email: user.email,
       },
-      auth: true,
     });
 
     if (isActionError(registerResponse)) {
@@ -210,12 +204,11 @@ export const register = createAction(
 
     // Login on the server
     const loginResponse = await post({
-      endpoint: '/login/',
+      endpoint: '/auth/login/',
       params: {
         username: user.username,
         password: user.password1,
       },
-      auth: true,
     });
 
     if (isActionError(loginResponse)) {
@@ -251,9 +244,8 @@ export const resetPassword = createAction(
 
     // Call the API
     const response = await post({
-      endpoint: '/password/reset/',
+      endpoint: '/auth/password/reset/',
       params: { email },
-      auth: true,
     });
 
     if (isActionError(response)) {
@@ -294,14 +286,13 @@ export const resetPasswordConfirm = createAction(
     // TODO(ankit): When the backend bug is fixed, remove this hack.
     try {
       response = await post({
-        endpoint: '/password/reset/confirm/',
+        endpoint: '/auth/password/reset/confirm/',
         params: {
           new_password1: user.password1,
           new_password2: user.password2,
           uid,
           token,
         },
-        auth: true,
       });
     } catch (e) {
       return actionError(errors.EXPIRED_LINK);
@@ -346,12 +337,11 @@ export const changePassword = createAction(
     }
 
     return await post({
-      endpoint: '/password/change/',
+      endpoint: '/auth/password/change/',
       params: {
         new_password1: user.password1,
         new_password2: user.password2,
       },
-      auth: true,
     });
   }
 );
@@ -360,11 +350,10 @@ export const facebookLogin = createAction(
   LOGIN_FACEBOOK,
   async token => {
     const response = await post({
-      endpoint: '/social-login/facebook/',
+      endpoint: '/auth/social-login/facebook/',
       params: {
         access_token: token.accessToken,
       },
-      auth: true,
     });
 
     if (isActionError(response)) {
@@ -380,12 +369,11 @@ export const twitterLogin = createAction(
   LOGIN_TWITTER,
   async token => {
     const response = await post({
-      endpoint: '/social-login/twitter/',
+      endpoint: '/auth/social-login/twitter/',
       params: {
         access_token: token.oauthToken,
         access_token_secret: token.oauthTokenSecret,
       },
-      auth: true,
     });
 
     if (isActionError(response)) {

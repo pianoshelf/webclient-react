@@ -1,10 +1,140 @@
 
-@import 'responsivecontainer'
-
-.upload
-  min-height: 100vh
-
 .upload__container
   padding: $navbar-height 20px 0 20px
-  min-height: calc(100vh - #{$footer-height})
+
+.upload__dropzone-wrapper
+  margin-top: 20px
+  +when-tablet
+    margin-top: 40px
+
+.upload__dropzone
+  border-width: 2px
+  border-style: solid
+  border-color: $grey-light
+  &--active
+    border-style: dashed
+    border-color: $grey-dark
+  &--success
+    border-color: $green
+    &:hover .upload__dropzone-text-dismiss-message
+      color: $red
+  &--error
+    border-color: $red
+    &:hover .upload__dropzone-text-dismiss-message
+      color: $red
+  &:hover, &--active
+    .upload__dropzone-cloud
+      color: $blue-light
+
+.upload__dropzone-link
+  background-color: $grey-light
+  display: block
+  padding: 10px
+  text-align: center
+  &--uploaded
+    background-color: #fff
+
+.upload__dropzone-icon
+  display: block
+  color: $grey-text-normal
+  margin: 20px 0
+  font-size: 40px
+  &--success
+    color: darken($green, 20%)
+  &--error
+    color: darken($red, 20%)
+  +when-tablet
+    font-size: 50px
+    padding-bottom: 10px
+
+.upload__dropzone-text
+  margin: 20px 0
+
+.upload__dropzone-text-large
+  color: $grey-text-dark
+  font-size: 16px
+  margin-bottom: 15px
+  &--uploaded
+    font-weight: $weight-bold
+
+.upload__dropzone-text-small
+  color: $grey-text-normal
+  font-size: 15px
+  margin-bottom: 5px
+
+.upload__dropzone-text-dismiss-message
+  color: $grey-text-normal
+  font-size: 15px
+  margin-bottom: 5px
+
+.upload__dropzone-text-dismiss-message-icon
+  padding-right: 5px
+
+.upload__options-title
+  margin: 15px 0
+  padding: 7px 6px
+  border-bottom: 1px solid $grey-text-light
+  border-left: 1px solid $grey-text-light
+  font-family: $title-font
+  font-size: 18px
+
+.upload__options-title-step
+  display: inline-block
+  font-family: $body-font
+  text-transform: uppercase
+  font-size: 15px
+  padding: 2px 6px
+  background-color: $grey-text-dark
+  color: #fff
+  margin-right: 10px
+  float: left
+
+.upload__options-input-clear
+  +when-tablet
+    clear: both
+
+.upload__options-input
+  display: block
+  +when-tablet
+    display: inline-block
+    width: 70%
+    float: left
+
+.upload__options-input-field-arrangers
+  margin: 20px 0 20px 20px
+
+.upload__options-input-field-arrangers-input
+  // bottom: 1.4em
+
+.upload__options-input-field-tip
+  display: block
+  +when-tablet
+    display: inline-block
+    width: 30%
+    float: left
+
+.upload__options-input-field-tip-box
+  display: block
+  padding-left: 10px
+  position: relative
+  +when-tablet
+    display: inline-block
+    margin-top: 15px
+    margin-left: 20px
+
+.upload__options-input-field-tip-box-tip
+  color: $grey-text-dark
+  font-size: 14px
+
+.upload__options-input-field-tip-box-example
+  color: $grey-text-normal
+  padding-top: 5px
+  font-size: 13px
+
+.upload__submit
+  padding-bottom: 20px
+
+.upload__submit-button
+  +clickable($blue-light)
+  padding: 5px 30px
 

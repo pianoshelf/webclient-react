@@ -9,7 +9,7 @@
     "compile": "gulp compile",
     "lint": "gulp build:lint",
     "production": "NODE_ENV=production node build/server",
-    "production:proxy": "PROXY_API=true NODE_ENV=production node build/server",
+    "production:docker": "DOCKER=true NODE_ENV=production node build/server",
     "test": "mocha --compilers js:babel-register --recursive test",
     "watch": "gulp watch"
   },
@@ -95,12 +95,15 @@
     "http-proxy": "^1.11.1",
     "immutable": "^3.7.6",
     "lodash": "^4.6.1",
+    "node-fetch": "^1.4.0",
     "node-sass": "^3.2.0",
     "normalize.css": "^3.0.3",
     "nuka-carousel": "^1.0.2",
     "numeral": "^1.5.3",
+    "qs": "^6.1.0",
     "react": "^0.14.6",
     "react-dom": "^0.14.6",
+    "react-dropzone": "^3.3.2",
     "react-fontawesome": "^0.2.5",
     "react-helmet": "^1.1.5",
     "react-markdown": "1.0.5",
@@ -117,8 +120,8 @@
     "redux-form": "^4.2.0",
     "redux-thunk": "^1.0.3",
     "screenfull": "^3.0.0",
-    "superagent": "^1.6.1",
     "thenify": "^3.1.0",
-    "utf8": "^2.1.1"
+    "utf8": "^2.1.1",
+    "whatwg-fetch": "^0.11.0"
   }
 }

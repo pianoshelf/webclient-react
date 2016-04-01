@@ -19,7 +19,7 @@ import { errors } from '../../utils/constants';
 
 const trackEvent = createEventTracker('ResetPassword');
 
-export const fieldNames = [
+export const FIELD_NAMES = [
   'email',
 ];
 
@@ -29,7 +29,7 @@ export const fieldNames = [
 @reduxForm(
   {
     form: 'resetPassword',
-    fields: fieldNames,
+    fields: FIELD_NAMES,
     initialValues: { email: '' },
   },
   state => ({

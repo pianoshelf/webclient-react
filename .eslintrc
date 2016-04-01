@@ -15,7 +15,8 @@
     "__CLIENT__": true,
     "If": true,
     "Else": true,
-    "For": true
+    "For": true,
+    "fetch": true
   },
   "settings": {
     "import/ignore": [

@@ -1,10 +1,57 @@
 
-@import 'responsivecontainer'
-
 .dashboard
   min-height: 100vh
 
 .dashboard__container
-  padding: $navbar-height 20px 0 20px
+  padding: $navbar-height 10px 0 10px
+  +when-tablet
+    padding: $navbar-height 20px 0 20px
   min-height: calc(100vh - #{$footer-height})
+
+.dashboard__wrapper
+  +when-tablet
+    margin-top: 30px
+
+.dashboard__wrapper-half
+  padding-top: 20px
+  +when-tablet
+    padding-top: 0
+    width: 50%
+    float: left
+    position: relative
+    &--left
+      border-right: 1px solid $grey-text-light
+    &--right
+      border-left: 1px solid $grey-text-light
+      right: 1px
+
+.dashboard__list-title
+  font-size: 18px
+  font-family: $title-font
+  text-align: center
+  padding: 7px
+  margin: 0 10px
+  border-bottom: 1px solid $grey-text-light
+
+.dashboard__list-container
+  list-style: none
+  margin: 0 10px
+  padding: 0
+
+.dashboard__list-container-callout
+  display: block
+  padding: 20px 0
+  color: $grey-text-light
+  text-align: center
+  transition: 0.1s ease color
+  &:hover, &:focus
+    color: $grey-text-dark
+
+.dashboard__list-container-icon
+  font-size: 20px
+  line-height: 2.5
+
+.dashboard__list-container-message
+  font-size: 14px
+  line-height: 1.5
 

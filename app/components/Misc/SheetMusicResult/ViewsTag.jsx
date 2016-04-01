@@ -7,8 +7,8 @@ export default function ViewsTag({ viewCount }) {
   if (!viewCount) return <span />;
   const formatted = numeral(viewCount).format('0a');
   return (
-    <li className="search__result-property search__result-property--dark" key="views">
-      <FontAwesome name="eye" className="search__result-property-icon" />
+    <li className="sheet-music-result__property sheet-music-result__property--dark" key="views">
+      <FontAwesome name="eye" className="sheet-music-result__property-icon" />
       {formatted}
     </li>
   );

@@ -4,11 +4,11 @@ import { reduxForm } from 'redux-form';
 
 import TextArea from '../../Misc/TextArea';
 
-export const fieldNames = ['reply'];
+export const FIELD_NAMES = ['reply'];
 
 @reduxForm({
   form: 'commentReply',
-  fields: fieldNames,
+  fields: FIELD_NAMES,
   initialValues: { reply: '' },
 })
 export default class ReplyBox extends React.Component {

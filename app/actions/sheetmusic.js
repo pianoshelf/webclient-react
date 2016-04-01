@@ -24,6 +24,10 @@ import {
   SHEETMUSIC_COMMENT_UPVOTE,
   SHEETMUSIC_DOWNLOAD,
 } from '../constants/sheetmusic';
+import {
+  SHELF_ADD,
+  SHELF_REMOVE,
+} from '../constants/shelf';
 
 /**
  * Sheet music manipulation functions
@@ -276,5 +280,23 @@ export const getSheetMusicDownloadLink = createAction(
       endpoint: '/sheetmusic/downloads/',
       params: { sheetmusic_id: sheetId },
       request,
+    })
+);
+
+export const addToShelf = createAction(
+  SHELF_ADD,
+  async sheetId =>
+    await post({
+      endpoint: '/shelf/',
+      params: { sheetmusic: sheetId },
+    })
+);
+
+export const removeFromShelf = createAction(
+  SHELF_REMOVE,
+  async sheetId =>
+    await del({
+      endpoint: '/shelf/',
+      params: { sheetmusic: sheetId },
     })
 );

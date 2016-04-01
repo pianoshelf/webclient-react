@@ -1,17 +1,12 @@
 
-@import 'variables/buttons'
-@import 'variables/colors'
-@import 'variables/fonts'
-@import 'variables/globals'
-@import 'variables/responsive'
-
-@import 'responsivecontainer'
-@import 'sheetmusiccarousel'
+$homepage-background-image: url('../img/bg.jpg')
+$callout-button-color: lighten($orange, 10%)
+$callout-button-color-hover: darken($orange, 50%)
 
 .homepage__main-panel
   padding-top: $navbar-height
   height: 400px + $navbar-height
-  background-image: url('../img/bg.jpg')
+  background-image: $homepage-background-image
   background-position: center
   background-size: cover
   background-repeat: no-repeat
@@ -20,6 +15,9 @@
     height: 500px + $navbar-height
   +when-desktop
     height: 600px + $navbar-height
+
+.homepage__main
+  opacity: 0.9
 
 .homepage__main-message
   text-align: center
@@ -44,21 +42,41 @@
   +when-tablet
     padding-bottom: 35px
   +when-desktop
-    padding-bottom: 40px
+    padding-bottom: 50px
 
 .homepage__main-search-input
   display: inline-block
   position: relative
   text-decoration: none
   margin: auto
-  padding: 13px
-  color: #000
-  font-family: $title-font
-  font-size: 22px
+  padding: 14px 0 12px 0
+  font-family: $body-font
+  font-size: 20px
   width: 55%
-  +clickable-gradient($orange)
+  border-width: 2px
+  border-style: solid
+  border-color: $callout-button-color
+  color: $callout-button-color
+  transition-duration: 0.1s
+  transition-property: color, background-color, border-color
+  position: relative
+  z-index: 0
+  &:before
+    content: ''
+    position: absolute
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    z-index: -1
+    background-color: #000
+    opacity: 0.15
+  &:hover, &:focus
+    color: #fff
+    border-color: #fff
   +when-tablet
     width: 45%
+    font-size: 22px
   +when-desktop
     width: 35%
 
@@ -75,7 +93,7 @@
 .homepage__main-register-link
   text-decoration: none
   color: inherit
-  font-weight: $weight-bold
+  font-weight: $weight-normal
 
 .homepage__info-box
   display: inline-block

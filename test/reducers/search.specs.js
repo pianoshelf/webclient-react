@@ -2,41 +2,19 @@
 import testReducer from 'redux-test-reducer';
 
 import searchReducer from '../../app/reducers/search';
-import { createStartAction, createDoneAction, createErrorAction } from '../shared/actions';
+import { createDoneAction, createErrorAction } from '../shared/actions';
 
 import { SEARCH_SHEETMUSIC } from '../../app/constants/search';
 
 const assertReducer = testReducer(searchReducer);
 
 describe('reducers/search', () => {
-  it('sets progress to true when beginning a request', () => {
-    assertReducer({
-      from: {
-        errorCode: 0,
-        count: 0,
-        free: [],
-        paid: [],
-        progress: false,
-      },
-      to: {
-        errorCode: 0,
-        count: 0,
-        free: [],
-        paid: [],
-        progress: true,
-      },
-      action: createStartAction(SEARCH_SHEETMUSIC),
-    });
-  });
-
   it('lists out sheet music properties when retrieving a list of sheet music', () => {
     assertReducer({
       from: {
         errorCode: 0,
         count: 0,
         free: [],
-        paid: [],
-        progress: true,
       },
       to: {
         errorCode: 0,
@@ -65,18 +43,6 @@ describe('reducers/search', () => {
           videos: [],
           viewCount: undefined,
         }],
-        paid: [{
-          pageUrl: 'url',
-          detailedDescription: 'some description',
-          musicFormat: 'music format',
-          source: 'source',
-          shortDescription: 'short description',
-          instrument: 'instrument',
-          level: null,
-          thumbnailUrl: 'thumbnail',
-          title: 'title',
-        }],
-        progress: false,
       },
       action: createDoneAction(SEARCH_SHEETMUSIC, {
         count: 1234,
@@ -92,17 +58,6 @@ describe('reducers/search', () => {
           date: '',
           title: 'Philadelphia',
         }],
-        paid: [{
-          page_url: 'url',
-          detailed_description: 'some description',
-          music_format: 'music format',
-          source: 'source',
-          short_description: 'short description',
-          instrument: 'instrument',
-          level: null,
-          thumbnail_url: 'thumbnail',
-          title: 'title',
-        }],
       }),
     });
   });
@@ -113,15 +68,11 @@ describe('reducers/search', () => {
         errorCode: 0,
         count: 0,
         free: [],
-        paid: [],
-        progress: true,
       },
       to: {
         errorCode: 123,
         count: 0,
         free: [],
-        paid: [],
-        progress: false,
       },
       action: createErrorAction(SEARCH_SHEETMUSIC, 123),
     });

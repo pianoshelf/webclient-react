@@ -1,15 +1,11 @@
 
 import React from 'react';
 
-import SearchResult from './SearchResult';
+import SheetMusicResult from '../../Misc/SheetMusicResult';
 
 export default function BrowseList({ sheetMusicList }) {
   const listElements = sheetMusicList.map((sheetMusic, index) => (
-    <SearchResult sheetMusic={sheetMusic}
-      key={sheetMusic.id}
-      firstItem={index === 0}
-      lastItem={index === sheetMusicList.length - 1}
-    />
+    <SheetMusicResult sheetMusic={sheetMusic} key={index} />
   ));
 
   return (

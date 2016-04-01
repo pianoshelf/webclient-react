@@ -1,0 +1,64 @@
+
+.misc-checkbox__input
+  position: absolute
+  left: -9999px
+
+.misc-checkbox__group
+  display: block
+  margin-top: 0.8em
+  margin-bottom: 0.8em
+  height: 1.6em
+  position: relative
+  &:hover .misc-checkbox__checkbox:before
+    opacity: 0.2
+
+.misc-checkbox__checkbox
+  display: inline-block
+  width: calc(2.0em + 1px)
+  height: calc(2.0em + 1px)
+  background-color: #fff
+  border: 1px solid $grey-normal
+  position: absolute
+  top: 0
+  left: 0
+  transition-duration: 0.1s
+  transition-property: background-color border-color
+  &:before
+    content: ''
+    opacity: 0
+    position: absolute
+    left: 0.7em
+    top: 0.08em
+    width: 0.6em
+    height: 1.4em
+    border-width: 0 0.2em 0.2em 0
+    border-style: solid
+    border-color: $blue-light
+    transform: rotate(45deg)
+    transition-duration: 0.1s
+    transition-property: opacity
+  .misc-checkbox__input:checked + &
+    background-color: $grey-light
+    border-color: $grey-light
+    &:before
+      opacity: 1
+  .misc-checkbox__input:focus + &
+    border-color: $grey-dark
+
+.misc-checkbox__label
+  display: block
+  color: $grey-text-normal
+  font-size: 0.9em
+  font-weight: $weight-normal
+  text-transform: uppercase
+  padding-left: 3em
+  line-height: 2.4em
+  height: 1.6em
+  user-select: none
+
+.misc-checkbox__icon
+  margin-right: 0.4em
+
+.misc-checkbox__clear
+  clear: both
+

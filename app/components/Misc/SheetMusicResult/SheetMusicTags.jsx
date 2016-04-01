@@ -3,7 +3,7 @@ import React from 'react';
 
 export default function SheetMusicTags({ tags }) {
   const mappedElements = tags.map((tag, index) => (
-    <li className="search__result-property" key={index}>{tag}</li>
+    <li className="sheet-music-result__property" key={index}>{tag}</li>
   ));
   return (
     <span>

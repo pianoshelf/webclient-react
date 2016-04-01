@@ -2,6 +2,7 @@
 
 // Import polyfills first
 import 'babel-polyfill';
+import 'whatwg-fetch';
 
 // Import external modules
 import base64 from 'base-64';

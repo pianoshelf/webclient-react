@@ -1,10 +1,14 @@
 
+// Import polyfills first
+import 'babel-polyfill';
+
 // Import external modules
 import base64 from 'base-64';
 import bodyParser from 'body-parser';
 import bunyan from 'bunyan';
 import cookieParser from 'cookie-parser';
 import express from 'express';
+import fetch from 'node-fetch';
 import fs from 'fs';
 import Helmet from 'react-helmet';
 import http from 'http';
@@ -43,6 +47,10 @@ const log = bunyan.createLogger({
   ],
 });
 
+// Globalize fetch
+global.fetch = fetch;
+global.Headers = fetch.Headers;
+
 // Add our isomorphic constants
 global.__SERVER__ = true;
 global.__CLIENT__ = false;
@@ -52,7 +60,7 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // Proxy API requests to the python server if we're on a dev environment or if we specified the
 // override
-if (process.env.PROXY_API === 'true' || process.env.NODE_ENV !== 'production') {
+if (process.env.DOCKER !== 'true' || process.env.NODE_ENV !== 'production') {
   const proxy = httpProxy.createProxyServer({});
   app.use((req, res, next) => {
     if (/^\/api/.test(req.url)) {

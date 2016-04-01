@@ -9,7 +9,6 @@ import config from '../../config';
 
 /**
  * Sets the auth token cookie.
- *
  * @param {string} authToken The auth token.
  */
 export function setAuthToken(authToken) {

@@ -1,11 +1,4 @@
 
-@import 'variables/globals'
-@import 'variables/fonts'
-@import 'variables/colors'
-@import 'variables/buttons'
-
-@import 'responsivecontainer'
-
 .search
   min-height: 100vh
 
@@ -19,9 +12,6 @@
   +when-tablet
     font-size: 18px
     padding: 30px 10px 10px 10px
-
-.search__browse-search-input-icon
-  padding-right: 5px
 
 .search__results-panel
   display: table
@@ -83,7 +73,7 @@
 
 .search__result-wrapper--with-filters
   +when-tablet
-    border-left: $button-border-width solid $grey-normal
+    border-left: $button-border-width solid $grey-text-light
     width: calc(100% - 170px)
 
 .search__spinner
@@ -119,113 +109,6 @@
   color: $grey-text-dark
   font-size: 18px
   text-transform: uppercase
-  // font-family: $title-font
-
-.search__result
-  position: relative
-  display: block
-  color: #000
-  border-bottom: $button-border-width solid $grey-normal
-  padding: 10px 0 5px 0
-  transition: 0.2s border
-  clear: both
-  min-height: 100px
-  &:hover, &:focus
-    border-bottom-color: $grey-text-normal
-    .search__result-right-arrow
-      color: $grey-text-dark
-    .search__result-property
-      opacity: 1
-
-.search__result--paid
-  border-bottom: none
-
-.search__result--first-item
-  padding-top: 5px
-
-.search__result--last-item
-  border-bottom: 0
-  padding-bottom: 5px
-
-.search__result-right-arrow
-  display: block
-  position: absolute
-  right: 0
-  top: 50%
-  margin-top: -0.5em
-  font-size: 22px
-  color: $grey-dark
-
-.search__result-thumbnail
-  float: left
-  width: 60px
-  height: 80px
-  margin-right: 10px
-
-.search__result-thumbnail--paid
-  width: 50px
-  height: 70px
-
-.search__result-details
-  padding-left: 70px
-  padding-bottom: 5px
-
-.search__result-details--paid
-  padding-left: 60px
-
-.search__result-title
-  font-family: $title-font
-  padding-bottom: 5px
-  font-size: 15px
-  +when-tablet
-    font-size: 16px
-
-.search__result-description
-  padding-bottom: 5px
-  font-size: 12px
-  +when-tablet
-    font-size: 13px
-
-.search__result-info
-  padding-bottom: 5px
-  font-size: 14px
-  +when-tablet
-    font-size: 15px
-
-.search__result-properties
-  padding: 0
-  margin: 0
-  font-size: 12px
-  list-style: none
-  +when-tablet
-    font-size: 15px
-
-.search__result-property
-  display: inline-block
-  background-color: $grey-light
-  padding: 2px 5px
-  margin: 0 5px 5px 0
-  border-radius: 5px
-  opacity: 0.7
-  transition: 0.1s opacity
-
-.search__result-property--blue
-  background-color: lighten($blue-light, 10%)
-
-.search__result-property--green
-  background-color: lighten($green, 10%)
-
-.search__result-property--orange
-  background-color: lighten($orange, 10%)
-
-.search__result-property--red
-  background-color: lighten($red, 10%)
-
-.search__result-property--dark
-  background-color: $grey-normal
-
-.search__result-property-icon
-  width: 20px
 
 .search__pagination
   width: 200px
