@@ -6,10 +6,10 @@ import React from 'react';
 
 export default class Checkbox extends React.Component {
   render() {
-    const { children, className, icon } = this.props;
+    const { children, className, icon, required } = this.props;
     const props = omit(
       this.props,
-      ['children', 'className', 'icon']
+      ['children', 'className', 'icon', 'required']
     );
 
     const groupClassName = classNames('misc-checkbox__group', className);
@@ -30,6 +30,9 @@ export default class Checkbox extends React.Component {
           </If>
           <span>
             {children}
+            <If condition={required}>
+              <span className="misc-checkbox__label-star">*</span>
+            </If>
           </span>
         </span>
         <span className="misc-checkbox__clear" />

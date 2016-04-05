@@ -37,10 +37,10 @@ export default class TextArea extends React.Component {
   }
 
   render() {
-    const { errorWhen, placeholder, className, icon } = this.props;
+    const { errorWhen, placeholder, className, icon, required } = this.props;
     const props = omit(
       this.props,
-      ['errorWhen', 'focusOnLoad', 'placeholder', 'className', 'icon']
+      ['errorWhen', 'focusOnLoad', 'placeholder', 'className', 'icon', 'required']
     );
 
     const groupClassName = classNames('misc-textarea__group', className);
@@ -67,6 +67,9 @@ export default class TextArea extends React.Component {
           </If>
           <span>
             {placeholder}
+            <If condition={required}>
+              <span className="misc-input__label-star">*</span>
+            </If>
           </span>
         </label>
       </div>

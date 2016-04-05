@@ -124,7 +124,7 @@ export default function getRoutes(store) {
       <Route component={Settings} onEnter={requireAuth}>
         <Route path="/settings/profile" component={SettingsProfile} onEnter={requireAuth} />
         <Route path="/settings/password" component={SettingsPassword} onEnter={requireAuth} />
-        <Redirect path="/settings" to="/settings/profile" />
+        <Redirect path="/settings" to="/settings/password" />
       </Route>
 
       { /* Dashboard route */ }

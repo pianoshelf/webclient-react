@@ -102,11 +102,16 @@ $navbar-logo-height-mobile: 67.5px
   display: inline-block
   position: absolute
   border: 0
+  font-size: 20px
+  text-align: center
+  color: $grey-text-dark
   height: 26px
   width: 26px
+  line-height: 26px
   +when-tablet
     height: 39px
     width: 39px
+    line-height: 39px
 
 .navbar__user-text
   display: inline-block
@@ -121,6 +126,10 @@ $navbar-logo-height-mobile: 67.5px
     font-size: 18px
     line-height: $navbar-height - 24px
     height: $navbar-height - 24px
+  &--with-avatar
+    padding-left: 26px
+    +when-tablet
+      padding-left: 39px
 
 .navbar__user-text-down-arrow
   display: inline-block

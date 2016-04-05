@@ -24,6 +24,9 @@ export default class Input extends React.Component {
 
     // Class name of the input
     className: React.PropTypes.string,
+
+    // Whether this field is required
+    required: React.PropTypes.bool,
   };
 
   static defaultProps = {
@@ -38,10 +41,10 @@ export default class Input extends React.Component {
   }
 
   render() {
-    const { errorWhen, placeholder, className, icon } = this.props;
+    const { errorWhen, placeholder, className, icon, required } = this.props;
     const props = omit(
       this.props,
-      ['errorWhen', 'focusOnLoad', 'placeholder', 'className', 'icon']
+      ['errorWhen', 'focusOnLoad', 'placeholder', 'className', 'icon', 'required']
     );
 
     const groupClassName = classNames('misc-input__group', className);
@@ -68,6 +71,9 @@ export default class Input extends React.Component {
           </If>
           <span>
             {placeholder}
+            <If condition={required}>
+              <span className="misc-input__label-star">*</span>
+            </If>
           </span>
         </label>
       </div>

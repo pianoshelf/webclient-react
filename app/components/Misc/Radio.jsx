@@ -6,10 +6,10 @@ import React from 'react';
 
 export default class Radio extends React.Component {
   render() {
-    const { children, className, icon } = this.props;
+    const { children, className, icon, required } = this.props;
     const props = omit(
       this.props,
-      ['children', 'className', 'icon']
+      ['children', 'className', 'icon', 'required']
     );
 
     const groupClassName = classNames('misc-radio__group', className);
@@ -30,6 +30,9 @@ export default class Radio extends React.Component {
           </If>
           <span>
             {children}
+            <If condition={required}>
+              <span className="misc-radio__label-star">*</span>
+            </If>
           </span>
         </span>
         <span className="misc-radio__clear" />
