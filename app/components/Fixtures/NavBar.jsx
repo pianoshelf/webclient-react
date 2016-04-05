@@ -79,10 +79,15 @@ export default class NavBar extends React.Component {
   }
 
   renderLoggedInWidgets() {
-    const { username, firstName, lastName } = this.props.user;
-    // TODO: Remove this!!!!!
-    const avatar = 'http://www.pethealthnetwork.com/sites/default/files/8-common-myths-about-' +
-      'surgery-and-cats-483673863.jpg';
+    const { username, firstName, lastName, profilePicture } = this.props.user;
+
+    const shouldShowThumbnail = profilePicture !== '' &&
+                                profilePicture !== '/images/profile/user_small.png';
+
+    const userTextClass = classNames('navbar__user-text', {
+      'navbar__user-text--with-avatar': !shouldShowThumbnail,
+    });
+
     return (
       <div className="navbar__component-container">
         <Link to="/browse" className={this.getButtonClass()}>
@@ -93,8 +98,12 @@ export default class NavBar extends React.Component {
         </Link>
         <div className="navbar__user-widget">
           <a href="#" className="navbar__user-widget-link" onClick={this.handleToggleMenu}>
-            <img src={avatar} className="navbar__user-text-avatar" />
-            <span href="#profile" className="navbar__user-text">
+            <If condition={shouldShowThumbnail}>
+              <img src={profilePicture} className="navbar__user-text-avatar" />
+            <Else />
+              <FontAwesome name="music" className="navbar__user-text-avatar" />
+            </If>
+            <span className={userTextClass}>
               <If condition={firstName === '' || lastName === ''}>
                 {username}
               <Else />
@@ -110,12 +119,14 @@ export default class NavBar extends React.Component {
                   View Profile
                 </Link>
               </li>
-              <li className="navbar__user-widget-list-item">
-                <Link className="navbar__user-widget-list-item-link" to="/settings">
-                  <FontAwesome className="navbar__user-widget-list-icon" name="gear" />
-                  Profile Settings
-                </Link>
-              </li>
+              <If condition={false}>
+                <li className="navbar__user-widget-list-item">
+                  <Link className="navbar__user-widget-list-item-link" to="/settings">
+                    <FontAwesome className="navbar__user-widget-list-icon" name="gear" />
+                    Profile Settings
+                  </Link>
+                </li>
+              </If>
               <li className="navbar__user-widget-list-item">
                 <Link className="navbar__user-widget-list-item-link" to="/logout">
                   <FontAwesome className="navbar__user-widget-list-icon" name="sign-out" />

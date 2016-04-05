@@ -2,10 +2,10 @@
 'use strict'; // eslint-disable-line strict
 
 // Import modules
-let webpack = require('webpack');
-let path = require('path');
+const webpack = require('webpack');
+const path = require('path');
 
-let config = require('./config');
+const config = require('./config');
 
 module.exports = {
 
@@ -14,7 +14,7 @@ module.exports = {
   context: __dirname,
   devtool: 'none',
   debug: false,
-  entry: [ config.files.client.entry ],
+  entry: [config.files.client.entry],
 
   output: {
     path: path.join(__dirname, config.files.staticAssets, config.files.client.out),
@@ -43,6 +43,7 @@ module.exports = {
   module: {
     loaders: [
       { test: /\.jsx?$/, loaders: ['babel'], include: [path.resolve(__dirname, 'app')] },
+      { test: /\.json$/, loaders: ['json'] },
     ],
   },
 
@@ -59,5 +60,4 @@ module.exports = {
   },
 
 };
-
 

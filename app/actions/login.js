@@ -21,12 +21,21 @@ import {
  */
 
 function sanitizeUserInfo(user) {
-  const { auth_token, username, first_name, last_name, email, is_superuser } = user;
+  const {
+    auth_token,
+    username,
+    first_name,
+    last_name,
+    email,
+    is_superuser,
+    profile_picture,
+  } = user;
   return {
     authToken: auth_token,
     firstName: first_name,
     lastName: last_name,
     isSuperuser: is_superuser,
+    profilePicture: profile_picture,
     username,
     email,
   };

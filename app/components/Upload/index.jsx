@@ -1,4 +1,5 @@
 
+import FontAwesome from 'react-fontawesome';
 import React from 'react';
 import { reduxForm } from 'redux-form';
 
@@ -82,6 +83,20 @@ export default class Upload extends React.Component {
     }
   }
 
+  getErrorMessage() {
+    const { errorCode } = this.props;
+    switch (errorCode) {
+      case errors.NO_FILE:
+        return 'Please upload a file before submitting.';
+      case errors.NO_TITLE:
+        return 'Please enter a title for the sheet music.';
+      case errors.NO_COMPOSER:
+        return 'Please enter a composer for the sheet music.';
+      default:
+        return null;
+    }
+  }
+
   handleUpload = file => {
     const { fields } = this.props;
     fields.file.onChange(file);
@@ -141,6 +156,7 @@ export default class Upload extends React.Component {
               icon="file-o"
               {...fields.title}
               placeholder="Title"
+              required
             />
           </Field>
           <Field
@@ -152,6 +168,7 @@ export default class Upload extends React.Component {
               icon="user"
               {...fields.composer}
               placeholder="Original Artist / Composer"
+              required
             />
           </Field>
           <Field
@@ -227,15 +244,47 @@ export default class Upload extends React.Component {
   }
 
   renderSubmit() {
-    const { handleSubmit } = this.props;
+    const { fields, handleSubmit } = this.props;
     return (
       <div className="upload__submit">
         <Title step={3} text="Submit" />
         <div>
-          <button className="upload__submit-button" onClick={handleSubmit(this.handleSubmit)}>
+          <button
+            className="upload__submit-button"
+            onClick={handleSubmit(this.handleSubmit)}
+            disabled={!fields.file.value}
+          >
             Upload
           </button>
+          {this.renderSubmitLabel()}
         </div>
+      </div>
+    );
+  }
+
+  renderSubmitLabel() {
+    const { errorCode, fields } = this.props;
+
+    if (!fields.file.value) {
+      return (
+        <div className="upload__submit-label">
+          <FontAwesome name="info-circle" className="upload__submit-label-icon" />
+          Please upload a file before submitting.
+        </div>
+      );
+    }
+
+    if (!errorCode) {
+      return null;
+    }
+
+    return (
+      <div className="upload__submit-label">
+        <FontAwesome
+          name="close"
+          className="upload__submit-label-icon upload__submit-label-icon--error"
+        />
+        {this.getErrorMessage()}
       </div>
     );
   }

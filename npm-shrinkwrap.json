@@ -1200,14 +1200,31 @@
       }
     },
     "commonmark": {
-      "version": "0.19.0",
-      "from": "commonmark@>=0.19.0 <0.20.0",
-      "resolved": "https://registry.npmjs.org/commonmark/-/commonmark-0.19.0.tgz"
+      "version": "0.24.0",
+      "from": "commonmark@>=0.24.0 <0.25.0",
+      "resolved": "https://registry.npmjs.org/commonmark/-/commonmark-0.24.0.tgz"
     },
     "commonmark-react-renderer": {
-      "version": "2.2.2",
-      "from": "commonmark-react-renderer@>=2.0.0 <3.0.0",
-      "resolved": "https://registry.npmjs.org/commonmark-react-renderer/-/commonmark-react-renderer-2.2.2.tgz"
+      "version": "4.1.2",
+      "from": "commonmark-react-renderer@>=4.1.1 <5.0.0",
+      "resolved": "https://registry.npmjs.org/commonmark-react-renderer/-/commonmark-react-renderer-4.1.2.tgz",
+      "dependencies": {
+        "lodash.assign": {
+          "version": "4.0.7",
+          "from": "lodash.assign@>=4.0.1 <5.0.0",
+          "resolved": "https://registry.npmjs.org/lodash.assign/-/lodash.assign-4.0.7.tgz"
+        },
+        "lodash.isplainobject": {
+          "version": "4.0.4",
+          "from": "lodash.isplainobject@>=4.0.0 <5.0.0",
+          "resolved": "https://registry.npmjs.org/lodash.isplainobject/-/lodash.isplainobject-4.0.4.tgz"
+        },
+        "lodash.keys": {
+          "version": "4.0.6",
+          "from": "lodash.keys@>=4.0.0 <5.0.0",
+          "resolved": "https://registry.npmjs.org/lodash.keys/-/lodash.keys-4.0.6.tgz"
+        }
+      }
     },
     "component-bind": {
       "version": "1.0.0",
@@ -3555,6 +3572,11 @@
       "from": "imurmurhash@>=0.1.4 <0.2.0",
       "resolved": "https://registry.npmjs.org/imurmurhash/-/imurmurhash-0.1.4.tgz"
     },
+    "in-publish": {
+      "version": "2.0.0",
+      "from": "in-publish@>=2.0.0 <3.0.0",
+      "resolved": "https://registry.npmjs.org/in-publish/-/in-publish-2.0.0.tgz"
+    },
     "indent-string": {
       "version": "2.1.0",
       "from": "indent-string@>=2.1.0 <3.0.0",
@@ -4319,6 +4341,11 @@
       "from": "lodash.repeat@>=4.0.0 <5.0.0",
       "resolved": "https://registry.npmjs.org/lodash.repeat/-/lodash.repeat-4.0.0.tgz"
     },
+    "lodash.rest": {
+      "version": "4.0.2",
+      "from": "lodash.rest@>=4.0.0 <5.0.0",
+      "resolved": "https://registry.npmjs.org/lodash.rest/-/lodash.rest-4.0.2.tgz"
+    },
     "lodash.restparam": {
       "version": "3.6.1",
       "from": "lodash.restparam@>=3.0.0 <4.0.0",
@@ -4403,6 +4430,11 @@
       "version": "0.0.1",
       "from": "matches-selector@0.0.1",
       "resolved": "https://registry.npmjs.org/matches-selector/-/matches-selector-0.0.1.tgz"
+    },
+    "mdurl": {
+      "version": "1.0.1",
+      "from": "mdurl@>=1.0.1 <1.1.0",
+      "resolved": "https://registry.npmjs.org/mdurl/-/mdurl-1.0.1.tgz"
     },
     "media-typer": {
       "version": "0.3.0",
@@ -5229,9 +5261,9 @@
       "resolved": "https://registry.npmjs.org/react-lazy-cache/-/react-lazy-cache-3.0.1.tgz"
     },
     "react-markdown": {
-      "version": "1.0.5",
-      "from": "react-markdown@1.0.5",
-      "resolved": "https://registry.npmjs.org/react-markdown/-/react-markdown-1.0.5.tgz"
+      "version": "2.1.1",
+      "from": "react-markdown@2.1.1",
+      "resolved": "https://registry.npmjs.org/react-markdown/-/react-markdown-2.1.1.tgz"
     },
     "react-mixin": {
       "version": "1.7.0",
@@ -6013,6 +6045,11 @@
       "from": "string-width@>=1.0.1 <2.0.0",
       "resolved": "https://registry.npmjs.org/string-width/-/string-width-1.0.1.tgz"
     },
+    "string.prototype.repeat": {
+      "version": "0.2.0",
+      "from": "string.prototype.repeat@>=0.2.0 <0.3.0",
+      "resolved": "https://registry.npmjs.org/string.prototype.repeat/-/string.prototype.repeat-0.2.0.tgz"
+    },
     "stringstream": {
       "version": "0.0.5",
       "from": "stringstream@>=0.0.4 <0.1.0",
@@ -6769,6 +6806,11 @@
       "version": "3.1.0",
       "from": "xregexp@>=3.0.0 <4.0.0",
       "resolved": "https://registry.npmjs.org/xregexp/-/xregexp-3.1.0.tgz"
+    },
+    "xss-filters": {
+      "version": "1.2.6",
+      "from": "xss-filters@>=1.2.6 <2.0.0",
+      "resolved": "https://registry.npmjs.org/xss-filters/-/xss-filters-1.2.6.tgz"
     },
     "xtend": {
       "version": "4.0.1",

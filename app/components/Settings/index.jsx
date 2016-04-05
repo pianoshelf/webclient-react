@@ -17,7 +17,7 @@ export default class Settings extends React.Component {
     return (
       <MenuList title="Settings">
         <MenuItem name="Profile" link="/settings/profile/" />
-        <MenuItem name="Password" link="/settings/password/" />
+        <MenuItem name="Change Password" link="/settings/password/" />
       </MenuList>
     );
   }

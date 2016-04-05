@@ -103,9 +103,6 @@
 .upload__options-input-field-arrangers
   margin: 20px 0 20px 20px
 
-.upload__options-input-field-arrangers-input
-  // bottom: 1.4em
-
 .upload__options-input-field-tip
   display: block
   +when-tablet
@@ -135,6 +132,18 @@
   padding-bottom: 20px
 
 .upload__submit-button
+  display: inline-block
   +clickable($blue-light)
   padding: 5px 30px
+
+.upload__submit-label
+  display: inline-block
+  padding-left: 20px
+  color: $grey-text-normal
+
+.upload__submit-label-icon
+  padding-right: 10px
+  color: $grey-text-light
+  &--error
+    color: $red
 
