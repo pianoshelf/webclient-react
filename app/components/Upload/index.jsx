@@ -1,6 +1,7 @@
 
 import FontAwesome from 'react-fontawesome';
 import React from 'react';
+import { asyncConnect } from 'redux-async-connect';
 import { reduxForm } from 'redux-form';
 
 // Import other components
@@ -16,7 +17,7 @@ import NavBar from '../Fixtures/NavBar';
 import Footer from '../Fixtures/Footer';
 import ResponsiveContainer from '../Misc/ResponsiveContainer';
 import { errors } from '../../utils/constants';
-import { uploadFile } from '../../actions/upload';
+import { clearErrors, uploadFile } from '../../actions/upload';
 
 const SELF_ARRANGED = 'SELF_ARRANGED';
 const NOT_SELF_ARRANGED = 'NOT_SELF_ARRANGED';
@@ -36,12 +37,16 @@ const FIELD_NAMES = [
 
 const MAX_FILE_SIZE = 10000000;
 
+@asyncConnect({
+  promise: (params, { store }) => store.dispatch(clearErrors()),
+})
 @reduxForm(
   {
     form: 'upload',
     fields: FIELD_NAMES,
     initialValues: { arrangedBy: SELF_ARRANGED },
     validate(values) {
+      // TODO: Put all this in our own redux actions instead of relying on redux-form
       const validationErrors = {};
 
       if (values.file && values.file.length > 0) {

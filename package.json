@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "clean": "gulp clean",
-    "compile": "gulp compile",
+    "compile": "NODE_ENV=production gulp compile",
     "lint": "gulp build:lint",
     "production": "NODE_ENV=production node build/server",
     "production:docker": "DOCKER=true NODE_ENV=production node build/server",
@@ -33,6 +33,9 @@
     "babel-eslint": "5.0.0-beta10",
     "babel-loader": "^6.2.1",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-node-env-inline": "^6.5.0",
+    "babel-plugin-transform-react-constant-elements": "^6.5.0",
+    "babel-plugin-transform-react-inline-elements": "^6.6.5",
     "babel-preset-es2015": "^6.5.0",
     "babel-preset-node5": "^10.3.0",
     "babel-preset-react": "^6.5.0",

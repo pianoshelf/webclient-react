@@ -3,7 +3,7 @@ import createAction from '../utils/createAction';
 import { actionError } from '../utils/actionUtils';
 import { errors } from '../utils/constants';
 import { upload } from '../utils/api';
-import { UPLOAD_FILE, UPLOAD_RESET_ERROR } from '../constants/upload';
+import { UPLOAD_FILE, UPLOAD_CLEAR_ERROR } from '../constants/upload';
 
 function createFormData(fileData) {
   const data = new FormData();
@@ -41,7 +41,7 @@ function createFormData(fileData) {
   return data;
 }
 
-export const resetErrorCode = createAction(UPLOAD_RESET_ERROR);
+export const clearErrors = createAction(UPLOAD_CLEAR_ERROR);
 
 export const uploadFile = createAction(
   UPLOAD_FILE,

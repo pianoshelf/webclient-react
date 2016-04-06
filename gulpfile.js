@@ -98,7 +98,21 @@ gulp.task('build:server', () =>
     .pipe(cache('src:server'))
     .pipe(plumber())
     .pipe(sourcemaps.init())
-    .pipe(babel(config.build.babel.server))
+    .pipe(babel(config.build.babel.server.dev))
+    .pipe(sourcemaps.write('.'))
+    .pipe(size({ title: 'Server JS' }))
+    .pipe(gulp.dest(config.files.server.out))
+);
+
+/**
+ * Compile our server files for production.
+ */
+gulp.task('build:server:prod', () =>
+  gulp.src(config.files.server.src)
+    .pipe(cache('src:server'))
+    .pipe(plumber())
+    .pipe(sourcemaps.init())
+    .pipe(babel(config.build.babel.server.prod))
     .pipe(sourcemaps.write('.'))
     .pipe(size({ title: 'Server JS' }))
     .pipe(gulp.dest(config.files.server.out))
@@ -194,7 +208,7 @@ gulp.task('compile', callback => {
     'build:images',
     'build:css:prod',
     'build:client:prod',
-    'build:server',
+    'build:server:prod',
   ], 'build:cache', callback);
 });
 
@@ -206,7 +220,7 @@ gulp.task('compile:nolint', callback => {
     'build:images',
     'build:css:prod',
     'build:client:prod',
-    'build:server',
+    'build:server:prod',
   ], 'build:cache', callback);
 });
 

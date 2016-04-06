@@ -1,14 +1,15 @@
 
 import createReducer from '../utils/createReducer';
 
-import { UPLOAD_FILE, UPLOAD_RESET_ERROR } from '../constants/upload';
+import { UPLOAD_FILE, UPLOAD_CLEAR_ERROR } from '../constants/upload';
+import { success } from '../utils/constants';
 
 const initialResults = {
   errorCode: 0,
 };
 
 export default createReducer(initialResults, {
-  [UPLOAD_RESET_ERROR]: state => ({
+  [UPLOAD_CLEAR_ERROR]: state => ({
     ...state,
     errorCode: 0,
   }),
@@ -16,7 +17,7 @@ export default createReducer(initialResults, {
   [UPLOAD_FILE]: {
     done() {
       return {
-        errorCode: 0,
+        errorCode: success.UPLOADED,
       };
     },
     error(state, errorCode) {

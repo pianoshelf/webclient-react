@@ -62,12 +62,41 @@ module.exports = {
   build: {
     babel: {
       client: {
-        presets: ['react', 'es2015', 'stage-0'],
-        plugins: ['transform-decorators-legacy', 'jsx-control-statements'],
+        dev: {
+          presets: ['react', 'es2015', 'stage-0'],
+          plugins: [
+            'transform-decorators-legacy',
+            'jsx-control-statements',
+          ],
+        },
+        prod: {
+          presets: ['react', 'es2015', 'stage-0'],
+          plugins: [
+            'transform-decorators-legacy',
+            'jsx-control-statements',
+            'transform-react-inline-elements',
+            'transform-react-constant-elements',
+          ],
+        },
       },
       server: {
-        presets: ['react', 'node5', 'stage-0'],
-        plugins: ['transform-decorators-legacy', 'jsx-control-statements'],
+        dev: {
+          presets: ['react', 'node5', 'stage-0'],
+          plugins: [
+            'transform-decorators-legacy',
+            'jsx-control-statements',
+          ],
+        },
+        prod: {
+          presets: ['react', 'node5', 'stage-0'],
+          plugins: [
+            'transform-decorators-legacy',
+            'jsx-control-statements',
+            'transform-node-env-inline',
+            'transform-react-inline-elements',
+            'transform-react-constant-elements',
+          ],
+        },
       },
     },
     sass: {
