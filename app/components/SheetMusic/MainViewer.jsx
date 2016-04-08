@@ -97,10 +97,10 @@ export default class MainViewer extends React.Component {
           dragging
           slidesToShow={1}
           slidesToScroll={1}
-          slideIndex={this.props.slide}
           slideWidth={1}
           easing="easeOutQuad"
           edgeEasing="easeOutQuad"
+          slideIndex={this.props.slide}
           decorators={decorators}
         >
           {imageElements}

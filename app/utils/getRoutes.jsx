@@ -17,7 +17,6 @@ import VerifyEmail from '../components/Authentication/VerifyEmail';
 
 // Profile components
 import Profile from '../components/Profile';
-import ProfileViewer from '../components/Profile/Viewer';
 
 // Search components
 import Search from '../components/Search';
@@ -95,10 +94,8 @@ export default function getRoutes(store) {
       </Route>
 
       { /* Profile routes */ }
-      <Route component={Profile}>
-        <Route path="/user/:username" component={ProfileViewer} />
-        <Redirect from="/profile/:username" to="/user/:username" />
-      </Route>
+      <Route path="/user/:username" component={Profile} />
+      <Redirect from="/profile/:username" to="/user/:username" />
 
       { /* Search routes */ }
       <Route component={Search}>

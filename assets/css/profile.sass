@@ -3,6 +3,16 @@
   min-height: 100vh
 
 .profile__container
-  padding: $navbar-height 20px 0 20px
   min-height: calc(100vh - #{$footer-height})
+
+.profile__main-panel
+  padding-top: $navbar-height
+  height: 100px + $navbar-height
+  background-color: darken($grey-text-dark, 15%)
+  background-position: center
+  background-size: cover
+  background-repeat: no-repeat
+  color: #fff
+  +when-tablet
+    height: 200px + $navbar-height
 

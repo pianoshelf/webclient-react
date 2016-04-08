@@ -4674,9 +4674,9 @@
       "resolved": "https://registry.npmjs.org/npmlog/-/npmlog-2.0.2.tgz"
     },
     "nuka-carousel": {
-      "version": "1.0.2",
-      "from": "nuka-carousel@>=1.0.2 <2.0.0",
-      "resolved": "https://registry.npmjs.org/nuka-carousel/-/nuka-carousel-1.0.2.tgz"
+      "version": "1.1.2",
+      "from": "nuka-carousel@1.1.2",
+      "resolved": "https://registry.npmjs.org/nuka-carousel/-/nuka-carousel-1.1.2.tgz"
     },
     "num2fraction": {
       "version": "1.2.2",

@@ -102,7 +102,7 @@
     "node-fetch": "^1.4.0",
     "node-sass": "^3.2.0",
     "normalize.css": "^3.0.3",
-    "nuka-carousel": "^1.0.2",
+    "nuka-carousel": "^1.1.2",
     "numeral": "^1.5.3",
     "qs": "^6.1.0",
     "react": "^0.14.6",

@@ -1,5 +1,6 @@
 
 import FontAwesome from 'react-fontawesome';
+import Helmet from 'react-helmet';
 import React from 'react';
 import { asyncConnect } from 'redux-async-connect';
 import { reduxForm } from 'redux-form';
@@ -297,6 +298,7 @@ export default class Upload extends React.Component {
   render() {
     return (
       <div className="upload">
+        <Helmet title="Upload Sheet Music" />
         <NavBar />
         <ResponsiveContainer className="upload__container">
           <div>

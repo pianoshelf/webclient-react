@@ -1,4 +1,5 @@
 
+import Helmet from 'react-helmet';
 import React from 'react';
 
 // Import other components
@@ -27,6 +28,7 @@ export default class Dashboard extends React.Component {
   render() {
     return (
       <div className="error">
+        <Helmet title="404 Not Found" />
         <NavBar />
         <ResponsiveContainer className="error__container">
           {this.renderError()}
