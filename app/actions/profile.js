@@ -43,7 +43,6 @@ export const updateProfilePicture = createAction(
       endpoint: '/submit/profilepicture/',
       formData: data,
     });
-    console.log(response);
     return response;
   }
 );

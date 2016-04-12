@@ -103,7 +103,6 @@ export default class Profile extends React.Component {
   };
 
   handleProfilePictureDrop = files => {
-    console.log(files[0]);
     this.props.updateProfilePicture(files[0]);
   };
 
