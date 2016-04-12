@@ -95,6 +95,7 @@ export default class ResetPasswordConfirm extends React.Component {
                   errorWhen={errorCode === errors.NO_PASSWORD ||
                     errorCode === errors.NOT_STRONG_PASSWORD}
                   focusOnLoad
+                  className="authentication__input"
                   {...fields.password1}
                 />
                 <Input
@@ -102,6 +103,7 @@ export default class ResetPasswordConfirm extends React.Component {
                   name="password2"
                   type="password"
                   errorWhen={errorCode === errors.NOT_SAME_PASSWORD}
+                  className="authentication__input"
                   {...fields.password2}
                 />
               </div>

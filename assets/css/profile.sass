@@ -1,18 +1,234 @@
 
-.profile
-  min-height: 100vh
+$profile-main-panel-height: 100px
 
 .profile__container
-  min-height: calc(100vh - #{$footer-height})
+  // min-height: calc(100vh - #{$footer-height})
 
 .profile__main-panel
-  padding-top: $navbar-height
-  height: 100px + $navbar-height
-  background-color: darken($grey-text-dark, 15%)
+  padding-top: $navbar-height-mobile
+  height: 100px + $navbar-height-mobile
+  background-image: url('../img/footer_lodyas.png')
+  background-color: #333
   background-position: center
-  background-size: cover
-  background-repeat: no-repeat
+  background-size: 400px 200px
   color: #fff
   +when-tablet
-    height: 200px + $navbar-height
+    background-size: 600px 300px
+    padding-top: $navbar-height
+    height: 150px + $navbar-height
+
+.profile__main-panel-shifter
+  position: relative;
+  top: 50px
+  +when-tablet
+    top: 75px
+
+.profile__main-avatar-container
+  height: 100px
+  text-align: center
+  position: relative
+  overflow: visible
+  +when-tablet
+    height: 150px
+    padding-left: 30px
+    text-align: left
+    float: left
+  &--active
+    .profile__main-avatar-change-avatar
+      display: table
+
+.profile__main-avatar-link
+  display: inline-block
+  position: relative
+  height: 100px
+  width: 100px
+  overflow: hidden
+  z-index: 1
+  border: 5px solid #fff
+  border-radius: 75px
+  +when-tablet
+    height: 150px
+    width: 150px
+  &--current-user
+    &:hover
+      .profile__main-avatar-change-avatar
+        display: table
+
+.profile__main-avatar
+  width: 100%
+  height: 100%
+  position: absolute
+  left: 0
+  background-color: #fff
+
+.profile__main-avatar-change-avatar
+  width: 100%
+  height: 100%
+  display: none
+  &:before
+    content: ''
+    width: 100%
+    height: 100%
+    position: absolute
+    background-color: #000
+    opacity: 0.5
+
+.profile__main-avatar-change-avatar-message
+  display: table-cell
+  position: relative
+  z-index: 1
+  text-align: center
+  vertical-align: middle
+  font-size: 18px
+  color: #fff
+
+.profile__main-avatar-change-avatar-icon
+  display: block
+  font-size: 25px
+  padding-bottom: 10px
+
+.profile__main-name-container
+  // background-color: red
+  font-family: $title-font
+  font-size: 25px
+  text-align: center
+  height: 35px
+  color: #000
+  +when-tablet
+    color: #fff
+    padding-left: 210px
+    padding-top: 30px
+    text-align: left
+    height: 75px
+
+.profile__main-name-container
+  +when-tablet
+
+
+.profile__content-panel
+  +when-tablet
+
+.profile__content-panel-user-info
+  margin: 85px 10px 10px 10px
+  padding: 5px 10px 10px 10px
+  border-bottom: 1px solid $grey-text-light
+  +when-tablet
+    border-bottom: 0
+    float: left
+    width: 210px
+    margin: 75px 0 0 0
+    padding: 0 10px 10px 10px
+    height: 100%
+
+.profile__content-user-info
+  padding: 10px 10px 0 40px
+  position: relative
+  font-size: 16px
+  color: $grey-text-dark
+  &--empty
+    color: $grey-text-normal
+
+.profile__content-user-info-icon
+  position: absolute
+  font-size: 20px
+  top: 10px
+  left: 10px
+  color: $grey-text-dark
+
+.profile__content-user-info-edit-input
+  font-size: 15px
+
+.profile__content-user-info-edit-submit
+  margin-top: 10px
+  width: 100%
+  +clickable($blue-light)
+
+.profile__content-user-info-edit
+  display: block
+  color: $grey-text-dark
+  padding-top: 5px
+  font-size: 15px
+  &:hover
+    color: $blue-light
+
+.profile__content-user-info-edit-icon
+  padding-right: 5px
+
+.profile__content-panel-content
+  +when-tablet
+    margin: 15px 0 15px 210px
+    padding: 0 20px
+    border-left: 1px solid $grey-text-light
+    min-height: calc(100vh - 310px)
+
+.profile__content-panel-content-link-list
+  text-align: center
+  padding: 0 0 10px 0
+  border-bottom: 1px solid $grey-text-light
+  margin: 0 10px 10px 10px
+  list-style: none
+  height: 40px
+  +when-tablet
+    height: 50px
+    margin: 0
+
+.profile__content-panel-content-link-item
+  display: inline-block
+  height: 30px
+  +when-tablet
+    height: 40px
+    float: left
+
+.profile__content-panel-content-link
+  margin-right: 10px
+  padding: 0 20px
+  display: block
+  font-size: 15px
+  height: 30px
+  line-height: 30px
+  color: $grey-text-dark
+  +when-tablet
+    padding: 0 30px
+    height: 40px
+    line-height: 40px
+    font-size: 17px
+  &--active
+    background-color: $grey-light
+
+.profile__content-panel-content-link-icon
+  padding-right: 10px
+
+.profile__content-upload-list, .profile__content-shelf-list
+  list-style: none
+  margin: 0 10px 10px 10px
+  padding: 0
+  +when-tablet
+    margin: 0
+
+.profile__content-not-found
+  display: block
+  padding: 50px 0
+  color: $grey-text-dark
+  text-align: center
+  text-transform: uppercase
+  font-size: 18px
+
+.profile__content-empty
+  display: block
+  padding: 20px 0
+  color: $grey-text-light
+  text-align: center
+  transition: 0.1s ease color
+  &:hover, &:focus
+    color: $grey-text-dark
+
+.profile__content-empty-icon
+  font-size: 20px
+  line-height: 2.5
+
+.profile__content-empty-message
+  font-size: 14px
+  line-height: 1.5
+
+
 

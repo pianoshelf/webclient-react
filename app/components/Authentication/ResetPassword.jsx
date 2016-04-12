@@ -76,6 +76,7 @@ export default class ResetPassword extends React.Component {
               name="email"
               errorWhen={errorCode === errors.NO_EMAIL || errorCode === errors.INVALID_EMAIL}
               focusOnLoad
+              className="authentication__input"
               {...fields.email}
             />
           </div>

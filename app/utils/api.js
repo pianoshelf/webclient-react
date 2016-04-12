@@ -62,7 +62,7 @@ function getHeaders(request) {
   headers.append('Content-Type', 'application/json');
 
   // Mirror cookies if we're on the server.
-  if (__SERVER__ && request) {
+  if (__SERVER__ && request && request.get('Cookie')) {
     headers.append('Cookie', request.get('Cookie'));
   }
 

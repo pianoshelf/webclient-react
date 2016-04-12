@@ -63,7 +63,10 @@ export const uploadFile = createAction(
 
     // Create form data and send it.
     const formData = createFormData(fileData);
-    const response = await upload('/submit/sheetmusic/', formData);
+    const response = await upload({
+      endpoint: '/submit/sheetmusic/',
+      formData,
+    });
 
     return response;
   }

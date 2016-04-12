@@ -72,13 +72,6 @@ export default class NavBar extends React.Component {
     const { user, showMenu } = this.props;
     const { username, firstName, lastName, profilePicture } = user;
 
-    const shouldShowThumbnail = profilePicture !== '' &&
-                                profilePicture !== '/images/profile/user_small.png';
-
-    const userTextClass = classNames('navbar__user-text', {
-      'navbar__user-text--with-avatar': !shouldShowThumbnail,
-    });
-
     return (
       <div className="navbar__component-container">
         <Link to="/browse" className={this.getButtonClass()}>
@@ -88,13 +81,9 @@ export default class NavBar extends React.Component {
           Upload
         </Link>
         <div className="navbar__user-widget">
-          <Link className="navbar__user-widget-link" to={`/user/${username}`}>
-            <If condition={shouldShowThumbnail}>
-              <img src={profilePicture} className="navbar__user-text-avatar" />
-            <Else />
-              <FontAwesome name="music" className="navbar__user-text-avatar" />
-            </If>
-            <span className={userTextClass}>
+          <Link className="navbar__user-widget-link" to={`/${username}`}>
+            <img src={profilePicture} className="navbar__user-text-avatar" />
+            <span className="navbar__user-text">
               <If condition={firstName === '' || lastName === ''}>
                 {username}
               <Else />

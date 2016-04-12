@@ -144,6 +144,7 @@ export default class Register extends React.Component {
               name="username"
               errorWhen={errorCode === errors.NO_USERNAME || errorCode === errors.USERNAME_TAKEN}
               focusOnLoad
+              className="authentication__input"
               {...fields.username}
             />
             <Input
@@ -151,6 +152,7 @@ export default class Register extends React.Component {
               name="email"
               errorWhen={errorCode === errors.NO_EMAIL || errorCode === errors.INVALID_EMAIL ||
                 errorCode === errors.EMAIL_ALREADY_REGISTERED}
+              className="authentication__input"
               {...fields.email}
             />
             <Input
@@ -159,6 +161,7 @@ export default class Register extends React.Component {
               type="password"
               errorWhen={errorCode === errors.NO_PASSWORD ||
                 errorCode === errors.NOT_STRONG_PASSWORD}
+              className="authentication__input"
               {...fields.password1}
             />
             <Input
@@ -166,6 +169,7 @@ export default class Register extends React.Component {
               name="password2"
               type="password"
               errorWhen={errorCode === errors.NOT_SAME_PASSWORD}
+              className="authentication__input"
               {...fields.password2}
             />
           </div>
