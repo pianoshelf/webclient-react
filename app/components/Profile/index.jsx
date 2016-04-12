@@ -99,7 +99,7 @@ export default class Profile extends React.Component {
   handleUpdateDescription = () => {
     const { fields } = this.props;
     const { description } = fields;
-    this.props.updateProfileDescription(description.value);
+    this.props.updateProfileDescription(description.value.trim());
   };
 
   handleProfilePictureDrop = files => {
