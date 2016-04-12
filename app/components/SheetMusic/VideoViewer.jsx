@@ -1,3 +1,4 @@
+
 import React from 'react';
 import withState from 'recompose/withState';
 
@@ -9,8 +10,18 @@ export default class VideoViewer extends React.Component {
     setVideo: React.PropTypes.func.isRequired,
   };
 
+  getEmbedVideoURL(youtubeId) {
+    return `https://www.youtube.com/embed/${youtubeId}`;
+  }
+
+  getThumbnailUrl(youtubeId) {
+    return `https://img.youtube.com/vi/${youtubeId}/0.jpg`;
+  }
+
   selectVideo(index) {
-    this.props.setVideo(() => index);
+    return () => {
+      this.props.setVideo(() => index);
+    };
   }
 
   render() {
@@ -18,17 +29,24 @@ export default class VideoViewer extends React.Component {
 
     const videoElements = videos.map((video, index) => (
       <span className="sheetmusic__video" key={index}>
-        <img className="video__thumbnail" src={"http://img.youtube.com/vi/" + video.youtubeId + "/0.jpg"} onClick={() => this.selectVideo(index)} title={video.title} />
+        <img
+          className="video__thumbnail"
+          src={this.getThumbnailUrl(video.youtubeId)}
+          onClick={this.selectVideo(index)}
+          title={video.title}
+        />
       </span>
     ));
 
     return (
       <span>
         <If condition={this.props.selected > -1}>
-          <iframe className="video__player"
-                  src={"https://www.youtube.com/embed/" + videos[this.props.selected].youtubeId}
-                  frameBorder="0"
-                  allowFullScreen />
+          <iframe
+            className="video__player"
+            src={this.getEmbedVideoURL(videos[this.props.selected].youtubeId)}
+            frameBorder="0"
+            allowFullScreen
+          />
         </If>
         {videoElements}
       </span>
