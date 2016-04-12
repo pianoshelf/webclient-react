@@ -79,12 +79,21 @@ $controls-height-mobile: 30px
     background-color: #000
     color: #fff
 
-.sheetmusic__controls-page-number
-  font-family: $title-font
+.sheetmusic__controls-page-number-section
+  font-family: $body-font
+  text-transform: uppercase
   text-align: center
   line-height: $controls-height-mobile
+  color: $grey-text-dark
   +when-tablet
     line-height: $controls-height
+  :fullscreen &
+    color: $grey-text-light
+
+.sheetmusic__controls-page-number
+  color: #000
+  :fullscreen &
+    color: #fff
 
 .sheetmusic__controls
   color: $grey-text-normal
@@ -131,37 +140,43 @@ $controls-height-mobile: 30px
   margin: 0 10px
 
 .sheetmusic__details-info-box-title
-  padding: 10px
+  padding: 7px 6px
   font-family: $title-font
-  font-size: 20px
-  border-bottom: $button-border-width solid $grey-normal
+  font-size: 18px
+  border-bottom: 1px solid $grey-text-light
 
 .sheetmusic__details-info-box-icon
   color: $grey-text-dark
   padding-right: 10px
 
 .sheetmusic__details-info-box-content
-  padding: 10px
+  padding: 10px 5px
 
 .sheetmusic__description
   font-size: 15px
+  color: $grey-text-dark
+  line-height: 1.5
 
 .sheetmusic__description-none
   color: $grey-text-normal
   font-style: italic
 
 .sheetmusic__detail
-  margin: 10px 0 20px 0
+  margin: 0 0 20px 0
 
 .sheetmusic__detail-title
-  font-family: $title-font
+  font-family: $body-font
   text-transform: uppercase
-  color: $grey-text-normal
-  font-weight: $weight-bold
+  color: $grey-text-dark
   padding-bottom: 5px
 
 .sheetmusic__detail-content
   font-size: 14px
+
+.sheetmusic__detail-content-link
+  color: $grey-text-dark
+  &:hover
+    color: $blue-light
 
 .sheetmusic__video iframe
   width: 100%

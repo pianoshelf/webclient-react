@@ -19,6 +19,7 @@ import { getShelf } from '../../actions/shelf';
   state => ({
     shelf: state.profile.shelf,
     profile: state.profile.profile.user,
+    inProgress: state.progress.inProgress,
   }),
 )
 export default class Shelf extends React.Component {

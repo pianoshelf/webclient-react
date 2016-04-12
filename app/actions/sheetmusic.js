@@ -275,12 +275,15 @@ export const upvoteComment = createAction(
 
 export const getSheetMusicDownloadLink = createAction(
   SHEETMUSIC_DOWNLOAD,
-  async (sheetId, request) =>
-    await get({
+  async sheetId => {
+    const response = await post({
       endpoint: '/sheetmusic/downloads/',
       params: { sheetmusic_id: sheetId },
-      request,
-    })
+    });
+
+    const url = response.payload.pdf_url;
+    return actionDone(url);
+  }
 );
 
 export const addToShelf = createAction(

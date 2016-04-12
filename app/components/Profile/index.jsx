@@ -1,10 +1,10 @@
 
 import classNames from 'classnames';
-import ReactDropzone from 'react-dropzone';
+import intersection from 'lodash/intersection';
 import FontAwesome from 'react-fontawesome';
 import Helmet from 'react-helmet';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDropzone from 'react-dropzone';
 import withState from 'recompose/withState';
 import { asyncConnect } from 'redux-async-connect';
 import { connect } from 'react-redux';
@@ -16,6 +16,7 @@ import NavBar from '../Fixtures/NavBar';
 import NotFound from '../Error/NotFound';
 import Footer from '../Fixtures/Footer';
 import ResponsiveContainer from '../Misc/ResponsiveContainer';
+import Spinner from './utils/Spinner';
 import {
   getProfile,
   makeDescriptionEditable,
@@ -39,6 +40,7 @@ const NAVBAR_DISAPPEARING_OFFSET = 50;
     profile: state.profile.profile.user,
     errorCode: state.profile.profile.errorCode,
     editableDescription: state.profile.profile.editableDescription,
+    inProgress: state.progress.inProgress,
   }),
   {
     makeDescriptionEditable,
@@ -113,15 +115,18 @@ export default class Profile extends React.Component {
 
     if (displayName) {
       return (
-        <div className="profile__main-name-container">
+        <div className="profile__main-name">
           {displayName}
+          <span className="profile__main-name-username">
+            @{username}
+          </span>
         </div>
       );
     }
 
     return (
-      <div className="profile__main-name-container">
-        {username}
+      <div className="profile__main-name profile__main-name--only-username">
+        @{username}
       </div>
     );
   }
@@ -239,10 +244,18 @@ export default class Profile extends React.Component {
   }
 
   renderContentPanel() {
+    const inProgress = intersection(
+      this.props.inProgress,
+      ['getProfile', 'getUploadsForUser', 'getShelf']
+    ).length > 0;
+
     return (
       <ResponsiveContainer className="profile__content-panel">
         {this.renderUserInfo()}
         <div className="profile__content-panel-content">
+          <If condition={inProgress}>
+            <Spinner />
+          </If>
           {this.props.children}
         </div>
       </ResponsiveContainer>

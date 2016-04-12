@@ -5,6 +5,7 @@ import React from 'react';
 import times from 'lodash/times';
 import { asyncConnect } from 'redux-async-connect';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 
 import Detail from './utils/Detail';
 import InfoBox from './utils/InfoBox';
@@ -12,8 +13,13 @@ import LoadingScreen from './utils/LoadingScreen';
 import MainViewer from './MainViewer';
 import ResponsiveContainer from '../Misc/ResponsiveContainer';
 import Comments from './comments/Comments';
+import { isActionError } from '../../utils/actionUtils';
 import { getDifficultyText } from '../../utils/sheetMusicUtils';
-import { getSheetMusic, getComments } from '../../actions/sheetmusic';
+import {
+  getSheetMusic,
+  getComments,
+  getSheetMusicDownloadLink,
+} from '../../actions/sheetmusic';
 
 @asyncConnect({
   promise: ({ id }, { store, request }) => Promise.all([
@@ -47,6 +53,16 @@ export default class Viewer extends React.Component {
     inProgress: React.PropTypes.array.isRequired,
     loggedIn: React.PropTypes.bool.isRequired,
     user: React.PropTypes.object.isRequired,
+  };
+
+  handleDownload = () => {
+    // Call action directly and get resulting URL.
+    getSheetMusicDownloadLink(this.props.params.id)(response => {
+      if (!isActionError(response) && response.payload) {
+        const url = response.payload;
+        window.location.assign(url);
+      }
+    });
   };
 
   handleShowMoreVideos = event => {
@@ -141,7 +157,9 @@ export default class Viewer extends React.Component {
         </If>
         <If condition={result.submittedBy}>
           <Detail title="Submitted by">
-            {result.submittedBy}
+            <Link to={`/${result.submittedBy}`} className="sheetmusic__detail-content-link">
+              {result.submittedBy}
+            </Link>
           </Detail>
         </If>
         <If condition={result.musicStyle}>
@@ -175,7 +193,11 @@ export default class Viewer extends React.Component {
           <LoadingScreen />
         <Else />
           <div>
-            <MainViewer ref="mainViewer" images={this.props.result.images} />
+            <MainViewer
+              ref="mainViewer"
+              images={this.props.result.images}
+              onDownloadClick={this.handleDownload}
+            />
             <ResponsiveContainer className="sheetmusic__details">
               <div className="sheetmusic__details-left">
                 {this.renderDescription()}

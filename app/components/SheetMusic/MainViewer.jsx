@@ -18,6 +18,7 @@ export default class MainViewer extends React.Component {
     fullscreen: React.PropTypes.bool.isRequired,
     setSlide: React.PropTypes.func.isRequired,
     setFullScreen: React.PropTypes.func.isRequired,
+    onDownloadClick: React.PropTypes.func.isRequired,
   };
 
   componentDidMount() {
@@ -28,6 +29,9 @@ export default class MainViewer extends React.Component {
     if (screenfull.enabled) {
       window.document.addEventListener(screenfull.raw.fullscreenchange, this.setFullScreen);
     }
+
+    // Trigger re-render
+    this.forceUpdate();
   }
 
   componentWillUnmount() {
@@ -36,6 +40,11 @@ export default class MainViewer extends React.Component {
 
   setFullScreen = () => {
     this.props.setFullScreen(() => screenfull.isFullscreen);
+  };
+
+  handleDownload = event => {
+    event.preventDefault();
+    this.props.onDownloadClick();
   };
 
   handlePageChange = page => {
@@ -81,8 +90,15 @@ export default class MainViewer extends React.Component {
     return (
       <ResponsiveContainer className="sheetmusic__controls-container">
         <If condition={this.props.images.length}>
-          <div className="sheetmusic__controls-page-number">
-            Page {this.props.slide} / {this.props.images.length}
+          <div className="sheetmusic__controls-page-number-section">
+            {'Page '}
+            <span className="sheetmusic__controls-page-number">
+              {this.props.slide}
+            </span>
+            {' / '}
+            <span className="sheetmusic__controls-page-number">
+              {this.props.images.length}
+            </span>
           </div>
         </If>
         <If condition={screenfull && screenfull.enabled}>
