@@ -19,8 +19,17 @@ import {
 } from '../constants/progress';
 
 import {
+  PROFILE_GET,
+  PROFILE_GET_UPLOADS_FOR_USER,
+} from '../constants/profile';
+
+import {
   SEARCH_SHEETMUSIC,
 } from '../constants/search';
+
+import {
+  SHELF_GET,
+} from '../constants/shelf';
 
 import {
   SHEETMUSIC_GET,
@@ -38,11 +47,14 @@ const progressMappings = {
   [LOGIN_RESET_PASSWORD]: 'resetPassword',
   [LOGIN_RESET_PASSWORD_CONFIRM]: 'resetPasswordConfirm',
   [LOGIN_FACEBOOK]: 'facebookLogin',
+  [PROFILE_GET]: 'getProfile',
+  [PROFILE_GET_UPLOADS_FOR_USER]: 'getUploadsForUser',
   [SEARCH_SHEETMUSIC]: 'search',
   [SHEETMUSIC_GET]: 'getSheetMusic',
   [SHEETMUSIC_GET_TRENDING]: 'trendingSheetMusic',
   [SHEETMUSIC_GET_LIST]: 'sheetMusicList',
   [SHEETMUSIC_GET_POPULAR]: 'popularSheetMusic',
+  [SHELF_GET]: 'getShelf',
 };
 
 /**

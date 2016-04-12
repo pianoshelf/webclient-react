@@ -22,6 +22,28 @@ $navbar-logo-height-mobile: 67.5px
     background-color: transparent
     border-color: transparent
     box-shadow: none
+    .navbar__title
+      color: #fff
+      top: 7px
+      opacity: 0.9
+      +when-tablet
+        top: 9px
+    .navbar__user-widget-link, .navbar__user-widget-link-menu
+      opacity: 0.9
+    .navbar__user-widget-list
+      top: $navbar-height-mobile
+      border-top: 1px solid $grey-dark
+      +when-tablet
+        top: $navbar-height
+    .navbar__button
+      background: transparent
+      border-color: transparent
+      color: #fff
+      &:hover
+        color: #fff
+        border-color: transparent
+      &:focus
+        color: #000
 
 // This is for the logo on the navbar.
 .navbar__logo
@@ -65,12 +87,6 @@ $navbar-logo-height-mobile: 67.5px
   +when-tablet
     line-height: $navbar-height
     font-size: 35px
-  &--transparent
-    color: #fff
-    top: 7px
-    opacity: 0.9
-    +when-tablet
-      top: 9px
 
 .navbar__component-container
   float: right
@@ -90,62 +106,77 @@ $navbar-logo-height-mobile: 67.5px
   color: #000
   height: 28px
   border: 1px solid $grey-normal
-  line-height: $navbar-height - 40px
+  background-color: #fff
+  float: left
   +when-tablet
     height: 41px
-  &:hover, &:active, &:focus
+  &:hover, &:focus
     border-color: $grey-dark
-    .navbar__user-text-down-arrow
-      color: $grey-text-dark
+    opacity: 1
+    z-index: 2
 
 .navbar__user-text-avatar
   display: inline-block
   position: absolute
   border: 0
-  font-size: 20px
+  font-size: 16px
   text-align: center
   color: $grey-text-dark
   height: 26px
   width: 26px
   line-height: 26px
   +when-tablet
+    font-size: 20px
     height: 39px
     width: 39px
     line-height: 39px
 
 .navbar__user-text
   display: inline-block
-  padding: 2px 23px 0 35px
+  padding: 1px 7px 0 35px
   font-family: $title-font
   font-size: 15px
-  line-height: $navbar-height-mobile - 24px
-  height: $navbar-height-mobile - 24px
+  line-height: 26px
+  height: 26px
+  +when-tablet
+    padding: 0 10px 0 53px
+    font-size: 18px
+    line-height: 39px
+    height: 39px
+
+.navbar__user-widget-link-menu
+  display: inline-block
+  color: #000
+  height: 28px
+  border: 1px solid $grey-normal
+  background-color: #fff
+  float: left
+  position: relative
+  right: 1px
   +when-tablet
     height: 41px
-    padding: 0 32px 0 53px
-    font-size: 18px
-    line-height: $navbar-height - 24px
-    height: $navbar-height - 24px
-  &--with-avatar
-    padding-left: 26px
-    +when-tablet
-      padding-left: 39px
+  &:hover, &:focus
+    border-color: $grey-dark
+    opacity: 1
+    z-index: 2
+    .navbar__user-text-down-arrow
+      color: $grey-text-dark
 
 .navbar__user-text-down-arrow
   display: inline-block
-  position: absolute
-  top: 0
-  right: 0
-  padding: 6px 4px
-  font-size: 14px
+  font-size: 18px
   color: $grey-text-normal
+  height: 26px
+  line-height: 26px
+  padding: 1px 10px 0 10px
   +when-tablet
-    padding: 12px 7px
-    font-size: 15px
+    font-size: 20px
+    height: 39px
+    line-height: 39px
 
 .navbar__user-widget-list
   position: absolute
-  right: 0
+  right: 1px
   top: $navbar-height-mobile + 1px
   z-index: 1
   margin: 0
@@ -154,7 +185,7 @@ $navbar-logo-height-mobile: 67.5px
   min-width: 150px
   list-style: none
   background-color: #fff
-  border: 2px solid $grey-dark
+  border: 1px solid $grey-dark
   border-top: 0
   box-shadow: 0 0 2px $grey-dark
   font-size: 15px
@@ -170,7 +201,7 @@ $navbar-logo-height-mobile: 67.5px
   height: 30px
   margin: 5px 0
   color: #000
-  &:hover, &:active, &:focus
+  &:hover, &:focus
     background-color: $grey-light
 
 .navbar__user-widget-list-icon
@@ -195,13 +226,4 @@ $navbar-logo-height-mobile: 67.5px
   +clickable($blue-light)
   &--important
     +clickable($green)
-  &--transparent
-    background: transparent
-    border-color: transparent
-    color: #fff
-    &:hover
-      color: #fff
-      border-color: transparent
-    &:active, &:focus
-      color: #000
 

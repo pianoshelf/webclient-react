@@ -137,6 +137,7 @@ export default class Login extends React.Component {
               placeholder="Username"
               name="username"
               focusOnLoad
+              className="authentication__input"
               {...fields.username}
             />
             <Input
@@ -144,6 +145,7 @@ export default class Login extends React.Component {
               placeholder="Password"
               name="password"
               type="password"
+              className="authentication__input"
               {...fields.password}
             />
           </div>

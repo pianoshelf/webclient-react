@@ -2,10 +2,12 @@
 import createAction from '../utils/createAction';
 import { actionDone } from '../utils/actionUtils';
 import { mapSheetMusic } from '../utils/sheetMusicUtils';
-import { get, post } from '../utils/api';
+import { get, post, upload } from '../utils/api';
 import {
   PROFILE_GET,
+  PROFILE_MAKE_DESCRIPTION_EDITABLE,
   PROFILE_UPDATE_DESCRIPTION,
+  PROFILE_UPDATE_PROFILE_PICTURE,
   PROFILE_GET_COMMENTS_FOR_USER,
   PROFILE_GET_UPLOADS_FOR_USER,
   PROFILE_GET_VIDEOS_FOR_USER,
@@ -21,6 +23,8 @@ export const getProfile = createAction(
     })
 );
 
+export const makeDescriptionEditable = createAction(PROFILE_MAKE_DESCRIPTION_EDITABLE);
+
 export const updateProfileDescription = createAction(
   PROFILE_UPDATE_DESCRIPTION,
   async description =>
@@ -28,6 +32,19 @@ export const updateProfileDescription = createAction(
       endpoint: '/profile/',
       params: { description },
     })
+);
+
+export const updateProfilePicture = createAction(
+  PROFILE_UPDATE_PROFILE_PICTURE,
+  async file => {
+    const data = new FormData();
+    data.append('file', file);
+    const response = await upload({
+      endpoint: '/submit/profilepicture/',
+      formData: data,
+    });
+    return response;
+  }
 );
 
 export const getCommentsForUser = createAction(

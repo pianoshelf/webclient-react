@@ -1,6 +1,5 @@
 
 import createReducer from '../../utils/createReducer';
-import { convertSheetMusic } from '../../utils/sheetMusicUtils';
 
 // SHEETMUSIC_UPDATE,
 // SHEETMUSIC_GET_COMPOSERS,
@@ -24,7 +23,7 @@ export default createReducer(initialState, {
     done(state, payload) {
       return {
         ...state,
-        result: convertSheetMusic(payload),
+        result: payload,
       };
     },
     error(state, code) {

@@ -1,6 +1,6 @@
 // Import external modules
 import React from 'react';
-import { Route, Redirect } from 'react-router';
+import { IndexRoute, Route, Redirect } from 'react-router';
 
 // Main components
 import App from '../components/App';
@@ -14,10 +14,6 @@ import Register from '../components/Authentication/Register';
 import ResetPassword from '../components/Authentication/ResetPassword';
 import ResetPasswordConfirm from '../components/Authentication/ResetPasswordConfirm';
 import VerifyEmail from '../components/Authentication/VerifyEmail';
-
-// Profile components
-import Profile from '../components/Profile';
-import ProfileViewer from '../components/Profile/Viewer';
 
 // Search components
 import Search from '../components/Search';
@@ -44,8 +40,13 @@ import Dashboard from '../components/Dashboard';
 // Uploader components
 import Upload from '../components/Upload';
 
+// Profile components
+import Profile from '../components/Profile';
+import ProfileShelf from '../components/Profile/Shelf';
+import ProfileUploads from '../components/Profile/Uploads';
+
 // Error components
-import Error404 from '../components/Error/Error404';
+import NotFound from '../components/Error/NotFound';
 
 /**
  * A function that retrieves the route configuration for both
@@ -94,12 +95,6 @@ export default function getRoutes(store) {
         <Redirect from="/verify-email/:key" to="/login/verify/:key" />
       </Route>
 
-      { /* Profile routes */ }
-      <Route component={Profile}>
-        <Route path="/user/:username" component={ProfileViewer} />
-        <Redirect from="/profile/:username" to="/user/:username" />
-      </Route>
-
       { /* Search routes */ }
       <Route component={Search}>
         <Route path="/browse" component={SearchBrowse} />
@@ -133,8 +128,15 @@ export default function getRoutes(store) {
       { /* Upload route */ }
       <Route path="/upload" component={Upload} onEnter={requireAuth} />
 
+      { /* Profile routes - should appear last due to wildcard route */ }
+      <Route path="/:username" component={Profile}>
+        <IndexRoute component={ProfileShelf} />
+        <Route path="/:username/uploads" component={ProfileUploads} />
+        <Redirect from="/profile/:username" to="/:username" />
+      </Route>
+
       { /* 404 route */ }
-      <Route path="*" component={Error404} />
+      <Route path="*" component={NotFound} />
 
     </Route>
   );

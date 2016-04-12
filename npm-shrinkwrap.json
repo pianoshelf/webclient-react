@@ -2223,9 +2223,9 @@
       "resolved": "https://registry.npmjs.org/executable/-/executable-1.1.0.tgz"
     },
     "exenv": {
-      "version": "1.2.0",
+      "version": "1.2.1",
       "from": "exenv@>=1.2.0 <2.0.0",
-      "resolved": "https://registry.npmjs.org/exenv/-/exenv-1.2.0.tgz"
+      "resolved": "https://registry.npmjs.org/exenv/-/exenv-1.2.1.tgz"
     },
     "exit-hook": {
       "version": "1.1.1",
@@ -4675,7 +4675,7 @@
     },
     "nuka-carousel": {
       "version": "1.0.2",
-      "from": "nuka-carousel@>=1.0.2 <2.0.0",
+      "from": "nuka-carousel@1.0.2",
       "resolved": "https://registry.npmjs.org/nuka-carousel/-/nuka-carousel-1.0.2.tgz"
     },
     "num2fraction": {
@@ -6034,6 +6034,11 @@
       "version": "0.2.1",
       "from": "string-convert@>=0.2.0 <0.3.0",
       "resolved": "https://registry.npmjs.org/string-convert/-/string-convert-0.2.1.tgz"
+    },
+    "string-hash": {
+      "version": "1.1.0",
+      "from": "string-hash@*",
+      "resolved": "https://registry.npmjs.org/string-hash/-/string-hash-1.1.0.tgz"
     },
     "string-length": {
       "version": "1.0.1",

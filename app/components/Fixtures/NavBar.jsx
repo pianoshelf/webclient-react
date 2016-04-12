@@ -44,11 +44,8 @@ export default class NavBar extends React.Component {
   }
 
   getButtonClass = options => {
-    const {
-      important = false,
-    } = options || {};
+    const { important = false } = options || {};
     return classNames('navbar__button', {
-      'navbar__button--transparent': this.props.transparent,
       'navbar__button--important': important,
     });
   };
@@ -64,13 +61,6 @@ export default class NavBar extends React.Component {
   };
 
   renderTitle() {
-    if (this.props.transparent) {
-      return (
-        <div>
-          <div className="navbar__title navbar__title--transparent">pianoshelf</div>
-        </div>
-      );
-    }
     return (
       <div>
         <div className="navbar__title">pianoshelf</div>
@@ -79,14 +69,8 @@ export default class NavBar extends React.Component {
   }
 
   renderLoggedInWidgets() {
-    const { username, firstName, lastName, profilePicture } = this.props.user;
-
-    const shouldShowThumbnail = profilePicture !== '' &&
-                                profilePicture !== '/images/profile/user_small.png';
-
-    const userTextClass = classNames('navbar__user-text', {
-      'navbar__user-text--with-avatar': !shouldShowThumbnail,
-    });
+    const { user, showMenu } = this.props;
+    const { username, firstName, lastName, profilePicture } = user;
 
     return (
       <div className="navbar__component-container">
@@ -97,28 +81,22 @@ export default class NavBar extends React.Component {
           Upload
         </Link>
         <div className="navbar__user-widget">
-          <a href="#" className="navbar__user-widget-link" onClick={this.handleToggleMenu}>
-            <If condition={shouldShowThumbnail}>
-              <img src={profilePicture} className="navbar__user-text-avatar" />
-            <Else />
-              <FontAwesome name="music" className="navbar__user-text-avatar" />
-            </If>
-            <span className={userTextClass}>
+          <Link className="navbar__user-widget-link" to={`/${username}`}>
+            <img src={profilePicture} className="navbar__user-text-avatar" />
+            <span className="navbar__user-text">
               <If condition={firstName === '' || lastName === ''}>
                 {username}
               <Else />
                 {`${firstName} ${lastName}`}
               </If>
             </span>
-            <FontAwesome className="navbar__user-text-down-arrow" name="chevron-down" />
+          </Link>
+          <a href="#" className="navbar__user-widget-link-menu" onClick={this.handleToggleMenu}>
+            <FontAwesome className="navbar__user-text-down-arrow" name="ellipsis-v" />
           </a>
-          <If condition={this.props.showMenu}>
+          <If condition={showMenu}>
             <ul className="navbar__user-widget-list">
-              <li className="navbar__user-widget-list-item">
-                <Link className="navbar__user-widget-list-item-link" to={`/user/${username}`}>
-                  View Profile
-                </Link>
-              </li>
+              {/* TODO: Make this feature flagged */}
               <If condition={false}>
                 <li className="navbar__user-widget-list-item">
                   <Link className="navbar__user-widget-list-item-link" to="/settings">
@@ -157,24 +135,26 @@ export default class NavBar extends React.Component {
   }
 
   render() {
+    const { loggedIn, isLoaded, transparent } = this.props;
+
     const navbarClass = classNames('navbar', {
-      'navbar--transparent': this.props.transparent,
+      'navbar--transparent': transparent,
     });
 
     const logoClass = classNames('navbar__logo', {
-      'navbar__logo--loading': !this.props.isLoaded,
+      'navbar__logo--loading': !isLoaded,
     });
 
     return (
       <ResponsiveContainer className={navbarClass}>
-        <If condition={this.props.loggedIn}>
+        <If condition={loggedIn}>
           <Link to="/home" className={logoClass} />
         <Else />
           <Link to="/" className={logoClass} />
         </If>
         <div className="navbar__logo-buffer" />
         {this.renderTitle()}
-        <If condition={this.props.loggedIn}>
+        <If condition={loggedIn}>
           {this.renderLoggedInWidgets()}
         <Else />
           {this.renderLoggedOutWidgets()}
