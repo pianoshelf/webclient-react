@@ -12,6 +12,7 @@ import LoadingScreen from './utils/LoadingScreen';
 import MainViewer from './MainViewer';
 import ResponsiveContainer from '../Misc/ResponsiveContainer';
 import Comments from './comments/Comments';
+import VideoViewer from './VideoViewer';
 import { getDifficultyText } from '../../utils/sheetMusicUtils';
 import { getSheetMusic, getComments } from '../../actions/sheetmusic';
 
@@ -49,13 +50,6 @@ export default class Viewer extends React.Component {
     user: React.PropTypes.object.isRequired,
   };
 
-  handleShowMoreVideos = event => {
-    event.preventDefault();
-    this.setState({
-      showVideos: this.state.showVideos + 5,
-    });
-  };
-
   renderDescription() {
     const longDescription = this.props.result.longDescription;
     return (
@@ -73,26 +67,10 @@ export default class Viewer extends React.Component {
 
   renderVideos() {
     const videos = this.props.result.videos;
-    if (!videos || !videos.length) return null;
-
-    const videoElements = videos.slice(0, this.state.showVideos).map((video, index) => (
-      <div className="sheetmusic__video" key={index}>
-        {/* <Video videoId={video.youtubeId} /> */}
-      </div>
-    ));
 
     return (
       <InfoBox title="Videos" icon="video-camera">
-        {videoElements}
-        <If condition={this.state.showVideos < videos.length}>
-          <a className="sheetmusic__video-show-more"
-            href="#"
-            onClick={this.handleShowMoreVideos}
-          >
-            <FontAwesome className="sheetmusic__video-show-more-icon" name="angle-down" />
-            See More Videos
-          </a>
-        </If>
+        <VideoViewer videos={videos} />
       </InfoBox>
     );
   }
@@ -179,7 +157,7 @@ export default class Viewer extends React.Component {
             <ResponsiveContainer className="sheetmusic__details">
               <div className="sheetmusic__details-left">
                 {this.renderDescription()}
-                {/* this.renderVideos() */}
+                {this.renderVideos()}
                 {this.renderComments()}
               </div>
               <div className="sheetmusic__details-right">
